@@ -1,0 +1,51 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [master]
+
+env:
+  BRANCH_TO_PUSH: master-codegen
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Git setup
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github@s.k-kachi.net"
+          git config --global push.default current
+          git fetch origin master
+          git checkout -B ${BRANCH_TO_PUSH} origin/master
+      - name: Remove gitignore
+        run: |
+          git rm .gitignore
+          git commit -a -m "Remove gitignore"
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install jinja2
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Download proto files
+        run: |
+          ./utils/update.sh
+          git add .
+          git commit -m "Add proto files"
+      - name: Generate rust codes
+        run: |
+          ./prebuild.py
+          git add .
+          git commit -m "Generate rust codes"
+      - name: Force push
+        run: |
+          git push -f
