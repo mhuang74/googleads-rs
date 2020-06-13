@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from functools import reduce
 import subprocess
+import os
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -72,6 +73,8 @@ def main():
     #
     # write
     #
+
+    os.makedirs('src', exist_ok=True)
 
     with open('src/lib.rs', 'w') as f:
         f.write(txt_lib_rs)
