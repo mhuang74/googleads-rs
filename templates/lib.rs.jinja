@@ -1,0 +1,17 @@
+{% macro mod(p) %}
+    {% if p is mapping %}
+        {% for k, v in p.items() %}
+            {% if k == 'self' %}
+                tonic::include_proto!("{{ v }}");
+            {% else %}
+                pub mod {{ k }} {
+                    {{ mod(v) }}
+                }
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        tonic::include_proto!("{{ p }}");
+    {% endif %}
+{% endmacro %}
+
+{{ mod(packages) }}
