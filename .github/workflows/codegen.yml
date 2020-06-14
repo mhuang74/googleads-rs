@@ -9,7 +9,6 @@ on:
 
 env:
   BRANCH_TO_PUSH: master-codegen
-  GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
 jobs:
   build:
@@ -17,12 +16,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
       - name: Git setup
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "github@s.k-kachi.net"
           git config --global push.default current
-          git remote set-url origin https://gkkachi:${GITHUB_TOKEN}@github.com/gkkachi/gapi-grpc-rs.git
           git fetch origin master
           git checkout -B ${BRANCH_TO_PUSH} origin/master
       - name: Remove gitignore
