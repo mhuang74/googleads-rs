@@ -48,6 +48,10 @@ jobs:
           ./prebuild.py
           git add .
           git commit -m "Generate rust codes"
+      - name: Remove unnecessary files
+        run: |
+          git rm -r templates utils prebuild.py
+          git commit -m "Remove unnecessary files"
       - name: Force push
         run: |
           git push -f
