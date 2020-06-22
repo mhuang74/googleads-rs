@@ -1,0 +1,31 @@
+name: Push release
+
+on:
+  push:
+    branches: [master-codegen]
+
+env:
+  BRANCH_TO_PUSH: release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Git setup
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github@s.k-kachi.net"
+          git config --global push.default current
+          git fetch origin master-codegen
+          git fetch origin ${BRANCH_TO_PUSH}
+          git checkout -B ${BRANCH_TO_PUSH} origin/${BRANCH_TO_PUSH}
+      - name: Check diff
+        run: "if [[ $(git diff origin/master-codegen) ]]; then echo 'NE'; else echo 'EQ'; exit -1; fi"
+      - name: Push diff
+        run: |
+          git reset --hard origin/master-codegen
+          git push -f
