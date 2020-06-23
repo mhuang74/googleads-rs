@@ -6,6 +6,7 @@ name: Python application
 on:
   push:
     branches: [master]
+    paths-ignore: [.github/**]
 
 env:
   BRANCH_TO_PUSH: master-codegen
