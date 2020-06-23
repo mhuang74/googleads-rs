@@ -1,0 +1,34 @@
+name: Weekly
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+
+env:
+  BRANCH_TO_PUSH: master
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+    - name: Git setup
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "github@s.k-kachi.net"
+        git config --global push.default current
+        git fetch origin ${BRANCH_TO_PUSH}
+        git checkout -B ${BRANCH_TO_PUSH} origin/${BRANCH_TO_PUSH}
+    - name: Bump version
+      run: |
+        cargo install cargo-bump
+        mkdir src
+        touch src/lib.rs
+        cargo bump
+    - name: Push
+      run: |
+        git commit -a -m "Bump version"
+        git push
