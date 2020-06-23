@@ -1,0 +1,16 @@
+steps:
+- name: gcr.io/cloud-builders/gcloud
+  entrypoint: bash
+  args: |
+    "-c"
+    "gcloud secrets versions access latest --secret=CRATES_IO_TOKEN > CRATES_IO_TOKEN"
+
+- name: gcr.io/cloud-builders/docker
+  entrypoint: "run"
+  args: |
+    "-v"
+    "$PWD:/usr/src/myapp"
+    "-w"
+    "/usr/src/myapp"
+    "rust:latest"
+    "cargo login `cat CRATES_IO_TOKEN` && cargo publish"
