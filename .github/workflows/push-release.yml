@@ -24,9 +24,9 @@ jobs:
           git fetch origin ${BRANCH_TO_PUSH}
           git checkout -B ${BRANCH_TO_PUSH} origin/${BRANCH_TO_PUSH}
       - name: Check diff
-        run: |
-          "if [[ $(git diff origin/master-codegen) ]]; then echo 'NE'; else echo 'EQ'; exit -1; fi"
-          "if [[ $(git diff -U0 origin/master-codegen -- Cargo.toml | grep +version) ]]; then echo 'NE'; else echo 'EQ'; exit -1; fi"
+        run: "if [[ $(git diff origin/master-codegen) ]]; then echo 'NE'; else echo 'EQ'; exit -1; fi"
+      - name: Check version
+        run: "if [[ $(git diff -U0 origin/master-codegen -- Cargo.toml | grep +version) ]]; then echo 'NE'; else echo 'EQ'; exit -1; fi"
       - name: Push diff
         run: |
           git reset --hard origin/master-codegen
