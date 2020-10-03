@@ -5,5 +5,9 @@ grep '^package' -r proto \
 | sed 's/:/ /g' \
 | sed 's/;//g' \
 | sed 's/\.type/\.r#type/g' \
-| awk '{print $3 "\t" $1}' \
-| sort
+| awk '{print $3 " " $1}' \
+| sed 's/0/@/g' \
+| sed 's/\./0/g' \
+| sort -k1,1 \
+| sed 's/0/\./g' \
+| sed 's/@/0/g' \

@@ -33,7 +33,7 @@ def main():
     # lib.rs
     #
 
-    packages_list = [x.split('\t')[0] for x in cmd_lines]
+    packages_list = [x.split(' ')[0] for x in cmd_lines]
 
     mods = []
     for i in range(len(packages_list) - 1):
@@ -66,7 +66,7 @@ def main():
     # build.rs
     #
 
-    paths = [x.split('\t')[1] for x in cmd_lines]
+    paths = [x.split(' ')[1] for x in cmd_lines]
     tpl_build_rs = env.get_template('build.rs.jinja')
     txt_built_rs = tpl_build_rs.render({'paths': paths})
 
