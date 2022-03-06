@@ -2,6 +2,8 @@
 
 # PACKAGE_NAME <tab> PATH_TO_PROTO
 grep '^package' -r proto \
+| grep -v 'BUILD' \
+| grep -E "googleads\/v10|google\/longrunning|google\/api|google\/rpc" \
 | sed 's/:/ /g' \
 | sed 's/;//g' \
 | sed 's/\.type/\.r#type/g' \

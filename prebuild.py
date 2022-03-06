@@ -45,9 +45,6 @@ def main():
             packages_list[i] = None
             mods.append(p1)
 
-    ignore_packages = ['google.firebase.fcm.connection.v1alpha1']
-    for package in ignore_packages:
-        packages_list.remove(package)
 
     packages = {}
     for package in packages_list:
