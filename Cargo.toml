@@ -17,6 +17,8 @@ keywords = ["gapi", "grpc", "gcp", "firebase", "tonic"]
 tonic = { version = "0.6", features = ["tls", "tls-roots"] }
 prost = "0.9.0"
 prost-types = "0.9.0"
+prost-reflect = { version="0.6.1", features = ["reflect-well-known-types", "derive"] }
 
 [build-dependencies]
 tonic-build = "0.6.2"
+
