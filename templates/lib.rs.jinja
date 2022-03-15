@@ -15,3 +15,28 @@
 {% endmacro %}
 
 {{ mod(packages) }}
+
+{% macro march_arm_rhs(field_parts) %}
+    {% for f in field_parts -%}
+        {{ "r#" if f == "type" }}{{ f }}{{ ".as_ref().unwrap()." if not loop.last }}{{ ".to_string()," if loop.last }}
+    {%- endfor %}
+{% endmacro %}
+
+use crate::google::ads::googleads::v10::services::GoogleAdsRow;
+
+trait ReflectiveMethods {
+    fn get(&self, field: &str) -> String;
+}
+
+impl ReflectiveMethods for GoogleAdsRow {
+
+    fn get(&self, field: &str) -> String {
+        match field {
+            {% for field_parts in array_field_parts %}
+                "{{ '.'.join(field_parts) }}" => self.{{ march_arm_rhs(field_parts) }}
+            {%  endfor %}
+            _ => "unsupported".to_string()
+        }
+    }
+
+}
