@@ -57,7 +57,7 @@ def main():
         setInDict(packages, package_split, package)
 
     # load in GoogleAds field names
-    with open('selectable_fields.txt') as f:
+    with open('google_ads_service_client_selectable_fields.txt') as f:
         gaql_fields = f.readlines()
 
     array_field_parts = [field.strip().split('.') for field in gaql_fields]
