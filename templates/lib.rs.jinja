@@ -15,3 +15,45 @@
 {% endmacro %}
 
 {{ mod(packages) }}
+
+{% macro march_arm_rhs(field_parts) %}
+    {% for f in field_parts -%}
+        {{ "r#" if f == "type" }}{{ f }}{{ ".as_ref().unwrap()." if not loop.last }}{{ ".to_string()," if loop.last }}
+    {%- endfor %}
+{% endmacro %}
+
+impl google::ads::googleads::v10::services::GoogleAdsRow {
+
+    /// Returns GoogleAdsRow field value by field name
+    ///
+    /// # Arguments
+    /// * `field_name` - A string slice that holds name of a field in GoogleAdsRow struct
+    ///
+    /// Support fields:
+    /// * all non-list Metrics fields are supported
+    /// * all non-list Segment fields are supported
+    /// * only basic Attribute fields are supported (eg. id, name, status)
+    /// 
+    /// # Examples
+    ///
+    /// ```
+    /// let field_mask = response.field_mask.unwrap();
+    /// for row in response.results {
+    ///     for path in &field_mask.paths {
+    ///         print!("{}\t", row.get(&path));
+    ///     }
+    ///     print!("\n");
+    /// }
+    /// ```
+    pub fn get(&self, field_name: &str) -> String {
+        match field_name {
+            {% for field_parts in array_field_parts %}
+            "{{ '.'.join(field_parts) }}" => self.{{ march_arm_rhs(field_parts) }}
+            {%  endfor %}
+            _ => "unsupported".to_string()
+        }
+    }
+
+}
+
+
