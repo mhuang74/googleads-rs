@@ -1,6 +1,9 @@
 # googleads-rs
 
-A gRPC client library for Google APIs, generated automatically from the API definition files.
+A gRPC client library for Google Ads API, generated automatically from the API definition files.
+
+* Currently only supports Google Ads API v10
+* Provides `GoogleAdsRow.get(path: &str)` accessor method to more easily retrieve fields selected in GAQL
 
 ## Install dependencies
 

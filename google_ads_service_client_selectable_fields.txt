@@ -58,6 +58,14 @@ campaign.network_settings.target_partner_search_network
 campaign.network_settings.target_search_network
 campaign.serving_status
 campaign.status
+customer_client.client_customer
+customer_client.currency_code
+customer_client.descriptive_name
+customer_client.id
+customer_client.level
+customer_client.manager
+customer_client.status
+customer_client.time_zone
 metrics.absolute_top_impression_percentage
 metrics.active_view_cpm
 metrics.active_view_ctr
