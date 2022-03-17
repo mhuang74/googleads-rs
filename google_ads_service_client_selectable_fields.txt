@@ -58,6 +58,11 @@ campaign.network_settings.target_partner_search_network
 campaign.network_settings.target_search_network
 campaign.serving_status
 campaign.status
+customer.id
+customer.descriptive_name
+customer.status
+customer.currency_code
+customer.time_zone
 customer_client.client_customer
 customer_client.currency_code
 customer_client.descriptive_name
