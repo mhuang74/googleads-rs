@@ -42,6 +42,8 @@ audience.status
 bidding_strategy.id
 bidding_strategy.name
 bidding_strategy.status
+campaign.advertising_channel_type
+campaign.advertising_channel_sub_type
 campaign.base_campaign
 campaign.bidding_strategy_type
 campaign.campaign_budget
