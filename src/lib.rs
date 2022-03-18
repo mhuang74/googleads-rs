@@ -101,7 +101,7 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "bidding_strategy.name" => self.bidding_strategy.as_ref().unwrap().name.to_string(),
             "bidding_strategy.status" => self.bidding_strategy.as_ref().unwrap().status.to_string(),
             "campaign.advertising_channel_type" => self.campaign.as_ref().unwrap().advertising_channel_type().to_string(),
-            "campaign.advertising_channel_sub_type" => self.campaign.as_ref().unwrap().advertising_channel_sub_type.to_string(),
+            "campaign.advertising_channel_sub_type" => self.campaign.as_ref().unwrap().advertising_channel_sub_type().to_string(),
             "campaign.base_campaign" => self.campaign.as_ref().unwrap().base_campaign.to_string(),
             "campaign.bidding_strategy_type" => self.campaign.as_ref().unwrap().bidding_strategy_type.to_string(),
             "campaign.campaign_budget" => self.campaign.as_ref().unwrap().campaign_budget.to_string(),
@@ -259,7 +259,7 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "segments.click_type" => self.segments.as_ref().unwrap().click_type.to_string(),
             "segments.date" => self.segments.as_ref().unwrap().date.to_string(),
             "segments.day_of_week" => self.segments.as_ref().unwrap().day_of_week.to_string(),
-            "segments.device" => self.segments.as_ref().unwrap().device().to_string(),
+            "segments.device" => format!("{:?}", self.segments.as_ref().unwrap().device()),
             "segments.hour" => self.segments.as_ref().unwrap().hour.to_string(),
             "segments.month" => self.segments.as_ref().unwrap().month.to_string(),
             "segments.month_of_year" => self.segments.as_ref().unwrap().month_of_year.to_string(),
@@ -282,10 +282,18 @@ impl fmt::Display for google::ads::googleads::v10::enums::advertising_channel_ty
     }
 }
 
-impl fmt::Display for google::ads::googleads::v10::enums::device_enum::Device {
+impl fmt::Display for google::ads::googleads::v10::enums::advertising_channel_sub_type_enum::AdvertisingChannelSubType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self)
         // or, alternatively:
         // fmt::Debug::fmt(self, f)
     }
 }
+
+// impl fmt::Display for google::ads::googleads::v10::enums::device_enum::Device {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         write!(f, "{:?}", self)
+//         // or, alternatively:
+//         // fmt::Debug::fmt(self, f)
+//     }
+// }
