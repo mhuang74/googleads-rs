@@ -16,9 +16,9 @@
 
 {{ mod(packages) }}
 
-{% macro march_arm_rhs(field_parts) %}
+{% macro get_field_value(field_parts) %}
     {% for f in field_parts -%}
-        {{ "r#" if f == "type" }}{{ f }}{{ ".as_ref().unwrap()." if not loop.last }}{{ ".to_string()," if loop.last }}
+        {{ "r#" if f == "type" }}{{ f }}{{ ".as_ref().unwrap()." if not loop.last }}{{ "()" if loop.last and ("status" in f or "type" in f or "device" == f) }}
     {%- endfor %}
 {% endmacro %}
 
@@ -48,7 +48,7 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
     pub fn get(&self, field_name: &str) -> String {
         match field_name {
             {% for field_parts in array_field_parts %}
-            "{{ '.'.join(field_parts) }}" => self.{{ march_arm_rhs(field_parts) }}
+            "{{ '.'.join(field_parts) }}" => format!("{:?}", self.{{ get_field_value(field_parts) }}),
             {%  endfor %}
             _ => "unsupported".to_string()
         }

@@ -33,6 +33,8 @@ ad_group_criterion.effective_cpv_bid_micros
 ad_group_criterion.effective_cpv_bid_source
 ad_group_criterion.effective_percent_cpc_bid_micros
 ad_group_criterion.effective_percent_cpc_bid_source
+ad_group_criterion.keyword.text
+ad_group_criterion.keyword.match_type
 ad_group_criterion.status
 ad_group_criterion.type
 audience.description
@@ -54,10 +56,6 @@ campaign.end_date
 campaign.experiment_type
 campaign.id
 campaign.name
-campaign.network_settings.target_content_network
-campaign.network_settings.target_google_search
-campaign.network_settings.target_partner_search_network
-campaign.network_settings.target_search_network
 campaign.serving_status
 campaign.status
 customer.id
