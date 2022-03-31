@@ -95,6 +95,7 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "ad_group_criterion.keyword.match_type" => format!("{:?}", self.ad_group_criterion.as_ref().unwrap().criterion.as_ref().unwrap()),
             "ad_group_criterion.status" => format!("{:?}", self.ad_group_criterion.as_ref().unwrap().status()),
             "ad_group_criterion.type" => format!("{:?}", self.ad_group_criterion.as_ref().unwrap().r#type()),
+            "asset_field_type_view.field_type" => format!("{:?}", self.asset_field_type_view.as_ref().unwrap().field_type()),
             "audience.description" => format!("{:?}", self.audience.as_ref().unwrap().description),
             "audience.id" => format!("{:?}", self.audience.as_ref().unwrap().id),
             "audience.name" => format!("{:?}", self.audience.as_ref().unwrap().name),

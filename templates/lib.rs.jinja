@@ -18,7 +18,9 @@
 
 {% macro get_field_value(field_parts) %}
     {% for f in field_parts -%}
-        {{ "r#" if f == "type" }}{{ f }}{{ ".as_ref().unwrap()." if not loop.last }}{{ "()" if loop.last and ("status" in f or "type" in f or "device" == f) }}
+        {#- "type" is reserved word in Rust, so need escape -#}
+        {#- GoogleAds resource field to proto mapping is sometimes screwy. So map "keyword" to "criterion". -#}
+        {{ "r#" if f == "type" }}{{ {"keyword":"criterion"}[f] | default(f) }}{{ ".as_ref().unwrap()." if not loop.last }}{{ "()" if loop.last and ("status" in f or "type" in f or "device" == f) }}
     {%- endfor %}
 {% endmacro %}
 
