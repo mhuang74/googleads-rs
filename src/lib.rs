@@ -130,6 +130,8 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "customer_client.manager" => format!("{:?}", self.customer_client.as_ref().unwrap().manager),
             "customer_client.status" => format!("{:?}", self.customer_client.as_ref().unwrap().status()),
             "customer_client.time_zone" => format!("{:?}", self.customer_client.as_ref().unwrap().time_zone),
+            "extension_feed_item.extension_type" => format!("{:?}", self.extension_feed_item.as_ref().unwrap().extension_type()),
+            "feed_placeholder_view.placeholder_type" => format!("{:?}", self.feed_placeholder_view.as_ref().unwrap().placeholder_type()),
             "metrics.absolute_top_impression_percentage" => format!("{:?}", self.metrics.as_ref().unwrap().absolute_top_impression_percentage),
             "metrics.active_view_cpm" => format!("{:?}", self.metrics.as_ref().unwrap().active_view_cpm),
             "metrics.active_view_ctr" => format!("{:?}", self.metrics.as_ref().unwrap().active_view_ctr),

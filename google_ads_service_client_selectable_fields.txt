@@ -72,6 +72,8 @@ customer_client.level
 customer_client.manager
 customer_client.status
 customer_client.time_zone
+extension_feed_item.extension_type
+feed_placeholder_view.placeholder_type
 metrics.absolute_top_impression_percentage
 metrics.active_view_cpm
 metrics.active_view_ctr
