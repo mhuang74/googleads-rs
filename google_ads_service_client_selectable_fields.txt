@@ -48,6 +48,7 @@ bidding_strategy.status
 campaign.advertising_channel_type
 campaign.advertising_channel_sub_type
 campaign.base_campaign
+campaign.bidding_strategy
 campaign.bidding_strategy_type
 campaign.campaign_budget
 campaign.dynamic_search_ads_setting.domain_name
@@ -59,6 +60,7 @@ campaign.id
 campaign.name
 campaign.serving_status
 campaign.status
+campaign_budget.amount_micros
 customer.id
 customer.descriptive_name
 customer.status

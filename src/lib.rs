@@ -42,6 +42,10 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
     /// * all non-list Metrics fields are supported
     /// * all non-list Segment fields are supported
     /// * only basic Attribute fields are supported (eg. id, name, status)
+    /// * for Attribute with Enum values, readable values returned for fields that ends with:
+    ///  * status
+    ///  * type
+    ///  * device
     ///
     /// # Examples
     ///
@@ -106,6 +110,7 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "campaign.advertising_channel_type" => format!("{:?}", self.campaign.as_ref().unwrap().advertising_channel_type()),
             "campaign.advertising_channel_sub_type" => format!("{:?}", self.campaign.as_ref().unwrap().advertising_channel_sub_type()),
             "campaign.base_campaign" => format!("{:?}", self.campaign.as_ref().unwrap().base_campaign),
+            "campaign.bidding_strategy" => format!("{:?}", self.campaign.as_ref().unwrap().campaign_bidding_strategy),
             "campaign.bidding_strategy_type" => format!("{:?}", self.campaign.as_ref().unwrap().bidding_strategy_type()),
             "campaign.campaign_budget" => format!("{:?}", self.campaign.as_ref().unwrap().campaign_budget),
             "campaign.dynamic_search_ads_setting.domain_name" => format!("{:?}", self.campaign.as_ref().unwrap().dynamic_search_ads_setting.as_ref().unwrap().domain_name),
@@ -117,6 +122,7 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "campaign.name" => format!("{:?}", self.campaign.as_ref().unwrap().name),
             "campaign.serving_status" => format!("{:?}", self.campaign.as_ref().unwrap().serving_status()),
             "campaign.status" => format!("{:?}", self.campaign.as_ref().unwrap().status()),
+            "campaign_budget.amount_micros" => format!("{:?}", self.campaign_budget.as_ref().unwrap().amount_micros),
             "customer.id" => format!("{:?}", self.customer.as_ref().unwrap().id),
             "customer.descriptive_name" => format!("{:?}", self.customer.as_ref().unwrap().descriptive_name),
             "customer.status" => format!("{:?}", self.customer.as_ref().unwrap().status()),

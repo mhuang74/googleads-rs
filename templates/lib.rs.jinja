@@ -19,8 +19,14 @@
 {% macro get_field_value(field_parts) %}
     {% for f in field_parts -%}
         {#- "type" is reserved word in Rust, so need escape -#}
-        {#- GoogleAds resource field to proto mapping is sometimes screwy. So map "keyword" to "criterion". -#}
-        {{ "r#" if f == "type" }}{{ {"keyword":"criterion"}[f] | default(f) }}{{ ".as_ref().unwrap()." if not loop.last }}{{ "()" if loop.last and ("status" in f or "type" in f or "device" == f) }}
+        {#- GoogleAds resource field to proto mapping is sometimes screwy. So manually populate a map to translate. -#}
+        {%- if loop.last -%}
+            {%- if not (f == "match_type" or f == "text") -%}
+                .{{ "r#" if f == "type" }}{{ {'bidding_strategy':'campaign_bidding_strategy','keyword':'criterion'}[f] | default(f) }}{{ "()" if loop.last and ("status" in f or "type" in f or "device" == f) }}
+            {%- endif -%}
+        {%- else -%}
+            .{{ f }}{{".as_ref().unwrap()"}}
+        {%- endif -%}
     {%- endfor %}
 {% endmacro %}
 
@@ -35,6 +41,10 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
     /// * all non-list Metrics fields are supported
     /// * all non-list Segment fields are supported
     /// * only basic Attribute fields are supported (eg. id, name, status)
+    /// * for Attribute with Enum values, readable values returned for fields that ends with:
+    ///  * status
+    ///  * type
+    ///  * device
     /// 
     /// # Examples
     ///
@@ -50,7 +60,7 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
     pub fn get(&self, field_name: &str) -> String {
         match field_name {
             {% for field_parts in array_field_parts %}
-            "{{ '.'.join(field_parts) }}" => format!("{:?}", self.{{ get_field_value(field_parts) }}),
+            "{{ '.'.join(field_parts) }}" => format!("{:?}", self{{ get_field_value(field_parts) }}),
             {%  endfor %}
             _ => "unsupported".to_string()
         }
