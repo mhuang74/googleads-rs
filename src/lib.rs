@@ -138,6 +138,9 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "customer_client.time_zone" => format!("{:?}", self.customer_client.as_ref().unwrap().time_zone),
             "extension_feed_item.extension_type" => format!("{:?}", self.extension_feed_item.as_ref().unwrap().extension_type()),
             "feed_placeholder_view.placeholder_type" => format!("{:?}", self.feed_placeholder_view.as_ref().unwrap().placeholder_type()),
+            "search_term_view.ad_group" => format!("{:?}", self.search_term_view.as_ref().unwrap().ad_group),
+            "search_term_view.search_term" => format!("{:?}", self.search_term_view.as_ref().unwrap().search_term),
+            "search_term_view.status" => format!("{:?}", self.search_term_view.as_ref().unwrap().status()),
             "metrics.absolute_top_impression_percentage" => format!("{:?}", self.metrics.as_ref().unwrap().absolute_top_impression_percentage),
             "metrics.active_view_cpm" => format!("{:?}", self.metrics.as_ref().unwrap().active_view_cpm),
             "metrics.active_view_ctr" => format!("{:?}", self.metrics.as_ref().unwrap().active_view_ctr),
@@ -272,6 +275,7 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "segments.month_of_year" => format!("{:?}", self.segments.as_ref().unwrap().month_of_year),
             "segments.product_channel" => format!("{:?}", self.segments.as_ref().unwrap().product_channel),
             "segments.product_item_id" => format!("{:?}", self.segments.as_ref().unwrap().product_item_id),
+            "segments.search_term_match_type" => format!("{:?}", self.segments.as_ref().unwrap().search_term_match_type()),
             "segments.week" => format!("{:?}", self.segments.as_ref().unwrap().week),
             "segments.year" => format!("{:?}", self.segments.as_ref().unwrap().year),
             _ => "unsupported".to_string()

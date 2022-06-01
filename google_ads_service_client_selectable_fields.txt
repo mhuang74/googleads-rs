@@ -76,6 +76,9 @@ customer_client.status
 customer_client.time_zone
 extension_feed_item.extension_type
 feed_placeholder_view.placeholder_type
+search_term_view.ad_group
+search_term_view.search_term
+search_term_view.status
 metrics.absolute_top_impression_percentage
 metrics.active_view_cpm
 metrics.active_view_ctr
@@ -210,5 +213,6 @@ segments.month
 segments.month_of_year
 segments.product_channel
 segments.product_item_id
+segments.search_term_match_type
 segments.week
 segments.year
