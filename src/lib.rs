@@ -141,6 +141,8 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "search_term_view.ad_group" => format!("{:?}", self.search_term_view.as_ref().unwrap().ad_group),
             "search_term_view.search_term" => format!("{:?}", self.search_term_view.as_ref().unwrap().search_term),
             "search_term_view.status" => format!("{:?}", self.search_term_view.as_ref().unwrap().status()),
+            "smart_campaign_search_term_view.campaign" => format!("{:?}", self.smart_campaign_search_term_view.as_ref().unwrap().campaign),
+            "smart_campaign_search_term_view.search_term" => format!("{:?}", self.smart_campaign_search_term_view.as_ref().unwrap().search_term),
             "metrics.absolute_top_impression_percentage" => format!("{:?}", self.metrics.as_ref().unwrap().absolute_top_impression_percentage),
             "metrics.active_view_cpm" => format!("{:?}", self.metrics.as_ref().unwrap().active_view_cpm),
             "metrics.active_view_ctr" => format!("{:?}", self.metrics.as_ref().unwrap().active_view_ctr),

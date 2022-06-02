@@ -79,6 +79,8 @@ feed_placeholder_view.placeholder_type
 search_term_view.ad_group
 search_term_view.search_term
 search_term_view.status
+smart_campaign_search_term_view.campaign
+smart_campaign_search_term_view.search_term
 metrics.absolute_top_impression_percentage
 metrics.active_view_cpm
 metrics.active_view_ctr
