@@ -2,21 +2,21 @@
 pub mod google {
     pub mod ads {
         pub mod googleads {
-            pub mod v10 {
+            pub mod v11 {
                 pub mod common {
-                    tonic::include_proto!("google.ads.googleads.v10.common");
+                    tonic::include_proto!("google.ads.googleads.v11.common");
                 }
                 pub mod enums {
-                    tonic::include_proto!("google.ads.googleads.v10.enums");
+                    tonic::include_proto!("google.ads.googleads.v11.enums");
                 }
                 pub mod errors {
-                    tonic::include_proto!("google.ads.googleads.v10.errors");
+                    tonic::include_proto!("google.ads.googleads.v11.errors");
                 }
                 pub mod resources {
-                    tonic::include_proto!("google.ads.googleads.v10.resources");
+                    tonic::include_proto!("google.ads.googleads.v11.resources");
                 }
                 pub mod services {
-                    tonic::include_proto!("google.ads.googleads.v10.services");
+                    tonic::include_proto!("google.ads.googleads.v11.services");
                 }
             }
         }
@@ -32,7 +32,7 @@ pub mod google {
     }
 }
 
-impl google::ads::googleads::v10::services::GoogleAdsRow {
+impl google::ads::googleads::v11::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
     ///
     /// # Arguments
@@ -120,6 +120,14 @@ impl google::ads::googleads::v10::services::GoogleAdsRow {
             "campaign.experiment_type" => format!("{:?}", self.campaign.as_ref().unwrap().experiment_type()),
             "campaign.id" => format!("{:?}", self.campaign.as_ref().unwrap().id),
             "campaign.name" => format!("{:?}", self.campaign.as_ref().unwrap().name),
+            "campaign.network_settings.target_content_network" => format!("{:?}", self.campaign.as_ref().unwrap().network_settings.as_ref().unwrap().target_content_network),
+            "campaign.network_settings.target_google_search" => format!("{:?}", self.campaign.as_ref().unwrap().network_settings.as_ref().unwrap().target_google_search),
+            "campaign.network_settings.target_partner_search_network" => format!("{:?}", self.campaign.as_ref().unwrap().network_settings.as_ref().unwrap().target_partner_search_network),
+            "campaign.network_settings.target_search_network" => format!("{:?}", self.campaign.as_ref().unwrap().network_settings.as_ref().unwrap().target_search_network),
+            "campaign.optimization_score" => format!("{:?}", self.campaign.as_ref().unwrap().optimization_score),
+            "campaign.performance_max_upgrade.performance_max_campaign" => format!("{:?}", self.campaign.as_ref().unwrap().performance_max_upgrade.as_ref().unwrap().performance_max_campaign),
+            "campaign.performance_max_upgrade.pre_upgrade_campaign" => format!("{:?}", self.campaign.as_ref().unwrap().performance_max_upgrade.as_ref().unwrap().pre_upgrade_campaign),
+            "campaign.performance_max_upgrade.status" => format!("{:?}", self.campaign.as_ref().unwrap().performance_max_upgrade.as_ref().unwrap().status()),
             "campaign.serving_status" => format!("{:?}", self.campaign.as_ref().unwrap().serving_status()),
             "campaign.status" => format!("{:?}", self.campaign.as_ref().unwrap().status()),
             "campaign_budget.amount_micros" => format!("{:?}", self.campaign_budget.as_ref().unwrap().amount_micros),

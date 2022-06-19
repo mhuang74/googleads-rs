@@ -3,7 +3,7 @@
 # PACKAGE_NAME <tab> PATH_TO_PROTO
 grep '^package' -r proto \
 | grep -v 'BUILD' \
-| grep -E "googleads\/v10|google\/longrunning|google\/rpc" \
+| grep -E "googleads\/v11|google\/longrunning|google\/rpc" \
 | sed 's/:/ /g' \
 | sed 's/;//g' \
 | sed 's/\.type/\.r#type/g' \

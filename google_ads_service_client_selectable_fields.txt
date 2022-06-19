@@ -57,7 +57,18 @@ campaign.dynamic_search_ads_setting.use_supplied_urls_only
 campaign.end_date
 campaign.experiment_type
 campaign.id
+# select bidding_strategy instead
+#campaign.maximize_conversion_value.target_roas
+#campaign.maximize_conversions.target_cpa
 campaign.name
+campaign.network_settings.target_content_network
+campaign.network_settings.target_google_search
+campaign.network_settings.target_partner_search_network
+campaign.network_settings.target_search_network
+campaign.optimization_score
+campaign.performance_max_upgrade.performance_max_campaign
+campaign.performance_max_upgrade.pre_upgrade_campaign
+campaign.performance_max_upgrade.status 
 campaign.serving_status
 campaign.status
 campaign_budget.amount_micros

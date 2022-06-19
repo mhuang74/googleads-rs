@@ -895,6 +895,9 @@ campaign.optimization_score
 campaign.payment_mode
 campaign.percent_cpc.cpc_bid_ceiling_micros
 campaign.percent_cpc.enhanced_cpc_enabled
+campaign.performance_max_upgrade.performance_max_campaign
+campaign.performance_max_upgrade.pre_upgrade_campaign
+campaign.performance_max_upgrade.status 
 campaign.real_time_bidding_setting.opt_in
 campaign.resource_name
 campaign.selective_optimization.conversion_actions

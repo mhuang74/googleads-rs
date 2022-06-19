@@ -60,7 +60,8 @@ def main():
     with open('google_ads_service_client_selectable_fields.txt') as f:
         gaql_fields = f.readlines()
 
-    array_field_parts = [field.strip().split('.') for field in gaql_fields]
+    # remove any commented out rows, and split fields components
+    array_field_parts = [field.strip().split('.') for field in gaql_fields if not field.startswith('#')]
 
     tpl_lib_rs = env.get_template('lib.rs.jinja')
     txt_lib_rs = tpl_lib_rs.render({'packages': packages, 'array_field_parts': array_field_parts})
