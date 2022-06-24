@@ -10,6 +10,8 @@ use crate::google::ads::googleads::v11::resources::campaign::CampaignBiddingStra
     TargetRoas,
 };
 
+use crate::google::ads::googleads::v11::resources::ad_group_criterion::Criterion::Keyword;
+
 impl google::ads::googleads::v11::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
     ///
@@ -74,8 +76,26 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
             "ad_group_criterion.effective_cpv_bid_source" => format!("{}", self.ad_group_criterion.as_ref().unwrap().effective_cpv_bid_source),
             "ad_group_criterion.effective_percent_cpc_bid_micros" => format!("{}", self.ad_group_criterion.as_ref().unwrap().effective_percent_cpc_bid_micros),
             "ad_group_criterion.effective_percent_cpc_bid_source" => format!("{}", self.ad_group_criterion.as_ref().unwrap().effective_percent_cpc_bid_source),
-            "ad_group_criterion.keyword.text" => format!("{:#?}", self.ad_group_criterion.as_ref().unwrap().criterion.as_ref().unwrap()),
-            "ad_group_criterion.keyword.match_type" => format!("{:#?}", self.ad_group_criterion.as_ref().unwrap().criterion.as_ref().unwrap()),
+            "ad_group_criterion.keyword.text" => {
+                if let Some(criterion) = self.ad_group_criterion.as_ref().unwrap().criterion.as_ref() {
+                    match criterion {
+                        Keyword(ki) => format!("{}", ki.text),
+                        _ => "".to_string()
+                    }
+                } else {
+                    "n/a".to_string()
+                }
+            },
+            "ad_group_criterion.keyword.match_type" => {
+                if let Some(criterion) = self.ad_group_criterion.as_ref().unwrap().criterion.as_ref() {
+                    match criterion {
+                        Keyword(ki) => format!("{:#?}", ki.match_type()),
+                        _ => "".to_string()
+                    }
+                } else {
+                    "n/a".to_string()
+                }
+            },
             "ad_group_criterion.status" => format!("{:#?}", self.ad_group_criterion.as_ref().unwrap().status()),
             "ad_group_criterion.type" => format!("{:#?}", self.ad_group_criterion.as_ref().unwrap().r#type()),
             "asset_field_type_view.field_type" => format!("{:#?}", self.asset_field_type_view.as_ref().unwrap().field_type()),
@@ -90,20 +110,19 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
             "campaign.advertising_channel_sub_type" => format!("{:#?}", self.campaign.as_ref().unwrap().advertising_channel_sub_type()),
             "campaign.base_campaign" => format!("{}", self.campaign.as_ref().unwrap().base_campaign),
             "campaign.bidding_strategy" => {
-                match self.campaign.as_ref().unwrap().campaign_bidding_strategy.as_ref() {
-                    Some(strategy) => {
-                        match strategy {
-                            BiddingStrategy(str) => format!("BiddingStrategy: {}", str),
-                            ManualCpc(mcpc) => format!("ManualCPC: enhanced={}", mcpc.enhanced_cpc_enabled),
-                            MaximizeConversions(mc) => format!("MaximizeConverions: cpa={:.2}", mc.target_cpa_micros/1000000),
-                            MaximizeConversionValue(mcv) => format!("MaximizeConversionValue: roas={:.2}", mcv.target_roas),
-                            TargetCpa(tcpa) => format!("TargetCPA: cpa={:.2}", tcpa.target_cpa_micros/1000000),
-                            TargetRoas(troas) => format!("TargetROAS: roas={:.2}", troas.target_roas),
-                            TargetImpressionShare(timp) => format!("TargetImpShare: loc={}, share={:.2}%", timp.location, timp.location_fraction_micros/10000),
-                            _ => "Unsupported".to_string()
-                        }
-                    },
-                    None => "none".to_string()
+                if let Some(strategy) = self.campaign.as_ref().unwrap().campaign_bidding_strategy.as_ref() {
+                    match strategy {
+                        BiddingStrategy(str) => format!("BiddingStrategy: {}", str),
+                        ManualCpc(mcpc) => format!("ManualCPC: enhanced={}", mcpc.enhanced_cpc_enabled),
+                        MaximizeConversions(mc) => format!("MaximizeConverions: cpa={:.2}", mc.target_cpa_micros/1000000),
+                        MaximizeConversionValue(mcv) => format!("MaximizeConversionValue: roas={:.2}", mcv.target_roas),
+                        TargetCpa(tcpa) => format!("TargetCPA: cpa={:.2}", tcpa.target_cpa_micros/1000000),
+                        TargetRoas(troas) => format!("TargetROAS: roas={:.2}", troas.target_roas),
+                        TargetImpressionShare(timp) => format!("TargetImpShare: loc={}, share={:.2}%", timp.location, timp.location_fraction_micros/10000),
+                        _ => "Unsupported".to_string()
+                    }
+                } else {
+                    "n/a".to_string()
                 }
             },
             "campaign.bidding_strategy_type" => format!("{:#?}", self.campaign.as_ref().unwrap().bidding_strategy_type()),
