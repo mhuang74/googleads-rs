@@ -144,7 +144,13 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
             "campaign.performance_max_upgrade.status" => format!("{:#?}", self.campaign.as_ref().unwrap().performance_max_upgrade.as_ref().unwrap().status()),
             "campaign.serving_status" => format!("{:#?}", self.campaign.as_ref().unwrap().serving_status()),
             "campaign.status" => format!("{:#?}", self.campaign.as_ref().unwrap().status()),
-            "campaign_budget.amount_micros" => format!("{}", self.campaign_budget.as_ref().unwrap().amount_micros),
+            "campaign_budget.amount_micros" => {
+                if let Some(budget) = self.campaign_budget.as_ref() {
+                    format!("{}", budget.amount_micros)
+                } else {
+                    "n/a".to_string()
+                }
+            },
             "customer.id" => format!("{}", self.customer.as_ref().unwrap().id),
             "customer.descriptive_name" => format!("{}", self.customer.as_ref().unwrap().descriptive_name),
             "customer.status" => format!("{:#?}", self.customer.as_ref().unwrap().status()),
