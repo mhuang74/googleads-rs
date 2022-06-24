@@ -1,36 +1,4 @@
-
-pub mod google {
-    pub mod ads {
-        pub mod googleads {
-            pub mod v11 {
-                pub mod common {
-                    tonic::include_proto!("google.ads.googleads.v11.common");
-                }
-                pub mod enums {
-                    tonic::include_proto!("google.ads.googleads.v11.enums");
-                }
-                pub mod errors {
-                    tonic::include_proto!("google.ads.googleads.v11.errors");
-                }
-                pub mod resources {
-                    tonic::include_proto!("google.ads.googleads.v11.resources");
-                }
-                pub mod services {
-                    tonic::include_proto!("google.ads.googleads.v11.services");
-                }
-            }
-        }
-    }
-    pub mod longrunning {
-        tonic::include_proto!("google.longrunning");
-    }
-    pub mod rpc {
-        pub mod context {
-            tonic::include_proto!("google.rpc.context");
-        }
-        tonic::include_proto!("google.rpc");
-    }
-}
+include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
 impl google::ads::googleads::v11::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
