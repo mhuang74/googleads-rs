@@ -10,7 +10,11 @@ use crate::google::ads::googleads::v11::resources::campaign::CampaignBiddingStra
     TargetRoas,
 };
 
-use crate::google::ads::googleads::v11::resources::ad_group_criterion::Criterion::Keyword;
+use crate::google::ads::googleads::v11::resources::{
+    ad_group_criterion::Criterion::Keyword,
+    campaign_criterion::Criterion::Keyword as CampaignKeyword,
+    campaign_criterion::Criterion::Location
+};
 
 impl google::ads::googleads::v11::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
@@ -39,11 +43,32 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
     ///     print!("\n");
     /// }
     /// ```
+
     pub fn get(&self, field_name: &str) -> String {
+
+        // macros to get attribute value as string
+        macro_rules! attr_str {
+            ([$( $parent:ident ),+], $attr:ident) => {
+                format!("{}", self.$($parent.as_ref().unwrap().)+$attr)
+            };
+        }
+        // macro to get Enum as debug formatter string
+        macro_rules! enum_str {
+            ([$( $parent:ident ),+], $func:ident) => {
+                format!("{:#?}", self.$($parent.as_ref().unwrap().)+$func())
+            };
+        }
+
         match field_name {
-            "account_budget.id" => format!("{}", self.account_budget.as_ref().unwrap().id),
-            "account_budget.name" => format!("{}", self.account_budget.as_ref().unwrap().name),
-            "account_budget.status" => format!("{:#?}", self.account_budget.as_ref().unwrap().status()),
+            // experiment with macros here..
+            "account_budget.id" => attr_str!([account_budget], id),
+            "account_budget.name" => attr_str!([account_budget], name),
+            "account_budget.status" => enum_str!([account_budget], status),
+            "ad_group_ad.ad.id" => attr_str!([ad_group_ad, ad], id),
+            "ad_group_ad.ad.name" => attr_str!([ad_group_ad, ad], name),
+            "ad_group_ad.ad.type" => enum_str!([ad_group_ad, ad], r#type),
+            "ad_group_ad.status" => enum_str!([ad_group_ad], status),
+            // resume old way of doing things..
             "ad_group.cpc_bid_micros" => format!("{}", self.ad_group.as_ref().unwrap().cpc_bid_micros),
             "ad_group.cpm_bid_micros" => format!("{}", self.ad_group.as_ref().unwrap().cpm_bid_micros),
             "ad_group.cpv_bid_micros" => format!("{}", self.ad_group.as_ref().unwrap().cpv_bid_micros),
@@ -59,10 +84,6 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
             "ad_group.target_cpm_micros" => format!("{}", self.ad_group.as_ref().unwrap().target_cpm_micros),
             "ad_group.target_roas" => format!("{}", self.ad_group.as_ref().unwrap().target_roas),
             "ad_group.type" => format!("{:#?}", self.ad_group.as_ref().unwrap().r#type()),
-            "ad_group_ad.ad.id" => format!("{}", self.ad_group_ad.as_ref().unwrap().ad.as_ref().unwrap().id),
-            "ad_group_ad.ad.name" => format!("{}", self.ad_group_ad.as_ref().unwrap().ad.as_ref().unwrap().name),
-            "ad_group_ad.ad.type" => format!("{:#?}", self.ad_group_ad.as_ref().unwrap().ad.as_ref().unwrap().r#type()),
-            "ad_group_ad.status" => format!("{:#?}", self.ad_group_ad.as_ref().unwrap().status()),
             "ad_group_criterion.bid_modifier" => format!("{}", self.ad_group_criterion.as_ref().unwrap().bid_modifier),
             "ad_group_criterion.cpc_bid_micros" => format!("{}", self.ad_group_criterion.as_ref().unwrap().cpc_bid_micros),
             "ad_group_criterion.cpm_bid_micros" => format!("{}", self.ad_group_criterion.as_ref().unwrap().cpm_bid_micros),
@@ -126,6 +147,30 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
                 }
             },
             "campaign.bidding_strategy_type" => format!("{:#?}", self.campaign.as_ref().unwrap().bidding_strategy_type()),
+            "campaign_criterion.criterion_id" => attr_str!([campaign_criterion], criterion_id),
+            "campaign_criterion.display_name" => attr_str!([campaign_criterion], display_name),
+            "campaign_criterion.keyword.text" => {
+                if let Some(criterion) = self.campaign_criterion.as_ref().unwrap().criterion.as_ref() {
+                    match criterion {
+                        CampaignKeyword(ki) => format!("{}", ki.text),
+                        _ => "".to_string()
+                    }
+                } else {
+                    "n/a".to_string()
+                }
+            },
+            "campaign_criterion.status" => enum_str!([campaign_criterion], status),
+            "campaign_criterion.type" => enum_str!([campaign_criterion], r#type),
+            "campaign_criterion.location.geo_target_constant" => {
+                if let Some(criterion) = self.campaign_criterion.as_ref().unwrap().criterion.as_ref() {
+                    match criterion {
+                        Location(loc) => format!("{:#?}", loc.geo_target_constant),
+                        _ => "".to_string()
+                    }
+                } else {
+                    "n/a".to_string()
+                }
+            },
             "campaign.campaign_budget" => format!("{}", self.campaign.as_ref().unwrap().campaign_budget),
             "campaign.dynamic_search_ads_setting.domain_name" => format!("{}", self.campaign.as_ref().unwrap().dynamic_search_ads_setting.as_ref().unwrap().domain_name),
             "campaign.dynamic_search_ads_setting.language_code" => format!("{}", self.campaign.as_ref().unwrap().dynamic_search_ads_setting.as_ref().unwrap().language_code),
