@@ -46,28 +46,6 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
 
     pub fn get(&self, field_name: &str) -> String {
 
-        /// Macro to get optional value of an attribute as string
-        /// HACK: limited to single level; consider TT Muncher pattern in future
-        /// Before
-        ///     "campaign_budget.amount_micros" => {
-        ///         if let Some(budget) = self.campaign_budget.as_ref() {
-        ///             format!("{}", budget.amount_micros)
-        ///         } else {
-        ///             "".to_string()
-        ///         }
-        ///     },
-        /// With Macro
-        ///     "campaign_budget.amount_micros" => attr_str!([campaign_budget], amount_micros),
-        macro_rules! optional_attr_str {
-            ($parent:ident, $attr:ident) => {
-                if let Some(o) = self.$parent.as_ref() {
-                    format!("{}", o.$attr)
-                } else {
-                    "".to_string()
-                }
-            };
-        }
-
         /// Macro to get value of an attribute as string
         /// Before
         ///     "ad_group.name" => format!("{}", self.ad_group.as_ref().unwrap().name),
@@ -79,6 +57,28 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
             };
         }
 
+        /// Macro to get value of an attribute as string on OPTIONAL parent
+        /// HACK: limited to single level; consider TT Muncher pattern in future
+        /// Before
+        ///     "campaign_budget.amount_micros" => {
+        ///         if let Some(budget) = self.campaign_budget.as_ref() {
+        ///             format!("{}", budget.amount_micros)
+        ///         } else {
+        ///             "".to_string()
+        ///         }
+        ///     },
+        /// With Macro
+        ///     "campaign_budget.amount_micros" => optional_attr_str!(campaign_budget, amount_micros),
+        macro_rules! optional_attr_str {
+            ($parent:ident, $attr:ident) => {
+                if let Some(o) = self.$parent.as_ref() {
+                    format!("{}", o.$attr)
+                } else {
+                    "".to_string()
+                }
+            };
+        }
+
         /// Macro to get result of a method call as debug string
         /// Before
         ///     "ad_group.status" => format!("{:#?}", self.ad_group.as_ref().unwrap().status()),
@@ -87,6 +87,29 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
         macro_rules! method_str {
             ([$( $parent:ident ),+], $func:ident) => {
                 format!("{:#?}", self.$($parent.as_ref().unwrap().)+$func())
+            };
+        }
+
+
+        /// Macro to get result of a method call as debug string on OPTIONAL parent
+        /// HACK: limited to single level; consider TT Muncher pattern in future
+        /// Before
+        ///     "campaign_criterion.status" => {
+        ///         if let Some(campaign_criterion) = self.campaign_criterion.as_ref() {
+        ///             format!("{}", campaign_criterion.status())
+        ///         } else {
+        ///             "".to_string()
+        ///         }
+        ///     },
+        /// With Macro
+        ///     "campaign_criterion.status" => optional_method_str!(campaign_criterion, status),
+        macro_rules! optional_method_str {
+            ($parent:ident, $func:ident) => {
+                if let Some(o) = self.$parent.as_ref() {
+                    format!("{:#?}", o.$func())
+                } else {
+                    "".to_string()
+                }
             };
         }
 
@@ -117,6 +140,41 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
             };
         }
 
+        /// Macro to get result of an Enum match on OPTIONAL parent
+        /// HACK: limited to single level; consider TT Muncher pattern in future
+        /// Before:
+        ///     "campaign_criterion.location.geo_target_constant" => {
+        ///         if let Some(campaign_criterion) = self.campaign_criterion.as_ref() {
+        ///             if let Some(criterion) = campaign_criterion.criterion.as_ref() {
+        ///                 match criterion {
+        ///                     Location(li) => format!("{}", li.geo_target_constant),
+        ///                     _ => "".to_string()
+        ///                 }
+        ///             } else {
+        ///                 "".to_string()
+        ///             }
+        ///         } else {
+        ///             "".to_string()
+        ///         }
+        ///     },
+        /// With Macro:
+        ///     "campaign_criterion.location.geo_target_constant" => optional_enum_match_str!([campaign_criterion], criterion, Location, geo_target_constant),
+        macro_rules! optional_enum_match_str {
+            ($parent:ident, $match_attr:ident, $enum_class:ident, $enum_attr:ident) => {
+                if let Some(p) = self.$parent.as_ref() {
+                    if let Some(a) = p.$match_attr.as_ref() {
+                        match a {
+                            $enum_class(o) => format!("{}", o.$enum_attr),
+                            _ => "".to_string()
+                        }
+                    } else {
+                        "".to_string()
+                    }
+                } else {
+                    "".to_string()
+                }
+            };
+        }
 
         match field_name {
             "account_budget.id" => attr_str!([account_budget], id),
@@ -186,12 +244,13 @@ impl google::ads::googleads::v11::services::GoogleAdsRow {
                 }
             },
             "campaign.bidding_strategy_type" => method_str!([campaign], bidding_strategy_type),
-            "campaign_criterion.criterion_id" => attr_str!([campaign_criterion], criterion_id),
-            "campaign_criterion.display_name" => attr_str!([campaign_criterion], display_name),
-            "campaign_criterion.keyword.text" => enum_match_str!([campaign_criterion], criterion, CampaignKeyword, text), 
-            "campaign_criterion.status" => method_str!([campaign_criterion], status),
-            "campaign_criterion.type" => method_str!([campaign_criterion], r#type),
-            "campaign_criterion.location.geo_target_constant" => enum_match_str!([campaign_criterion], criterion, Location, geo_target_constant),
+            "campaign_criterion.campaign" => optional_attr_str!(campaign_criterion, campaign),
+            "campaign_criterion.criterion_id" => optional_attr_str!(campaign_criterion, criterion_id),
+            "campaign_criterion.display_name" => optional_attr_str!(campaign_criterion, display_name),
+            "campaign_criterion.keyword.text" => optional_enum_match_str!(campaign_criterion, criterion, CampaignKeyword, text), 
+            "campaign_criterion.status" => optional_method_str!(campaign_criterion, status),
+            "campaign_criterion.type" => optional_method_str!(campaign_criterion, r#type),
+            "campaign_criterion.location.geo_target_constant" => optional_enum_match_str!(campaign_criterion, criterion, Location, geo_target_constant),
             "campaign.campaign_budget" => attr_str!([campaign], campaign_budget),
             "campaign.dynamic_search_ads_setting.domain_name" => attr_str!([campaign, dynamic_search_ads_setting], domain_name),
             "campaign.dynamic_search_ads_setting.language_code" => attr_str!([campaign, dynamic_search_ads_setting], language_code),
