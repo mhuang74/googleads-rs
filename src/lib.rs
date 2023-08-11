@@ -218,7 +218,7 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
             "asset_field_type_view.field_type" => method_str!([asset_field_type_view], field_type),
             "asset_group.id" => attr_str!([asset_group], id),
             "asset_group.name" => attr_str!([asset_group], name),
-            "asset_group.status" => attr_str!([asset_group], status),
+            "asset_group.status" => method_str!([asset_group], status),
             "asset_group.resource_name" => attr_str!([asset_group], resource_name),
             "asset_group.campaign" => attr_str!([asset_group], campaign),
             "asset_group.ad_strength" => attr_str!([asset_group], ad_strength),
