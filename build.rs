@@ -18,9 +18,9 @@ fn main() -> Res {
     .filter(|e| {
       (
         // pull in the 3 pakage we need for calling googleads api
-        e.path().to_str().unwrap().contains(&"googleads/v14") ||
-        e.path().to_str().unwrap().contains(&"google/rpc") ||
-        e.path().to_str().unwrap().contains(&"google/longrunning")
+        e.path().to_str().unwrap().contains("googleads/v14") ||
+        e.path().to_str().unwrap().contains("google/rpc") ||
+        e.path().to_str().unwrap().contains("google/longrunning")
       )
       &&
       e.path()
@@ -31,7 +31,7 @@ fn main() -> Res {
     let path = entry.path();
     protos.push(path.to_owned());
 
-    let content = fs::read_to_string(&path).unwrap();
+    let content = fs::read_to_string(path).unwrap();
     let pkg = content
       .lines()
       .find(|line| line.starts_with("package "))
@@ -43,7 +43,7 @@ fn main() -> Res {
       // extract package
       .trim()
       .trim_start_matches("package ")
-      .trim_end_matches(";");
+      .trim_end_matches(';');
 
     pkgs.insert(pkg.to_string());
   }
@@ -60,7 +60,7 @@ fn main() -> Res {
 }
 
 fn write_protos_rs(pkgs: HashSet<String>) -> Res {
-  let ref mut protos_rs = String::new();
+  let protos_rs = &mut String::new();
 
   let mut packages: Vec<String> = pkgs.into_iter().collect();
   packages.sort();
@@ -70,8 +70,8 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
   for pkg in packages {
     // find common ancestor
     let pop_to = pkg
-      .split(".")
-      .map(|seg| map_keyword(seg))
+      .split('.')
+      .map(map_keyword)
       .enumerate()
       .position(|(idx, pkg_seg)| {
         path_stack
@@ -87,7 +87,7 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
     }
 
     // now push stack
-    for seg in pkg.split(".").skip(pop_to).map(|seg| map_keyword(seg)) {
+    for seg in pkg.split('.').skip(pop_to).map(map_keyword) {
       writeln!(protos_rs, "pub mod {} {{", &seg)?;
       path_stack.push(seg);
     }
@@ -101,7 +101,7 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
   }
 
   // pop all stack
-  while path_stack.len() > 0 {
+  while !path_stack.is_empty() {
     path_stack.pop();
     writeln!(protos_rs, "}}").unwrap();
   }
