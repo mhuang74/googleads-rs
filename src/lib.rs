@@ -1,3 +1,25 @@
+//! Google Ads gRPC library.
+//! 
+//! A gRPC client library for Google Ads API, generated automatically from the API definition files.
+//! 
+//! Provides `GoogleAdsRow.get(path: &str)` accessor method to easily retrieve fields selected in GAQL.
+//!     
+//! # Example
+//! 
+//! ```
+//! let field_mask = response.field_mask.unwrap();
+//! for row in response.results {
+//!     for path in &field_mask.paths {
+//!         print!("{}: {}\t", path, row.get(&path));
+//!     }
+//!     print!("\n");
+//! }
+//! ```
+//! 
+
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.4.1")]
+
+
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
 use crate::google::ads::googleads::v14::enums::bidding_strategy_type_enum::{
@@ -27,17 +49,17 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
     /// * basic Attribute fields are supported (eg. id, name, status)
     /// * other Attribute fields are supported when requested
     /// * for Attribute with Enum values, readable values returned for fields that ends with:
-    ///  * status
-    ///  * type
-    ///  * device
+    ///   * status
+    ///   * type
+    ///   * device
     ///
-    /// # Examples
+    /// # Example
     ///
     /// ```
     /// let field_mask = response.field_mask.unwrap();
     /// for row in response.results {
     ///     for path in &field_mask.paths {
-    ///         print!("{}\t", row.get(&path));
+    ///         print!("{}: {}\t", path, row.get(&path));
     ///     }
     ///     print!("\n");
     /// }
