@@ -93,3 +93,7 @@ Provides `GoogleAdsRow.get(path: &str)` accessor method to easily retrieve field
         }
     }
 ```
+
+## Credits
+* Originally forked from [gkkachi's gapi-grpc-rs](https://github.com/gkkachi/gapi-grpc-rs), which used Python to generate `protos.rs`
+* Dropped Python and migrated to custom build.rs per [aquarhead](https://blog.aqd.is/2021/07/rust-protobuf)
