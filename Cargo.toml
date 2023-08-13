@@ -15,12 +15,12 @@ readme = "README.md"
 [lib]
 
 [dependencies]
-tonic = { version = "0.7.2", features = ["tls", "tls-roots"] }
-prost = "0.10.4"
-prost-types = "0.10.1"
+tonic = { version = "0.8.0", features = ["tls", "tls-roots"] }
+prost = "0.11.9"
+prost-types = "0.11.9"
 
 [build-dependencies]
-tonic-build = "0.7.2"
+tonic-build = "0.8.0"
 walkdir = "2"
 
 [dev-dependencies]
