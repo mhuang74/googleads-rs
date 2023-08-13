@@ -5,7 +5,6 @@ authors = ["Michael S. Huang <mhuang74@gmail.com>"]
 edition = "2018"
 license = "MIT"
 repository = "https://github.com/mhuang74/googleads-rs"
-documentation = ""
 description = """
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
 """
