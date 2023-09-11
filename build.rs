@@ -12,7 +12,9 @@ fn main() -> Res {
   let mut protos = vec![];
   let mut pkgs = HashSet::new();
 
-  for entry in WalkDir::new("proto")
+  let proto_path = concat!(env!("CARGO_MANIFEST_DIR"), "/proto");
+
+  for entry in WalkDir::new(proto_path)
     .into_iter()
     .map(|e| e.unwrap())
     .filter(|e| {
@@ -50,7 +52,7 @@ fn main() -> Res {
 
   tonic_build::configure()
     .build_server(false)
-    .compile(&protos, &[Path::new("proto")])?;
+    .compile(&protos, &[Path::new(proto_path)])?;
 
   write_protos_rs(pkgs)?;
 
