@@ -10,6 +10,7 @@ description = """
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
 """
 keywords = ["gapi", "grpc", "googleads"]
+readme = "README.md"
 
 [lib]
 
@@ -27,3 +28,4 @@ version-sync = "0.9"
 
 [badges.maintenance]
 status = "actively-developed"
+

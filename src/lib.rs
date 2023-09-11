@@ -6,7 +6,7 @@
 //!     
 //! # Example
 //! 
-//! ```
+//! ```ignore
 //! let field_mask = response.field_mask.unwrap();
 //! for row in response.results {
 //!     for path in &field_mask.paths {
@@ -55,7 +55,7 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```ignore
     /// let field_mask = response.field_mask.unwrap();
     /// for row in response.results {
     ///     for path in &field_mask.paths {
