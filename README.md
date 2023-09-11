@@ -6,11 +6,13 @@
 [![api-docs](https://docs.rs/googleads-rs/badge.svg)](https://docs.rs/googleads-rs)
 
 
-Current Version 0.5.0
+Current Version 0.5.1
 
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
 
-Provides `GoogleAdsRow.get(path: &str)` accessor method to easily retrieve fields selected in GAQL
+I use it for my [mcc-gaql](https://github.com/mhuang74/mcc-gaql-rs) command line tool to run Google Ads Query Language queries across large number of MCC-linked accounts.
+
+There may be more elegant ways to pull query results from GoogleAdsRow in a reflection-like manner. I couldn't figure it out. So I hand-crafted a `GoogleAdsRow.get(path: &str)` accessor method for fields which I need. 
 
 ## Example
 
