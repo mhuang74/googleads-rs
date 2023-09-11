@@ -1,5 +1,11 @@
 # googleads-rs
 
+![Maintenance](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg)
+[![CI](https://github.com/mhuang74/googleads-rs/actions/workflows/main.yml/badge.svg)](https://github.com/mhuang74/googleads-rs/actions)
+[![crates-io](https://img.shields.io/crates/v/googleads-rs.svg)](https://crates.io/crates/googleads-rs)
+[![api-docs](https://docs.rs/googleads-rs/badge.svg)](https://docs.rs/googleads-rs)
+
+
 Current Version 0.5.0
 
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
