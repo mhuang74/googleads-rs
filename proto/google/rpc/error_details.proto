@@ -28,7 +28,7 @@ option objc_class_prefix = "RPC";
 //
 // Example of an error when contacting the "pubsub.googleapis.com" API when it
 // is not enabled:
-//
+// ```ignore
 //     { "reason": "API_DISABLED"
 //       "domain": "googleapis.com"
 //       "metadata": {
@@ -36,18 +36,19 @@ option objc_class_prefix = "RPC";
 //         "service": "pubsub.googleapis.com"
 //       }
 //     }
-//
+// ```
 // This response indicates that the pubsub.googleapis.com API is not enabled.
 //
 // Example of an error that is returned when attempting to create a Spanner
 // instance in a region that is out of stock:
-//
+// ```ignore
 //     { "reason": "STOCKOUT"
 //       "domain": "spanner.googleapis.com",
 //       "metadata": {
 //         "availableRegions": "us-central1,us-east2"
 //       }
 //     }
+// ```
 message ErrorInfo {
   // The reason of the error. This is a constant value that identifies the
   // proximate cause of the error. Error reasons are unique within a particular
@@ -175,7 +176,7 @@ message BadRequest {
     // field.
     //
     // Consider the following:
-    //
+    // ```ignore
     //     message CreateContactRequest {
     //       message EmailAddress {
     //         enum Type {
@@ -191,7 +192,7 @@ message BadRequest {
     //       string full_name = 1;
     //       repeated EmailAddress email_addresses = 2;
     //     }
-    //
+    // ```
     // In this example, in proto `field` could take one of the following values:
     //
     // * `full_name` for a violation in the `full_name` value
