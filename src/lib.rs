@@ -1,16 +1,12 @@
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
 use crate::google::ads::googleads::v14::enums::bidding_strategy_type_enum::{
-    BiddingStrategyType,
-};
-
-use crate::google::ads::googleads::v14::common::{
-    ManualCpc,
-    MaximizeConversions,
-    MaximizeConversionValue,
-    TargetCpa,
-    TargetImpressionShare,
-    TargetRoas,
+    BiddingStrategyType::ManualCpc,
+    BiddingStrategyType::MaximizeConversions,
+    BiddingStrategyType::MaximizeConversionValue,
+    BiddingStrategyType::TargetCpa,
+    BiddingStrategyType::TargetImpressionShare,
+    BiddingStrategyType::TargetRoas,
 };
 
 use crate::google::ads::googleads::v14::resources::{
@@ -220,6 +216,12 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
             "ad_group_criterion.status" => method_str!([ad_group_criterion], status),
             "ad_group_criterion.type" => method_str!([ad_group_criterion], r#type),
             "asset_field_type_view.field_type" => method_str!([asset_field_type_view], field_type),
+            "asset_group.id" => attr_str!([asset_group], id),
+            "asset_group.name" => attr_str!([asset_group], name),
+            "asset_group.status" => attr_str!([asset_group], status),
+            "asset_group.resource_name" => attr_str!([asset_group], resource_name),
+            "asset_group.campaign" => attr_str!([asset_group], campaign),
+            "asset_group.ad_strength" => attr_str!([asset_group], ad_strength),
             "audience.description" => attr_str!([audience], description),
             "audience.id" => attr_str!([audience], id),
             "audience.name" => attr_str!([audience], name),
@@ -231,20 +233,18 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
             "campaign.advertising_channel_sub_type" => method_str!([campaign], advertising_channel_sub_type),
             "campaign.base_campaign" => attr_str!([campaign], base_campaign),
             "campaign.bidding_strategy_type" => {
-                let strategy = self.campaign.as_ref().unwrap().bidding_strategy_type;
+                let strategy = self.campaign.as_ref().unwrap().bidding_strategy_type();
                 match strategy {
-                    BiddingStrategy => format!("BiddingStrategy",),
-                    ManualCpc => format!("ManualCPC"),
-                    MaximizeConversions => format!("MaximizeConverions"),
-                    MaximizeConversionValue => format!("MaximizeConversionValue"),
-                    TargetCpa => format!("TargetCPA"),
-                    TargetRoas => format!("TargetROAS"),
-                    TargetImpressionShare => format!("TargetImpShare"),
+                    ManualCpc => "ManualCPC".to_string(),
+                    MaximizeConversions => "MaximizeConverions".to_string(),
+                    MaximizeConversionValue => "MaximizeConversionValue".to_string(),
+                    TargetCpa => "TargetCPA".to_string(),
+                    TargetRoas => "TargetROAS".to_string(),
+                    TargetImpressionShare => "TargetImpShare".to_string(),
                     _ => "Unsupported".to_string()
                 }
 
             },
-            "campaign.bidding_strategy_type" => method_str!([campaign], bidding_strategy_type),
             "campaign_criterion.campaign" => optional_attr_str!(campaign_criterion, campaign),
             "campaign_criterion.criterion_id" => optional_attr_str!(campaign_criterion, criterion_id),
             "campaign_criterion.display_name" => optional_attr_str!(campaign_criterion, display_name),
@@ -435,7 +435,7 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
             "segments.slot" => method_str!([segments], slot),
             "segments.week" => attr_str!([segments], week),
             "segments.year" => attr_str!([segments], year),
-            _ => "unsupported".to_string()
+            _ => "not implemented by googleads-rs".to_string()
         }
     }
 }
