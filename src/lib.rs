@@ -17,7 +17,7 @@
 //! ```
 //! 
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.4.1")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.5.0")]
 
 
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));

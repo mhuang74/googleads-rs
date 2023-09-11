@@ -1,6 +1,6 @@
 # googleads-rs
 
-Current Version 0.4.1
+Current Version 0.5.0
 
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
 

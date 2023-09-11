@@ -1,6 +1,6 @@
 [package]
 name = "googleads-rs"
-version = "0.4.1"
+version = "0.5.0"
 authors = ["Michael S. Huang <mhuang74@gmail.com>"]
 edition = "2018"
 license = "MIT"
