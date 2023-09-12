@@ -6,7 +6,7 @@
 [![api-docs](https://docs.rs/googleads-rs/badge.svg)](https://docs.rs/googleads-rs)
 
 
-Current Version 0.5.2
+Current Version 0.5.1
 
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
 
