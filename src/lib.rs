@@ -1,11 +1,11 @@
 //! Google Ads gRPC library.
-//! 
+//!
 //! A gRPC client library for Google Ads API, generated automatically from the API definition files.
-//! 
+//!
 //! Provides `GoogleAdsRow.get(path: &str)` accessor method to easily retrieve fields selected in GAQL.
 //!     
 //! # Example
-//! 
+//!
 //! ```ignore
 //! let field_mask = response.field_mask.unwrap();
 //! for row in response.results {
@@ -15,26 +15,22 @@
 //!     print!("\n");
 //! }
 //! ```
-//! 
+//!
 
 #![doc(html_root_url = "https://docs.rs/googleads-rs/0.5.1")]
-
 
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
 use crate::google::ads::googleads::v14::enums::bidding_strategy_type_enum::{
-    BiddingStrategyType::ManualCpc,
-    BiddingStrategyType::MaximizeConversions,
-    BiddingStrategyType::MaximizeConversionValue,
-    BiddingStrategyType::TargetCpa,
-    BiddingStrategyType::TargetImpressionShare,
-    BiddingStrategyType::TargetRoas,
+    BiddingStrategyType::ManualCpc, BiddingStrategyType::MaximizeConversionValue,
+    BiddingStrategyType::MaximizeConversions, BiddingStrategyType::TargetCpa,
+    BiddingStrategyType::TargetImpressionShare, BiddingStrategyType::TargetRoas,
 };
 
 use crate::google::ads::googleads::v14::resources::{
     ad_group_criterion::Criterion::Keyword,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
-    campaign_criterion::Criterion::Location
+    campaign_criterion::Criterion::Location,
 };
 
 impl google::ads::googleads::v14::services::GoogleAdsRow {
@@ -66,7 +62,6 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
     /// ```
 
     pub fn get(&self, field_name: &str) -> String {
-
         /// Macro to get value of an attribute as string
         /// Before
         ///     "ad_group.name" => format!("{}", self.ad_group.as_ref().unwrap().name),
@@ -110,7 +105,6 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
                 format!("{:#?}", self.$($parent.as_ref().unwrap().)+$func())
             };
         }
-
 
         /// Macro to get result of a method call as debug string on OPTIONAL parent
         /// HACK: limited to single level; consider TT Muncher pattern in future
@@ -186,7 +180,7 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
                     if let Some(a) = p.$match_attr.as_ref() {
                         match a {
                             $enum_class(o) => format!("{}", o.$enum_attr),
-                            _ => "".to_string()
+                            _ => "".to_string(),
                         }
                     } else {
                         "".to_string()
@@ -308,6 +302,9 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
             "customer_client.time_zone" => attr_str!([customer_client], time_zone),
             "extension_feed_item.extension_type" => method_str!([extension_feed_item], extension_type),
             "feed_placeholder_view.placeholder_type" => method_str!([feed_placeholder_view], placeholder_type),
+            "label.id" => attr_str!([label], id),
+            "label.name" => attr_str!([label], name),
+            "label.status" => method_str!([label], status),
             "search_term_view.ad_group" => attr_str!([search_term_view], ad_group),
             "search_term_view.search_term" => attr_str!([search_term_view], search_term),
             "search_term_view.status" => method_str!([search_term_view], status),

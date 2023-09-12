@@ -9,114 +9,113 @@ type Res = Result<(), Box<dyn std::error::Error>>;
 //   "REPO DIR": where to monitor change for build.rs rerun
 
 fn main() -> Res {
-  let mut protos = vec![];
-  let mut pkgs = HashSet::new();
+    let mut protos = vec![];
+    let mut pkgs = HashSet::new();
 
-  let proto_path = concat!(env!("CARGO_MANIFEST_DIR"), "/proto");
+    let proto_path = concat!(env!("CARGO_MANIFEST_DIR"), "/proto");
 
-  for entry in WalkDir::new(proto_path)
-    .into_iter()
-    .map(|e| e.unwrap())
-    .filter(|e| {
-      (
-        // pull in the 3 pakage we need for calling googleads api
-        e.path().to_str().unwrap().contains("googleads/v14") ||
-        e.path().to_str().unwrap().contains("google/rpc") ||
-        e.path().to_str().unwrap().contains("google/longrunning")
-      )
-      &&
-      e.path()
-        .extension()
-        .map_or(false, |ext| ext.to_str().unwrap() == "proto")
-    })
-  {
-    let path = entry.path();
-    protos.push(path.to_owned());
+    for entry in WalkDir::new(proto_path)
+        .into_iter()
+        .map(|e| e.unwrap())
+        .filter(|e| {
+            (
+                // pull in the 3 pakage we need for calling googleads api
+                e.path().to_str().unwrap().contains("googleads/v14")
+                    || e.path().to_str().unwrap().contains("google/rpc")
+                    || e.path().to_str().unwrap().contains("google/longrunning")
+            ) && e
+                .path()
+                .extension()
+                .map_or(false, |ext| ext.to_str().unwrap() == "proto")
+        })
+    {
+        let path = entry.path();
+        protos.push(path.to_owned());
 
-    let content = fs::read_to_string(path).unwrap();
-    let pkg = content
-      .lines()
-      .find(|line| line.starts_with("package "))
-      .unwrap()
-      // remove comment
-      .split("//")
-      .next()
-      .unwrap()
-      // extract package
-      .trim()
-      .trim_start_matches("package ")
-      .trim_end_matches(';');
+        let content = fs::read_to_string(path).unwrap();
+        let pkg = content
+            .lines()
+            .find(|line| line.starts_with("package "))
+            .unwrap()
+            // remove comment
+            .split("//")
+            .next()
+            .unwrap()
+            // extract package
+            .trim()
+            .trim_start_matches("package ")
+            .trim_end_matches(';');
 
-    pkgs.insert(pkg.to_string());
-  }
+        pkgs.insert(pkg.to_string());
+    }
 
-  tonic_build::configure()
-    .build_server(false)
-    .compile(&protos, &[Path::new(proto_path)])?;
+    tonic_build::configure()
+        .build_server(false)
+        .compile(&protos, &[Path::new(proto_path)])?;
 
-  write_protos_rs(pkgs)?;
+    write_protos_rs(pkgs)?;
 
-  println!("cargo:rerun-if-changed=proto");
+    println!("cargo:rerun-if-changed=proto");
 
-  Ok(())
+    Ok(())
 }
 
 fn write_protos_rs(pkgs: HashSet<String>) -> Res {
-  let protos_rs = &mut String::new();
+    let protos_rs = &mut String::new();
 
-  let mut packages: Vec<String> = pkgs.into_iter().collect();
-  packages.sort();
+    let mut packages: Vec<String> = pkgs.into_iter().collect();
+    packages.sort();
 
-  let mut path_stack: Vec<String> = vec![];
+    let mut path_stack: Vec<String> = vec![];
 
-  for pkg in packages {
-    // find common ancestor
-    let pop_to = pkg
-      .split('.')
-      .map(map_keyword)
-      .enumerate()
-      .position(|(idx, pkg_seg)| {
-        path_stack
-          .get(idx)
-          .map_or(true, |stack_seg| stack_seg != &pkg_seg)
-      })
-      .unwrap_or(0);
+    for pkg in packages {
+        // find common ancestor
+        let pop_to = pkg
+            .split('.')
+            .map(map_keyword)
+            .enumerate()
+            .position(|(idx, pkg_seg)| {
+                path_stack
+                    .get(idx)
+                    .map_or(true, |stack_seg| stack_seg != &pkg_seg)
+            })
+            .unwrap_or(0);
 
-    // pop stack
-    while path_stack.len() > pop_to {
-      path_stack.pop();
-      writeln!(protos_rs, "}}")?;
+        // pop stack
+        while path_stack.len() > pop_to {
+            path_stack.pop();
+            writeln!(protos_rs, "}}")?;
+        }
+
+        // now push stack
+        for seg in pkg.split('.').skip(pop_to).map(map_keyword) {
+            writeln!(protos_rs, "pub mod {} {{", &seg)?;
+            path_stack.push(seg);
+        }
+
+        // write include_proto! inside module
+        writeln!(
+            protos_rs,
+            "tonic::include_proto!(\"{}\");",
+            path_stack.join(".")
+        )?;
     }
 
-    // now push stack
-    for seg in pkg.split('.').skip(pop_to).map(map_keyword) {
-      writeln!(protos_rs, "pub mod {} {{", &seg)?;
-      path_stack.push(seg);
+    // pop all stack
+    while !path_stack.is_empty() {
+        path_stack.pop();
+        writeln!(protos_rs, "}}").unwrap();
     }
 
-    // write include_proto! inside module
-    writeln!(
-      protos_rs,
-      "tonic::include_proto!(\"{}\");",
-      path_stack.join(".")
-    )?;
-  }
+    fs::write(format!("{}/protos.rs", env::var("OUT_DIR")?), protos_rs)?;
 
-  // pop all stack
-  while !path_stack.is_empty() {
-    path_stack.pop();
-    writeln!(protos_rs, "}}").unwrap();
-  }
-
-  fs::write(format!("{}/protos.rs", env::var("OUT_DIR")?), protos_rs)?;
-
-  Ok(())
+    Ok(())
 }
 
 // This is copied from prost-build/src/ident.rs
 fn map_keyword(kw: &str) -> String {
-  let mut ident = kw.to_string();
-  match ident.as_str() {
+    let mut ident = kw.to_string();
+    match ident.as_str() {
       // 2015 strict keywords.
       "as" | "break" | "const" | "continue" | "else" | "enum" | "false"
       | "fn" | "for" | "if" | "impl" | "in" | "let" | "loop" | "match" | "mod" | "move" | "mut"
@@ -133,6 +132,5 @@ fn map_keyword(kw: &str) -> String {
       "self" | "super" | "extern" | "crate" => ident += "_",
       _ => (),
   }
-  ident
+    ident
 }
-
