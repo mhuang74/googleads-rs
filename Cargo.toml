@@ -16,7 +16,7 @@ readme = "README.md"
 [dependencies]
 tonic = { version = "0.8.0", features = ["tls", "tls-roots"] }
 prost = "0.11.9"
-prost-types = "0.11.9"
+prost-types = "0.12.1"
 
 [build-dependencies]
 tonic-build = "0.8.0"
