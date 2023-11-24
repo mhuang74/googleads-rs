@@ -15,7 +15,7 @@ mv googleapis-master/google/api proto/google
 
 # move latest googleads api
 mkdir -p proto/google/ads/googleads
-mv googleapis-master/google/ads/googleads/v14 proto/google/ads/googleads
+mv googleapis-master/google/ads/googleads/v15 proto/google/ads/googleads
 
 find proto -type f -not -name '*.proto' -delete
 find proto -type f | xargs sed -i'' -e 's/^ *optional//g'

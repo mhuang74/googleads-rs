@@ -17,23 +17,23 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.5.1")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.6.0")]
 
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
-use crate::google::ads::googleads::v14::enums::bidding_strategy_type_enum::{
+use crate::google::ads::googleads::v15::enums::bidding_strategy_type_enum::{
     BiddingStrategyType::ManualCpc, BiddingStrategyType::MaximizeConversionValue,
     BiddingStrategyType::MaximizeConversions, BiddingStrategyType::TargetCpa,
     BiddingStrategyType::TargetImpressionShare, BiddingStrategyType::TargetRoas,
 };
 
-use crate::google::ads::googleads::v14::resources::{
+use crate::google::ads::googleads::v15::resources::{
     ad_group_criterion::Criterion::Keyword,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
     campaign_criterion::Criterion::Location,
 };
 
-impl google::ads::googleads::v14::services::GoogleAdsRow {
+impl google::ads::googleads::v15::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
     ///
     /// # Arguments
@@ -418,7 +418,7 @@ impl google::ads::googleads::v14::services::GoogleAdsRow {
             "metrics.search_rank_lost_impression_share" => attr_str!([metrics], search_rank_lost_impression_share),
             "metrics.search_rank_lost_top_impression_share" => attr_str!([metrics], search_rank_lost_top_impression_share),
             "metrics.search_top_impression_share" => attr_str!([metrics], search_top_impression_share),
-            "metrics.sk_ad_network_conversions" => attr_str!([metrics], sk_ad_network_conversions),
+            "metrics.sk_ad_network_installs" => attr_str!([metrics], sk_ad_network_installs),
             "metrics.speed_score" => attr_str!([metrics], speed_score),
             "metrics.top_impression_percentage" => attr_str!([metrics], top_impression_percentage),
             "metrics.valid_accelerated_mobile_pages_clicks_percentage" => attr_str!([metrics], valid_accelerated_mobile_pages_clicks_percentage),
