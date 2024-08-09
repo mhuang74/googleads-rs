@@ -1,4 +1,4 @@
-// Copyright 2022 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -130,7 +130,7 @@ message AttributeContext {
     // `{key: value}` pairs for standard and private claims. The following
     // is a subset of the standard required and optional claims that would
     // typically be presented for a Google-based JWT:
-    // ```ignore
+    //
     //    {'iss': 'accounts.google.com',
     //     'sub': '113289723416554971153',
     //     'aud': ['123456789012', 'pubsub.googleapis.com'],
@@ -138,7 +138,7 @@ message AttributeContext {
     //     'email': 'jsmith@example.com',
     //     'iat': 1353601026,
     //     'exp': 1353604926}
-    // ```
+    //
     // SAML assertions are similarly specified, but with an identity provider
     // dependent structure.
     google.protobuf.Struct claims = 4;

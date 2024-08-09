@@ -15,9 +15,12 @@ mv googleapis-master/google/api proto/google
 
 # move latest googleads api
 mkdir -p proto/google/ads/googleads
-mv googleapis-master/google/ads/googleads/v16 proto/google/ads/googleads
+
+############################### GOOGLE ADS API VERSION ###############################
+mv googleapis-master/google/ads/googleads/v17 proto/google/ads/googleads
+######################################################################################
 
 find proto -type f -not -name '*.proto' -delete
 find proto -type f | xargs sed -i'' -e 's/^ *optional//g'
-rm -rf googleapis-master master.zip
+#rm -rf googleapis-master master.zip
 find proto -type f -name '*.proto-e' -delete

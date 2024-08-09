@@ -17,23 +17,23 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.7.0")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.8.0")]
 
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
-use crate::google::ads::googleads::v16::enums::bidding_strategy_type_enum::{
+use crate::google::ads::googleads::v17::enums::bidding_strategy_type_enum::{
     BiddingStrategyType::ManualCpc, BiddingStrategyType::MaximizeConversionValue,
     BiddingStrategyType::MaximizeConversions, BiddingStrategyType::TargetCpa,
     BiddingStrategyType::TargetImpressionShare, BiddingStrategyType::TargetRoas,
 };
 
-use crate::google::ads::googleads::v16::resources::{
+use crate::google::ads::googleads::v17::resources::{
     ad_group_criterion::Criterion::Keyword,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
     campaign_criterion::Criterion::Location,
 };
 
-impl google::ads::googleads::v16::services::GoogleAdsRow {
+impl google::ads::googleads::v17::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
     ///
     /// # Arguments
