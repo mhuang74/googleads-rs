@@ -77,7 +77,7 @@ There may be more elegant ways to pull query results from GoogleAdsRow in a refl
 ## API Upgrade
 
 Run `update.sh` to update the library for a new Google Ads API version:
-* Download latest proto files for new Google Ads API v17version
+* Download latest proto files for new Google Ads API version
 * Replace references to old api version in build.rs, lib.rs, and README.md
 
 ```
