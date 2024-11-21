@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Define a function to handle errors gracefully
+safe_run() {
+  "$@" || echo "Command failed: $*" >&2
+}
+
 if [ -z "$1" ]; then
   echo "Error: must supply Google Ads API version, e.g., 'v17'"
   exit 1
@@ -10,7 +18,7 @@ GOOGLEADS_API_VERSION=$1
 current_version=$(grep -oE 'googleads/v[0-9]+' build.rs | grep -oE 'v[0-9]+')
 
 if [ "$current_version" == "$GOOGLEADS_API_VERSION" ]; then
-  echo "Nothing Done. Already at target version"
+  echo "Nothing Done. Already at target version $GOOGLEADS_API_VERSION"
   exit 0
 fi
 
@@ -19,7 +27,8 @@ echo "Updating googleads-rs to $GOOGLEADS_API_VERSION"
 rm -rf proto
 mkdir proto
 # download latest googleapis
-curl https://github.com/googleapis/googleapis/archive/master.zip -o master.zip -L --silent && unzip -q master
+curl https://github.com/googleapis/googleapis/archive/master.zip -o master.zip -L --silent
+unzip -q master
 
 # infrastructure needed by googleads
 mkdir -p proto/google
@@ -37,30 +46,31 @@ mv googleapis-master/google/ads/googleads/$GOOGLEADS_API_VERSION proto/google/ad
 ######################################################################################
 
 # only keep proto files
-find proto -type f -not -name '*.proto' -delete
+safe_run find proto -type f -not -name '*.proto' -delete
 
-# remove optional keyword
-find proto -type f | xargs sed -i '' -e 's/^ *optional//g'
+# Remove optional keyword
+safe_run find proto -type f | while read -r file; do
+  sed -i -e 's/^ *optional//g' "$file" || echo "Failed to process $file"
+done
 
-# remove comments from 2 proto files to avoid doc test errors
-sed -i '' -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
-sed -i '' -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
+# Remove comments from 2 proto files to avoid doc test errors
+safe_run sed -i -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
+safe_run sed -i -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
 
-# remove extra proto-e files
-find proto -type f -name '*.proto-e' -delete
+# Remove extra proto-e files
+safe_run find proto -type f -name '*.proto-e' -delete
 
-# remove orig googleapis files
-rm -rf googleapis-master master.zip
+# Remove orig googleapis files (uncomment if needed)
+safe_run rm -rf googleapis-master master.zip
 
-## update version references in rust code
-
+# Update version references in Rust code
 # Update build.rs
-sed -i '' "s/googleads\/$current_version/googleads\/$GOOGLEADS_API_VERSION/g" build.rs
+safe_run sed -i "s/googleads\/$current_version/googleads\/$GOOGLEADS_API_VERSION/g" build.rs
 
 # Update src/lib.rs
-sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
+safe_run sed -i "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
 
 # Update README.md
-sed -i '' "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
+safe_run sed -i "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
 
 

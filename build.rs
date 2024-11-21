@@ -20,7 +20,7 @@ fn main() -> Res {
         .filter(|e| {
             (
                 // pull in the 3 pakage we need for calling googleads api
-                e.path().to_str().unwrap().contains("googleads/v17")
+                e.path().to_str().unwrap().contains("googleads/v18")
                     || e.path().to_str().unwrap().contains("google/rpc")
                     || e.path().to_str().unwrap().contains("google/longrunning")
             ) && e
