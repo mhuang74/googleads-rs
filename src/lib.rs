@@ -17,7 +17,7 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.9.0")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.9.1")]
 
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
@@ -29,6 +29,7 @@ use crate::google::ads::googleads::v18::enums::bidding_strategy_type_enum::{
 
 use crate::google::ads::googleads::v18::resources::{
     ad_group_criterion::Criterion::Keyword,
+    ad::AdData::ResponsiveSearchAd,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
     campaign_criterion::Criterion::Location,
 };
@@ -155,6 +156,26 @@ impl google::ads::googleads::v18::services::GoogleAdsRow {
             };
         }
 
+        /// useful for accessing AdData
+        macro_rules! enum_match_iterator_str {
+            ([$( $parent:ident ),+], $match_attr:ident, $enum_class:ident, $enum_iterator:ident, $enum_attr:ident) => {
+                if let Some(x) = self.$($parent.as_ref().unwrap().)+$match_attr.as_ref() {
+                    match x {
+                        $enum_class(o) => {
+                            o.$enum_iterator
+                                .iter()
+                                .map(|item| format!("{}", item.$enum_attr))
+                                .collect::<Vec<String>>()
+                                .join(", ")
+                        },
+                        _ => "".to_string()
+                    }
+                } else {
+                    "".to_string()
+                }
+            };
+        }
+
         /// Macro to get result of an Enum match on OPTIONAL parent
         /// HACK: limited to single level; consider TT Muncher pattern in future
         /// Before:
@@ -212,8 +233,17 @@ impl google::ads::googleads::v18::services::GoogleAdsRow {
             "ad_group.type" => method_str!([ad_group], r#type),
             "ad_group_ad.ad.id" => attr_str!([ad_group_ad, ad], id),
             "ad_group_ad.ad.name" => attr_str!([ad_group_ad, ad], name),
+            "ad_group_ad.ad.responsive_search_ad.headlines" => enum_match_iterator_str!([ad_group_ad, ad], ad_data, ResponsiveSearchAd, headlines, text),
+            "ad_group_ad.ad.responsive_search_ad.descriptions" => enum_match_iterator_str!([ad_group_ad, ad], ad_data, ResponsiveSearchAd, descriptions, text),
+            "ad_group_ad.ad.responsive_search_ad.path1" => enum_match_str!([ad_group_ad, ad], ad_data, ResponsiveSearchAd, path1),
+            "ad_group_ad.ad.responsive_search_ad.path2" => enum_match_str!([ad_group_ad, ad], ad_data, ResponsiveSearchAd, path2),
             "ad_group_ad.ad.type" => method_str!([ad_group_ad, ad], r#type),
             "ad_group_ad.status" => method_str!([ad_group_ad], status),
+            "ad_group_ad_asset_view.resource_name" => attr_str!([ad_group_ad_asset_view], resource_name),
+            "ad_group_ad_asset_view.asset" => attr_str!([ad_group_ad_asset_view], asset),
+            "ad_group_ad_asset_view.field_type" => method_str!([ad_group_ad_asset_view], field_type),
+            "ad_group_ad_asset_view.pinned_field" => method_str!([ad_group_ad_asset_view], pinned_field),
+            "ad_group_ad_asset_view.performance_label" => method_str!([ad_group_ad_asset_view], performance_label),
             "ad_group_criterion.bid_modifier" => attr_str!([ad_group_criterion], bid_modifier),
             "ad_group_criterion.cpc_bid_micros" => attr_str!([ad_group_criterion], cpc_bid_micros),
             "ad_group_criterion.cpm_bid_micros" => attr_str!([ad_group_criterion], cpm_bid_micros),
@@ -310,6 +340,19 @@ impl google::ads::googleads::v18::services::GoogleAdsRow {
             "search_term_view.status" => method_str!([search_term_view], status),
             "smart_campaign_search_term_view.campaign" => attr_str!([smart_campaign_search_term_view], campaign),
             "smart_campaign_search_term_view.search_term" => attr_str!([smart_campaign_search_term_view], search_term),
+            // change event
+            "change_event.change_date_time" => attr_str!([change_event], change_date_time), 
+            "change_event.change_resource_type" => method_str!([change_event], change_resource_type), 
+            "change_event.change_resource_name" => attr_str!([change_event], change_resource_name), 
+            "change_event.client_type" => method_str!([change_event], client_type), 
+            "change_event.user_email" => attr_str!([change_event], user_email), 
+            "change_event.resource_change_operation" => method_str!([change_event], resource_change_operation), 
+            "change_event.changed_fields" => {
+                // comma delmited list of paths
+                format!("'{}'", self.change_event.as_ref().unwrap().changed_fields.as_ref().unwrap().paths.join(", "))
+            },
+            "change_event.campaign" => attr_str!([change_event], campaign), 
+            // metrics
             "metrics.absolute_top_impression_percentage" => attr_str!([metrics], absolute_top_impression_percentage),
             "metrics.active_view_cpm" => attr_str!([metrics], active_view_cpm),
             "metrics.active_view_ctr" => attr_str!([metrics], active_view_ctr),
