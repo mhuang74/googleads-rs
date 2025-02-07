@@ -340,6 +340,19 @@ impl google::ads::googleads::v18::services::GoogleAdsRow {
             "search_term_view.status" => method_str!([search_term_view], status),
             "smart_campaign_search_term_view.campaign" => attr_str!([smart_campaign_search_term_view], campaign),
             "smart_campaign_search_term_view.search_term" => attr_str!([smart_campaign_search_term_view], search_term),
+            // change event
+            "change_event.change_date_time" => attr_str!([change_event], change_date_time), 
+            "change_event.change_resource_type" => method_str!([change_event], change_resource_type), 
+            "change_event.change_resource_name" => attr_str!([change_event], change_resource_name), 
+            "change_event.client_type" => method_str!([change_event], client_type), 
+            "change_event.user_email" => attr_str!([change_event], user_email), 
+            "change_event.resource_change_operation" => method_str!([change_event], resource_change_operation), 
+            "change_event.changed_fields" => {
+                // comma delmited list of paths
+                format!("'{}'", self.change_event.as_ref().unwrap().changed_fields.as_ref().unwrap().paths.join(", "))
+            },
+            "change_event.campaign" => attr_str!([change_event], campaign), 
+            // metrics
             "metrics.absolute_top_impression_percentage" => attr_str!([metrics], absolute_top_impression_percentage),
             "metrics.active_view_cpm" => attr_str!([metrics], active_view_cpm),
             "metrics.active_view_ctr" => attr_str!([metrics], active_view_ctr),
