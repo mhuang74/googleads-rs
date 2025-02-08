@@ -12,31 +12,32 @@ fn main() -> Res {
     let mut protos = vec![];
     let mut pkgs = HashSet::new();
 
-    let proto_path = concat!(env!("CARGO_MANIFEST_DIR"), "/proto");
+    let proto_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("proto");
 
-    for entry in WalkDir::new(proto_path)
+    for entry in WalkDir::new(&proto_path)
         .into_iter()
-        .map(|e| e.unwrap())
+        .filter_map(Result::ok)
         .filter(|e| {
+            let path_str = e.path().to_str().unwrap();
             (
                 // pull in the 3 pakage we need for calling googleads api
-                e.path().to_str().unwrap().contains("googleads/v18")
-                    || e.path().to_str().unwrap().contains("google/rpc")
-                    || e.path().to_str().unwrap().contains("google/longrunning")
+                path_str.contains("googleads/v18")
+                    || path_str.contains("google/rpc")
+                    || path_str.contains("google/longrunning")
             ) && e
                 .path()
                 .extension()
-                .map_or(false, |ext| ext.to_str().unwrap() == "proto")
+                .map_or(false, |ext| ext == "proto")
         })
     {
         let path = entry.path();
         protos.push(path.to_owned());
 
-        let content = fs::read_to_string(path).unwrap();
+        let content = fs::read_to_string(path).expect("Failed to read proto file");
         let pkg = content
             .lines()
             .find(|line| line.starts_with("package "))
-            .unwrap()
+            .expect("Package declaration not found")
             // remove comment
             .split("//")
             .next()
@@ -51,7 +52,7 @@ fn main() -> Res {
 
     tonic_build::configure()
         .build_server(false)
-        .compile(&protos, &[Path::new(proto_path)])?;
+        .compile(&protos, &[proto_path])?;
 
     write_protos_rs(pkgs)?;
 
@@ -107,7 +108,8 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
         writeln!(protos_rs, "}}").unwrap();
     }
 
-    fs::write(format!("{}/protos.rs", env::var("OUT_DIR")?), protos_rs)?;
+    let out_dir = env::var("OUT_DIR").expect("OUT_DIR environment variable not set");
+    fs::write(Path::new(&out_dir).join("protos.rs"), protos_rs)?;
 
     Ok(())
 }
