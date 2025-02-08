@@ -59,18 +59,18 @@ fn main() -> Res {
         info!("Number of proto files: {}", protos.len());
     }
 
-    let tokens = ["common", "enums", "errors", "resources", "services"];
-    let mut protos_by_token: HashMap<&str, Vec<_>> = HashMap::new();
-    let mut unmatched_protos: Vec<_> = Vec::new();
+    let package_names = ["common", "enums", "errors", "resources", "services"];
+    let mut protos_by_package: HashMap<&str, Vec<_>> = HashMap::new();
+    let mut misc_protos: Vec<_> = Vec::new();
 
     for proto in &protos {
         let path_str = proto.to_str().unwrap();
         let mut matched = false;
 
-        for &token in &tokens {
-            let pkg_str = format!("{MAIN_SEPARATOR}{token}{MAIN_SEPARATOR}");
+        for &package in &package_names {
+            let pkg_str = format!("{MAIN_SEPARATOR}{package}{MAIN_SEPARATOR}");
             if path_str.contains(&pkg_str) {
-                protos_by_token.entry(token).or_insert_with(Vec::new).push(proto.clone());
+                protos_by_package.entry(package).or_insert_with(Vec::new).push(proto.clone());
                 matched = true;
                 // info!("added to {token}: {path_str}");
                 break;
@@ -79,22 +79,22 @@ fn main() -> Res {
 
         if !matched {
             info!("Misc proto: {}", path_str);
-            unmatched_protos.push(proto.clone());
+            misc_protos.push(proto.clone());
         }
     }
 
-    if !unmatched_protos.is_empty() {
-        info!("> Compiling {} misc proto files", unmatched_protos.len());
+    if !misc_protos.is_empty() {
+        info!("> Compiling {} misc proto files", misc_protos.len());
         tonic_build::configure()
             .build_server(false)
-            .compile(&unmatched_protos, &[proto_path.clone()])?;
+            .compile(&misc_protos, &[proto_path.clone()])?;
     }
 
-    for &token in &tokens {
-        if let Some(protos) = protos_by_token.get(token) {
-            info!("> Compiling {} proto files from package '{}'", protos.len(), token);
+    for &package in &package_names {
+        if let Some(protos) = protos_by_package.get(package) {
+            info!("> Compiling {} proto files from package '{}'", protos.len(), package);
             for chunk in protos.chunks(185) {
-                info!("  Compiling batch of {} proto files from package '{}'", chunk.len(), token);
+                info!("  Compiling batch of {} proto files from package '{}'", chunk.len(), package);
                 tonic_build::configure()
                     .build_server(false)
                     .compile(chunk, &[proto_path.clone()])?;
