@@ -22,10 +22,10 @@ fn main() -> Res {
             let path_str = e.path().to_str().unwrap();
             (
                 // pull in the 3 pakage we need for calling googleads api
-                path_str.contains("googleads/v18")
-                    || path_str.contains("google/rpc")
-                    || path_str.contains("google/longrunning")
-            ) && e
+                path_str.contains(&format!("googleads{}v18", std::path::MAIN_SEPARATOR))
+                    || path_str.contains(&format!("google{}rpc", std::path::MAIN_SEPARATOR))
+                    || path_str.contains(&format!("google{}longrunning", std::path::MAIN_SEPARATOR))
+                ) && e
                 .path()
                 .extension()
                 .map_or(false, |ext| ext == "proto")
@@ -55,7 +55,7 @@ fn main() -> Res {
     if protos.is_empty() {
         return Err("No .proto files found".into());
     }
-    
+
     tonic_build::configure()
         .build_server(false)
         .compile(&protos, &[proto_path])?;
