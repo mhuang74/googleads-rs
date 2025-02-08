@@ -1,5 +1,6 @@
-use std::{collections::HashSet, env, fmt::Write, fs, path::Path};
+use std::{collections::HashSet, collections::HashMap, env, fmt::Write, fs, path::Path, path::MAIN_SEPARATOR};
 use walkdir::WalkDir;
+use build_print::info;
 
 type Res = Result<(), Box<dyn std::error::Error>>;
 
@@ -12,31 +13,34 @@ fn main() -> Res {
     let mut protos = vec![];
     let mut pkgs = HashSet::new();
 
-    let proto_path = concat!(env!("CARGO_MANIFEST_DIR"), "/proto");
+    let proto_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("proto");
+    info!("Proto path: {:?}", &proto_path);
 
-    for entry in WalkDir::new(proto_path)
+    for entry in WalkDir::new(&proto_path)
         .into_iter()
-        .map(|e| e.unwrap())
+        .filter_map(Result::ok)
         .filter(|e| {
+            let path_str = e.path().to_str().unwrap();
             (
                 // pull in the 3 pakage we need for calling googleads api
-                e.path().to_str().unwrap().contains("googleads/v18")
-                    || e.path().to_str().unwrap().contains("google/rpc")
-                    || e.path().to_str().unwrap().contains("google/longrunning")
-            ) && e
+                path_str.contains(&format!("googleads{}v18", std::path::MAIN_SEPARATOR))
+                    || path_str.contains(&format!("google{}rpc", std::path::MAIN_SEPARATOR))
+                    || path_str.contains(&format!("google{}longrunning", std::path::MAIN_SEPARATOR))
+                ) && e
                 .path()
                 .extension()
-                .map_or(false, |ext| ext.to_str().unwrap() == "proto")
+                .map_or(false, |ext| ext == "proto")
         })
     {
         let path = entry.path();
+        // info!("Found proto file: {:?}", path);
         protos.push(path.to_owned());
 
-        let content = fs::read_to_string(path).unwrap();
+        let content = fs::read_to_string(path).expect("Failed to read proto file");
         let pkg = content
             .lines()
             .find(|line| line.starts_with("package "))
-            .unwrap()
+            .expect("Package declaration not found")
             // remove comment
             .split("//")
             .next()
@@ -49,13 +53,56 @@ fn main() -> Res {
         pkgs.insert(pkg.to_string());
     }
 
-    tonic_build::configure()
-        .build_server(false)
-        .compile(&protos, &[Path::new(proto_path)])?;
+    if protos.is_empty() {
+        return Err("No .proto files found".into());
+    } else {
+        info!("Number of proto files: {}", protos.len());
+    }
+
+    let package_names = ["common", "enums", "errors", "resources", "services"];
+    let mut protos_by_package: HashMap<&str, Vec<_>> = HashMap::new();
+    let mut misc_protos: Vec<_> = Vec::new();
+
+    for proto in &protos {
+        let path_str = proto.to_str().unwrap();
+        let mut matched = false;
+
+        for &package in &package_names {
+            let pkg_str = format!("{MAIN_SEPARATOR}{package}{MAIN_SEPARATOR}");
+            if path_str.contains(&pkg_str) {
+                protos_by_package.entry(package).or_insert_with(Vec::new).push(proto.clone());
+                matched = true;
+                // info!("added to {token}: {path_str}");
+                break;
+            }
+        }
+
+        if !matched {
+            // info!("Misc proto: {}", path_str);
+            misc_protos.push(proto.clone());
+        }
+    }
+
+    if !misc_protos.is_empty() {
+        info!("> Compiling {} misc proto files", misc_protos.len());
+        tonic_build::configure()
+            .build_server(false)
+            .compile(&misc_protos, &[proto_path.clone()])?;
+    }
+
+    for &package in &package_names {
+        if let Some(protos) = protos_by_package.get(package) {
+            info!("> Compiling {} proto files from package '{}'", protos.len(), package);
+            for chunk in protos.chunks(185) {
+                info!("  Compiling batch of {} proto files from package '{}'", chunk.len(), package);
+                tonic_build::configure()
+                    .build_server(false)
+                    .compile(chunk, &[proto_path.clone()])?;
+            }
+        }
+    }
 
     write_protos_rs(pkgs)?;
-
-    println!("cargo:rerun-if-changed=proto");
 
     Ok(())
 }
@@ -107,7 +154,8 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
         writeln!(protos_rs, "}}").unwrap();
     }
 
-    fs::write(format!("{}/protos.rs", env::var("OUT_DIR")?), protos_rs)?;
+    let out_dir = env::var("OUT_DIR").expect("OUT_DIR environment variable not set");
+    fs::write(Path::new(&out_dir).join("protos.rs"), protos_rs)?;
 
     Ok(())
 }
