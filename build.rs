@@ -13,6 +13,7 @@ fn main() -> Res {
     let mut pkgs = HashSet::new();
 
     let proto_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("proto");
+    println!("Proto path: {:?}", proto_path);
 
     for entry in WalkDir::new(&proto_path)
         .into_iter()
@@ -31,6 +32,7 @@ fn main() -> Res {
         })
     {
         let path = entry.path();
+        println!("Found proto file: {:?}", path);
         protos.push(path.to_owned());
 
         let content = fs::read_to_string(path).expect("Failed to read proto file");
@@ -50,6 +52,10 @@ fn main() -> Res {
         pkgs.insert(pkg.to_string());
     }
 
+    if protos.is_empty() {
+        return Err("No .proto files found".into());
+    }
+    
     tonic_build::configure()
         .build_server(false)
         .compile(&protos, &[proto_path])?;
