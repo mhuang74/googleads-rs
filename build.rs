@@ -58,9 +58,20 @@ fn main() -> Res {
         println!("Number of proto files: {}", protos.len());
     }
 
+    // split proto into 2 batches; easiest is to compile services last
+    let (protos_without_services, protos_with_services): (Vec<_>, Vec<_>) = protos
+        .iter()
+        .partition(|path| !path.to_str().unwrap().contains("services"));
+
+    println!("{} proto files without services; {} proto files for services", protos_without_services.len(), protos_with_services.len());
+
     tonic_build::configure()
         .build_server(false)
-        .compile(&protos, &[proto_path.clone()])?;
+        .compile(&protos_without_services, &[proto_path.clone()])?;
+
+    tonic_build::configure()
+        .build_server(true)
+        .compile(&protos_with_services, &[proto_path.clone()])?;
 
     write_protos_rs(pkgs)?;
 
