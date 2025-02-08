@@ -1,5 +1,6 @@
 use std::{collections::HashSet, collections::HashMap, env, fmt::Write, fs, path::Path, path::MAIN_SEPARATOR};
 use walkdir::WalkDir;
+use build_print::info;
 
 type Res = Result<(), Box<dyn std::error::Error>>;
 
@@ -13,7 +14,7 @@ fn main() -> Res {
     let mut pkgs = HashSet::new();
 
     let proto_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("proto");
-    println!("Proto path: {:?}", &proto_path);
+    info!("Proto path: {:?}", &proto_path);
 
     for entry in WalkDir::new(&proto_path)
         .into_iter()
@@ -32,7 +33,7 @@ fn main() -> Res {
         })
     {
         let path = entry.path();
-        println!("Found proto file: {:?}", path);
+        // info!("Found proto file: {:?}", path);
         protos.push(path.to_owned());
 
         let content = fs::read_to_string(path).expect("Failed to read proto file");
@@ -55,7 +56,7 @@ fn main() -> Res {
     if protos.is_empty() {
         return Err("No .proto files found".into());
     } else {
-        println!("Number of proto files: {}", protos.len());
+        info!("Number of proto files: {}", protos.len());
     }
 
     let tokens = ["common", "enums", "errors", "resources", "services"];
@@ -71,19 +72,19 @@ fn main() -> Res {
             if path_str.contains(&pkg_str) {
                 protos_by_token.entry(token).or_insert_with(Vec::new).push(proto.clone());
                 matched = true;
-                println!("added to {token}: {path_str}");
+                // info!("added to {token}: {path_str}");
                 break;
             }
         }
 
         if !matched {
-            println!("Unmatched proto: {}", path_str);
+            info!("Misc proto: {}", path_str);
             unmatched_protos.push(proto.clone());
         }
     }
 
     if !unmatched_protos.is_empty() {
-        println!("Compiling {} unmatched proto files", unmatched_protos.len());
+        info!("> Compiling {} misc proto files", unmatched_protos.len());
         tonic_build::configure()
             .build_server(false)
             .compile(&unmatched_protos, &[proto_path.clone()])?;
@@ -91,10 +92,13 @@ fn main() -> Res {
 
     for &token in &tokens {
         if let Some(protos) = protos_by_token.get(token) {
-            println!("Compiling {} proto files from package '{}'", protos.len(), token);
-            tonic_build::configure()
-                .build_server(false)
-                .compile(protos, &[proto_path.clone()])?;
+            info!("> Compiling {} proto files from package '{}'", protos.len(), token);
+            for chunk in protos.chunks(185) {
+                info!("  Compiling batch of {} proto files from package '{}'", chunk.len(), token);
+                tonic_build::configure()
+                    .build_server(false)
+                    .compile(chunk, &[proto_path.clone()])?;
+            }
         }
     }
 
