@@ -71,6 +71,7 @@ fn main() -> Res {
             if path_str.contains(&pkg_str) {
                 protos_by_token.entry(token).or_insert_with(Vec::new).push(proto.clone());
                 matched = true;
+                println!("added to {token}: {path_str}");
                 break;
             }
         }
@@ -81,6 +82,7 @@ fn main() -> Res {
     }
 
     if !unmatched_protos.is_empty() {
+        println!("Compiling {} unmatched proto files", unmatched_protos.len());
         tonic_build::configure()
             .build_server(false)
             .compile(&unmatched_protos, &[proto_path.clone()])?;
@@ -88,6 +90,7 @@ fn main() -> Res {
 
     for &token in &tokens {
         if let Some(protos) = protos_by_token.get(token) {
+            println!("Compiling {} proto files from package '{}'", protos.len(), token);
             tonic_build::configure()
                 .build_server(false)
                 .compile(protos, &[proto_path.clone()])?;
