@@ -78,7 +78,7 @@ fn main() -> Res {
         }
 
         if !matched {
-            info!("Misc proto: {}", path_str);
+            // info!("Misc proto: {}", path_str);
             misc_protos.push(proto.clone());
         }
     }
