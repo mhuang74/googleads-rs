@@ -13,7 +13,7 @@ fn main() -> Res {
     let mut pkgs = HashSet::new();
 
     let proto_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("proto");
-    println!("Proto path: {:?}", proto_path);
+    println!("Proto path: {:?}", &proto_path);
 
     for entry in WalkDir::new(&proto_path)
         .into_iter()
@@ -54,11 +54,15 @@ fn main() -> Res {
 
     if protos.is_empty() {
         return Err("No .proto files found".into());
+    } else {
+        println!("Number of proto files: {}", protos.len());
     }
 
-    tonic_build::configure()
-        .build_server(false)
-        .compile(&protos, &[proto_path])?;
+    for proto_chunk in protos.chunks(100) {
+        tonic_build::configure()
+            .build_server(false)
+            .compile(proto_chunk, &[proto_path.clone()])?;
+    }
 
     write_protos_rs(pkgs)?;
 
