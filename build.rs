@@ -1,4 +1,4 @@
-use std::{collections::HashSet, env, fmt::Write, fs, path::Path};
+use std::{collections::HashSet, collections::HashMap, env, fmt::Write, fs, path::Path, path::MAIN_SEPARATOR};
 use walkdir::WalkDir;
 
 type Res = Result<(), Box<dyn std::error::Error>>;
@@ -58,20 +58,41 @@ fn main() -> Res {
         println!("Number of proto files: {}", protos.len());
     }
 
-    // split proto into 2 batches; easiest is to compile services last
-    let (protos_without_services, protos_with_services): (Vec<_>, Vec<_>) = protos
-        .iter()
-        .partition(|path| !path.to_str().unwrap().contains("services"));
+    let tokens = ["common", "enums", "errors", "resources", "services"];
+    let mut protos_by_token: HashMap<&str, Vec<_>> = HashMap::new();
+    let mut unmatched_protos: Vec<_> = Vec::new();
 
-    println!("{} proto files without services; {} proto files for services", protos_without_services.len(), protos_with_services.len());
+    for proto in &protos {
+        let path_str = proto.to_str().unwrap();
+        let mut matched = false;
 
-    tonic_build::configure()
-        .build_server(false)
-        .compile(&protos_without_services, &[proto_path.clone()])?;
+        for &token in &tokens {
+            let pkg_str = format!("{MAIN_SEPARATOR}{token}{MAIN_SEPARATOR}");
+            if path_str.contains(&pkg_str) {
+                protos_by_token.entry(token).or_insert_with(Vec::new).push(proto.clone());
+                matched = true;
+                break;
+            }
+        }
 
-    tonic_build::configure()
-        .build_server(true)
-        .compile(&protos_with_services, &[proto_path.clone()])?;
+        if !matched {
+            unmatched_protos.push(proto.clone());
+        }
+    }
+
+    if !unmatched_protos.is_empty() {
+        tonic_build::configure()
+            .build_server(false)
+            .compile(&unmatched_protos, &[proto_path.clone()])?;
+    }
+
+    for &token in &tokens {
+        if let Some(protos) = protos_by_token.get(token) {
+            tonic_build::configure()
+                .build_server(false)
+                .compile(protos, &[proto_path.clone()])?;
+        }
+    }
 
     write_protos_rs(pkgs)?;
 
