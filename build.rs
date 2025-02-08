@@ -58,15 +58,11 @@ fn main() -> Res {
         println!("Number of proto files: {}", protos.len());
     }
 
-    for proto_chunk in protos.chunks(100) {
-        tonic_build::configure()
-            .build_server(false)
-            .compile(proto_chunk, &[proto_path.clone()])?;
-    }
+    tonic_build::configure()
+        .build_server(false)
+        .compile(&protos, &[proto_path.clone()])?;
 
     write_protos_rs(pkgs)?;
-
-    println!("cargo:rerun-if-changed=proto");
 
     Ok(())
 }
