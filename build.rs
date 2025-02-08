@@ -77,6 +77,7 @@ fn main() -> Res {
         }
 
         if !matched {
+            println!("Unmatched proto: {}", path_str);
             unmatched_protos.push(proto.clone());
         }
     }
