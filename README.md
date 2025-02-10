@@ -101,6 +101,14 @@ Run `update.sh` to update the library for a new Google Ads API version:
     }
 ```
 
+## Documentation
+
+* to generate docs quicker, exclude dependent crates
+
+```
+$$ cargo doc --no-deps --open
+```
+
 ## Credits
 * Originally forked from [gkkachi's gapi-grpc-rs](https://github.com/gkkachi/gapi-grpc-rs), which used Python to generate `protos.rs`
 * Dropped Python and migrated to custom build.rs per [aquarhead](https://blog.aqd.is/2021/07/rust-protobuf)
