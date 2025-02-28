@@ -23,7 +23,7 @@ fn main() -> Res {
             let path_str = e.path().to_str().unwrap();
             (
                 // pull in the 3 pakage we need for calling googleads api
-                path_str.contains(&format!("googleads{}v18", std::path::MAIN_SEPARATOR))
+                path_str.contains(&format!("googleads{}v19", std::path::MAIN_SEPARATOR))
                     || path_str.contains(&format!("google{}rpc", std::path::MAIN_SEPARATOR))
                     || path_str.contains(&format!("google{}longrunning", std::path::MAIN_SEPARATOR))
                 ) && e

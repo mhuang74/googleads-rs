@@ -215,9 +215,9 @@ message WaitOperationRequest {
 }
 
 // A message representing the message types used by a long-running operation.
-//
-// Example:
 // ```ignore
+// Example:
+//
 //     rpc Export(ExportRequest) returns (google.longrunning.Operation) {
 //       option (google.longrunning.operation_info) = {
 //         response_type: "ExportResponse"

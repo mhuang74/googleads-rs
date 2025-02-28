@@ -6,7 +6,7 @@
 [![api-docs](https://docs.rs/googleads-rs/badge.svg)](https://docs.rs/googleads-rs)
 
 
-Current Version 0.9.2 uses [Google Ads API v18](https://developers.google.com/google-ads/api/docs/release-notes)
+Current Version 0.10.0 uses [Google Ads API v19](https://developers.google.com/google-ads/api/docs/release-notes)
 
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
 
@@ -99,6 +99,22 @@ Run `update.sh` to update the library for a new Google Ads API version:
             <snip>
         }
     }
+```
+
+* cargo test may fail due to compilation errors with example code in comment blocks of proto files. enclose them in ignore blocks.
+
+```
+// A message representing the message types used by a long-running operation.
+// ```ignore
+// Example:
+//
+//     rpc Export(ExportRequest) returns (google.longrunning.Operation) {
+//       option (google.longrunning.operation_info) = {
+//         response_type: "ExportResponse"
+//         metadata_type: "ExportMetadata"
+//       };
+//     }
+// ```
 ```
 
 ## Documentation

@@ -15,7 +15,7 @@ fi
 GOOGLEADS_API_VERSION=$1
 
 # Determine the current Google Ads API version from build.rs
-current_version=$(grep -oE 'googleads/v[0-9]+' build.rs | grep -oE 'v[0-9]+')
+current_version=$(grep -oE 'googleads\{\}v[0-9]+' build.rs | grep -oE 'v[0-9]+')
 
 if [ "$current_version" == "$GOOGLEADS_API_VERSION" ]; then
   echo "Nothing Done. Already at target version $GOOGLEADS_API_VERSION"
@@ -65,7 +65,7 @@ safe_run rm -rf googleapis-master master.zip
 
 # Update version references in Rust code
 # Update build.rs
-safe_run sed -i "s/googleads\/$current_version/googleads\/$GOOGLEADS_API_VERSION/g" build.rs
+safe_run sed -i "s/googleads{}$current_version/googleads{}$GOOGLEADS_API_VERSION/g" build.rs
 
 # Update src/lib.rs
 safe_run sed -i "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
