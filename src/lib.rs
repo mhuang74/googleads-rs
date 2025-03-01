@@ -17,24 +17,24 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.9.2")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.10.0")]
 
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
-use crate::google::ads::googleads::v18::enums::bidding_strategy_type_enum::{
+use crate::google::ads::googleads::v19::enums::bidding_strategy_type_enum::{
     BiddingStrategyType::ManualCpc, BiddingStrategyType::MaximizeConversionValue,
     BiddingStrategyType::MaximizeConversions, BiddingStrategyType::TargetCpa,
     BiddingStrategyType::TargetImpressionShare, BiddingStrategyType::TargetRoas,
 };
 
-use crate::google::ads::googleads::v18::resources::{
+use crate::google::ads::googleads::v19::resources::{
     ad_group_criterion::Criterion::Keyword,
     ad::AdData::ResponsiveSearchAd,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
     campaign_criterion::Criterion::Location,
 };
 
-impl google::ads::googleads::v18::services::GoogleAdsRow {
+impl google::ads::googleads::v19::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
     ///
     /// # Arguments
@@ -330,8 +330,6 @@ impl google::ads::googleads::v18::services::GoogleAdsRow {
             "customer_client.manager" => attr_str!([customer_client], manager),
             "customer_client.status" => method_str!([customer_client], status),
             "customer_client.time_zone" => attr_str!([customer_client], time_zone),
-            "extension_feed_item.extension_type" => method_str!([extension_feed_item], extension_type),
-            "feed_placeholder_view.placeholder_type" => method_str!([feed_placeholder_view], placeholder_type),
             "label.id" => attr_str!([label], id),
             "label.name" => attr_str!([label], name),
             "label.status" => method_str!([label], status),

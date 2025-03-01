@@ -72,6 +72,7 @@ message ErrorInfo {
   
   
   
+  
   map<string, string> metadata = 3;
 }
 
@@ -211,6 +212,18 @@ message BadRequest {
 
     
     string description = 2;
+
+    
+    
+    
+    
+    
+    
+    string reason = 3;
+
+    
+    
+    LocalizedMessage localized_message = 4;
   }
 
   
