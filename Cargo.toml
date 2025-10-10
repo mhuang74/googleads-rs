@@ -25,6 +25,10 @@ build-print = "0.1"
 
 [dev-dependencies]
 version-sync = "0.9"
+tokio = { version = "1.39", features = ["full", "test-util", "macros"] }
+tokio-stream = "0.1"
+tower = "0.4"
+futures = "0.3"
 
 [badges.maintenance]
 status = "actively-developed"
