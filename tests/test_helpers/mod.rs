@@ -6,7 +6,8 @@
 use googleads_rs::google::ads::googleads::v19::services::GoogleAdsRow;
 use googleads_rs::google::ads::googleads::v19::resources::{
     Campaign, AdGroup, AdGroupAd, AdGroupCriterion, CampaignCriterion, CampaignBudget,
-    Customer, CustomerClient, Label, Ad,
+    Customer, CustomerClient, Label, Ad, AccountBudget, AssetGroup, Audience, BiddingStrategy,
+    SearchTermView, SmartCampaignSearchTermView, ChangeEvent, AdGroupAdAssetView, AssetFieldTypeView,
 };
 use googleads_rs::google::ads::googleads::v19::common::{Metrics, Segments};
 use googleads_rs::google::ads::googleads::v19::enums::{
@@ -32,6 +33,15 @@ pub struct GoogleAdsRowBuilder {
     label: Option<Label>,
     metrics: Option<Metrics>,
     segments: Option<Segments>,
+    account_budget: Option<AccountBudget>,
+    asset_group: Option<AssetGroup>,
+    audience: Option<Audience>,
+    bidding_strategy: Option<BiddingStrategy>,
+    search_term_view: Option<SearchTermView>,
+    smart_campaign_search_term_view: Option<SmartCampaignSearchTermView>,
+    change_event: Option<ChangeEvent>,
+    ad_group_ad_asset_view: Option<AdGroupAdAssetView>,
+    asset_field_type_view: Option<AssetFieldTypeView>,
 }
 
 impl GoogleAdsRowBuilder {
@@ -48,6 +58,15 @@ impl GoogleAdsRowBuilder {
             label: None,
             metrics: None,
             segments: None,
+            account_budget: None,
+            asset_group: None,
+            audience: None,
+            bidding_strategy: None,
+            search_term_view: None,
+            smart_campaign_search_term_view: None,
+            change_event: None,
+            ad_group_ad_asset_view: None,
+            asset_field_type_view: None,
         }
     }
 
@@ -106,6 +125,51 @@ impl GoogleAdsRowBuilder {
         self
     }
 
+    pub fn with_account_budget(mut self, account_budget: AccountBudget) -> Self {
+        self.account_budget = Some(account_budget);
+        self
+    }
+
+    pub fn with_asset_group(mut self, asset_group: AssetGroup) -> Self {
+        self.asset_group = Some(asset_group);
+        self
+    }
+
+    pub fn with_audience(mut self, audience: Audience) -> Self {
+        self.audience = Some(audience);
+        self
+    }
+
+    pub fn with_bidding_strategy(mut self, bidding_strategy: BiddingStrategy) -> Self {
+        self.bidding_strategy = Some(bidding_strategy);
+        self
+    }
+
+    pub fn with_search_term_view(mut self, search_term_view: SearchTermView) -> Self {
+        self.search_term_view = Some(search_term_view);
+        self
+    }
+
+    pub fn with_smart_campaign_search_term_view(mut self, smart_campaign_search_term_view: SmartCampaignSearchTermView) -> Self {
+        self.smart_campaign_search_term_view = Some(smart_campaign_search_term_view);
+        self
+    }
+
+    pub fn with_change_event(mut self, change_event: ChangeEvent) -> Self {
+        self.change_event = Some(change_event);
+        self
+    }
+
+    pub fn with_ad_group_ad_asset_view(mut self, ad_group_ad_asset_view: AdGroupAdAssetView) -> Self {
+        self.ad_group_ad_asset_view = Some(ad_group_ad_asset_view);
+        self
+    }
+
+    pub fn with_asset_field_type_view(mut self, asset_field_type_view: AssetFieldTypeView) -> Self {
+        self.asset_field_type_view = Some(asset_field_type_view);
+        self
+    }
+
     pub fn build(self) -> GoogleAdsRow {
         GoogleAdsRow {
             campaign: self.campaign,
@@ -119,6 +183,15 @@ impl GoogleAdsRowBuilder {
             label: self.label,
             metrics: self.metrics,
             segments: self.segments,
+            account_budget: self.account_budget,
+            asset_group: self.asset_group,
+            audience: self.audience,
+            bidding_strategy: self.bidding_strategy,
+            search_term_view: self.search_term_view,
+            smart_campaign_search_term_view: self.smart_campaign_search_term_view,
+            change_event: self.change_event,
+            ad_group_ad_asset_view: self.ad_group_ad_asset_view,
+            asset_field_type_view: self.asset_field_type_view,
             ..Default::default()
         }
     }
@@ -721,5 +794,494 @@ impl CampaignBuilder {
             ..Default::default()
         });
         self
+    }
+}
+
+// ============================================================================
+// Phase 3 Resource Builders
+// ============================================================================
+
+/// Builder for AccountBudget
+pub struct AccountBudgetBuilder {
+    account_budget: AccountBudget,
+}
+
+impl AccountBudgetBuilder {
+    pub fn new() -> Self {
+        Self {
+            account_budget: AccountBudget::default(),
+        }
+    }
+
+    pub fn id(mut self, id: i64) -> Self {
+        self.account_budget.id = id;
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.account_budget.name = name.to_string();
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.account_budget.status = status;
+        self
+    }
+
+    pub fn build(self) -> AccountBudget {
+        self.account_budget
+    }
+}
+
+impl Default for AccountBudgetBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for AssetGroup
+pub struct AssetGroupBuilder {
+    asset_group: AssetGroup,
+}
+
+impl AssetGroupBuilder {
+    pub fn new() -> Self {
+        Self {
+            asset_group: AssetGroup::default(),
+        }
+    }
+
+    pub fn id(mut self, id: i64) -> Self {
+        self.asset_group.id = id;
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.asset_group.name = name.to_string();
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.asset_group.status = status;
+        self
+    }
+
+    pub fn resource_name(mut self, name: &str) -> Self {
+        self.asset_group.resource_name = name.to_string();
+        self
+    }
+
+    pub fn campaign(mut self, campaign: &str) -> Self {
+        self.asset_group.campaign = campaign.to_string();
+        self
+    }
+
+    pub fn ad_strength(mut self, strength: i32) -> Self {
+        self.asset_group.ad_strength = strength;
+        self
+    }
+
+    pub fn build(self) -> AssetGroup {
+        self.asset_group
+    }
+}
+
+impl Default for AssetGroupBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for Audience
+pub struct AudienceBuilder {
+    audience: Audience,
+}
+
+impl AudienceBuilder {
+    pub fn new() -> Self {
+        Self {
+            audience: Audience::default(),
+        }
+    }
+
+    pub fn id(mut self, id: i64) -> Self {
+        self.audience.id = id;
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.audience.name = name.to_string();
+        self
+    }
+
+    pub fn description(mut self, description: &str) -> Self {
+        self.audience.description = description.to_string();
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.audience.status = status;
+        self
+    }
+
+    pub fn build(self) -> Audience {
+        self.audience
+    }
+}
+
+impl Default for AudienceBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for BiddingStrategy
+pub struct BiddingStrategyBuilder {
+    bidding_strategy: BiddingStrategy,
+}
+
+impl BiddingStrategyBuilder {
+    pub fn new() -> Self {
+        Self {
+            bidding_strategy: BiddingStrategy::default(),
+        }
+    }
+
+    pub fn id(mut self, id: i64) -> Self {
+        self.bidding_strategy.id = id;
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.bidding_strategy.name = name.to_string();
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.bidding_strategy.status = status;
+        self
+    }
+
+    pub fn build(self) -> BiddingStrategy {
+        self.bidding_strategy
+    }
+}
+
+impl Default for BiddingStrategyBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for Label (extension to existing)
+pub struct LabelBuilder {
+    label: Label,
+}
+
+impl LabelBuilder {
+    pub fn new() -> Self {
+        Self {
+            label: Label::default(),
+        }
+    }
+
+    pub fn id(mut self, id: i64) -> Self {
+        self.label.id = id;
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.label.name = name.to_string();
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.label.status = status;
+        self
+    }
+
+    pub fn build(self) -> Label {
+        self.label
+    }
+}
+
+impl Default for LabelBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for CustomerClient (extension to existing)
+pub struct CustomerClientBuilder {
+    customer_client: CustomerClient,
+}
+
+impl CustomerClientBuilder {
+    pub fn new() -> Self {
+        Self {
+            customer_client: CustomerClient::default(),
+        }
+    }
+
+    pub fn id(mut self, id: i64) -> Self {
+        self.customer_client.id = id;
+        self
+    }
+
+    pub fn client_customer(mut self, client: &str) -> Self {
+        self.customer_client.client_customer = client.to_string();
+        self
+    }
+
+    pub fn currency_code(mut self, code: &str) -> Self {
+        self.customer_client.currency_code = code.to_string();
+        self
+    }
+
+    pub fn descriptive_name(mut self, name: &str) -> Self {
+        self.customer_client.descriptive_name = name.to_string();
+        self
+    }
+
+    pub fn level(mut self, level: i64) -> Self {
+        self.customer_client.level = level;
+        self
+    }
+
+    pub fn manager(mut self, manager: bool) -> Self {
+        self.customer_client.manager = manager;
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.customer_client.status = status;
+        self
+    }
+
+    pub fn time_zone(mut self, tz: &str) -> Self {
+        self.customer_client.time_zone = tz.to_string();
+        self
+    }
+
+    pub fn build(self) -> CustomerClient {
+        self.customer_client
+    }
+}
+
+impl Default for CustomerClientBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for SearchTermView
+pub struct SearchTermViewBuilder {
+    search_term_view: SearchTermView,
+}
+
+impl SearchTermViewBuilder {
+    pub fn new() -> Self {
+        Self {
+            search_term_view: SearchTermView::default(),
+        }
+    }
+
+    pub fn ad_group(mut self, ad_group: &str) -> Self {
+        self.search_term_view.ad_group = ad_group.to_string();
+        self
+    }
+
+    pub fn search_term(mut self, term: &str) -> Self {
+        self.search_term_view.search_term = term.to_string();
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.search_term_view.status = status;
+        self
+    }
+
+    pub fn build(self) -> SearchTermView {
+        self.search_term_view
+    }
+}
+
+impl Default for SearchTermViewBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for SmartCampaignSearchTermView
+pub struct SmartCampaignSearchTermViewBuilder {
+    smart_campaign_search_term_view: SmartCampaignSearchTermView,
+}
+
+impl SmartCampaignSearchTermViewBuilder {
+    pub fn new() -> Self {
+        Self {
+            smart_campaign_search_term_view: SmartCampaignSearchTermView::default(),
+        }
+    }
+
+    pub fn campaign(mut self, campaign: &str) -> Self {
+        self.smart_campaign_search_term_view.campaign = campaign.to_string();
+        self
+    }
+
+    pub fn search_term(mut self, term: &str) -> Self {
+        self.smart_campaign_search_term_view.search_term = term.to_string();
+        self
+    }
+
+    pub fn build(self) -> SmartCampaignSearchTermView {
+        self.smart_campaign_search_term_view
+    }
+}
+
+impl Default for SmartCampaignSearchTermViewBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for ChangeEvent
+pub struct ChangeEventBuilder {
+    change_event: ChangeEvent,
+}
+
+impl ChangeEventBuilder {
+    pub fn new() -> Self {
+        Self {
+            change_event: ChangeEvent::default(),
+        }
+    }
+
+    pub fn change_date_time(mut self, date_time: &str) -> Self {
+        self.change_event.change_date_time = date_time.to_string();
+        self
+    }
+
+    pub fn change_resource_type(mut self, resource_type: i32) -> Self {
+        self.change_event.change_resource_type = resource_type;
+        self
+    }
+
+    pub fn change_resource_name(mut self, resource_name: &str) -> Self {
+        self.change_event.change_resource_name = resource_name.to_string();
+        self
+    }
+
+    pub fn client_type(mut self, client_type: i32) -> Self {
+        self.change_event.client_type = client_type;
+        self
+    }
+
+    pub fn user_email(mut self, email: &str) -> Self {
+        self.change_event.user_email = email.to_string();
+        self
+    }
+
+    pub fn resource_change_operation(mut self, operation: i32) -> Self {
+        self.change_event.resource_change_operation = operation;
+        self
+    }
+
+    pub fn changed_fields(mut self, paths: Vec<&str>) -> Self {
+        use prost_types::FieldMask;
+        let paths_vec: Vec<String> = paths.iter().map(|s| s.to_string()).collect();
+        self.change_event.changed_fields = Some(FieldMask { paths: paths_vec });
+        self
+    }
+
+    pub fn campaign(mut self, campaign: &str) -> Self {
+        self.change_event.campaign = campaign.to_string();
+        self
+    }
+
+    pub fn build(self) -> ChangeEvent {
+        self.change_event
+    }
+}
+
+impl Default for ChangeEventBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for AdGroupAdAssetView
+pub struct AdGroupAdAssetViewBuilder {
+    ad_group_ad_asset_view: AdGroupAdAssetView,
+}
+
+impl AdGroupAdAssetViewBuilder {
+    pub fn new() -> Self {
+        Self {
+            ad_group_ad_asset_view: AdGroupAdAssetView::default(),
+        }
+    }
+
+    pub fn resource_name(mut self, name: &str) -> Self {
+        self.ad_group_ad_asset_view.resource_name = name.to_string();
+        self
+    }
+
+    pub fn asset(mut self, asset: &str) -> Self {
+        self.ad_group_ad_asset_view.asset = asset.to_string();
+        self
+    }
+
+    pub fn field_type(mut self, field_type: i32) -> Self {
+        self.ad_group_ad_asset_view.field_type = field_type;
+        self
+    }
+
+    pub fn pinned_field(mut self, pinned: i32) -> Self {
+        self.ad_group_ad_asset_view.pinned_field = pinned;
+        self
+    }
+
+    pub fn performance_label(mut self, label: i32) -> Self {
+        self.ad_group_ad_asset_view.performance_label = label;
+        self
+    }
+
+    pub fn build(self) -> AdGroupAdAssetView {
+        self.ad_group_ad_asset_view
+    }
+}
+
+impl Default for AdGroupAdAssetViewBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for AssetFieldTypeView
+pub struct AssetFieldTypeViewBuilder {
+    asset_field_type_view: AssetFieldTypeView,
+}
+
+impl AssetFieldTypeViewBuilder {
+    pub fn new() -> Self {
+        Self {
+            asset_field_type_view: AssetFieldTypeView::default(),
+        }
+    }
+
+    pub fn field_type(mut self, field_type: i32) -> Self {
+        self.asset_field_type_view.field_type = field_type;
+        self
+    }
+
+    pub fn build(self) -> AssetFieldTypeView {
+        self.asset_field_type_view
+    }
+}
+
+impl Default for AssetFieldTypeViewBuilder {
+    fn default() -> Self {
+        Self::new()
     }
 }
