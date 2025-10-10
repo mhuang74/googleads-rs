@@ -8,6 +8,8 @@ use googleads_rs::google::ads::googleads::v19::resources::{
     Campaign, AdGroup, AdGroupAd, AdGroupCriterion, CampaignCriterion, CampaignBudget,
     Customer, CustomerClient, Label, Ad, AccountBudget, AssetGroup, Audience, BiddingStrategy,
     SearchTermView, SmartCampaignSearchTermView, ChangeEvent, AdGroupAdAssetView, AssetFieldTypeView,
+    ConversionAction, ConversionCustomVariable, Asset, CampaignAsset, AdGroupAsset, CustomerAsset,
+    UserList, GeoTargetConstant,
 };
 use googleads_rs::google::ads::googleads::v19::common::{Metrics, Segments};
 use googleads_rs::google::ads::googleads::v19::enums::{
@@ -42,6 +44,14 @@ pub struct GoogleAdsRowBuilder {
     change_event: Option<ChangeEvent>,
     ad_group_ad_asset_view: Option<AdGroupAdAssetView>,
     asset_field_type_view: Option<AssetFieldTypeView>,
+    conversion_action: Option<ConversionAction>,
+    conversion_custom_variable: Option<ConversionCustomVariable>,
+    asset: Option<Asset>,
+    campaign_asset: Option<CampaignAsset>,
+    ad_group_asset: Option<AdGroupAsset>,
+    customer_asset: Option<CustomerAsset>,
+    user_list: Option<UserList>,
+    geo_target_constant: Option<GeoTargetConstant>,
 }
 
 impl GoogleAdsRowBuilder {
@@ -67,6 +77,14 @@ impl GoogleAdsRowBuilder {
             change_event: None,
             ad_group_ad_asset_view: None,
             asset_field_type_view: None,
+            conversion_action: None,
+            conversion_custom_variable: None,
+            asset: None,
+            campaign_asset: None,
+            ad_group_asset: None,
+            customer_asset: None,
+            user_list: None,
+            geo_target_constant: None,
         }
     }
 
@@ -170,6 +188,46 @@ impl GoogleAdsRowBuilder {
         self
     }
 
+    pub fn with_conversion_action(mut self, conversion_action: ConversionAction) -> Self {
+        self.conversion_action = Some(conversion_action);
+        self
+    }
+
+    pub fn with_conversion_custom_variable(mut self, conversion_custom_variable: ConversionCustomVariable) -> Self {
+        self.conversion_custom_variable = Some(conversion_custom_variable);
+        self
+    }
+
+    pub fn with_asset(mut self, asset: Asset) -> Self {
+        self.asset = Some(asset);
+        self
+    }
+
+    pub fn with_campaign_asset(mut self, campaign_asset: CampaignAsset) -> Self {
+        self.campaign_asset = Some(campaign_asset);
+        self
+    }
+
+    pub fn with_ad_group_asset(mut self, ad_group_asset: AdGroupAsset) -> Self {
+        self.ad_group_asset = Some(ad_group_asset);
+        self
+    }
+
+    pub fn with_customer_asset(mut self, customer_asset: CustomerAsset) -> Self {
+        self.customer_asset = Some(customer_asset);
+        self
+    }
+
+    pub fn with_user_list(mut self, user_list: UserList) -> Self {
+        self.user_list = Some(user_list);
+        self
+    }
+
+    pub fn with_geo_target_constant(mut self, geo_target_constant: GeoTargetConstant) -> Self {
+        self.geo_target_constant = Some(geo_target_constant);
+        self
+    }
+
     pub fn build(self) -> GoogleAdsRow {
         GoogleAdsRow {
             campaign: self.campaign,
@@ -192,6 +250,14 @@ impl GoogleAdsRowBuilder {
             change_event: self.change_event,
             ad_group_ad_asset_view: self.ad_group_ad_asset_view,
             asset_field_type_view: self.asset_field_type_view,
+            conversion_action: self.conversion_action,
+            conversion_custom_variable: self.conversion_custom_variable,
+            asset: self.asset,
+            campaign_asset: self.campaign_asset,
+            ad_group_asset: self.ad_group_asset,
+            customer_asset: self.customer_asset,
+            user_list: self.user_list,
+            geo_target_constant: self.geo_target_constant,
             ..Default::default()
         }
     }
