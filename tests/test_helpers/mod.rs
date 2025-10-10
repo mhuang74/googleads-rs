@@ -457,3 +457,269 @@ impl Default for SegmentsBuilder {
         Self::new()
     }
 }
+
+/// Builder for AdGroupCriterion with oneof criterion support
+pub struct AdGroupCriterionBuilder {
+    criterion: AdGroupCriterion,
+}
+
+impl AdGroupCriterionBuilder {
+    pub fn new() -> Self {
+        Self {
+            criterion: AdGroupCriterion::default(),
+        }
+    }
+
+    pub fn criterion_id(mut self, id: i64) -> Self {
+        self.criterion.criterion_id = id;
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.criterion.status = status;
+        self
+    }
+
+    pub fn cpc_bid_micros(mut self, bid: i64) -> Self {
+        self.criterion.cpc_bid_micros = bid;
+        self
+    }
+
+    pub fn with_keyword(mut self, text: &str, match_type: i32) -> Self {
+        use googleads_rs::google::ads::googleads::v19::common::KeywordInfo;
+        use googleads_rs::google::ads::googleads::v19::resources::ad_group_criterion::Criterion;
+
+        self.criterion.criterion = Some(Criterion::Keyword(KeywordInfo {
+            text: text.to_string(),
+            match_type,
+        }));
+        self
+    }
+
+    pub fn labels(mut self, labels: Vec<String>) -> Self {
+        self.criterion.labels = labels;
+        self
+    }
+
+    pub fn build(self) -> AdGroupCriterion {
+        self.criterion
+    }
+}
+
+impl Default for AdGroupCriterionBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for CampaignCriterion with oneof criterion support
+pub struct CampaignCriterionBuilder {
+    criterion: CampaignCriterion,
+}
+
+impl CampaignCriterionBuilder {
+    pub fn new() -> Self {
+        Self {
+            criterion: CampaignCriterion::default(),
+        }
+    }
+
+    pub fn criterion_id(mut self, id: i64) -> Self {
+        self.criterion.criterion_id = id;
+        self
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.criterion.status = status;
+        self
+    }
+
+    pub fn display_name(mut self, name: &str) -> Self {
+        self.criterion.display_name = name.to_string();
+        self
+    }
+
+    pub fn with_keyword(mut self, text: &str) -> Self {
+        use googleads_rs::google::ads::googleads::v19::common::KeywordInfo;
+        use googleads_rs::google::ads::googleads::v19::resources::campaign_criterion::Criterion;
+
+        self.criterion.criterion = Some(Criterion::Keyword(KeywordInfo {
+            text: text.to_string(),
+            match_type: 0,
+        }));
+        self
+    }
+
+    pub fn with_location(mut self, geo_target_constant: &str) -> Self {
+        use googleads_rs::google::ads::googleads::v19::common::LocationInfo;
+        use googleads_rs::google::ads::googleads::v19::resources::campaign_criterion::Criterion;
+
+        self.criterion.criterion = Some(Criterion::Location(LocationInfo {
+            geo_target_constant: geo_target_constant.to_string(),
+        }));
+        self
+    }
+
+    pub fn build(self) -> CampaignCriterion {
+        self.criterion
+    }
+}
+
+impl Default for CampaignCriterionBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for Ad with oneof ad_data support
+pub struct AdBuilder {
+    ad: Ad,
+}
+
+impl AdBuilder {
+    pub fn new() -> Self {
+        Self {
+            ad: Ad::default(),
+        }
+    }
+
+    pub fn id(mut self, id: i64) -> Self {
+        self.ad.id = id;
+        self
+    }
+
+    pub fn name(mut self, name: &str) -> Self {
+        self.ad.name = name.to_string();
+        self
+    }
+
+    pub fn ad_type(mut self, ad_type: i32) -> Self {
+        self.ad.r#type = ad_type;
+        self
+    }
+
+    pub fn with_responsive_search_ad(
+        mut self,
+        headlines: Vec<&str>,
+        descriptions: Vec<&str>,
+        path1: Option<&str>,
+        path2: Option<&str>,
+    ) -> Self {
+        use googleads_rs::google::ads::googleads::v19::common::{
+            ResponsiveSearchAdInfo, AdTextAsset,
+        };
+        use googleads_rs::google::ads::googleads::v19::resources::ad::AdData;
+
+        let headline_assets: Vec<AdTextAsset> = headlines
+            .iter()
+            .map(|text| AdTextAsset {
+                text: text.to_string(),
+                ..Default::default()
+            })
+            .collect();
+
+        let description_assets: Vec<AdTextAsset> = descriptions
+            .iter()
+            .map(|text| AdTextAsset {
+                text: text.to_string(),
+                ..Default::default()
+            })
+            .collect();
+
+        self.ad.ad_data = Some(AdData::ResponsiveSearchAd(ResponsiveSearchAdInfo {
+            headlines: headline_assets,
+            descriptions: description_assets,
+            path1: path1.unwrap_or("").to_string(),
+            path2: path2.unwrap_or("").to_string(),
+            ..Default::default()
+        }));
+        self
+    }
+
+    pub fn build(self) -> Ad {
+        self.ad
+    }
+}
+
+impl Default for AdBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for AdGroupAd
+pub struct AdGroupAdBuilder {
+    ad_group_ad: AdGroupAd,
+}
+
+impl AdGroupAdBuilder {
+    pub fn new() -> Self {
+        Self {
+            ad_group_ad: AdGroupAd::default(),
+        }
+    }
+
+    pub fn status(mut self, status: i32) -> Self {
+        self.ad_group_ad.status = status;
+        self
+    }
+
+    pub fn with_ad(mut self, ad: Ad) -> Self {
+        self.ad_group_ad.ad = Some(ad);
+        self
+    }
+
+    pub fn labels(mut self, labels: Vec<String>) -> Self {
+        self.ad_group_ad.labels = labels;
+        self
+    }
+
+    pub fn build(self) -> AdGroupAd {
+        self.ad_group_ad
+    }
+}
+
+impl Default for AdGroupAdBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Builder for Campaign with nested message support
+impl CampaignBuilder {
+    pub fn with_network_settings(
+        mut self,
+        target_search: bool,
+        target_content: bool,
+        target_partner: bool,
+        target_google_search: bool,
+    ) -> Self {
+        use googleads_rs::google::ads::googleads::v19::resources::campaign::NetworkSettings;
+
+        self.campaign.network_settings = Some(NetworkSettings {
+            target_search_network: target_search,
+            target_content_network: target_content,
+            target_partner_search_network: target_partner,
+            target_google_search: target_google_search,
+            ..Default::default()
+        });
+        self
+    }
+
+    pub fn with_dynamic_search_ads_setting(
+        mut self,
+        domain_name: &str,
+        language_code: &str,
+        use_supplied_urls_only: bool,
+    ) -> Self {
+        use googleads_rs::google::ads::googleads::v19::resources::campaign::DynamicSearchAdsSetting;
+
+        self.campaign.dynamic_search_ads_setting = Some(DynamicSearchAdsSetting {
+            domain_name: domain_name.to_string(),
+            language_code: language_code.to_string(),
+            use_supplied_urls_only,
+            ..Default::default()
+        });
+        self
+    }
+}
