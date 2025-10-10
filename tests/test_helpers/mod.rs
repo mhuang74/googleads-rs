@@ -9,7 +9,9 @@ use googleads_rs::google::ads::googleads::v19::resources::{
     Customer, CustomerClient, Label, Ad, AccountBudget, AssetGroup, Audience, BiddingStrategy,
     SearchTermView, SmartCampaignSearchTermView, ChangeEvent, AdGroupAdAssetView, AssetFieldTypeView,
     ConversionAction, ConversionCustomVariable, Asset, CampaignAsset, AdGroupAsset, CustomerAsset,
-    UserList, GeoTargetConstant,
+    UserList, GeoTargetConstant, KeywordView, LandingPageView, GeographicView, ClickView,
+    AssetGroupAsset, AssetGroupSignal, CampaignLabel, AdGroupLabel, AdGroupAdLabel,
+    Recommendation, CampaignSharedSet, SharedSet, SharedCriterion,
 };
 use googleads_rs::google::ads::googleads::v19::common::{Metrics, Segments};
 use googleads_rs::google::ads::googleads::v19::enums::{
@@ -52,6 +54,19 @@ pub struct GoogleAdsRowBuilder {
     customer_asset: Option<CustomerAsset>,
     user_list: Option<UserList>,
     geo_target_constant: Option<GeoTargetConstant>,
+    keyword_view: Option<KeywordView>,
+    landing_page_view: Option<LandingPageView>,
+    geographic_view: Option<GeographicView>,
+    click_view: Option<ClickView>,
+    asset_group_asset: Option<AssetGroupAsset>,
+    asset_group_signal: Option<AssetGroupSignal>,
+    campaign_label: Option<CampaignLabel>,
+    ad_group_label: Option<AdGroupLabel>,
+    ad_group_ad_label: Option<AdGroupAdLabel>,
+    recommendation: Option<Recommendation>,
+    campaign_shared_set: Option<CampaignSharedSet>,
+    shared_set: Option<SharedSet>,
+    shared_criterion: Option<SharedCriterion>,
 }
 
 impl GoogleAdsRowBuilder {
@@ -85,6 +100,19 @@ impl GoogleAdsRowBuilder {
             customer_asset: None,
             user_list: None,
             geo_target_constant: None,
+            keyword_view: None,
+            landing_page_view: None,
+            geographic_view: None,
+            click_view: None,
+            asset_group_asset: None,
+            asset_group_signal: None,
+            campaign_label: None,
+            ad_group_label: None,
+            ad_group_ad_label: None,
+            recommendation: None,
+            campaign_shared_set: None,
+            shared_set: None,
+            shared_criterion: None,
         }
     }
 
@@ -228,6 +256,71 @@ impl GoogleAdsRowBuilder {
         self
     }
 
+    pub fn with_keyword_view(mut self, keyword_view: KeywordView) -> Self {
+        self.keyword_view = Some(keyword_view);
+        self
+    }
+
+    pub fn with_landing_page_view(mut self, landing_page_view: LandingPageView) -> Self {
+        self.landing_page_view = Some(landing_page_view);
+        self
+    }
+
+    pub fn with_geographic_view(mut self, geographic_view: GeographicView) -> Self {
+        self.geographic_view = Some(geographic_view);
+        self
+    }
+
+    pub fn with_click_view(mut self, click_view: ClickView) -> Self {
+        self.click_view = Some(click_view);
+        self
+    }
+
+    pub fn with_asset_group_asset(mut self, asset_group_asset: AssetGroupAsset) -> Self {
+        self.asset_group_asset = Some(asset_group_asset);
+        self
+    }
+
+    pub fn with_asset_group_signal(mut self, asset_group_signal: AssetGroupSignal) -> Self {
+        self.asset_group_signal = Some(asset_group_signal);
+        self
+    }
+
+    pub fn with_campaign_label(mut self, campaign_label: CampaignLabel) -> Self {
+        self.campaign_label = Some(campaign_label);
+        self
+    }
+
+    pub fn with_ad_group_label(mut self, ad_group_label: AdGroupLabel) -> Self {
+        self.ad_group_label = Some(ad_group_label);
+        self
+    }
+
+    pub fn with_ad_group_ad_label(mut self, ad_group_ad_label: AdGroupAdLabel) -> Self {
+        self.ad_group_ad_label = Some(ad_group_ad_label);
+        self
+    }
+
+    pub fn with_recommendation(mut self, recommendation: Recommendation) -> Self {
+        self.recommendation = Some(recommendation);
+        self
+    }
+
+    pub fn with_campaign_shared_set(mut self, campaign_shared_set: CampaignSharedSet) -> Self {
+        self.campaign_shared_set = Some(campaign_shared_set);
+        self
+    }
+
+    pub fn with_shared_set(mut self, shared_set: SharedSet) -> Self {
+        self.shared_set = Some(shared_set);
+        self
+    }
+
+    pub fn with_shared_criterion(mut self, shared_criterion: SharedCriterion) -> Self {
+        self.shared_criterion = Some(shared_criterion);
+        self
+    }
+
     pub fn build(self) -> GoogleAdsRow {
         GoogleAdsRow {
             campaign: self.campaign,
@@ -258,6 +351,19 @@ impl GoogleAdsRowBuilder {
             customer_asset: self.customer_asset,
             user_list: self.user_list,
             geo_target_constant: self.geo_target_constant,
+            keyword_view: self.keyword_view,
+            landing_page_view: self.landing_page_view,
+            geographic_view: self.geographic_view,
+            click_view: self.click_view,
+            asset_group_asset: self.asset_group_asset,
+            asset_group_signal: self.asset_group_signal,
+            campaign_label: self.campaign_label,
+            ad_group_label: self.ad_group_label,
+            ad_group_ad_label: self.ad_group_ad_label,
+            recommendation: self.recommendation,
+            campaign_shared_set: self.campaign_shared_set,
+            shared_set: self.shared_set,
+            shared_criterion: self.shared_criterion,
             ..Default::default()
         }
     }
