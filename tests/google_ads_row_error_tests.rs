@@ -4,6 +4,7 @@
 
 mod test_helpers;
 
+#[allow(unused_imports)]
 use test_helpers::{
     GoogleAdsRowBuilder, CampaignBuilder, AdGroupBuilder,
     MetricsBuilder, SegmentsBuilder,

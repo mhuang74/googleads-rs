@@ -25,8 +25,10 @@ use test_helpers::GoogleAdsRowBuilder;
 
 #[test]
 fn test_conversion_action_id() {
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.id = 123456789;
+    let conversion_action = ConversionAction {
+        id: 123456789,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -37,8 +39,10 @@ fn test_conversion_action_id() {
 
 #[test]
 fn test_conversion_action_name() {
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.name = "Purchase".to_string();
+    let conversion_action = ConversionAction {
+        name: "Purchase".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -49,8 +53,10 @@ fn test_conversion_action_name() {
 
 #[test]
 fn test_conversion_action_resource_name() {
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.resource_name = "customers/123/conversionActions/456".to_string();
+    let conversion_action = ConversionAction {
+        resource_name: "customers/123/conversionActions/456".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -63,8 +69,10 @@ fn test_conversion_action_resource_name() {
 fn test_conversion_action_status() {
     use googleads_rs::google::ads::googleads::v19::enums::conversion_action_status_enum::ConversionActionStatus;
 
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.status = ConversionActionStatus::Enabled as i32;
+    let conversion_action = ConversionAction {
+        status: ConversionActionStatus::Enabled as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -75,8 +83,10 @@ fn test_conversion_action_status() {
 
 #[test]
 fn test_conversion_action_include_in_conversions_metric() {
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.include_in_conversions_metric = true;
+    let conversion_action = ConversionAction {
+        include_in_conversions_metric: true,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -87,10 +97,13 @@ fn test_conversion_action_include_in_conversions_metric() {
 
 #[test]
 fn test_conversion_action_value_settings_default_value() {
-    let mut conversion_action = ConversionAction::default();
-    let mut value_settings = ValueSettings::default();
-    value_settings.default_value = 49.99;
-    conversion_action.value_settings = Some(value_settings);
+    let conversion_action = ConversionAction {
+        value_settings: Some(ValueSettings {
+            default_value: 49.99,
+            ..Default::default()
+        }),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -101,10 +114,13 @@ fn test_conversion_action_value_settings_default_value() {
 
 #[test]
 fn test_conversion_action_value_settings_default_currency_code() {
-    let mut conversion_action = ConversionAction::default();
-    let mut value_settings = ValueSettings::default();
-    value_settings.default_currency_code = "USD".to_string();
-    conversion_action.value_settings = Some(value_settings);
+    let conversion_action = ConversionAction {
+        value_settings: Some(ValueSettings {
+            default_currency_code: "USD".to_string(),
+            ..Default::default()
+        }),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -117,8 +133,10 @@ fn test_conversion_action_value_settings_default_currency_code() {
 fn test_conversion_action_type() {
     use googleads_rs::google::ads::googleads::v19::enums::conversion_action_type_enum::ConversionActionType;
 
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.r#type = ConversionActionType::Webpage as i32;
+    let conversion_action = ConversionAction {
+        r#type: ConversionActionType::Webpage as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -131,8 +149,10 @@ fn test_conversion_action_type() {
 fn test_conversion_action_category() {
     use googleads_rs::google::ads::googleads::v19::enums::conversion_action_category_enum::ConversionActionCategory;
 
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.category = ConversionActionCategory::Purchase as i32;
+    let conversion_action = ConversionAction {
+        category: ConversionActionCategory::Purchase as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -147,8 +167,10 @@ fn test_conversion_action_category() {
 
 #[test]
 fn test_conversion_custom_variable_id() {
-    let mut variable = ConversionCustomVariable::default();
-    variable.id = 987654321;
+    let variable = ConversionCustomVariable {
+        id: 987654321,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_custom_variable(variable)
@@ -159,8 +181,10 @@ fn test_conversion_custom_variable_id() {
 
 #[test]
 fn test_conversion_custom_variable_name() {
-    let mut variable = ConversionCustomVariable::default();
-    variable.name = "transaction_id".to_string();
+    let variable = ConversionCustomVariable {
+        name: "transaction_id".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_custom_variable(variable)
@@ -171,8 +195,10 @@ fn test_conversion_custom_variable_name() {
 
 #[test]
 fn test_conversion_custom_variable_tag() {
-    let mut variable = ConversionCustomVariable::default();
-    variable.tag = "txn_id".to_string();
+    let variable = ConversionCustomVariable {
+        tag: "txn_id".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_custom_variable(variable)
@@ -183,8 +209,10 @@ fn test_conversion_custom_variable_tag() {
 
 #[test]
 fn test_conversion_custom_variable_resource_name() {
-    let mut variable = ConversionCustomVariable::default();
-    variable.resource_name = "customers/123/conversionCustomVariables/456".to_string();
+    let variable = ConversionCustomVariable {
+        resource_name: "customers/123/conversionCustomVariables/456".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_custom_variable(variable)
@@ -199,8 +227,10 @@ fn test_conversion_custom_variable_resource_name() {
 
 #[test]
 fn test_asset_id() {
-    let mut asset = Asset::default();
-    asset.id = 111222333;
+    let asset = Asset {
+        id: 111222333,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset(asset)
@@ -211,8 +241,10 @@ fn test_asset_id() {
 
 #[test]
 fn test_asset_name() {
-    let mut asset = Asset::default();
-    asset.name = "Summer Sale Image".to_string();
+    let asset = Asset {
+        name: "Summer Sale Image".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset(asset)
@@ -223,8 +255,10 @@ fn test_asset_name() {
 
 #[test]
 fn test_asset_resource_name() {
-    let mut asset = Asset::default();
-    asset.resource_name = "customers/123/assets/456".to_string();
+    let asset = Asset {
+        resource_name: "customers/123/assets/456".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset(asset)
@@ -237,8 +271,10 @@ fn test_asset_resource_name() {
 fn test_asset_type() {
     use googleads_rs::google::ads::googleads::v19::enums::asset_type_enum::AssetType;
 
-    let mut asset = Asset::default();
-    asset.r#type = AssetType::Image as i32;
+    let asset = Asset {
+        r#type: AssetType::Image as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset(asset)
@@ -249,8 +285,10 @@ fn test_asset_type() {
 
 #[test]
 fn test_asset_tracking_url_template() {
-    let mut asset = Asset::default();
-    asset.tracking_url_template = "https://example.com/track?id={lpurl}".to_string();
+    let asset = Asset {
+        tracking_url_template: "https://example.com/track?id={lpurl}".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset(asset)
@@ -264,10 +302,13 @@ fn test_asset_policy_summary_approval_status() {
     use googleads_rs::google::ads::googleads::v19::enums::policy_approval_status_enum::PolicyApprovalStatus;
     use googleads_rs::google::ads::googleads::v19::resources::AssetPolicySummary;
 
-    let mut asset = Asset::default();
-    let mut policy_summary = AssetPolicySummary::default();
-    policy_summary.approval_status = PolicyApprovalStatus::Approved as i32;
-    asset.policy_summary = Some(policy_summary);
+    let asset = Asset {
+        policy_summary: Some(AssetPolicySummary {
+            approval_status: PolicyApprovalStatus::Approved as i32,
+            ..Default::default()
+        }),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset(asset)
@@ -281,10 +322,13 @@ fn test_asset_policy_summary_review_status() {
     use googleads_rs::google::ads::googleads::v19::enums::policy_review_status_enum::PolicyReviewStatus;
     use googleads_rs::google::ads::googleads::v19::resources::AssetPolicySummary;
 
-    let mut asset = Asset::default();
-    let mut policy_summary = AssetPolicySummary::default();
-    policy_summary.review_status = PolicyReviewStatus::Reviewed as i32;
-    asset.policy_summary = Some(policy_summary);
+    let asset = Asset {
+        policy_summary: Some(AssetPolicySummary {
+            review_status: PolicyReviewStatus::Reviewed as i32,
+            ..Default::default()
+        }),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset(asset)
@@ -299,8 +343,10 @@ fn test_asset_policy_summary_review_status() {
 
 #[test]
 fn test_campaign_asset_resource_name() {
-    let mut campaign_asset = CampaignAsset::default();
-    campaign_asset.resource_name = "customers/123/campaignAssets/456~789~HEADLINE".to_string();
+    let campaign_asset = CampaignAsset {
+        resource_name: "customers/123/campaignAssets/456~789~HEADLINE".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_campaign_asset(campaign_asset)
@@ -311,8 +357,10 @@ fn test_campaign_asset_resource_name() {
 
 #[test]
 fn test_campaign_asset_campaign() {
-    let mut campaign_asset = CampaignAsset::default();
-    campaign_asset.campaign = "customers/123/campaigns/456".to_string();
+    let campaign_asset = CampaignAsset {
+        campaign: "customers/123/campaigns/456".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_campaign_asset(campaign_asset)
@@ -323,8 +371,10 @@ fn test_campaign_asset_campaign() {
 
 #[test]
 fn test_campaign_asset_asset() {
-    let mut campaign_asset = CampaignAsset::default();
-    campaign_asset.asset = "customers/123/assets/789".to_string();
+    let campaign_asset = CampaignAsset {
+        asset: "customers/123/assets/789".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_campaign_asset(campaign_asset)
@@ -337,8 +387,10 @@ fn test_campaign_asset_asset() {
 fn test_campaign_asset_field_type() {
     use googleads_rs::google::ads::googleads::v19::enums::asset_field_type_enum::AssetFieldType;
 
-    let mut campaign_asset = CampaignAsset::default();
-    campaign_asset.field_type = AssetFieldType::Headline as i32;
+    let campaign_asset = CampaignAsset {
+        field_type: AssetFieldType::Headline as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_campaign_asset(campaign_asset)
@@ -351,8 +403,10 @@ fn test_campaign_asset_field_type() {
 fn test_campaign_asset_status() {
     use googleads_rs::google::ads::googleads::v19::enums::asset_link_status_enum::AssetLinkStatus;
 
-    let mut campaign_asset = CampaignAsset::default();
-    campaign_asset.status = AssetLinkStatus::Enabled as i32;
+    let campaign_asset = CampaignAsset {
+        status: AssetLinkStatus::Enabled as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_campaign_asset(campaign_asset)
@@ -367,8 +421,10 @@ fn test_campaign_asset_status() {
 
 #[test]
 fn test_ad_group_asset_resource_name() {
-    let mut ad_group_asset = AdGroupAsset::default();
-    ad_group_asset.resource_name = "customers/123/adGroupAssets/456~789~HEADLINE".to_string();
+    let ad_group_asset = AdGroupAsset {
+        resource_name: "customers/123/adGroupAssets/456~789~HEADLINE".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_asset(ad_group_asset)
@@ -379,8 +435,10 @@ fn test_ad_group_asset_resource_name() {
 
 #[test]
 fn test_ad_group_asset_ad_group() {
-    let mut ad_group_asset = AdGroupAsset::default();
-    ad_group_asset.ad_group = "customers/123/adGroups/456".to_string();
+    let ad_group_asset = AdGroupAsset {
+        ad_group: "customers/123/adGroups/456".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_asset(ad_group_asset)
@@ -391,8 +449,10 @@ fn test_ad_group_asset_ad_group() {
 
 #[test]
 fn test_ad_group_asset_asset() {
-    let mut ad_group_asset = AdGroupAsset::default();
-    ad_group_asset.asset = "customers/123/assets/789".to_string();
+    let ad_group_asset = AdGroupAsset {
+        asset: "customers/123/assets/789".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_asset(ad_group_asset)
@@ -405,8 +465,10 @@ fn test_ad_group_asset_asset() {
 fn test_ad_group_asset_field_type() {
     use googleads_rs::google::ads::googleads::v19::enums::asset_field_type_enum::AssetFieldType;
 
-    let mut ad_group_asset = AdGroupAsset::default();
-    ad_group_asset.field_type = AssetFieldType::Description as i32;
+    let ad_group_asset = AdGroupAsset {
+        field_type: AssetFieldType::Description as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_asset(ad_group_asset)
@@ -419,8 +481,10 @@ fn test_ad_group_asset_field_type() {
 fn test_ad_group_asset_status() {
     use googleads_rs::google::ads::googleads::v19::enums::asset_link_status_enum::AssetLinkStatus;
 
-    let mut ad_group_asset = AdGroupAsset::default();
-    ad_group_asset.status = AssetLinkStatus::Paused as i32;
+    let ad_group_asset = AdGroupAsset {
+        status: AssetLinkStatus::Paused as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_asset(ad_group_asset)
@@ -433,8 +497,10 @@ fn test_ad_group_asset_status() {
 fn test_ad_group_asset_primary_status() {
     use googleads_rs::google::ads::googleads::v19::enums::asset_link_primary_status_enum::AssetLinkPrimaryStatus;
 
-    let mut ad_group_asset = AdGroupAsset::default();
-    ad_group_asset.primary_status = AssetLinkPrimaryStatus::Eligible as i32;
+    let ad_group_asset = AdGroupAsset {
+        primary_status: AssetLinkPrimaryStatus::Eligible as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_asset(ad_group_asset)
@@ -449,8 +515,10 @@ fn test_ad_group_asset_primary_status() {
 
 #[test]
 fn test_customer_asset_resource_name() {
-    let mut customer_asset = CustomerAsset::default();
-    customer_asset.resource_name = "customers/123/customerAssets/789~SITELINK".to_string();
+    let customer_asset = CustomerAsset {
+        resource_name: "customers/123/customerAssets/789~SITELINK".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_customer_asset(customer_asset)
@@ -461,8 +529,10 @@ fn test_customer_asset_resource_name() {
 
 #[test]
 fn test_customer_asset_asset() {
-    let mut customer_asset = CustomerAsset::default();
-    customer_asset.asset = "customers/123/assets/789".to_string();
+    let customer_asset = CustomerAsset {
+        asset: "customers/123/assets/789".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_customer_asset(customer_asset)
@@ -475,8 +545,10 @@ fn test_customer_asset_asset() {
 fn test_customer_asset_field_type() {
     use googleads_rs::google::ads::googleads::v19::enums::asset_field_type_enum::AssetFieldType;
 
-    let mut customer_asset = CustomerAsset::default();
-    customer_asset.field_type = AssetFieldType::Sitelink as i32;
+    let customer_asset = CustomerAsset {
+        field_type: AssetFieldType::Sitelink as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_customer_asset(customer_asset)
@@ -489,8 +561,10 @@ fn test_customer_asset_field_type() {
 fn test_customer_asset_status() {
     use googleads_rs::google::ads::googleads::v19::enums::asset_link_status_enum::AssetLinkStatus;
 
-    let mut customer_asset = CustomerAsset::default();
-    customer_asset.status = AssetLinkStatus::Enabled as i32;
+    let customer_asset = CustomerAsset {
+        status: AssetLinkStatus::Enabled as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_customer_asset(customer_asset)
@@ -505,8 +579,10 @@ fn test_customer_asset_status() {
 
 #[test]
 fn test_user_list_id() {
-    let mut user_list = UserList::default();
-    user_list.id = 555666777;
+    let user_list = UserList {
+        id: 555666777,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -517,8 +593,10 @@ fn test_user_list_id() {
 
 #[test]
 fn test_user_list_name() {
-    let mut user_list = UserList::default();
-    user_list.name = "Website Visitors - Last 30 Days".to_string();
+    let user_list = UserList {
+        name: "Website Visitors - Last 30 Days".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -529,8 +607,10 @@ fn test_user_list_name() {
 
 #[test]
 fn test_user_list_description() {
-    let mut user_list = UserList::default();
-    user_list.description = "Users who visited the website in the last 30 days".to_string();
+    let user_list = UserList {
+        description: "Users who visited the website in the last 30 days".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -541,8 +621,10 @@ fn test_user_list_description() {
 
 #[test]
 fn test_user_list_resource_name() {
-    let mut user_list = UserList::default();
-    user_list.resource_name = "customers/123/userLists/456".to_string();
+    let user_list = UserList {
+        resource_name: "customers/123/userLists/456".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -553,8 +635,10 @@ fn test_user_list_resource_name() {
 
 #[test]
 fn test_user_list_membership_life_span() {
-    let mut user_list = UserList::default();
-    user_list.membership_life_span = 30;
+    let user_list = UserList {
+        membership_life_span: 30,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -565,8 +649,10 @@ fn test_user_list_membership_life_span() {
 
 #[test]
 fn test_user_list_size_for_display() {
-    let mut user_list = UserList::default();
-    user_list.size_for_display = 15000;
+    let user_list = UserList {
+        size_for_display: 15000,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -577,8 +663,10 @@ fn test_user_list_size_for_display() {
 
 #[test]
 fn test_user_list_size_for_search() {
-    let mut user_list = UserList::default();
-    user_list.size_for_search = 12000;
+    let user_list = UserList {
+        size_for_search: 12000,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -589,8 +677,10 @@ fn test_user_list_size_for_search() {
 
 #[test]
 fn test_user_list_match_rate_percentage() {
-    let mut user_list = UserList::default();
-    user_list.match_rate_percentage = 85;
+    let user_list = UserList {
+        match_rate_percentage: 85,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -601,8 +691,10 @@ fn test_user_list_match_rate_percentage() {
 
 #[test]
 fn test_user_list_read_only() {
-    let mut user_list = UserList::default();
-    user_list.read_only = true;
+    let user_list = UserList {
+        read_only: true,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -613,8 +705,10 @@ fn test_user_list_read_only() {
 
 #[test]
 fn test_user_list_eligible_for_search() {
-    let mut user_list = UserList::default();
-    user_list.eligible_for_search = true;
+    let user_list = UserList {
+        eligible_for_search: true,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -625,8 +719,10 @@ fn test_user_list_eligible_for_search() {
 
 #[test]
 fn test_user_list_eligible_for_display() {
-    let mut user_list = UserList::default();
-    user_list.eligible_for_display = true;
+    let user_list = UserList {
+        eligible_for_display: true,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -639,8 +735,10 @@ fn test_user_list_eligible_for_display() {
 fn test_user_list_membership_status() {
     use googleads_rs::google::ads::googleads::v19::enums::user_list_membership_status_enum::UserListMembershipStatus;
 
-    let mut user_list = UserList::default();
-    user_list.membership_status = UserListMembershipStatus::Open as i32;
+    let user_list = UserList {
+        membership_status: UserListMembershipStatus::Open as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -653,8 +751,10 @@ fn test_user_list_membership_status() {
 fn test_user_list_size_range_for_display() {
     use googleads_rs::google::ads::googleads::v19::enums::user_list_size_range_enum::UserListSizeRange;
 
-    let mut user_list = UserList::default();
-    user_list.size_range_for_display = UserListSizeRange::TenThousandToFiftyThousand as i32;
+    let user_list = UserList {
+        size_range_for_display: UserListSizeRange::TenThousandToFiftyThousand as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -667,8 +767,10 @@ fn test_user_list_size_range_for_display() {
 fn test_user_list_type() {
     use googleads_rs::google::ads::googleads::v19::enums::user_list_type_enum::UserListType;
 
-    let mut user_list = UserList::default();
-    user_list.r#type = UserListType::Remarketing as i32;
+    let user_list = UserList {
+        r#type: UserListType::Remarketing as i32,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -683,8 +785,10 @@ fn test_user_list_type() {
 
 #[test]
 fn test_geo_target_constant_id() {
-    let mut geo_target = GeoTargetConstant::default();
-    geo_target.id = 1023191;
+    let geo_target = GeoTargetConstant {
+        id: 1023191,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_geo_target_constant(geo_target)
@@ -695,8 +799,10 @@ fn test_geo_target_constant_id() {
 
 #[test]
 fn test_geo_target_constant_name() {
-    let mut geo_target = GeoTargetConstant::default();
-    geo_target.name = "New York,NY,United States".to_string();
+    let geo_target = GeoTargetConstant {
+        name: "New York,NY,United States".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_geo_target_constant(geo_target)
@@ -707,8 +813,10 @@ fn test_geo_target_constant_name() {
 
 #[test]
 fn test_geo_target_constant_canonical_name() {
-    let mut geo_target = GeoTargetConstant::default();
-    geo_target.canonical_name = "New York,New York,United States".to_string();
+    let geo_target = GeoTargetConstant {
+        canonical_name: "New York,New York,United States".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_geo_target_constant(geo_target)
@@ -719,8 +827,10 @@ fn test_geo_target_constant_canonical_name() {
 
 #[test]
 fn test_geo_target_constant_country_code() {
-    let mut geo_target = GeoTargetConstant::default();
-    geo_target.country_code = "US".to_string();
+    let geo_target = GeoTargetConstant {
+        country_code: "US".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_geo_target_constant(geo_target)
@@ -731,8 +841,10 @@ fn test_geo_target_constant_country_code() {
 
 #[test]
 fn test_geo_target_constant_target_type() {
-    let mut geo_target = GeoTargetConstant::default();
-    geo_target.target_type = "City".to_string();
+    let geo_target = GeoTargetConstant {
+        target_type: "City".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_geo_target_constant(geo_target)
@@ -743,8 +855,10 @@ fn test_geo_target_constant_target_type() {
 
 #[test]
 fn test_geo_target_constant_resource_name() {
-    let mut geo_target = GeoTargetConstant::default();
-    geo_target.resource_name = "geoTargetConstants/1023191".to_string();
+    let geo_target = GeoTargetConstant {
+        resource_name: "geoTargetConstants/1023191".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_geo_target_constant(geo_target)
@@ -759,17 +873,23 @@ fn test_geo_target_constant_resource_name() {
 
 #[test]
 fn test_multiple_phase1_resources_in_same_row() {
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.id = 111;
-    conversion_action.name = "Purchase".to_string();
+    let conversion_action = ConversionAction {
+        id: 111,
+        name: "Purchase".to_string(),
+        ..Default::default()
+    };
 
-    let mut user_list = UserList::default();
-    user_list.id = 222;
-    user_list.name = "Buyers".to_string();
+    let user_list = UserList {
+        id: 222,
+        name: "Buyers".to_string(),
+        ..Default::default()
+    };
 
-    let mut geo_target = GeoTargetConstant::default();
-    geo_target.id = 333;
-    geo_target.name = "California".to_string();
+    let geo_target = GeoTargetConstant {
+        id: 333,
+        name: "California".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -787,8 +907,10 @@ fn test_multiple_phase1_resources_in_same_row() {
 
 #[test]
 fn test_empty_string_values_phase1() {
-    let mut asset = Asset::default();
-    asset.name = "".to_string();
+    let asset = Asset {
+        name: "".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset(asset)
@@ -799,8 +921,10 @@ fn test_empty_string_values_phase1() {
 
 #[test]
 fn test_special_characters_in_phase1_names() {
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.name = "Purchase: Q4 2024 - \"Special\" (Test)".to_string();
+    let conversion_action = ConversionAction {
+        name: "Purchase: Q4 2024 - \"Special\" (Test)".to_string(),
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)
@@ -811,9 +935,11 @@ fn test_special_characters_in_phase1_names() {
 
 #[test]
 fn test_zero_values_phase1() {
-    let mut user_list = UserList::default();
-    user_list.id = 0;
-    user_list.size_for_display = 0;
+    let user_list = UserList {
+        id: 0,
+        size_for_display: 0,
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_user_list(user_list)
@@ -825,8 +951,10 @@ fn test_zero_values_phase1() {
 
 #[test]
 fn test_very_large_numbers_phase1() {
-    let mut conversion_action = ConversionAction::default();
-    conversion_action.id = 9_223_372_036_854_775_807; // i64::MAX
+    let conversion_action = ConversionAction {
+        id: 9_223_372_036_854_775_807, // i64::MAX
+        ..Default::default()
+    };
 
     let row = GoogleAdsRowBuilder::new()
         .with_conversion_action(conversion_action)

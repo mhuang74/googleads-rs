@@ -69,6 +69,7 @@ pub struct GoogleAdsRowBuilder {
     shared_criterion: Option<SharedCriterion>,
 }
 
+#[allow(dead_code)]
 impl GoogleAdsRowBuilder {
     pub fn new() -> Self {
         Self {
@@ -380,6 +381,7 @@ pub struct CampaignBuilder {
     campaign: Campaign,
 }
 
+#[allow(dead_code)]
 impl CampaignBuilder {
     pub fn new() -> Self {
         Self {
@@ -444,10 +446,12 @@ impl Default for CampaignBuilder {
 }
 
 /// Builder for AdGroup
+#[allow(dead_code)]
 pub struct AdGroupBuilder {
     ad_group: AdGroup,
 }
 
+#[allow(dead_code)]
 impl AdGroupBuilder {
     pub fn new() -> Self {
         Self {
@@ -507,9 +511,13 @@ impl Default for AdGroupBuilder {
 }
 
 /// Builder for CampaignBudget
+#[allow(dead_code)]
 pub struct CampaignBudgetBuilder {
     budget: CampaignBudget,
 }
+
+#[allow(dead_code)]
+impl CampaignBudgetBuilder {
 
 impl CampaignBudgetBuilder {
     pub fn new() -> Self {
@@ -545,10 +553,12 @@ impl Default for CampaignBudgetBuilder {
 }
 
 /// Builder for Customer
+#[allow(dead_code)]
 pub struct CustomerBuilder {
     customer: Customer,
 }
 
+#[allow(dead_code)]
 impl CustomerBuilder {
     pub fn new() -> Self {
         Self {
@@ -588,10 +598,12 @@ impl Default for CustomerBuilder {
 }
 
 /// Builder for Metrics
+#[allow(dead_code)]
 pub struct MetricsBuilder {
     metrics: Metrics,
 }
 
+#[allow(dead_code)]
 impl MetricsBuilder {
     pub fn new() -> Self {
         Self {
@@ -651,10 +663,12 @@ impl Default for MetricsBuilder {
 }
 
 /// Builder for Segments
+#[allow(dead_code)]
 pub struct SegmentsBuilder {
     segments: Segments,
 }
 
+#[allow(dead_code)]
 impl SegmentsBuilder {
     pub fn new() -> Self {
         Self {
@@ -833,11 +847,13 @@ impl AdBuilder {
         self
     }
 
+    #[allow(dead_code)]
     pub fn name(mut self, name: &str) -> Self {
         self.ad.name = name.to_string();
         self
     }
 
+    #[allow(dead_code)]
     pub fn ad_type(mut self, ad_type: i32) -> Self {
         self.ad.r#type = ad_type;
         self
@@ -904,6 +920,7 @@ impl AdGroupAdBuilder {
         }
     }
 
+    #[allow(dead_code)]
     pub fn status(mut self, status: i32) -> Self {
         self.ad_group_ad.status = status;
         self
@@ -914,6 +931,7 @@ impl AdGroupAdBuilder {
         self
     }
 
+    #[allow(dead_code)]
     pub fn labels(mut self, labels: Vec<String>) -> Self {
         self.ad_group_ad.labels = labels;
         self
@@ -945,12 +963,13 @@ impl CampaignBuilder {
             target_search_network: target_search,
             target_content_network: target_content,
             target_partner_search_network: target_partner,
-            target_google_search: target_google_search,
+            target_google_search,
             ..Default::default()
         });
         self
     }
 
+    #[allow(dead_code)]
     pub fn with_dynamic_search_ads_setting(
         mut self,
         domain_name: &str,
