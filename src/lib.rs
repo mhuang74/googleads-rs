@@ -62,7 +62,6 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
     ///     print!("\n");
     /// }
     /// ```
-
     pub fn get(&self, field_name: &str) -> String {
         /// Macro to get value of an attribute as string
         /// Before

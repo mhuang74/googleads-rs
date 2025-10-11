@@ -29,7 +29,7 @@ fn main() -> Res {
                 ) && e
                 .path()
                 .extension()
-                .map_or(false, |ext| ext == "proto")
+                .is_some_and(|ext| ext == "proto")
         })
     {
         let path = entry.path();
@@ -123,8 +123,7 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
             .enumerate()
             .position(|(idx, pkg_seg)| {
                 path_stack
-                    .get(idx)
-                    .map_or(true, |stack_seg| stack_seg != &pkg_seg)
+                    .get(idx) != Some(&pkg_seg)
             })
             .unwrap_or(0);
 
