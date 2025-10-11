@@ -46,7 +46,7 @@ jobs:
     - name: Generate coverage (stable) and JUnit XML (nightly)
       run: |
         cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
-        cargo +nightly test --all-features --workspace -Z unstable-options --format json > test-results.json
+        cargo +nightly test --all-features --workspace -Z unstable-options -- --format json > test-results.json
         cargo2junit < test-results.json > junit.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
