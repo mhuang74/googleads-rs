@@ -518,8 +518,6 @@ pub struct CampaignBudgetBuilder {
 
 #[allow(dead_code)]
 impl CampaignBudgetBuilder {
-
-impl CampaignBudgetBuilder {
     pub fn new() -> Self {
         Self {
             budget: CampaignBudget::default(),
