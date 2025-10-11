@@ -716,10 +716,12 @@ impl Default for SegmentsBuilder {
 }
 
 /// Builder for AdGroupCriterion with oneof criterion support
+#[allow(dead_code)]
 pub struct AdGroupCriterionBuilder {
     criterion: AdGroupCriterion,
 }
 
+#[allow(dead_code)]
 impl AdGroupCriterionBuilder {
     pub fn new() -> Self {
         Self {
@@ -770,10 +772,12 @@ impl Default for AdGroupCriterionBuilder {
 }
 
 /// Builder for CampaignCriterion with oneof criterion support
+#[allow(dead_code)]
 pub struct CampaignCriterionBuilder {
     criterion: CampaignCriterion,
 }
 
+#[allow(dead_code)]
 impl CampaignCriterionBuilder {
     pub fn new() -> Self {
         Self {
@@ -829,10 +833,12 @@ impl Default for CampaignCriterionBuilder {
 }
 
 /// Builder for Ad with oneof ad_data support
+#[allow(dead_code)]
 pub struct AdBuilder {
     ad: Ad,
 }
 
+#[allow(dead_code)]
 impl AdBuilder {
     pub fn new() -> Self {
         Self {
@@ -907,10 +913,12 @@ impl Default for AdBuilder {
 }
 
 /// Builder for AdGroupAd
+#[allow(dead_code)]
 pub struct AdGroupAdBuilder {
     ad_group_ad: AdGroupAd,
 }
 
+#[allow(dead_code)]
 impl AdGroupAdBuilder {
     pub fn new() -> Self {
         Self {
@@ -991,10 +999,12 @@ impl CampaignBuilder {
 // ============================================================================
 
 /// Builder for AccountBudget
+#[allow(dead_code)]
 pub struct AccountBudgetBuilder {
     account_budget: AccountBudget,
 }
 
+#[allow(dead_code)]
 impl AccountBudgetBuilder {
     pub fn new() -> Self {
         Self {
@@ -1029,10 +1039,12 @@ impl Default for AccountBudgetBuilder {
 }
 
 /// Builder for AssetGroup
+#[allow(dead_code)]
 pub struct AssetGroupBuilder {
     asset_group: AssetGroup,
 }
 
+#[allow(dead_code)]
 impl AssetGroupBuilder {
     pub fn new() -> Self {
         Self {
@@ -1082,10 +1094,12 @@ impl Default for AssetGroupBuilder {
 }
 
 /// Builder for Audience
+#[allow(dead_code)]
 pub struct AudienceBuilder {
     audience: Audience,
 }
 
+#[allow(dead_code)]
 impl AudienceBuilder {
     pub fn new() -> Self {
         Self {
@@ -1125,10 +1139,12 @@ impl Default for AudienceBuilder {
 }
 
 /// Builder for BiddingStrategy
+#[allow(dead_code)]
 pub struct BiddingStrategyBuilder {
     bidding_strategy: BiddingStrategy,
 }
 
+#[allow(dead_code)]
 impl BiddingStrategyBuilder {
     pub fn new() -> Self {
         Self {
@@ -1163,10 +1179,12 @@ impl Default for BiddingStrategyBuilder {
 }
 
 /// Builder for Label (extension to existing)
+#[allow(dead_code)]
 pub struct LabelBuilder {
     label: Label,
 }
 
+#[allow(dead_code)]
 impl LabelBuilder {
     pub fn new() -> Self {
         Self {
@@ -1201,10 +1219,12 @@ impl Default for LabelBuilder {
 }
 
 /// Builder for CustomerClient (extension to existing)
+#[allow(dead_code)]
 pub struct CustomerClientBuilder {
     customer_client: CustomerClient,
 }
 
+#[allow(dead_code)]
 impl CustomerClientBuilder {
     pub fn new() -> Self {
         Self {
@@ -1264,10 +1284,12 @@ impl Default for CustomerClientBuilder {
 }
 
 /// Builder for SearchTermView
+#[allow(dead_code)]
 pub struct SearchTermViewBuilder {
     search_term_view: SearchTermView,
 }
 
+#[allow(dead_code)]
 impl SearchTermViewBuilder {
     pub fn new() -> Self {
         Self {
@@ -1302,10 +1324,12 @@ impl Default for SearchTermViewBuilder {
 }
 
 /// Builder for SmartCampaignSearchTermView
+#[allow(dead_code)]
 pub struct SmartCampaignSearchTermViewBuilder {
     smart_campaign_search_term_view: SmartCampaignSearchTermView,
 }
 
+#[allow(dead_code)]
 impl SmartCampaignSearchTermViewBuilder {
     pub fn new() -> Self {
         Self {
@@ -1335,10 +1359,12 @@ impl Default for SmartCampaignSearchTermViewBuilder {
 }
 
 /// Builder for ChangeEvent
+#[allow(dead_code)]
 pub struct ChangeEventBuilder {
     change_event: ChangeEvent,
 }
 
+#[allow(dead_code)]
 impl ChangeEventBuilder {
     pub fn new() -> Self {
         Self {
@@ -1400,10 +1426,12 @@ impl Default for ChangeEventBuilder {
 }
 
 /// Builder for AdGroupAdAssetView
+#[allow(dead_code)]
 pub struct AdGroupAdAssetViewBuilder {
     ad_group_ad_asset_view: AdGroupAdAssetView,
 }
 
+#[allow(dead_code)]
 impl AdGroupAdAssetViewBuilder {
     pub fn new() -> Self {
         Self {
@@ -1448,10 +1476,12 @@ impl Default for AdGroupAdAssetViewBuilder {
 }
 
 /// Builder for AssetFieldTypeView
+#[allow(dead_code)]
 pub struct AssetFieldTypeViewBuilder {
     asset_field_type_view: AssetFieldTypeView,
 }
 
+#[allow(dead_code)]
 impl AssetFieldTypeViewBuilder {
     pub fn new() -> Self {
         Self {

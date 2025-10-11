@@ -8,6 +8,7 @@
 
 mod test_helpers;
 
+#[allow(unused_imports)]
 use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder, SegmentsBuilder};
 use googleads_rs::google::ads::googleads::v19::resources::{
     KeywordView, LandingPageView, GeographicView, ClickView, AssetGroupAsset, AssetGroupSignal,
