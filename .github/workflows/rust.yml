@@ -40,9 +40,9 @@ jobs:
     - name: Generate coverage (stable)
       run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
     - name: Run tests and generate JUnit report
-      run: cargo nextest run --all-features --test-threads 1 --retries 0 --workspace --junit-xml tests.xml
+      run: cargo nextest run --all-features --test-threads 1 --retries 0 --workspace -- --junit-xml tests.xml
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v5 
       with:
         files: lcov.info
         fail_ci_if_error: false
