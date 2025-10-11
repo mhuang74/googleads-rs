@@ -3,13 +3,14 @@
 // This module tests the method_str! and optional_method_str! macros
 // which are used for extracting enum field values via accessor methods
 
+#![allow(unused_imports)]
+#![allow(clippy::field_reassign_with_default)]
+
 mod test_helpers;
 
-#[allow(unused_imports)]
 use test_helpers::{
     GoogleAdsRowBuilder, CampaignBuilder, AdGroupBuilder, CustomerBuilder, SegmentsBuilder,
 };
-#[allow(unused_imports)]
 use googleads_rs::google::ads::googleads::v19::enums::{
     campaign_status_enum::CampaignStatus,
     ad_group_status_enum::AdGroupStatus,

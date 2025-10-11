@@ -2,9 +2,10 @@
 //
 // This module tests error handling, unimplemented paths, and edge cases
 
+#![allow(unused_imports)]
+
 mod test_helpers;
 
-#[allow(unused_imports)]
 use test_helpers::{
     GoogleAdsRowBuilder, CampaignBuilder, AdGroupBuilder,
     MetricsBuilder, SegmentsBuilder,

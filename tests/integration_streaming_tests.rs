@@ -3,6 +3,9 @@
 // This module tests the integration between gRPC streaming responses,
 // field masks, and the GoogleAdsRow::get() method.
 
+#![allow(clippy::field_reassign_with_default)]
+#![allow(clippy::useless_vec)]
+
 use googleads_rs::google::ads::googleads::v19::services::{
     GoogleAdsRow, SearchGoogleAdsStreamResponse,
 };

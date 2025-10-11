@@ -10,6 +10,8 @@
 // - user_list
 // - geo_target_constant
 
+#![allow(clippy::field_reassign_with_default)]
+
 mod test_helpers;
 
 use googleads_rs::google::ads::googleads::v19::resources::{

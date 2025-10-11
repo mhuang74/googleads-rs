@@ -6,9 +6,11 @@
 // - Phase 6: High-Value Resources (recommendation, shared_set, shared_criterion, feed)
 // - Phase 7: Specialized Metrics & Segments (asset performance, hotel, SKAdNetwork)
 
+#![allow(unused_imports)]
+#![allow(clippy::needless_update)]
+
 mod test_helpers;
 
-#[allow(unused_imports)]
 use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder, SegmentsBuilder};
 use googleads_rs::google::ads::googleads::v19::resources::{
     KeywordView, LandingPageView, GeographicView, ClickView, AssetGroupAsset, AssetGroupSignal,

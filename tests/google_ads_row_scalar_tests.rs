@@ -3,6 +3,8 @@
 // This module tests the attr_str! and optional_attr_str! macros
 // which are used for extracting scalar field values (string, int64, double, bool)
 
+#![allow(clippy::excessive_precision)]
+
 mod test_helpers;
 
 use test_helpers::{

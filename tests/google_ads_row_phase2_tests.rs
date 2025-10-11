@@ -7,10 +7,11 @@
 //
 // All fields use the attr_str! macro for scalar field extraction
 
+#![allow(unused_imports)]
+
 mod test_helpers;
 
 use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder};
-#[allow(unused_imports)]
 use googleads_rs::google::ads::googleads::v19::common::Metrics;
 
 // ============================================================================
