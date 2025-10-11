@@ -32,7 +32,7 @@ jobs:
     - name: Install cargo-tarpaulin
       uses: taiki-e/install-action@cargo-tarpaulin
     - name: Run tests, generate coverage and JUnit XML reports
-      run: cargo tarpaulin --all-features --workspace --out Xml --out Cobertura --output-dir target/tarpaulin/
+      run: cargo tarpaulin --all-features --workspace --out Xml --out xml --output-dir target/tarpaulin/
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
