@@ -6,14 +6,13 @@
 #![allow(clippy::field_reassign_with_default)]
 #![allow(clippy::useless_vec)]
 
-use googleads_rs::google::ads::googleads::v19::services::{
-    GoogleAdsRow, SearchGoogleAdsStreamResponse,
-};
-use googleads_rs::google::ads::googleads::v19::resources::{Campaign, AdGroup, Customer};
 use googleads_rs::google::ads::googleads::v19::common::{Metrics, Segments};
 use googleads_rs::google::ads::googleads::v19::enums::{
-    campaign_status_enum::CampaignStatus,
-    ad_group_status_enum::AdGroupStatus,
+    ad_group_status_enum::AdGroupStatus, campaign_status_enum::CampaignStatus,
+};
+use googleads_rs::google::ads::googleads::v19::resources::{AdGroup, Campaign, Customer};
+use googleads_rs::google::ads::googleads::v19::services::{
+    GoogleAdsRow, SearchGoogleAdsStreamResponse,
 };
 use prost_types::FieldMask;
 
@@ -47,7 +46,11 @@ fn test_field_mask_with_campaign_fields() {
     for path in &field_mask.paths {
         let value = row.get(path);
         assert!(!value.is_empty(), "Field {} should return a value", path);
-        assert_ne!(value, "not implemented by googleads-rs", "Field {} should be implemented", path);
+        assert_ne!(
+            value, "not implemented by googleads-rs",
+            "Field {} should be implemented",
+            path
+        );
     }
 
     // Verify specific values
@@ -132,8 +135,14 @@ fn test_field_mask_with_nested_fields() {
 
     // Verify nested paths work
     assert_eq!(row.get("campaign.id"), "55555");
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_content_network"), "false");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_content_network"),
+        "false"
+    );
 }
 
 #[test]
@@ -358,8 +367,14 @@ fn test_invalid_field_path_returns_not_implemented() {
     assert_eq!(row.get("campaign.id"), "12345");
 
     // Invalid paths should return "not implemented"
-    assert_eq!(row.get("campaign.invalid_field"), "not implemented by googleads-rs");
-    assert_eq!(row.get("unknown.resource.field"), "not implemented by googleads-rs");
+    assert_eq!(
+        row.get("campaign.invalid_field"),
+        "not implemented by googleads-rs"
+    );
+    assert_eq!(
+        row.get("unknown.resource.field"),
+        "not implemented by googleads-rs"
+    );
 }
 
 #[test]
@@ -463,9 +478,15 @@ fn test_realistic_campaign_report_query() {
         let expected_clicks = 250 + (idx as i64 * 25);
         let expected_conversions = 10.0 + (idx as f64 * 2.0);
 
-        assert_eq!(row.get("metrics.impressions"), format!("{}", expected_impressions));
+        assert_eq!(
+            row.get("metrics.impressions"),
+            format!("{}", expected_impressions)
+        );
         assert_eq!(row.get("metrics.clicks"), format!("{}", expected_clicks));
-        assert_eq!(row.get("metrics.conversions"), format!("{}", expected_conversions));
+        assert_eq!(
+            row.get("metrics.conversions"),
+            format!("{}", expected_conversions)
+        );
     }
 }
 

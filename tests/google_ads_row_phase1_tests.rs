@@ -14,11 +14,11 @@
 
 mod test_helpers;
 
-use googleads_rs::google::ads::googleads::v19::resources::{
-    ConversionAction, ConversionCustomVariable, Asset, CampaignAsset,
-    AdGroupAsset, CustomerAsset, UserList, GeoTargetConstant,
-};
 use googleads_rs::google::ads::googleads::v19::resources::conversion_action::ValueSettings;
+use googleads_rs::google::ads::googleads::v19::resources::{
+    AdGroupAsset, Asset, CampaignAsset, ConversionAction, ConversionCustomVariable, CustomerAsset,
+    GeoTargetConstant, UserList,
+};
 use test_helpers::GoogleAdsRowBuilder;
 
 // ============================================================================
@@ -64,7 +64,10 @@ fn test_conversion_action_resource_name() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.resource_name"), "customers/123/conversionActions/456");
+    assert_eq!(
+        row.get("conversion_action.resource_name"),
+        "customers/123/conversionActions/456"
+    );
 }
 
 #[test]
@@ -94,7 +97,10 @@ fn test_conversion_action_include_in_conversions_metric() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.include_in_conversions_metric"), "true");
+    assert_eq!(
+        row.get("conversion_action.include_in_conversions_metric"),
+        "true"
+    );
 }
 
 #[test]
@@ -111,7 +117,10 @@ fn test_conversion_action_value_settings_default_value() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.value_settings.default_value"), "49.99");
+    assert_eq!(
+        row.get("conversion_action.value_settings.default_value"),
+        "49.99"
+    );
 }
 
 #[test]
@@ -128,7 +137,10 @@ fn test_conversion_action_value_settings_default_currency_code() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.value_settings.default_currency_code"), "USD");
+    assert_eq!(
+        row.get("conversion_action.value_settings.default_currency_code"),
+        "USD"
+    );
 }
 
 #[test]
@@ -220,7 +232,10 @@ fn test_conversion_custom_variable_resource_name() {
         .with_conversion_custom_variable(variable)
         .build();
 
-    assert_eq!(row.get("conversion_custom_variable.resource_name"), "customers/123/conversionCustomVariables/456");
+    assert_eq!(
+        row.get("conversion_custom_variable.resource_name"),
+        "customers/123/conversionCustomVariables/456"
+    );
 }
 
 // ============================================================================
@@ -234,9 +249,7 @@ fn test_asset_id() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_asset(asset)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
     assert_eq!(row.get("asset.id"), "111222333");
 }
@@ -248,9 +261,7 @@ fn test_asset_name() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_asset(asset)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
     assert_eq!(row.get("asset.name"), "Summer Sale Image");
 }
@@ -262,9 +273,7 @@ fn test_asset_resource_name() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_asset(asset)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
     assert_eq!(row.get("asset.resource_name"), "customers/123/assets/456");
 }
@@ -278,9 +287,7 @@ fn test_asset_type() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_asset(asset)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
     assert_eq!(row.get("asset.type"), "Image");
 }
@@ -292,11 +299,12 @@ fn test_asset_tracking_url_template() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_asset(asset)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
-    assert_eq!(row.get("asset.tracking_url_template"), "https://example.com/track?id={lpurl}");
+    assert_eq!(
+        row.get("asset.tracking_url_template"),
+        "https://example.com/track?id={lpurl}"
+    );
 }
 
 #[test]
@@ -312,9 +320,7 @@ fn test_asset_policy_summary_approval_status() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_asset(asset)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
     assert_eq!(row.get("asset.policy_summary.approval_status"), "Approved");
 }
@@ -332,9 +338,7 @@ fn test_asset_policy_summary_review_status() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_asset(asset)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
     assert_eq!(row.get("asset.policy_summary.review_status"), "Reviewed");
 }
@@ -354,7 +358,10 @@ fn test_campaign_asset_resource_name() {
         .with_campaign_asset(campaign_asset)
         .build();
 
-    assert_eq!(row.get("campaign_asset.resource_name"), "customers/123/campaignAssets/456~789~HEADLINE");
+    assert_eq!(
+        row.get("campaign_asset.resource_name"),
+        "customers/123/campaignAssets/456~789~HEADLINE"
+    );
 }
 
 #[test]
@@ -368,7 +375,10 @@ fn test_campaign_asset_campaign() {
         .with_campaign_asset(campaign_asset)
         .build();
 
-    assert_eq!(row.get("campaign_asset.campaign"), "customers/123/campaigns/456");
+    assert_eq!(
+        row.get("campaign_asset.campaign"),
+        "customers/123/campaigns/456"
+    );
 }
 
 #[test]
@@ -432,7 +442,10 @@ fn test_ad_group_asset_resource_name() {
         .with_ad_group_asset(ad_group_asset)
         .build();
 
-    assert_eq!(row.get("ad_group_asset.resource_name"), "customers/123/adGroupAssets/456~789~HEADLINE");
+    assert_eq!(
+        row.get("ad_group_asset.resource_name"),
+        "customers/123/adGroupAssets/456~789~HEADLINE"
+    );
 }
 
 #[test]
@@ -446,7 +459,10 @@ fn test_ad_group_asset_ad_group() {
         .with_ad_group_asset(ad_group_asset)
         .build();
 
-    assert_eq!(row.get("ad_group_asset.ad_group"), "customers/123/adGroups/456");
+    assert_eq!(
+        row.get("ad_group_asset.ad_group"),
+        "customers/123/adGroups/456"
+    );
 }
 
 #[test]
@@ -526,7 +542,10 @@ fn test_customer_asset_resource_name() {
         .with_customer_asset(customer_asset)
         .build();
 
-    assert_eq!(row.get("customer_asset.resource_name"), "customers/123/customerAssets/789~SITELINK");
+    assert_eq!(
+        row.get("customer_asset.resource_name"),
+        "customers/123/customerAssets/789~SITELINK"
+    );
 }
 
 #[test]
@@ -586,9 +605,7 @@ fn test_user_list_id() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.id"), "555666777");
 }
@@ -600,9 +617,7 @@ fn test_user_list_name() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.name"), "Website Visitors - Last 30 Days");
 }
@@ -614,11 +629,12 @@ fn test_user_list_description() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
-    assert_eq!(row.get("user_list.description"), "Users who visited the website in the last 30 days");
+    assert_eq!(
+        row.get("user_list.description"),
+        "Users who visited the website in the last 30 days"
+    );
 }
 
 #[test]
@@ -628,11 +644,12 @@ fn test_user_list_resource_name() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
-    assert_eq!(row.get("user_list.resource_name"), "customers/123/userLists/456");
+    assert_eq!(
+        row.get("user_list.resource_name"),
+        "customers/123/userLists/456"
+    );
 }
 
 #[test]
@@ -642,9 +659,7 @@ fn test_user_list_membership_life_span() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.membership_life_span"), "30");
 }
@@ -656,9 +671,7 @@ fn test_user_list_size_for_display() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.size_for_display"), "15000");
 }
@@ -670,9 +683,7 @@ fn test_user_list_size_for_search() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.size_for_search"), "12000");
 }
@@ -684,9 +695,7 @@ fn test_user_list_match_rate_percentage() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.match_rate_percentage"), "85");
 }
@@ -698,9 +707,7 @@ fn test_user_list_read_only() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.read_only"), "true");
 }
@@ -712,9 +719,7 @@ fn test_user_list_eligible_for_search() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.eligible_for_search"), "true");
 }
@@ -726,9 +731,7 @@ fn test_user_list_eligible_for_display() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.eligible_for_display"), "true");
 }
@@ -742,9 +745,7 @@ fn test_user_list_membership_status() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.membership_status"), "Open");
 }
@@ -758,11 +759,12 @@ fn test_user_list_size_range_for_display() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
-    assert_eq!(row.get("user_list.size_range_for_display"), "TenThousandToFiftyThousand");
+    assert_eq!(
+        row.get("user_list.size_range_for_display"),
+        "TenThousandToFiftyThousand"
+    );
 }
 
 #[test]
@@ -774,9 +776,7 @@ fn test_user_list_type() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.type"), "Remarketing");
 }
@@ -810,7 +810,10 @@ fn test_geo_target_constant_name() {
         .with_geo_target_constant(geo_target)
         .build();
 
-    assert_eq!(row.get("geo_target_constant.name"), "New York,NY,United States");
+    assert_eq!(
+        row.get("geo_target_constant.name"),
+        "New York,NY,United States"
+    );
 }
 
 #[test]
@@ -824,7 +827,10 @@ fn test_geo_target_constant_canonical_name() {
         .with_geo_target_constant(geo_target)
         .build();
 
-    assert_eq!(row.get("geo_target_constant.canonical_name"), "New York,New York,United States");
+    assert_eq!(
+        row.get("geo_target_constant.canonical_name"),
+        "New York,New York,United States"
+    );
 }
 
 #[test]
@@ -866,7 +872,10 @@ fn test_geo_target_constant_resource_name() {
         .with_geo_target_constant(geo_target)
         .build();
 
-    assert_eq!(row.get("geo_target_constant.resource_name"), "geoTargetConstants/1023191");
+    assert_eq!(
+        row.get("geo_target_constant.resource_name"),
+        "geoTargetConstants/1023191"
+    );
 }
 
 // ============================================================================
@@ -914,9 +923,7 @@ fn test_empty_string_values_phase1() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_asset(asset)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
     assert_eq!(row.get("asset.name"), "");
 }
@@ -932,7 +939,10 @@ fn test_special_characters_in_phase1_names() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.name"), "Purchase: Q4 2024 - \"Special\" (Test)");
+    assert_eq!(
+        row.get("conversion_action.name"),
+        "Purchase: Q4 2024 - \"Special\" (Test)"
+    );
 }
 
 #[test]
@@ -943,9 +953,7 @@ fn test_zero_values_phase1() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_user_list(user_list)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
     assert_eq!(row.get("user_list.id"), "0");
     assert_eq!(row.get("user_list.size_for_display"), "0");

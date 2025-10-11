@@ -28,11 +28,9 @@ use crate::google::ads::googleads::v19::enums::bidding_strategy_type_enum::{
 };
 
 use crate::google::ads::googleads::v19::resources::{
-    ad_group_criterion::Criterion::Keyword,
-    ad::AdData::ResponsiveSearchAd,
+    ad::AdData::ResponsiveSearchAd, ad_group_criterion::Criterion::Keyword,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
-    campaign_criterion::Criterion::Location,
-    shared_criterion::Criterion::Keyword as SharedKeyword,
+    campaign_criterion::Criterion::Location, shared_criterion::Criterion::Keyword as SharedKeyword,
 };
 
 impl google::ads::googleads::v19::services::GoogleAdsRow {

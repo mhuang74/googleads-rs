@@ -8,10 +8,9 @@
 mod test_helpers;
 
 use test_helpers::{
-    GoogleAdsRowBuilder, AccountBudgetBuilder, AssetGroupBuilder, AudienceBuilder,
-    BiddingStrategyBuilder, LabelBuilder, CustomerClientBuilder, SearchTermViewBuilder,
-    SmartCampaignSearchTermViewBuilder, ChangeEventBuilder, AdGroupAdAssetViewBuilder,
-    AssetFieldTypeViewBuilder,
+    AccountBudgetBuilder, AdGroupAdAssetViewBuilder, AssetFieldTypeViewBuilder, AssetGroupBuilder,
+    AudienceBuilder, BiddingStrategyBuilder, ChangeEventBuilder, CustomerClientBuilder,
+    GoogleAdsRowBuilder, LabelBuilder, SearchTermViewBuilder, SmartCampaignSearchTermViewBuilder,
 };
 
 // ============================================================================
@@ -20,9 +19,7 @@ use test_helpers::{
 
 #[test]
 fn test_account_budget_id() {
-    let account_budget = AccountBudgetBuilder::new()
-        .id(123456)
-        .build();
+    let account_budget = AccountBudgetBuilder::new().id(123456).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_account_budget(account_budget)
@@ -84,9 +81,7 @@ fn test_account_budget_all_fields() {
 
 #[test]
 fn test_asset_group_id() {
-    let asset_group = AssetGroupBuilder::new()
-        .id(111222)
-        .build();
+    let asset_group = AssetGroupBuilder::new().id(111222).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_asset_group(asset_group)
@@ -133,7 +128,10 @@ fn test_asset_group_resource_name() {
         .with_asset_group(asset_group)
         .build();
 
-    assert_eq!(row.get("asset_group.resource_name"), "customers/123/assetGroups/456");
+    assert_eq!(
+        row.get("asset_group.resource_name"),
+        "customers/123/assetGroups/456"
+    );
 }
 
 #[test]
@@ -146,7 +144,10 @@ fn test_asset_group_campaign() {
         .with_asset_group(asset_group)
         .build();
 
-    assert_eq!(row.get("asset_group.campaign"), "customers/123/campaigns/789");
+    assert_eq!(
+        row.get("asset_group.campaign"),
+        "customers/123/campaigns/789"
+    );
 }
 
 #[test]
@@ -171,26 +172,18 @@ fn test_asset_group_ad_strength() {
 
 #[test]
 fn test_audience_id() {
-    let audience = AudienceBuilder::new()
-        .id(55566)
-        .build();
+    let audience = AudienceBuilder::new().id(55566).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_audience(audience)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_audience(audience).build();
 
     assert_eq!(row.get("audience.id"), "55566");
 }
 
 #[test]
 fn test_audience_name() {
-    let audience = AudienceBuilder::new()
-        .name("High Value Customers")
-        .build();
+    let audience = AudienceBuilder::new().name("High Value Customers").build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_audience(audience)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_audience(audience).build();
 
     assert_eq!(row.get("audience.name"), "High Value Customers");
 }
@@ -201,11 +194,12 @@ fn test_audience_description() {
         .description("Customers who have spent over $1000")
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_audience(audience)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_audience(audience).build();
 
-    assert_eq!(row.get("audience.description"), "Customers who have spent over $1000");
+    assert_eq!(
+        row.get("audience.description"),
+        "Customers who have spent over $1000"
+    );
 }
 
 #[test]
@@ -216,9 +210,7 @@ fn test_audience_status() {
         .status(AudienceStatus::Enabled as i32)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_audience(audience)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_audience(audience).build();
 
     assert_eq!(row.get("audience.status"), "Enabled");
 }
@@ -229,9 +221,7 @@ fn test_audience_status() {
 
 #[test]
 fn test_bidding_strategy_id() {
-    let bidding_strategy = BiddingStrategyBuilder::new()
-        .id(987654)
-        .build();
+    let bidding_strategy = BiddingStrategyBuilder::new().id(987654).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_bidding_strategy(bidding_strategy)
@@ -274,26 +264,18 @@ fn test_bidding_strategy_status() {
 
 #[test]
 fn test_label_id() {
-    let label = LabelBuilder::new()
-        .id(11223344)
-        .build();
+    let label = LabelBuilder::new().id(11223344).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_label(label)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_label(label).build();
 
     assert_eq!(row.get("label.id"), "11223344");
 }
 
 #[test]
 fn test_label_name() {
-    let label = LabelBuilder::new()
-        .name("High Priority")
-        .build();
+    let label = LabelBuilder::new().name("High Priority").build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_label(label)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_label(label).build();
 
     assert_eq!(row.get("label.name"), "High Priority");
 }
@@ -306,9 +288,7 @@ fn test_label_status() {
         .status(LabelStatus::Enabled as i32)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_label(label)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_label(label).build();
 
     assert_eq!(row.get("label.status"), "Enabled");
 }
@@ -319,9 +299,7 @@ fn test_label_status() {
 
 #[test]
 fn test_customer_client_id() {
-    let customer_client = CustomerClientBuilder::new()
-        .id(555666777)
-        .build();
+    let customer_client = CustomerClientBuilder::new().id(555666777).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_customer_client(customer_client)
@@ -340,14 +318,15 @@ fn test_customer_client_client_customer() {
         .with_customer_client(customer_client)
         .build();
 
-    assert_eq!(row.get("customer_client.client_customer"), "customers/123456");
+    assert_eq!(
+        row.get("customer_client.client_customer"),
+        "customers/123456"
+    );
 }
 
 #[test]
 fn test_customer_client_currency_code() {
-    let customer_client = CustomerClientBuilder::new()
-        .currency_code("USD")
-        .build();
+    let customer_client = CustomerClientBuilder::new().currency_code("USD").build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_customer_client(customer_client)
@@ -371,9 +350,7 @@ fn test_customer_client_descriptive_name() {
 
 #[test]
 fn test_customer_client_level() {
-    let customer_client = CustomerClientBuilder::new()
-        .level(2)
-        .build();
+    let customer_client = CustomerClientBuilder::new().level(2).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_customer_client(customer_client)
@@ -384,9 +361,7 @@ fn test_customer_client_level() {
 
 #[test]
 fn test_customer_client_manager() {
-    let customer_client = CustomerClientBuilder::new()
-        .manager(true)
-        .build();
+    let customer_client = CustomerClientBuilder::new().manager(true).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_customer_client(customer_client)
@@ -437,7 +412,10 @@ fn test_search_term_view_ad_group() {
         .with_search_term_view(search_term_view)
         .build();
 
-    assert_eq!(row.get("search_term_view.ad_group"), "customers/123/adGroups/456");
+    assert_eq!(
+        row.get("search_term_view.ad_group"),
+        "customers/123/adGroups/456"
+    );
 }
 
 #[test]
@@ -482,7 +460,10 @@ fn test_smart_campaign_search_term_view_campaign() {
         .with_smart_campaign_search_term_view(smart_campaign_search_term_view)
         .build();
 
-    assert_eq!(row.get("smart_campaign_search_term_view.campaign"), "customers/123/campaigns/789");
+    assert_eq!(
+        row.get("smart_campaign_search_term_view.campaign"),
+        "customers/123/campaigns/789"
+    );
 }
 
 #[test]
@@ -495,7 +476,10 @@ fn test_smart_campaign_search_term_view_search_term() {
         .with_smart_campaign_search_term_view(smart_campaign_search_term_view)
         .build();
 
-    assert_eq!(row.get("smart_campaign_search_term_view.search_term"), "best coffee shop");
+    assert_eq!(
+        row.get("smart_campaign_search_term_view.search_term"),
+        "best coffee shop"
+    );
 }
 
 // ============================================================================
@@ -512,7 +496,10 @@ fn test_change_event_change_date_time() {
         .with_change_event(change_event)
         .build();
 
-    assert_eq!(row.get("change_event.change_date_time"), "2024-10-10 12:34:56+00:00");
+    assert_eq!(
+        row.get("change_event.change_date_time"),
+        "2024-10-10 12:34:56+00:00"
+    );
 }
 
 #[test]
@@ -540,7 +527,10 @@ fn test_change_event_change_resource_name() {
         .with_change_event(change_event)
         .build();
 
-    assert_eq!(row.get("change_event.change_resource_name"), "customers/123/campaigns/456");
+    assert_eq!(
+        row.get("change_event.change_resource_name"),
+        "customers/123/campaigns/456"
+    );
 }
 
 #[test]
@@ -596,7 +586,10 @@ fn test_change_event_changed_fields() {
         .with_change_event(change_event)
         .build();
 
-    assert_eq!(row.get("change_event.changed_fields"), "'campaign.name, campaign.status'");
+    assert_eq!(
+        row.get("change_event.changed_fields"),
+        "'campaign.name, campaign.status'"
+    );
 }
 
 #[test]
@@ -609,7 +602,10 @@ fn test_change_event_campaign() {
         .with_change_event(change_event)
         .build();
 
-    assert_eq!(row.get("change_event.campaign"), "customers/123/campaigns/789");
+    assert_eq!(
+        row.get("change_event.campaign"),
+        "customers/123/campaigns/789"
+    );
 }
 
 // ============================================================================
@@ -626,7 +622,10 @@ fn test_ad_group_ad_asset_view_resource_name() {
         .with_ad_group_ad_asset_view(ad_group_ad_asset_view)
         .build();
 
-    assert_eq!(row.get("ad_group_ad_asset_view.resource_name"), "customers/123/adGroupAdAssetViews/456");
+    assert_eq!(
+        row.get("ad_group_ad_asset_view.resource_name"),
+        "customers/123/adGroupAdAssetViews/456"
+    );
 }
 
 #[test]
@@ -639,7 +638,10 @@ fn test_ad_group_ad_asset_view_asset() {
         .with_ad_group_ad_asset_view(ad_group_ad_asset_view)
         .build();
 
-    assert_eq!(row.get("ad_group_ad_asset_view.asset"), "customers/123/assets/789");
+    assert_eq!(
+        row.get("ad_group_ad_asset_view.asset"),
+        "customers/123/assets/789"
+    );
 }
 
 #[test]
@@ -712,8 +714,8 @@ fn test_asset_field_type_view_field_type() {
 
 #[test]
 fn test_multiple_phase3_resources_in_same_row() {
-    use googleads_rs::google::ads::googleads::v19::enums::label_status_enum::LabelStatus;
     use googleads_rs::google::ads::googleads::v19::enums::audience_status_enum::AudienceStatus;
+    use googleads_rs::google::ads::googleads::v19::enums::label_status_enum::LabelStatus;
 
     let label = LabelBuilder::new()
         .id(111)
@@ -748,7 +750,10 @@ fn test_search_term_with_special_characters() {
         .with_search_term_view(search_term_view)
         .build();
 
-    assert_eq!(row.get("search_term_view.search_term"), "\"running shoes\" -cheap");
+    assert_eq!(
+        row.get("search_term_view.search_term"),
+        "\"running shoes\" -cheap"
+    );
 }
 
 #[test]

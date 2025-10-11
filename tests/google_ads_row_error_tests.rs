@@ -7,8 +7,7 @@
 mod test_helpers;
 
 use test_helpers::{
-    GoogleAdsRowBuilder, CampaignBuilder, AdGroupBuilder,
-    MetricsBuilder, SegmentsBuilder,
+    AdGroupBuilder, CampaignBuilder, GoogleAdsRowBuilder, MetricsBuilder, SegmentsBuilder,
 };
 
 // ============================================================================
@@ -27,13 +26,9 @@ fn test_unimplemented_field_path_returns_not_implemented() {
 
 #[test]
 fn test_unimplemented_campaign_field() {
-    let campaign = CampaignBuilder::new()
-        .id(123)
-        .build();
+    let campaign = CampaignBuilder::new().id(123).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Test a field that exists in the proto but isn't implemented in get()
     assert_eq!(
@@ -54,115 +49,65 @@ fn test_unimplemented_resource() {
 
 #[test]
 fn test_partial_field_path() {
-    let campaign = CampaignBuilder::new()
-        .id(123)
-        .build();
+    let campaign = CampaignBuilder::new().id(123).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Incomplete path
-    assert_eq!(
-        row.get("campaign"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaign"), "not implemented by googleads-rs");
 }
 
 #[test]
 fn test_typo_in_field_name() {
-    let campaign = CampaignBuilder::new()
-        .id(123)
-        .build();
+    let campaign = CampaignBuilder::new().id(123).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Common typo: "campaing" instead of "campaign"
-    assert_eq!(
-        row.get("campaing.id"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaing.id"), "not implemented by googleads-rs");
 }
 
 #[test]
 fn test_case_sensitive_field_names() {
-    let campaign = CampaignBuilder::new()
-        .id(123)
-        .build();
+    let campaign = CampaignBuilder::new().id(123).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Field names are case-sensitive
-    assert_eq!(
-        row.get("Campaign.ID"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("Campaign.ID"), "not implemented by googleads-rs");
 
-    assert_eq!(
-        row.get("CAMPAIGN.ID"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("CAMPAIGN.ID"), "not implemented by googleads-rs");
 }
 
 #[test]
 fn test_extra_dots_in_path() {
-    let campaign = CampaignBuilder::new()
-        .id(123)
-        .build();
+    let campaign = CampaignBuilder::new().id(123).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(
-        row.get("campaign..id"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaign..id"), "not implemented by googleads-rs");
 
-    assert_eq!(
-        row.get("campaign.id."),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaign.id."), "not implemented by googleads-rs");
 }
 
 #[test]
 fn test_empty_string_field_path() {
     let row = GoogleAdsRowBuilder::new().build();
 
-    assert_eq!(
-        row.get(""),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get(""), "not implemented by googleads-rs");
 }
 
 #[test]
 fn test_whitespace_in_field_path() {
-    let campaign = CampaignBuilder::new()
-        .id(123)
-        .build();
+    let campaign = CampaignBuilder::new().id(123).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(
-        row.get(" campaign.id"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get(" campaign.id"), "not implemented by googleads-rs");
 
-    assert_eq!(
-        row.get("campaign.id "),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaign.id "), "not implemented by googleads-rs");
 
-    assert_eq!(
-        row.get("campaign .id"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaign .id"), "not implemented by googleads-rs");
 }
 
 // ============================================================================
@@ -223,10 +168,7 @@ fn test_very_long_field_path() {
     let row = GoogleAdsRowBuilder::new().build();
 
     let long_path = "a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s.t.u.v.w.x.y.z";
-    assert_eq!(
-        row.get(long_path),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get(long_path), "not implemented by googleads-rs");
 }
 
 #[test]
@@ -241,13 +183,9 @@ fn test_field_path_with_numbers() {
 
 #[test]
 fn test_field_path_with_underscores() {
-    let campaign = CampaignBuilder::new()
-        .id(123)
-        .build();
+    let campaign = CampaignBuilder::new().id(123).build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Valid path with underscores
     assert_eq!(row.get("campaign.campaign_budget"), "");
@@ -289,9 +227,7 @@ fn test_field_path_with_special_characters() {
 #[test]
 fn test_default_numeric_values() {
     let campaign = CampaignBuilder::new().build();
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Default i64 values should be 0
     assert_eq!(row.get("campaign.id"), "0");
@@ -300,9 +236,7 @@ fn test_default_numeric_values() {
 #[test]
 fn test_default_string_values() {
     let campaign = CampaignBuilder::new().build();
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Default string values should be empty
     assert_eq!(row.get("campaign.name"), "");
@@ -315,11 +249,12 @@ fn test_default_bool_values() {
         .with_network_settings(false, false, false, false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "false");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "false"
+    );
 }
 
 #[test]
@@ -330,9 +265,7 @@ fn test_default_enum_values() {
         .status(CampaignStatus::Unspecified)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(row.get("campaign.status"), "Unspecified");
 }
@@ -343,13 +276,9 @@ fn test_default_enum_values() {
 
 #[test]
 fn test_accessing_missing_resource_in_populated_row() {
-    let campaign = CampaignBuilder::new()
-        .id(111)
-        .build();
+    let campaign = CampaignBuilder::new().id(111).build();
 
-    let metrics = MetricsBuilder::new()
-        .impressions(1000)
-        .build();
+    let metrics = MetricsBuilder::new().impressions(1000).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_campaign(campaign)
@@ -366,14 +295,9 @@ fn test_accessing_missing_resource_in_populated_row() {
 
 #[test]
 fn test_mixed_present_and_absent_resources() {
-    let campaign = CampaignBuilder::new()
-        .id(222)
-        .name("Test Campaign")
-        .build();
+    let campaign = CampaignBuilder::new().id(222).name("Test Campaign").build();
 
-    let segments = SegmentsBuilder::new()
-        .date("2024-10-10")
-        .build();
+    let segments = SegmentsBuilder::new().date("2024-10-10").build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_campaign(campaign)
@@ -395,21 +319,16 @@ fn test_mixed_present_and_absent_resources() {
 
 #[test]
 fn test_common_field_name_mistakes() {
-    let campaign = CampaignBuilder::new()
-        .id(123)
-        .name("Test")
-        .build();
+    let campaign = CampaignBuilder::new().id(123).name("Test").build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Common mistakes developers might make
     let mistakes = vec![
         ("campaign.campaignid", "campaign.id"),  // Missing underscore
-        ("campaign.campaign_id", "campaign.id"),  // Extra word
-        ("campaign.name_", "campaign.name"),  // Trailing underscore
-        ("campaign.status_", "campaign.status"),  // Trailing underscore
+        ("campaign.campaign_id", "campaign.id"), // Extra word
+        ("campaign.name_", "campaign.name"),     // Trailing underscore
+        ("campaign.status_", "campaign.status"), // Trailing underscore
     ];
 
     for (wrong, _correct) in mistakes {
@@ -437,8 +356,7 @@ fn test_sql_injection_like_input() {
     for input in weird_inputs {
         let result = row.get(input);
         assert_eq!(
-            result,
-            "not implemented by googleads-rs",
+            result, "not implemented by googleads-rs",
             "Weird input '{}' should return not implemented",
             input
         );
@@ -450,8 +368,8 @@ fn test_unicode_in_field_paths() {
     let row = GoogleAdsRowBuilder::new().build();
 
     let unicode_paths = vec![
-        "campaign.名前",  // Japanese
-        "campaign.名字",  // Chinese
+        "campaign.名前", // Japanese
+        "campaign.名字", // Chinese
         "campaign.имя",  // Russian
         "campaign.🎯",   // Emoji
     ];
@@ -472,14 +390,9 @@ fn test_unicode_in_field_paths() {
 
 #[test]
 fn test_many_sequential_gets() {
-    let campaign = CampaignBuilder::new()
-        .id(999)
-        .name("Test")
-        .build();
+    let campaign = CampaignBuilder::new().id(999).name("Test").build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Call get() many times to ensure no memory issues
     for _ in 0..1000 {

@@ -7,26 +7,23 @@
 #![allow(clippy::needless_update)]
 #![allow(clippy::field_reassign_with_default)]
 
-use googleads_rs::google::ads::googleads::v19::services::GoogleAdsRow;
-use googleads_rs::google::ads::googleads::v19::resources::{
-    Campaign, AdGroup, AdGroupAd, AdGroupCriterion, CampaignCriterion, CampaignBudget,
-    Customer, CustomerClient, Label, Ad, AccountBudget, AssetGroup, Audience, BiddingStrategy,
-    SearchTermView, SmartCampaignSearchTermView, ChangeEvent, AdGroupAdAssetView, AssetFieldTypeView,
-    ConversionAction, ConversionCustomVariable, Asset, CampaignAsset, AdGroupAsset, CustomerAsset,
-    UserList, GeoTargetConstant, KeywordView, LandingPageView, GeographicView, ClickView,
-    AssetGroupAsset, AssetGroupSignal, CampaignLabel, AdGroupLabel, AdGroupAdLabel,
-    Recommendation, CampaignSharedSet, SharedSet, SharedCriterion,
-};
 use googleads_rs::google::ads::googleads::v19::common::{Metrics, Segments};
 use googleads_rs::google::ads::googleads::v19::enums::{
-    campaign_status_enum::CampaignStatus,
-    ad_group_status_enum::AdGroupStatus,
-    ad_group_type_enum::AdGroupType,
+    ad_group_status_enum::AdGroupStatus, ad_group_type_enum::AdGroupType,
     advertising_channel_type_enum::AdvertisingChannelType,
-    bidding_strategy_type_enum::BiddingStrategyType,
-    device_enum::Device,
-    day_of_week_enum::DayOfWeek,
+    bidding_strategy_type_enum::BiddingStrategyType, campaign_status_enum::CampaignStatus,
+    day_of_week_enum::DayOfWeek, device_enum::Device,
 };
+use googleads_rs::google::ads::googleads::v19::resources::{
+    AccountBudget, Ad, AdGroup, AdGroupAd, AdGroupAdAssetView, AdGroupAdLabel, AdGroupAsset,
+    AdGroupCriterion, AdGroupLabel, Asset, AssetFieldTypeView, AssetGroup, AssetGroupAsset,
+    AssetGroupSignal, Audience, BiddingStrategy, Campaign, CampaignAsset, CampaignBudget,
+    CampaignCriterion, CampaignLabel, CampaignSharedSet, ChangeEvent, ClickView, ConversionAction,
+    ConversionCustomVariable, Customer, CustomerAsset, CustomerClient, GeoTargetConstant,
+    GeographicView, KeywordView, Label, LandingPageView, Recommendation, SearchTermView,
+    SharedCriterion, SharedSet, SmartCampaignSearchTermView, UserList,
+};
+use googleads_rs::google::ads::googleads::v19::services::GoogleAdsRow;
 
 /// Builder for GoogleAdsRow
 pub struct GoogleAdsRowBuilder {
@@ -200,7 +197,10 @@ impl GoogleAdsRowBuilder {
         self
     }
 
-    pub fn with_smart_campaign_search_term_view(mut self, smart_campaign_search_term_view: SmartCampaignSearchTermView) -> Self {
+    pub fn with_smart_campaign_search_term_view(
+        mut self,
+        smart_campaign_search_term_view: SmartCampaignSearchTermView,
+    ) -> Self {
         self.smart_campaign_search_term_view = Some(smart_campaign_search_term_view);
         self
     }
@@ -210,7 +210,10 @@ impl GoogleAdsRowBuilder {
         self
     }
 
-    pub fn with_ad_group_ad_asset_view(mut self, ad_group_ad_asset_view: AdGroupAdAssetView) -> Self {
+    pub fn with_ad_group_ad_asset_view(
+        mut self,
+        ad_group_ad_asset_view: AdGroupAdAssetView,
+    ) -> Self {
         self.ad_group_ad_asset_view = Some(ad_group_ad_asset_view);
         self
     }
@@ -225,7 +228,10 @@ impl GoogleAdsRowBuilder {
         self
     }
 
-    pub fn with_conversion_custom_variable(mut self, conversion_custom_variable: ConversionCustomVariable) -> Self {
+    pub fn with_conversion_custom_variable(
+        mut self,
+        conversion_custom_variable: ConversionCustomVariable,
+    ) -> Self {
         self.conversion_custom_variable = Some(conversion_custom_variable);
         self
     }
@@ -827,9 +833,7 @@ pub struct AdBuilder {
 
 impl AdBuilder {
     pub fn new() -> Self {
-        Self {
-            ad: Ad::default(),
-        }
+        Self { ad: Ad::default() }
     }
 
     pub fn id(mut self, id: i64) -> Self {
@@ -855,7 +859,7 @@ impl AdBuilder {
         path2: Option<&str>,
     ) -> Self {
         use googleads_rs::google::ads::googleads::v19::common::{
-            ResponsiveSearchAdInfo, AdTextAsset,
+            AdTextAsset, ResponsiveSearchAdInfo,
         };
         use googleads_rs::google::ads::googleads::v19::resources::ad::AdData;
 

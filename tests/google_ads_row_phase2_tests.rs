@@ -11,8 +11,8 @@
 
 mod test_helpers;
 
-use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder};
 use googleads_rs::google::ads::googleads::v19::common::Metrics;
+use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder};
 
 // ============================================================================
 // E-COMMERCE METRICS (Phase 2.1)
@@ -67,7 +67,10 @@ fn test_metrics_cross_sell_cost_of_goods_sold_micros() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.cross_sell_cost_of_goods_sold_micros"), "5400000");
+    assert_eq!(
+        row.get("metrics.cross_sell_cost_of_goods_sold_micros"),
+        "5400000"
+    );
 }
 
 #[test]
@@ -240,7 +243,10 @@ fn test_metrics_all_conversions_from_location_asset_click_to_call() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.all_conversions_from_location_asset_click_to_call"), "45.5");
+    assert_eq!(
+        row.get("metrics.all_conversions_from_location_asset_click_to_call"),
+        "45.5"
+    );
 }
 
 #[test]
@@ -253,7 +259,10 @@ fn test_metrics_all_conversions_from_location_asset_directions() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.all_conversions_from_location_asset_directions"), "125.3");
+    assert_eq!(
+        row.get("metrics.all_conversions_from_location_asset_directions"),
+        "125.3"
+    );
 }
 
 #[test]
@@ -266,7 +275,10 @@ fn test_metrics_all_conversions_from_location_asset_menu() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.all_conversions_from_location_asset_menu"), "32.7");
+    assert_eq!(
+        row.get("metrics.all_conversions_from_location_asset_menu"),
+        "32.7"
+    );
 }
 
 #[test]
@@ -279,7 +291,10 @@ fn test_metrics_all_conversions_from_location_asset_order() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.all_conversions_from_location_asset_order"), "78.2");
+    assert_eq!(
+        row.get("metrics.all_conversions_from_location_asset_order"),
+        "78.2"
+    );
 }
 
 #[test]
@@ -292,7 +307,10 @@ fn test_metrics_all_conversions_from_location_asset_other_engagement() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.all_conversions_from_location_asset_other_engagement"), "15.9");
+    assert_eq!(
+        row.get("metrics.all_conversions_from_location_asset_other_engagement"),
+        "15.9"
+    );
 }
 
 #[test]
@@ -305,7 +323,10 @@ fn test_metrics_all_conversions_from_location_asset_store_visits() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.all_conversions_from_location_asset_store_visits"), "234.6");
+    assert_eq!(
+        row.get("metrics.all_conversions_from_location_asset_store_visits"),
+        "234.6"
+    );
 }
 
 #[test]
@@ -318,7 +339,10 @@ fn test_metrics_all_conversions_from_location_asset_website() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.all_conversions_from_location_asset_website"), "189.4");
+    assert_eq!(
+        row.get("metrics.all_conversions_from_location_asset_website"),
+        "189.4"
+    );
 }
 
 #[test]
@@ -331,7 +355,10 @@ fn test_metrics_eligible_impressions_from_location_asset_store_reach() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.eligible_impressions_from_location_asset_store_reach"), "50000");
+    assert_eq!(
+        row.get("metrics.eligible_impressions_from_location_asset_store_reach"),
+        "50000"
+    );
 }
 
 #[test]
@@ -344,7 +371,10 @@ fn test_metrics_view_through_conversions_from_location_asset_click_to_call() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.view_through_conversions_from_location_asset_click_to_call"), "12.3");
+    assert_eq!(
+        row.get("metrics.view_through_conversions_from_location_asset_click_to_call"),
+        "12.3"
+    );
 }
 
 #[test]
@@ -357,7 +387,10 @@ fn test_metrics_view_through_conversions_from_location_asset_directions() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.view_through_conversions_from_location_asset_directions"), "28.7");
+    assert_eq!(
+        row.get("metrics.view_through_conversions_from_location_asset_directions"),
+        "28.7"
+    );
 }
 
 #[test]
@@ -370,7 +403,10 @@ fn test_metrics_view_through_conversions_from_location_asset_menu() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.view_through_conversions_from_location_asset_menu"), "7.1");
+    assert_eq!(
+        row.get("metrics.view_through_conversions_from_location_asset_menu"),
+        "7.1"
+    );
 }
 
 #[test]
@@ -383,7 +419,10 @@ fn test_metrics_view_through_conversions_from_location_asset_order() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.view_through_conversions_from_location_asset_order"), "19.5");
+    assert_eq!(
+        row.get("metrics.view_through_conversions_from_location_asset_order"),
+        "19.5"
+    );
 }
 
 #[test]
@@ -396,7 +435,10 @@ fn test_metrics_view_through_conversions_from_location_asset_other_engagement() 
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.view_through_conversions_from_location_asset_other_engagement"), "4.2");
+    assert_eq!(
+        row.get("metrics.view_through_conversions_from_location_asset_other_engagement"),
+        "4.2"
+    );
 }
 
 #[test]
@@ -409,7 +451,10 @@ fn test_metrics_view_through_conversions_from_location_asset_store_visits() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.view_through_conversions_from_location_asset_store_visits"), "56.8");
+    assert_eq!(
+        row.get("metrics.view_through_conversions_from_location_asset_store_visits"),
+        "56.8"
+    );
 }
 
 #[test]
@@ -422,7 +467,10 @@ fn test_metrics_view_through_conversions_from_location_asset_website() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.view_through_conversions_from_location_asset_website"), "43.9");
+    assert_eq!(
+        row.get("metrics.view_through_conversions_from_location_asset_website"),
+        "43.9"
+    );
 }
 
 // ============================================================================
@@ -439,7 +487,10 @@ fn test_metrics_all_new_customer_lifetime_value() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.all_new_customer_lifetime_value"), "15678.9");
+    assert_eq!(
+        row.get("metrics.all_new_customer_lifetime_value"),
+        "15678.9"
+    );
 }
 
 #[test]
@@ -465,7 +516,10 @@ fn test_metrics_average_impression_frequency_per_user() {
         .with_metrics(metrics_with_field)
         .build();
 
-    assert_eq!(row.get("metrics.average_impression_frequency_per_user"), "3.7");
+    assert_eq!(
+        row.get("metrics.average_impression_frequency_per_user"),
+        "3.7"
+    );
 }
 
 #[test]
@@ -563,18 +617,22 @@ fn test_phase2_combined_with_existing_metrics() {
     assert_eq!(row.get("metrics.orders"), "20");
     assert_eq!(row.get("metrics.revenue_micros"), "5000000");
     assert_eq!(row.get("metrics.unique_users"), "1500");
-    assert_eq!(row.get("metrics.all_conversions_from_location_asset_store_visits"), "10.2");
+    assert_eq!(
+        row.get("metrics.all_conversions_from_location_asset_store_visits"),
+        "10.2"
+    );
 }
 
 #[test]
 fn test_phase2_not_implemented_field() {
     let metrics = MetricsBuilder::new().build();
-    let row = GoogleAdsRowBuilder::new()
-        .with_metrics(metrics)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
 
     // Non-existent field should return "not implemented"
-    assert_eq!(row.get("metrics.nonexistent_phase2_field"), "not implemented by googleads-rs");
+    assert_eq!(
+        row.get("metrics.nonexistent_phase2_field"),
+        "not implemented by googleads-rs"
+    );
 }
 
 #[test]
@@ -584,8 +642,9 @@ fn test_phase2_metrics_absent_parent() {
 
     // All Phase 2 metric fields should panic (as they use attr_str! which calls unwrap())
     // This is expected behavior for non-optional resources
-    let result = std::panic::catch_unwind(|| {
-        row.get("metrics.orders")
-    });
-    assert!(result.is_err(), "Expected panic when metrics parent is absent");
+    let result = std::panic::catch_unwind(|| row.get("metrics.orders"));
+    assert!(
+        result.is_err(),
+        "Expected panic when metrics parent is absent"
+    );
 }

@@ -11,13 +11,13 @@
 
 mod test_helpers;
 
-use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder, SegmentsBuilder};
-use googleads_rs::google::ads::googleads::v19::resources::{
-    KeywordView, LandingPageView, GeographicView, ClickView, AssetGroupAsset, AssetGroupSignal,
-    CampaignLabel, AdGroupLabel, AdGroupAdLabel, Recommendation, CampaignSharedSet, SharedSet,
-    SharedCriterion,
-};
 use googleads_rs::google::ads::googleads::v19::common::{ClickLocation, Metrics, Segments};
+use googleads_rs::google::ads::googleads::v19::resources::{
+    AdGroupAdLabel, AdGroupLabel, AssetGroupAsset, AssetGroupSignal, CampaignLabel,
+    CampaignSharedSet, ClickView, GeographicView, KeywordView, LandingPageView, Recommendation,
+    SharedCriterion, SharedSet,
+};
+use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder, SegmentsBuilder};
 
 // ============================================================================
 // Phase 4: Reporting Views - KeywordView
@@ -33,7 +33,10 @@ fn test_keyword_view_resource_name() {
         .with_keyword_view(keyword_view)
         .build();
 
-    assert_eq!(row.get("keyword_view.resource_name"), "customers/123/keywordViews/456~789");
+    assert_eq!(
+        row.get("keyword_view.resource_name"),
+        "customers/123/keywordViews/456~789"
+    );
 }
 
 // ============================================================================
@@ -52,7 +55,10 @@ fn test_landing_page_view_resource_name() {
         .with_landing_page_view(landing_page_view)
         .build();
 
-    assert_eq!(row.get("landing_page_view.resource_name"), "customers/123/landingPageViews/456");
+    assert_eq!(
+        row.get("landing_page_view.resource_name"),
+        "customers/123/landingPageViews/456"
+    );
 }
 
 #[test]
@@ -66,7 +72,10 @@ fn test_landing_page_view_unexpanded_final_url() {
         .with_landing_page_view(landing_page_view)
         .build();
 
-    assert_eq!(row.get("landing_page_view.unexpanded_final_url"), "https://example.com/landing?param=value");
+    assert_eq!(
+        row.get("landing_page_view.unexpanded_final_url"),
+        "https://example.com/landing?param=value"
+    );
 }
 
 // ============================================================================
@@ -84,7 +93,10 @@ fn test_geographic_view_resource_name() {
         .with_geographic_view(geographic_view)
         .build();
 
-    assert_eq!(row.get("geographic_view.resource_name"), "customers/123/geographicViews/456~789");
+    assert_eq!(
+        row.get("geographic_view.resource_name"),
+        "customers/123/geographicViews/456~789"
+    );
 }
 
 #[test]
@@ -100,7 +112,10 @@ fn test_geographic_view_location_type() {
         .with_geographic_view(geographic_view)
         .build();
 
-    assert_eq!(row.get("geographic_view.location_type"), "LocationOfPresence");
+    assert_eq!(
+        row.get("geographic_view.location_type"),
+        "LocationOfPresence"
+    );
 }
 
 #[test]
@@ -132,7 +147,10 @@ fn test_click_view_resource_name() {
         .with_click_view(click_view)
         .build();
 
-    assert_eq!(row.get("click_view.resource_name"), "customers/123/clickViews/2024-01-01~abcd1234");
+    assert_eq!(
+        row.get("click_view.resource_name"),
+        "customers/123/clickViews/2024-01-01~abcd1234"
+    );
 }
 
 #[test]
@@ -165,7 +183,10 @@ fn test_click_view_area_of_interest() {
         .build();
 
     assert_eq!(row.get("click_view.area_of_interest.city"), "San Francisco");
-    assert_eq!(row.get("click_view.area_of_interest.country"), "United States");
+    assert_eq!(
+        row.get("click_view.area_of_interest.country"),
+        "United States"
+    );
 }
 
 #[test]
@@ -184,7 +205,10 @@ fn test_click_view_location_of_presence() {
         .build();
 
     assert_eq!(row.get("click_view.location_of_presence.city"), "New York");
-    assert_eq!(row.get("click_view.location_of_presence.country"), "United States");
+    assert_eq!(
+        row.get("click_view.location_of_presence.country"),
+        "United States"
+    );
 }
 
 // ============================================================================
@@ -202,7 +226,10 @@ fn test_asset_group_asset_resource_name() {
         .with_asset_group_asset(asset_group_asset)
         .build();
 
-    assert_eq!(row.get("asset_group_asset.resource_name"), "customers/123/assetGroupAssets/456~789");
+    assert_eq!(
+        row.get("asset_group_asset.resource_name"),
+        "customers/123/assetGroupAssets/456~789"
+    );
 }
 
 #[test]
@@ -268,7 +295,10 @@ fn test_asset_group_signal_resource_name() {
         .with_asset_group_signal(asset_group_signal)
         .build();
 
-    assert_eq!(row.get("asset_group_signal.resource_name"), "customers/123/assetGroupSignals/456~789");
+    assert_eq!(
+        row.get("asset_group_signal.resource_name"),
+        "customers/123/assetGroupSignals/456~789"
+    );
 }
 
 // ============================================================================
@@ -287,8 +317,14 @@ fn test_campaign_label_resource_name() {
         .with_campaign_label(campaign_label)
         .build();
 
-    assert_eq!(row.get("campaign_label.resource_name"), "customers/123/campaignLabels/456~789");
-    assert_eq!(row.get("campaign_label.campaign"), "customers/123/campaigns/456");
+    assert_eq!(
+        row.get("campaign_label.resource_name"),
+        "customers/123/campaignLabels/456~789"
+    );
+    assert_eq!(
+        row.get("campaign_label.campaign"),
+        "customers/123/campaigns/456"
+    );
     assert_eq!(row.get("campaign_label.label"), "customers/123/labels/789");
 }
 
@@ -304,8 +340,14 @@ fn test_ad_group_label_all_fields() {
         .with_ad_group_label(ad_group_label)
         .build();
 
-    assert_eq!(row.get("ad_group_label.resource_name"), "customers/123/adGroupLabels/456~789");
-    assert_eq!(row.get("ad_group_label.ad_group"), "customers/123/adGroups/456");
+    assert_eq!(
+        row.get("ad_group_label.resource_name"),
+        "customers/123/adGroupLabels/456~789"
+    );
+    assert_eq!(
+        row.get("ad_group_label.ad_group"),
+        "customers/123/adGroups/456"
+    );
     assert_eq!(row.get("ad_group_label.label"), "customers/123/labels/789");
 }
 
@@ -321,9 +363,18 @@ fn test_ad_group_ad_label_all_fields() {
         .with_ad_group_ad_label(ad_group_ad_label)
         .build();
 
-    assert_eq!(row.get("ad_group_ad_label.resource_name"), "customers/123/adGroupAdLabels/456~789~012");
-    assert_eq!(row.get("ad_group_ad_label.ad_group_ad"), "customers/123/adGroupAds/456~012");
-    assert_eq!(row.get("ad_group_ad_label.label"), "customers/123/labels/789");
+    assert_eq!(
+        row.get("ad_group_ad_label.resource_name"),
+        "customers/123/adGroupAdLabels/456~789~012"
+    );
+    assert_eq!(
+        row.get("ad_group_ad_label.ad_group_ad"),
+        "customers/123/adGroupAds/456~012"
+    );
+    assert_eq!(
+        row.get("ad_group_ad_label.label"),
+        "customers/123/labels/789"
+    );
 }
 
 // ============================================================================
@@ -341,7 +392,10 @@ fn test_recommendation_resource_name() {
         .with_recommendation(recommendation)
         .build();
 
-    assert_eq!(row.get("recommendation.resource_name"), "customers/123/recommendations/KEYWORD_123");
+    assert_eq!(
+        row.get("recommendation.resource_name"),
+        "customers/123/recommendations/KEYWORD_123"
+    );
 }
 
 #[test]
@@ -384,8 +438,14 @@ fn test_recommendation_impact_metrics() {
         .build();
 
     assert_eq!(row.get("recommendation.impact.base_metrics.clicks"), "1000");
-    assert_eq!(row.get("recommendation.impact.base_metrics.impressions"), "50000");
-    assert_eq!(row.get("recommendation.impact.base_metrics.cost_micros"), "25000000");
+    assert_eq!(
+        row.get("recommendation.impact.base_metrics.impressions"),
+        "50000"
+    );
+    assert_eq!(
+        row.get("recommendation.impact.base_metrics.cost_micros"),
+        "25000000"
+    );
 }
 
 // ============================================================================
@@ -394,8 +454,8 @@ fn test_recommendation_impact_metrics() {
 
 #[test]
 fn test_shared_set_all_fields() {
-    use googleads_rs::google::ads::googleads::v19::enums::shared_set_type_enum::SharedSetType;
     use googleads_rs::google::ads::googleads::v19::enums::shared_set_status_enum::SharedSetStatus;
+    use googleads_rs::google::ads::googleads::v19::enums::shared_set_type_enum::SharedSetType;
 
     let shared_set = SharedSet {
         id: 123456,
@@ -416,14 +476,17 @@ fn test_shared_set_all_fields() {
     assert_eq!(row.get("shared_set.type"), "NegativeKeywords");
     assert_eq!(row.get("shared_set.status"), "Enabled");
     assert_eq!(row.get("shared_set.member_count"), "42");
-    assert_eq!(row.get("shared_set.resource_name"), "customers/123/sharedSets/456");
+    assert_eq!(
+        row.get("shared_set.resource_name"),
+        "customers/123/sharedSets/456"
+    );
 }
 
 #[test]
 fn test_shared_criterion_keyword() {
-    use googleads_rs::google::ads::googleads::v19::resources::shared_criterion::Criterion;
     use googleads_rs::google::ads::googleads::v19::common::KeywordInfo;
     use googleads_rs::google::ads::googleads::v19::enums::criterion_type_enum::CriterionType;
+    use googleads_rs::google::ads::googleads::v19::resources::shared_criterion::Criterion;
 
     let shared_criterion = SharedCriterion {
         resource_name: "customers/123/sharedCriteria/456~789".to_string(),
@@ -441,8 +504,14 @@ fn test_shared_criterion_keyword() {
         .with_shared_criterion(shared_criterion)
         .build();
 
-    assert_eq!(row.get("shared_criterion.resource_name"), "customers/123/sharedCriteria/456~789");
-    assert_eq!(row.get("shared_criterion.shared_set"), "customers/123/sharedSets/456");
+    assert_eq!(
+        row.get("shared_criterion.resource_name"),
+        "customers/123/sharedCriteria/456~789"
+    );
+    assert_eq!(
+        row.get("shared_criterion.shared_set"),
+        "customers/123/sharedSets/456"
+    );
     assert_eq!(row.get("shared_criterion.criterion_id"), "789");
     assert_eq!(row.get("shared_criterion.type"), "Keyword");
     assert_eq!(row.get("shared_criterion.keyword.text"), "cheap flights");
@@ -467,9 +536,18 @@ fn test_campaign_shared_set_all_fields() {
         .with_campaign_shared_set(campaign_shared_set)
         .build();
 
-    assert_eq!(row.get("campaign_shared_set.resource_name"), "customers/123/campaignSharedSets/456~789");
-    assert_eq!(row.get("campaign_shared_set.campaign"), "customers/123/campaigns/456");
-    assert_eq!(row.get("campaign_shared_set.shared_set"), "customers/123/sharedSets/789");
+    assert_eq!(
+        row.get("campaign_shared_set.resource_name"),
+        "customers/123/campaignSharedSets/456~789"
+    );
+    assert_eq!(
+        row.get("campaign_shared_set.campaign"),
+        "customers/123/campaigns/456"
+    );
+    assert_eq!(
+        row.get("campaign_shared_set.shared_set"),
+        "customers/123/sharedSets/789"
+    );
     assert_eq!(row.get("campaign_shared_set.status"), "Enabled");
 }
 
@@ -493,20 +571,48 @@ fn test_asset_performance_metrics() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_metrics(metrics)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
 
-    assert_eq!(row.get("metrics.asset_best_performance_cost_percentage"), "15.5");
-    assert_eq!(row.get("metrics.asset_best_performance_impression_percentage"), "20.3");
-    assert_eq!(row.get("metrics.asset_good_performance_cost_percentage"), "35.2");
-    assert_eq!(row.get("metrics.asset_good_performance_impression_percentage"), "40.1");
-    assert_eq!(row.get("metrics.asset_learning_performance_cost_percentage"), "25");
-    assert_eq!(row.get("metrics.asset_learning_performance_impression_percentage"), "22.5");
-    assert_eq!(row.get("metrics.asset_low_performance_cost_percentage"), "15.3");
-    assert_eq!(row.get("metrics.asset_low_performance_impression_percentage"), "12.1");
-    assert_eq!(row.get("metrics.asset_unrated_performance_cost_percentage"), "9");
-    assert_eq!(row.get("metrics.asset_unrated_performance_impression_percentage"), "5");
+    assert_eq!(
+        row.get("metrics.asset_best_performance_cost_percentage"),
+        "15.5"
+    );
+    assert_eq!(
+        row.get("metrics.asset_best_performance_impression_percentage"),
+        "20.3"
+    );
+    assert_eq!(
+        row.get("metrics.asset_good_performance_cost_percentage"),
+        "35.2"
+    );
+    assert_eq!(
+        row.get("metrics.asset_good_performance_impression_percentage"),
+        "40.1"
+    );
+    assert_eq!(
+        row.get("metrics.asset_learning_performance_cost_percentage"),
+        "25"
+    );
+    assert_eq!(
+        row.get("metrics.asset_learning_performance_impression_percentage"),
+        "22.5"
+    );
+    assert_eq!(
+        row.get("metrics.asset_low_performance_cost_percentage"),
+        "15.3"
+    );
+    assert_eq!(
+        row.get("metrics.asset_low_performance_impression_percentage"),
+        "12.1"
+    );
+    assert_eq!(
+        row.get("metrics.asset_unrated_performance_cost_percentage"),
+        "9"
+    );
+    assert_eq!(
+        row.get("metrics.asset_unrated_performance_impression_percentage"),
+        "5"
+    );
 }
 
 // ============================================================================
@@ -525,15 +631,28 @@ fn test_asset_pinning_metrics() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_metrics(metrics)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
 
-    assert_eq!(row.get("metrics.asset_pinned_as_description_position_one_count"), "10");
-    assert_eq!(row.get("metrics.asset_pinned_as_description_position_two_count"), "8");
-    assert_eq!(row.get("metrics.asset_pinned_as_headline_position_one_count"), "15");
-    assert_eq!(row.get("metrics.asset_pinned_as_headline_position_two_count"), "12");
-    assert_eq!(row.get("metrics.asset_pinned_as_headline_position_three_count"), "9");
+    assert_eq!(
+        row.get("metrics.asset_pinned_as_description_position_one_count"),
+        "10"
+    );
+    assert_eq!(
+        row.get("metrics.asset_pinned_as_description_position_two_count"),
+        "8"
+    );
+    assert_eq!(
+        row.get("metrics.asset_pinned_as_headline_position_one_count"),
+        "15"
+    );
+    assert_eq!(
+        row.get("metrics.asset_pinned_as_headline_position_two_count"),
+        "12"
+    );
+    assert_eq!(
+        row.get("metrics.asset_pinned_as_headline_position_three_count"),
+        "9"
+    );
     assert_eq!(row.get("metrics.asset_pinned_total_count"), "54");
 }
 
@@ -553,16 +672,32 @@ fn test_auction_insights_metrics() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_metrics(metrics)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
 
-    assert_eq!(row.get("metrics.auction_insight_search_absolute_top_impression_percentage"), "25.5");
-    assert_eq!(row.get("metrics.auction_insight_search_impression_share"), "45.2");
-    assert_eq!(row.get("metrics.auction_insight_search_outranking_share"), "60.1");
-    assert_eq!(row.get("metrics.auction_insight_search_overlap_rate"), "15.3");
-    assert_eq!(row.get("metrics.auction_insight_search_position_above_rate"), "35.8");
-    assert_eq!(row.get("metrics.auction_insight_search_top_impression_percentage"), "50");
+    assert_eq!(
+        row.get("metrics.auction_insight_search_absolute_top_impression_percentage"),
+        "25.5"
+    );
+    assert_eq!(
+        row.get("metrics.auction_insight_search_impression_share"),
+        "45.2"
+    );
+    assert_eq!(
+        row.get("metrics.auction_insight_search_outranking_share"),
+        "60.1"
+    );
+    assert_eq!(
+        row.get("metrics.auction_insight_search_overlap_rate"),
+        "15.3"
+    );
+    assert_eq!(
+        row.get("metrics.auction_insight_search_position_above_rate"),
+        "35.8"
+    );
+    assert_eq!(
+        row.get("metrics.auction_insight_search_top_impression_percentage"),
+        "50"
+    );
 }
 
 // ============================================================================
@@ -588,13 +723,14 @@ fn test_specialized_metrics() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_metrics(metrics)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
 
     assert_eq!(row.get("metrics.average_target_cpa_micros"), "5000000");
     assert_eq!(row.get("metrics.average_target_roas"), "3.5");
-    assert_eq!(row.get("metrics.cross_device_conversions_value_micros"), "125000000");
+    assert_eq!(
+        row.get("metrics.cross_device_conversions_value_micros"),
+        "125000000"
+    );
     assert_eq!(row.get("metrics.general_invalid_click_rate"), "0.02");
     assert_eq!(row.get("metrics.general_invalid_clicks"), "15");
     assert_eq!(row.get("metrics.linked_entities_count"), "42");
@@ -622,15 +758,22 @@ fn test_product_segments_categories() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_segments(segments)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.product_category_level1"), "Electronics");
-    assert_eq!(row.get("segments.product_category_level2"), "Computers & Accessories");
+    assert_eq!(
+        row.get("segments.product_category_level2"),
+        "Computers & Accessories"
+    );
     assert_eq!(row.get("segments.product_category_level3"), "Laptops");
-    assert_eq!(row.get("segments.product_category_level4"), "Gaming Laptops");
-    assert_eq!(row.get("segments.product_category_level5"), "High Performance");
+    assert_eq!(
+        row.get("segments.product_category_level4"),
+        "Gaming Laptops"
+    );
+    assert_eq!(
+        row.get("segments.product_category_level5"),
+        "High Performance"
+    );
 }
 
 #[test]
@@ -644,9 +787,7 @@ fn test_product_segments_types() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_segments(segments)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.product_type_l1"), "Apparel");
     assert_eq!(row.get("segments.product_type_l2"), "Men's Clothing");
@@ -669,16 +810,17 @@ fn test_product_segments_attributes() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_segments(segments)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.product_brand"), "Nike");
     assert_eq!(row.get("segments.product_condition"), "New");
     assert_eq!(row.get("segments.product_country"), "US");
     assert_eq!(row.get("segments.product_language"), "en");
     assert_eq!(row.get("segments.product_merchant_id"), "123456");
-    assert_eq!(row.get("segments.product_title"), "Nike Air Max Running Shoes");
+    assert_eq!(
+        row.get("segments.product_title"),
+        "Nike Air Max Running Shoes"
+    );
 }
 
 // ============================================================================
@@ -696,15 +838,16 @@ fn test_geo_target_segments() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_segments(segments)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.geo_target_city"), "San Francisco");
     assert_eq!(row.get("segments.geo_target_country"), "United States");
     assert_eq!(row.get("segments.geo_target_state"), "California");
     assert_eq!(row.get("segments.geo_target_postal_code"), "94102");
-    assert_eq!(row.get("segments.geo_target_metro"), "San Francisco-Oakland-San Jose CA");
+    assert_eq!(
+        row.get("segments.geo_target_metro"),
+        "San Francisco-Oakland-San Jose CA"
+    );
 }
 
 #[test]
@@ -720,17 +863,24 @@ fn test_geo_target_segments_additional() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_segments(segments)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.geo_target_airport"), "SFO");
     assert_eq!(row.get("segments.geo_target_canton"), "Zurich");
-    assert_eq!(row.get("segments.geo_target_county"), "San Francisco County");
-    assert_eq!(row.get("segments.geo_target_district"), "Financial District");
+    assert_eq!(
+        row.get("segments.geo_target_county"),
+        "San Francisco County"
+    );
+    assert_eq!(
+        row.get("segments.geo_target_district"),
+        "Financial District"
+    );
     assert_eq!(row.get("segments.geo_target_province"), "Ontario");
     assert_eq!(row.get("segments.geo_target_region"), "West Coast");
-    assert_eq!(row.get("segments.geo_target_most_specific_location"), "94102, San Francisco, CA");
+    assert_eq!(
+        row.get("segments.geo_target_most_specific_location"),
+        "94102, San Francisco, CA"
+    );
 }
 
 // ============================================================================
@@ -746,13 +896,14 @@ fn test_resource_name_segments() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_segments(segments)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.campaign"), "customers/123/campaigns/456");
     assert_eq!(row.get("segments.ad_group"), "customers/123/adGroups/789");
-    assert_eq!(row.get("segments.asset_group"), "customers/123/assetGroups/012");
+    assert_eq!(
+        row.get("segments.asset_group"),
+        "customers/123/assetGroups/012"
+    );
 }
 
 // ============================================================================
@@ -784,9 +935,7 @@ fn test_hotel_segments() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_segments(segments)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.hotel_booking_window_days"), "14");
     assert_eq!(row.get("segments.hotel_center_id"), "123456");
@@ -795,7 +944,10 @@ fn test_hotel_segments() {
     assert_eq!(row.get("segments.hotel_city"), "San Francisco");
     assert_eq!(row.get("segments.hotel_class"), "4");
     assert_eq!(row.get("segments.hotel_country"), "US");
-    assert_eq!(row.get("segments.hotel_date_selection_type"), "DefaultSelection");
+    assert_eq!(
+        row.get("segments.hotel_date_selection_type"),
+        "DefaultSelection"
+    );
     assert_eq!(row.get("segments.hotel_length_of_stay"), "3");
     assert_eq!(row.get("segments.hotel_price_bucket"), "LowestUnique");
     assert_eq!(row.get("segments.hotel_rate_rule_id"), "WEEKEND_SPECIAL");
@@ -830,17 +982,33 @@ fn test_sk_ad_network_segments() {
         ..Default::default()
     };
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_segments(segments)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
-    assert_eq!(row.get("segments.sk_ad_network_ad_event_type"), "Interaction");
+    assert_eq!(
+        row.get("segments.sk_ad_network_ad_event_type"),
+        "Interaction"
+    );
     assert_eq!(row.get("segments.sk_ad_network_attribution_credit"), "Won");
-    assert_eq!(row.get("segments.sk_ad_network_coarse_conversion_value"), "High");
-    assert_eq!(row.get("segments.sk_ad_network_fine_conversion_value"), "42");
-    assert_eq!(row.get("segments.sk_ad_network_postback_sequence_index"), "1");
-    assert_eq!(row.get("segments.sk_ad_network_redistributed_fine_conversion_value"), "40");
-    assert_eq!(row.get("segments.sk_ad_network_source_domain"), "example.com");
+    assert_eq!(
+        row.get("segments.sk_ad_network_coarse_conversion_value"),
+        "High"
+    );
+    assert_eq!(
+        row.get("segments.sk_ad_network_fine_conversion_value"),
+        "42"
+    );
+    assert_eq!(
+        row.get("segments.sk_ad_network_postback_sequence_index"),
+        "1"
+    );
+    assert_eq!(
+        row.get("segments.sk_ad_network_redistributed_fine_conversion_value"),
+        "40"
+    );
+    assert_eq!(
+        row.get("segments.sk_ad_network_source_domain"),
+        "example.com"
+    );
     assert_eq!(row.get("segments.sk_ad_network_source_type"), "Website");
     assert_eq!(row.get("segments.sk_ad_network_user_type"), "NewInstaller");
     assert_eq!(row.get("segments.sk_ad_network_version"), "4.0");

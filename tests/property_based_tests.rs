@@ -7,14 +7,13 @@ mod test_helpers;
 
 use proptest::prelude::*;
 use test_helpers::{
-    GoogleAdsRowBuilder, CampaignBuilder, AdGroupBuilder, CustomerBuilder,
-    MetricsBuilder, SegmentsBuilder, AdGroupCriterionBuilder,
+    AdGroupBuilder, AdGroupCriterionBuilder, CampaignBuilder, CustomerBuilder, GoogleAdsRowBuilder,
+    MetricsBuilder, SegmentsBuilder,
 };
 
 use googleads_rs::google::ads::googleads::v19::enums::{
+    ad_group_status_enum::AdGroupStatus, advertising_channel_type_enum::AdvertisingChannelType,
     campaign_status_enum::CampaignStatus,
-    ad_group_status_enum::AdGroupStatus,
-    advertising_channel_type_enum::AdvertisingChannelType,
 };
 
 // ============================================================================

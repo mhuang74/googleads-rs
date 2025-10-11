@@ -6,8 +6,8 @@
 mod test_helpers;
 
 use test_helpers::{
-    GoogleAdsRowBuilder, AdGroupCriterionBuilder, CampaignCriterionBuilder,
-    AdBuilder, AdGroupAdBuilder,
+    AdBuilder, AdGroupAdBuilder, AdGroupCriterionBuilder, CampaignCriterionBuilder,
+    GoogleAdsRowBuilder,
 };
 
 // ============================================================================
@@ -67,7 +67,10 @@ fn test_ad_group_criterion_with_special_characters() {
         .with_ad_group_criterion(criterion)
         .build();
 
-    assert_eq!(row.get("ad_group_criterion.keyword.text"), "[brand \"shoes\"]");
+    assert_eq!(
+        row.get("ad_group_criterion.keyword.text"),
+        "[brand \"shoes\"]"
+    );
 }
 
 #[test]
@@ -85,9 +88,7 @@ fn test_ad_group_criterion_with_unicode() {
 
 #[test]
 fn test_ad_group_criterion_empty_keyword() {
-    let criterion = AdGroupCriterionBuilder::new()
-        .with_keyword("", 2)
-        .build();
+    let criterion = AdGroupCriterionBuilder::new().with_keyword("", 2).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_criterion(criterion)
@@ -111,7 +112,10 @@ fn test_campaign_criterion_keyword_text() {
         .with_campaign_criterion(criterion)
         .build();
 
-    assert_eq!(row.get("campaign_criterion.keyword.text"), "negative keyword");
+    assert_eq!(
+        row.get("campaign_criterion.keyword.text"),
+        "negative keyword"
+    );
 }
 
 #[test]
@@ -125,7 +129,10 @@ fn test_campaign_criterion_location_geo_target() {
         .with_campaign_criterion(criterion)
         .build();
 
-    assert_eq!(row.get("campaign_criterion.location.geo_target_constant"), "geoTargetConstants/2840");
+    assert_eq!(
+        row.get("campaign_criterion.location.geo_target_constant"),
+        "geoTargetConstants/2840"
+    );
 }
 
 #[test]
@@ -134,22 +141,26 @@ fn test_campaign_criterion_absent() {
     let row = GoogleAdsRowBuilder::new().build();
 
     assert_eq!(row.get("campaign_criterion.keyword.text"), "");
-    assert_eq!(row.get("campaign_criterion.location.geo_target_constant"), "");
+    assert_eq!(
+        row.get("campaign_criterion.location.geo_target_constant"),
+        ""
+    );
 }
 
 #[test]
 fn test_campaign_criterion_with_different_variant() {
     // Test accessing location when keyword variant is set
-    let criterion = CampaignCriterionBuilder::new()
-        .with_keyword("test")
-        .build();
+    let criterion = CampaignCriterionBuilder::new().with_keyword("test").build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_campaign_criterion(criterion)
         .build();
 
     // Accessing location fields when keyword is set should return empty
-    assert_eq!(row.get("campaign_criterion.location.geo_target_constant"), "");
+    assert_eq!(
+        row.get("campaign_criterion.location.geo_target_constant"),
+        ""
+    );
 }
 
 #[test]
@@ -183,15 +194,16 @@ fn test_ad_responsive_search_ad_path1() {
         )
         .build();
 
-    let ad_group_ad = AdGroupAdBuilder::new()
-        .with_ad(ad)
-        .build();
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_ad(ad_group_ad)
         .build();
 
-    assert_eq!(row.get("ad_group_ad.ad.responsive_search_ad.path1"), "path1");
+    assert_eq!(
+        row.get("ad_group_ad.ad.responsive_search_ad.path1"),
+        "path1"
+    );
 }
 
 #[test]
@@ -205,9 +217,7 @@ fn test_ad_responsive_search_ad_path2() {
         )
         .build();
 
-    let ad_group_ad = AdGroupAdBuilder::new()
-        .with_ad(ad)
-        .build();
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_ad(ad_group_ad)
@@ -219,17 +229,10 @@ fn test_ad_responsive_search_ad_path2() {
 #[test]
 fn test_ad_responsive_search_ad_no_paths() {
     let ad = AdBuilder::new()
-        .with_responsive_search_ad(
-            vec!["Headline"],
-            vec!["Description"],
-            None,
-            None,
-        )
+        .with_responsive_search_ad(vec!["Headline"], vec!["Description"], None, None)
         .build();
 
-    let ad_group_ad = AdGroupAdBuilder::new()
-        .with_ad(ad)
-        .build();
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_ad(ad_group_ad)
@@ -256,17 +259,10 @@ fn test_multiple_oneof_fields_in_row() {
         .build();
 
     let ad = AdBuilder::new()
-        .with_responsive_search_ad(
-            vec!["Headline"],
-            vec!["Description"],
-            Some("offers"),
-            None,
-        )
+        .with_responsive_search_ad(vec!["Headline"], vec!["Description"], Some("offers"), None)
         .build();
 
-    let ad_group_ad = AdGroupAdBuilder::new()
-        .with_ad(ad)
-        .build();
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_criterion(ad_group_criterion)
@@ -275,8 +271,14 @@ fn test_multiple_oneof_fields_in_row() {
         .build();
 
     assert_eq!(row.get("ad_group_criterion.keyword.text"), "keyword1");
-    assert_eq!(row.get("campaign_criterion.location.geo_target_constant"), "geoTargetConstants/2840");
-    assert_eq!(row.get("ad_group_ad.ad.responsive_search_ad.path1"), "offers");
+    assert_eq!(
+        row.get("campaign_criterion.location.geo_target_constant"),
+        "geoTargetConstants/2840"
+    );
+    assert_eq!(
+        row.get("ad_group_ad.ad.responsive_search_ad.path1"),
+        "offers"
+    );
 }
 
 #[test]
@@ -311,7 +313,10 @@ fn test_campaign_criterion_with_display_name() {
 
     assert_eq!(row.get("campaign_criterion.criterion_id"), "111");
     assert_eq!(row.get("campaign_criterion.display_name"), "New York");
-    assert_eq!(row.get("campaign_criterion.location.geo_target_constant"), "geoTargetConstants/1023191");
+    assert_eq!(
+        row.get("campaign_criterion.location.geo_target_constant"),
+        "geoTargetConstants/1023191"
+    );
 }
 
 // ============================================================================
@@ -321,9 +326,7 @@ fn test_campaign_criterion_with_display_name() {
 #[test]
 fn test_ad_group_criterion_no_oneof_set() {
     // Create criterion without setting the oneof field
-    let criterion = AdGroupCriterionBuilder::new()
-        .criterion_id(999)
-        .build();
+    let criterion = AdGroupCriterionBuilder::new().criterion_id(999).build();
 
     let row = GoogleAdsRowBuilder::new()
         .with_ad_group_criterion(criterion)
@@ -358,7 +361,10 @@ fn test_keyword_with_newlines() {
         .with_ad_group_criterion(criterion)
         .build();
 
-    assert_eq!(row.get("ad_group_criterion.keyword.text"), "line1\nline2\nline3");
+    assert_eq!(
+        row.get("ad_group_criterion.keyword.text"),
+        "line1\nline2\nline3"
+    );
 }
 
 #[test]
@@ -378,6 +384,9 @@ fn test_geo_target_with_various_formats() {
             .with_campaign_criterion(criterion)
             .build();
 
-        assert_eq!(row.get("campaign_criterion.location.geo_target_constant"), geo_target);
+        assert_eq!(
+            row.get("campaign_criterion.location.geo_target_constant"),
+            geo_target
+        );
     }
 }

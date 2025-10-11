@@ -5,7 +5,7 @@
 
 mod test_helpers;
 
-use test_helpers::{GoogleAdsRowBuilder, CampaignBuilder};
+use test_helpers::{CampaignBuilder, GoogleAdsRowBuilder};
 
 // ============================================================================
 // Campaign.NetworkSettings Nested Fields
@@ -17,11 +17,12 @@ fn test_campaign_network_settings_target_search_network() {
         .with_network_settings(true, false, false, true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "true");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "true"
+    );
 }
 
 #[test]
@@ -30,11 +31,12 @@ fn test_campaign_network_settings_target_content_network() {
         .with_network_settings(true, true, false, true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_content_network"), "true");
+    assert_eq!(
+        row.get("campaign.network_settings.target_content_network"),
+        "true"
+    );
 }
 
 #[test]
@@ -43,11 +45,12 @@ fn test_campaign_network_settings_target_partner_search_network() {
         .with_network_settings(true, false, true, true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_partner_search_network"), "true");
+    assert_eq!(
+        row.get("campaign.network_settings.target_partner_search_network"),
+        "true"
+    );
 }
 
 #[test]
@@ -56,11 +59,12 @@ fn test_campaign_network_settings_target_google_search() {
         .with_network_settings(true, false, false, true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_google_search"), "true");
+    assert_eq!(
+        row.get("campaign.network_settings.target_google_search"),
+        "true"
+    );
 }
 
 #[test]
@@ -69,14 +73,24 @@ fn test_campaign_network_settings_all_false() {
         .with_network_settings(false, false, false, false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "false");
-    assert_eq!(row.get("campaign.network_settings.target_content_network"), "false");
-    assert_eq!(row.get("campaign.network_settings.target_partner_search_network"), "false");
-    assert_eq!(row.get("campaign.network_settings.target_google_search"), "false");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "false"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_content_network"),
+        "false"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_partner_search_network"),
+        "false"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_google_search"),
+        "false"
+    );
 }
 
 #[test]
@@ -85,14 +99,24 @@ fn test_campaign_network_settings_all_true() {
         .with_network_settings(true, true, true, true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_content_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_partner_search_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_google_search"), "true");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_content_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_partner_search_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_google_search"),
+        "true"
+    );
 }
 
 // ============================================================================
@@ -105,9 +129,7 @@ fn test_campaign_dynamic_search_ads_domain_name() {
         .with_dynamic_search_ads_setting("www.example.com", "en", false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(
         row.get("campaign.dynamic_search_ads_setting.domain_name"),
@@ -121,9 +143,7 @@ fn test_campaign_dynamic_search_ads_language_code() {
         .with_dynamic_search_ads_setting("www.example.com", "es", false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(
         row.get("campaign.dynamic_search_ads_setting.language_code"),
@@ -137,9 +157,7 @@ fn test_campaign_dynamic_search_ads_use_supplied_urls_only_true() {
         .with_dynamic_search_ads_setting("www.example.com", "en", true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(
         row.get("campaign.dynamic_search_ads_setting.use_supplied_urls_only"),
@@ -153,9 +171,7 @@ fn test_campaign_dynamic_search_ads_use_supplied_urls_only_false() {
         .with_dynamic_search_ads_setting("www.example.com", "en", false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(
         row.get("campaign.dynamic_search_ads_setting.use_supplied_urls_only"),
@@ -179,9 +195,7 @@ fn test_campaign_dynamic_search_ads_multiple_languages() {
             .with_dynamic_search_ads_setting("www.example.com", lang_code, false)
             .build();
 
-        let row = GoogleAdsRowBuilder::new()
-            .with_campaign(campaign)
-            .build();
+        let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
         assert_eq!(
             row.get("campaign.dynamic_search_ads_setting.language_code"),
@@ -205,9 +219,7 @@ fn test_campaign_dynamic_search_ads_various_domains() {
             .with_dynamic_search_ads_setting(domain, "en", false)
             .build();
 
-        let row = GoogleAdsRowBuilder::new()
-            .with_campaign(campaign)
-            .build();
+        let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
         assert_eq!(
             row.get("campaign.dynamic_search_ads_setting.domain_name"),
@@ -229,30 +241,45 @@ fn test_campaign_with_both_nested_messages() {
         .with_dynamic_search_ads_setting("www.shop.com", "en", true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Test scalar fields
     assert_eq!(row.get("campaign.id"), "12345");
     assert_eq!(row.get("campaign.name"), "Multi-Network DSA Campaign");
 
     // Test network settings
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_content_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_partner_search_network"), "false");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_content_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_partner_search_network"),
+        "false"
+    );
 
     // Test DSA settings
-    assert_eq!(row.get("campaign.dynamic_search_ads_setting.domain_name"), "www.shop.com");
-    assert_eq!(row.get("campaign.dynamic_search_ads_setting.language_code"), "en");
-    assert_eq!(row.get("campaign.dynamic_search_ads_setting.use_supplied_urls_only"), "true");
+    assert_eq!(
+        row.get("campaign.dynamic_search_ads_setting.domain_name"),
+        "www.shop.com"
+    );
+    assert_eq!(
+        row.get("campaign.dynamic_search_ads_setting.language_code"),
+        "en"
+    );
+    assert_eq!(
+        row.get("campaign.dynamic_search_ads_setting.use_supplied_urls_only"),
+        "true"
+    );
 }
 
 #[test]
 fn test_campaign_with_nested_and_enum_fields() {
     use googleads_rs::google::ads::googleads::v19::enums::{
-        campaign_status_enum::CampaignStatus,
-        advertising_channel_type_enum::AdvertisingChannelType,
+        advertising_channel_type_enum::AdvertisingChannelType, campaign_status_enum::CampaignStatus,
     };
 
     let campaign = CampaignBuilder::new()
@@ -263,9 +290,7 @@ fn test_campaign_with_nested_and_enum_fields() {
         .with_network_settings(true, false, false, true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Scalar fields
     assert_eq!(row.get("campaign.id"), "99999");
@@ -276,8 +301,14 @@ fn test_campaign_with_nested_and_enum_fields() {
     assert_eq!(row.get("campaign.advertising_channel_type"), "Search");
 
     // Nested fields
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_google_search"), "true");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_google_search"),
+        "true"
+    );
 }
 
 // ============================================================================
@@ -302,9 +333,7 @@ fn test_campaign_network_settings_mixed_true_false() {
             .with_network_settings(search, content, partner, google)
             .build();
 
-        let row = GoogleAdsRowBuilder::new()
-            .with_campaign(campaign)
-            .build();
+        let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
         assert_eq!(
             row.get("campaign.network_settings.target_search_network"),
@@ -331,9 +360,7 @@ fn test_campaign_dsa_with_special_domain_characters() {
         .with_dynamic_search_ads_setting("shop-online.example-store.com", "en", false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(
         row.get("campaign.dynamic_search_ads_setting.domain_name"),
@@ -347,9 +374,7 @@ fn test_campaign_dsa_empty_domain() {
         .with_dynamic_search_ads_setting("", "en", false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(
         row.get("campaign.dynamic_search_ads_setting.domain_name"),
@@ -363,9 +388,7 @@ fn test_campaign_dsa_empty_language_code() {
         .with_dynamic_search_ads_setting("www.example.com", "", false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(
         row.get("campaign.dynamic_search_ads_setting.language_code"),
@@ -386,14 +409,24 @@ fn test_search_campaign_network_settings() {
         .with_network_settings(true, false, false, true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_content_network"), "false");
-    assert_eq!(row.get("campaign.network_settings.target_partner_search_network"), "false");
-    assert_eq!(row.get("campaign.network_settings.target_google_search"), "true");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_content_network"),
+        "false"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_partner_search_network"),
+        "false"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_google_search"),
+        "true"
+    );
 }
 
 #[test]
@@ -405,14 +438,24 @@ fn test_display_campaign_network_settings() {
         .with_network_settings(false, true, false, false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.network_settings.target_search_network"), "false");
-    assert_eq!(row.get("campaign.network_settings.target_content_network"), "true");
-    assert_eq!(row.get("campaign.network_settings.target_partner_search_network"), "false");
-    assert_eq!(row.get("campaign.network_settings.target_google_search"), "false");
+    assert_eq!(
+        row.get("campaign.network_settings.target_search_network"),
+        "false"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_content_network"),
+        "true"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_partner_search_network"),
+        "false"
+    );
+    assert_eq!(
+        row.get("campaign.network_settings.target_google_search"),
+        "false"
+    );
 }
 
 #[test]
@@ -425,15 +468,22 @@ fn test_dsa_campaign_with_url_restrictions() {
         .with_network_settings(true, false, false, true)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     assert_eq!(row.get("campaign.id"), "333333");
     assert_eq!(row.get("campaign.name"), "DSA - Products Only");
-    assert_eq!(row.get("campaign.dynamic_search_ads_setting.domain_name"), "www.store.com");
-    assert_eq!(row.get("campaign.dynamic_search_ads_setting.language_code"), "en");
-    assert_eq!(row.get("campaign.dynamic_search_ads_setting.use_supplied_urls_only"), "true");
+    assert_eq!(
+        row.get("campaign.dynamic_search_ads_setting.domain_name"),
+        "www.store.com"
+    );
+    assert_eq!(
+        row.get("campaign.dynamic_search_ads_setting.language_code"),
+        "en"
+    );
+    assert_eq!(
+        row.get("campaign.dynamic_search_ads_setting.use_supplied_urls_only"),
+        "true"
+    );
 }
 
 #[test]
@@ -445,9 +495,10 @@ fn test_dsa_campaign_without_url_restrictions() {
         .with_dynamic_search_ads_setting("www.company.com", "en", false)
         .build();
 
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.dynamic_search_ads_setting.use_supplied_urls_only"), "false");
+    assert_eq!(
+        row.get("campaign.dynamic_search_ads_setting.use_supplied_urls_only"),
+        "false"
+    );
 }
