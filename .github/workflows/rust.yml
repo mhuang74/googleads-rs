@@ -24,27 +24,19 @@ jobs:
   test-with-coverage:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Install deps
       run: sudo apt-get -y install protobuf-compiler
     - name: Install Rust (stable)
       uses: dtolnay/rust-toolchain@stable
-      with:
-        components: llvm-tools-preview
-    - name: Install cargo-llvm-cov
-      uses: taiki-e/install-action@v2
-      with:
-        tool: cargo-llvm-cov
-    - name: Install cargo-nextest
-      uses: taiki-e/install-action@cargo-nextest
-    - name: Generate coverage (stable)
-      run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
-    - name: Run tests and generate JUnit report
-      run: cargo nextest run --all-features --test-threads 1 --retries 0 --workspace -- --junit-xml tests.xml
+    - name: Install cargo-tarpaulin
+      uses: taiki-e/install-action@cargo-tarpaulin
+    - name: Run tests, generate coverage and JUnit XML reports
+      run: cargo tarpaulin --all-features --workspace --out Xml --out Cobertura --output-dir target/tarpaulin/
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5 
+      uses: codecov/codecov-action@v5
       with:
-        files: lcov.info
+        files: target/tarpaulin/cobertura.xml
         fail_ci_if_error: false
         token: ${{ secrets.CODECOV_TOKEN }}
     - name: Upload test results to Codecov
@@ -52,8 +44,8 @@ jobs:
       uses: codecov/test-results-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: tests.xml
-        flags: rust
+        files: target/tarpaulin/junit.xml
+        flags: rust-tarpaulin
 
   lint:
     runs-on: ubuntu-latest
