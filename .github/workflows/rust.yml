@@ -43,10 +43,6 @@ jobs:
       uses: taiki-e/install-action@v2
       with:
         tool: cargo2junit
-    - name: Check cargo-llvm-cov version
-      run: cargo llvm-cov --version
-    - name: Check cargo2junit version
-      run: cargo2junit --version
     - name: Generate coverage (stable) and JUnit XML (nightly)
       run: |
         cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
