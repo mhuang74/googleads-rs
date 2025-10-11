@@ -32,9 +32,17 @@ jobs:
       with:
         components: llvm-tools-preview
     - name: Install cargo-llvm-cov
-      uses: taiki-e/install-action@cargo-llvm-cov
+      uses: taiki-e/install-action@v2
+      with:
+        tool: cargo-llvm-cov
     - name: Install cargo2junit
-      uses: taiki-e/install-action@cargo2junit
+      uses: taiki-e/install-action@v2
+      with:
+        tool: cargo2junit
+    - name: Check cargo-llvm-cov version
+      run: cargo llvm-cov --version
+    - name: Check cargo2junit version
+      run: cargo2junit --version
     - name: Generate coverage and JUnit XML
       run: |
         cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
