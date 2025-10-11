@@ -27,10 +27,14 @@ jobs:
     - uses: actions/checkout@v3
     - name: Install deps
       run: sudo apt-get -y install protobuf-compiler
-    - name: Install Rust
+    - name: Install Rust (stable)
       uses: dtolnay/rust-toolchain@stable
       with:
         components: llvm-tools-preview
+    - name: Install Rust nightly (for JSON test output)
+      uses: dtolnay/rust-toolchain@nightly
+      with:
+        toolchain: nightly
     - name: Install cargo-llvm-cov
       uses: taiki-e/install-action@v2
       with:
@@ -43,10 +47,11 @@ jobs:
       run: cargo llvm-cov --version
     - name: Check cargo2junit version
       run: cargo2junit --version
-    - name: Generate coverage and JUnit XML
+    - name: Generate coverage (stable) and JUnit XML (nightly)
       run: |
         cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
-        cargo2junit > junit.xml
+        cargo +nightly test --all-features --workspace -Z unstable-options --format json > test-results.json
+        cargo2junit < test-results.json > junit.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
