@@ -33,14 +33,24 @@ jobs:
         components: llvm-tools-preview
     - name: Install cargo-llvm-cov
       uses: taiki-e/install-action@cargo-llvm-cov
-    - name: Generate coverage
-      run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+    - name: Install cargo2junit
+      uses: taiki-e/install-action@cargo2junit
+    - name: Generate coverage and JUnit XML
+      run: |
+        cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+        cargo2junit > junit.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
         files: lcov.info
         fail_ci_if_error: false
         token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: junit.xml
 
   lint:
     runs-on: ubuntu-latest
