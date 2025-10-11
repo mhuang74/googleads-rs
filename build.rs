@@ -85,9 +85,10 @@ fn main() -> Res {
 
     if !misc_protos.is_empty() {
         info!("> Compiling {} misc proto files", misc_protos.len());
-        tonic_build::configure()
-            .build_server(false)
-            .compile(&misc_protos, &[proto_path.clone()])?;
+        prost_build::Config::new()
+            .file_descriptor_set_path("target/descriptors.bin")
+            .type_attribute(".", "#[allow(clippy::all)]")
+            .compile_protos(&misc_protos, std::slice::from_ref(&proto_path))?;
     }
 
     for &package in &package_names {
@@ -95,9 +96,10 @@ fn main() -> Res {
             info!("> Compiling {} proto files from package '{}'", protos.len(), package);
             for chunk in protos.chunks(185) {
                 info!("  Compiling batch of {} proto files from package '{}'", chunk.len(), package);
-                tonic_build::configure()
-                    .build_server(false)
-                    .compile(chunk, &[proto_path.clone()])?;
+                prost_build::Config::new()
+                    .file_descriptor_set_path("target/descriptors.bin")
+                    .type_attribute(".", "#[allow(clippy::all)]")
+                    .compile_protos(chunk, std::slice::from_ref(&proto_path))?;
             }
         }
     }
@@ -139,10 +141,10 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
             path_stack.push(seg);
         }
 
-        // write include_proto! inside module
+        // write include! inside module for prost_build
         writeln!(
             protos_rs,
-            "tonic::include_proto!(\"{}\");",
+            "include!(\"{}.rs\");",
             path_stack.join(".")
         )?;
     }
