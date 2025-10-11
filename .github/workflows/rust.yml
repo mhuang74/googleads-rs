@@ -31,23 +31,16 @@ jobs:
       uses: dtolnay/rust-toolchain@stable
       with:
         components: llvm-tools-preview
-    - name: Install Rust nightly (for JSON test output)
-      uses: dtolnay/rust-toolchain@nightly
-      with:
-        toolchain: nightly
     - name: Install cargo-llvm-cov
       uses: taiki-e/install-action@v2
       with:
         tool: cargo-llvm-cov
-    - name: Install cargo2junit
-      uses: taiki-e/install-action@v2
-      with:
-        tool: cargo2junit
-    - name: Generate coverage (stable) and JUnit XML (nightly)
-      run: |
-        cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
-        cargo +nightly test --all-features --workspace -Z unstable-options -- --format json > test-results.json
-        cargo2junit < test-results.json > junit.xml
+    - name: Install cargo-nextest
+      uses: taiki-e/install-action@cargo-nextest
+    - name: Generate coverage (stable)
+      run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+    - name: Run tests and generate JUnit report
+      run: cargo nextest run --all-features --test-threads 1 --retries 0 --workspace --junit-xml tests.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
@@ -59,7 +52,8 @@ jobs:
       uses: codecov/test-results-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: junit.xml
+        files: tests.xml
+        flags: rust
 
   lint:
     runs-on: ubuntu-latest
