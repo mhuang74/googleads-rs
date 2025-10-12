@@ -11,7 +11,7 @@
 
 mod test_helpers;
 
-use googleads_rs::google::ads::googleads::v19::common::Metrics;
+use googleads_rs::google::ads::googleads::v21::common::Metrics;
 use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder};
 
 // ============================================================================

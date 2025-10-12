@@ -50,12 +50,12 @@ safe_run find proto -type f -not -name '*.proto' -delete
 
 # Remove optional keyword
 safe_run find proto -type f | while read -r file; do
-  sed -i -e 's/^ *optional//g' "$file" || echo "Failed to process $file"
+  sed -i '' -e 's/^ *optional//g' "$file" || echo "Failed to process $file"
 done
 
 # Remove comments from 2 proto files to avoid doc test errors
-safe_run sed -i -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
-safe_run sed -i -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
+safe_run sed -i '' -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
+safe_run sed -i '' -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
 
 # Remove extra proto-e files
 safe_run find proto -type f -name '*.proto-e' -delete
@@ -65,12 +65,18 @@ safe_run rm -rf googleapis-master master.zip
 
 # Update version references in Rust code
 # Update build.rs
-safe_run sed -i "s/googleads{}$current_version/googleads{}$GOOGLEADS_API_VERSION/g" build.rs
+safe_run sed -i '' "s/googleads{}$current_version/googleads{}$GOOGLEADS_API_VERSION/g" build.rs
 
 # Update src/lib.rs
-safe_run sed -i "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
+safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
+
+# Update tests/*.rs
+safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/*.rs
+
+# Update tests/test_helpers/*.rs
+safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/test_helpers/*.rs
 
 # Update README.md
-safe_run sed -i "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
+safe_run sed -i '' "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
 
 

@@ -131,6 +131,71 @@ message QuotaFailure {
     
     
     string description = 2;
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    string api_service = 3;
+
+    
+    
+    
+    
+    
+    
+    
+    string quota_metric = 4;
+
+    
+    
+    
+    
+    string quota_id = 5;
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    map<string, string> quota_dimensions = 6;
+
+    
+    
+    
+    
+    
+    int64 quota_value = 7;
+
+    
+    
+    
+    
+    
+    
+    
+    
+ int64 future_quota_value = 8;
   }
 
   
