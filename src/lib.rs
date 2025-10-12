@@ -17,17 +17,17 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.10.1")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.11.0")]
 
 include!(concat!(env!("OUT_DIR"), "/protos.rs"));
 
-use crate::google::ads::googleads::v19::enums::bidding_strategy_type_enum::{
+use crate::google::ads::googleads::v21::enums::bidding_strategy_type_enum::{
     BiddingStrategyType::ManualCpc, BiddingStrategyType::MaximizeConversionValue,
     BiddingStrategyType::MaximizeConversions, BiddingStrategyType::TargetCpa,
     BiddingStrategyType::TargetImpressionShare, BiddingStrategyType::TargetRoas,
 };
 
-use crate::google::ads::googleads::v19::enums::{
+use crate::google::ads::googleads::v21::enums::{
     ad_group_ad_primary_status_reason_enum::AdGroupAdPrimaryStatusReason,
     ad_group_criterion_primary_status_reason_enum::AdGroupCriterionPrimaryStatusReason,
     ad_group_primary_status_reason_enum::AdGroupPrimaryStatusReason,
@@ -36,13 +36,13 @@ use crate::google::ads::googleads::v19::enums::{
     campaign_primary_status_reason_enum::CampaignPrimaryStatusReason,
 };
 
-use crate::google::ads::googleads::v19::resources::{
+use crate::google::ads::googleads::v21::resources::{
     ad::AdData::ResponsiveSearchAd, ad_group_criterion::Criterion::Keyword,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
     campaign_criterion::Criterion::Location, shared_criterion::Criterion::Keyword as SharedKeyword,
 };
 
-impl google::ads::googleads::v19::services::GoogleAdsRow {
+impl google::ads::googleads::v21::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
     ///
     /// # Arguments

@@ -70,6 +70,12 @@ safe_run sed -i '' "s/googleads{}$current_version/googleads{}$GOOGLEADS_API_VERS
 # Update src/lib.rs
 safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
 
+# Update tests/*.rs
+safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/*.rs
+
+# Update tests/test_helpers/*.rs
+safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/test_helpers/*.rs
+
 # Update README.md
 safe_run sed -i '' "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
 

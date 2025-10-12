@@ -278,7 +278,7 @@ fn test_campaign_with_both_nested_messages() {
 
 #[test]
 fn test_campaign_with_nested_and_enum_fields() {
-    use googleads_rs::google::ads::googleads::v19::enums::{
+    use googleads_rs::google::ads::googleads::v21::enums::{
         advertising_channel_type_enum::AdvertisingChannelType, campaign_status_enum::CampaignStatus,
     };
 

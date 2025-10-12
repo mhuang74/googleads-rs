@@ -6,12 +6,12 @@
 #![allow(clippy::field_reassign_with_default)]
 #![allow(clippy::useless_vec)]
 
-use googleads_rs::google::ads::googleads::v19::common::{Metrics, Segments};
-use googleads_rs::google::ads::googleads::v19::enums::{
+use googleads_rs::google::ads::googleads::v21::common::{Metrics, Segments};
+use googleads_rs::google::ads::googleads::v21::enums::{
     ad_group_status_enum::AdGroupStatus, campaign_status_enum::CampaignStatus,
 };
-use googleads_rs::google::ads::googleads::v19::resources::{AdGroup, Campaign, Customer};
-use googleads_rs::google::ads::googleads::v19::services::{
+use googleads_rs::google::ads::googleads::v21::resources::{AdGroup, Campaign, Customer};
+use googleads_rs::google::ads::googleads::v21::services::{
     GoogleAdsRow, SearchGoogleAdsStreamResponse,
 };
 use prost_types::FieldMask;
@@ -119,7 +119,7 @@ fn test_field_mask_with_nested_fields() {
     let mut campaign = Campaign::default();
     campaign.id = 55555;
     campaign.network_settings = Some(
-        googleads_rs::google::ads::googleads::v19::resources::campaign::NetworkSettings {
+        googleads_rs::google::ads::googleads::v21::resources::campaign::NetworkSettings {
             target_search_network: true,
             target_content_network: false,
             target_partner_search_network: false,
