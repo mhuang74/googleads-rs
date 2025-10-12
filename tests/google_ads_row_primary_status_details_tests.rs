@@ -103,11 +103,7 @@ fn test_ad_group_asset_multiple_status_details() {
 fn test_ad_group_asset_status_detail_with_asset_disapproved() {
     // reason: 4 = ASSET_DISAPPROVED, status: 3 = NOT_ELIGIBLE
     // error_reasons: 2 = PRICE_ASSET_DESCRIPTION_REPEATS_ROW_HEADER, 3 = PRICE_ASSET_REPETITIVE_HEADERS
-    let status_details = vec![create_status_detail_with_disapproved(
-        4,
-        3,
-        vec![2, 3],
-    )];
+    let status_details = vec![create_status_detail_with_disapproved(4, 3, vec![2, 3])];
 
     let ad_group_asset = AdGroupAsset {
         primary_status_details: status_details,
@@ -254,11 +250,7 @@ fn test_campaign_asset_with_disapproved_details() {
     let status_details = vec![create_status_detail_with_disapproved(
         4, // ASSET_DISAPPROVED
         3, // NOT_ELIGIBLE
-        vec![
-            2,
-            3,
-            7,
-        ],
+        vec![2, 3, 7],
     )];
 
     let campaign_asset = CampaignAsset {
@@ -428,9 +420,7 @@ fn test_asset_group_asset_realistic_scenario() {
         create_status_detail_with_disapproved(
             4, // ASSET_DISAPPROVED
             3, // NOT_ELIGIBLE
-            vec![
-                2,
-            ],
+            vec![2],
         ),
     ];
 
@@ -541,10 +531,18 @@ fn test_all_resources_handle_empty_consistently() {
         ..Default::default()
     };
 
-    let row1 = GoogleAdsRowBuilder::new().with_ad_group_asset(ad_group_asset).build();
-    let row2 = GoogleAdsRowBuilder::new().with_campaign_asset(campaign_asset).build();
-    let row3 = GoogleAdsRowBuilder::new().with_customer_asset(customer_asset).build();
-    let row4 = GoogleAdsRowBuilder::new().with_asset_group_asset(asset_group_asset).build();
+    let row1 = GoogleAdsRowBuilder::new()
+        .with_ad_group_asset(ad_group_asset)
+        .build();
+    let row2 = GoogleAdsRowBuilder::new()
+        .with_campaign_asset(campaign_asset)
+        .build();
+    let row3 = GoogleAdsRowBuilder::new()
+        .with_customer_asset(customer_asset)
+        .build();
+    let row4 = GoogleAdsRowBuilder::new()
+        .with_asset_group_asset(asset_group_asset)
+        .build();
 
     assert_eq!(row1.get("ad_group_asset.primary_status_details"), "");
     assert_eq!(row2.get("campaign_asset.primary_status_details"), "");

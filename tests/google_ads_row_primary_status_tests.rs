@@ -1009,7 +1009,7 @@ fn test_campaign_paused_with_multiple_reasons() {
     let campaign = Campaign {
         id: 12345,
         name: "Test Campaign".to_string(),
-        primary_status: 3, // PAUSED
+        primary_status: 3,                   // PAUSED
         primary_status_reasons: vec![3, 11], // CAMPAIGN_PAUSED, BUDGET_CONSTRAINED
         ..Default::default()
     };
@@ -1028,7 +1028,7 @@ fn test_campaign_paused_with_multiple_reasons() {
 fn test_ad_group_ad_pending_approval() {
     // Realistic scenario: Ad is pending approval
     let ad_group_ad = AdGroupAd {
-        primary_status: 5, // PENDING
+        primary_status: 5,               // PENDING
         primary_status_reasons: vec![2], // CAMPAIGN_REMOVED
         ..Default::default()
     };
@@ -1049,7 +1049,7 @@ fn test_asset_group_asset_not_eligible_with_disapproval() {
     // Realistic scenario: Asset is not eligible due to disapproval
     let asset_group_asset = AssetGroupAsset {
         resource_name: "customers/123/assetGroupAssets/456~789~1011".to_string(),
-        primary_status: 7, // NOT_ELIGIBLE (correct value)
+        primary_status: 7,               // NOT_ELIGIBLE (correct value)
         primary_status_reasons: vec![4], // ASSET_DISAPPROVED
         ..Default::default()
     };
@@ -1095,11 +1095,15 @@ fn test_all_resources_handle_empty_reasons_consistently() {
 
     let row1 = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let row2 = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
-    let row3 = GoogleAdsRowBuilder::new().with_ad_group_ad(ad_group_ad).build();
+    let row3 = GoogleAdsRowBuilder::new()
+        .with_ad_group_ad(ad_group_ad)
+        .build();
     let row4 = GoogleAdsRowBuilder::new()
         .with_ad_group_criterion(ad_group_criterion)
         .build();
-    let row5 = GoogleAdsRowBuilder::new().with_asset_group(asset_group).build();
+    let row5 = GoogleAdsRowBuilder::new()
+        .with_asset_group(asset_group)
+        .build();
 
     assert_eq!(row1.get("campaign.primary_status_reasons"), "");
     assert_eq!(row2.get("ad_group.primary_status_reasons"), "");
