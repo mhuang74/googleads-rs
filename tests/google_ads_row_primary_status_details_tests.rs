@@ -560,12 +560,12 @@ fn test_max_status_details_handling() {
         let reason = if i % 2 == 0 {
             2 // ASSET_LINK_PAUSED
         } else {
-            2 // ASSET_LINK_PAUSED
+            3 // ASSET_LINK_REMOVED
         };
         let status = if i % 2 == 0 {
             2 // PAUSED
         } else {
-            2 // PAUSED
+            5 // REMOVED
         };
         status_details.push(create_simple_status_detail(reason, status));
     }
