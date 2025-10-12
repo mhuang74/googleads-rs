@@ -332,6 +332,7 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "ad_group_asset.source" => method_str!([ad_group_asset], source),
             "ad_group_asset.primary_status" => method_str!([ad_group_asset], primary_status),
             "ad_group_asset.primary_status_reasons" => repeated_enum_str!([ad_group_asset], primary_status_reasons, AssetLinkPrimaryStatusReason),
+            "ad_group_asset.primary_status_details" => repeated_message_str!([ad_group_asset], primary_status_details),
             // ===== ASSET =====
             "asset.id" => attr_str!([asset], id),
             "asset.name" => attr_str!([asset], name),
@@ -412,6 +413,7 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "campaign_asset.source" => method_str!([campaign_asset], source),
             "campaign_asset.primary_status" => method_str!([campaign_asset], primary_status),
             "campaign_asset.primary_status_reasons" => repeated_enum_str!([campaign_asset], primary_status_reasons, AssetLinkPrimaryStatusReason),
+            "campaign_asset.primary_status_details" => repeated_message_str!([campaign_asset], primary_status_details),
             // ===== CONVERSION_ACTION =====
             "conversion_action.id" => attr_str!([conversion_action], id),
             "conversion_action.name" => attr_str!([conversion_action], name),
@@ -453,6 +455,7 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "customer_asset.source" => method_str!([customer_asset], source),
             "customer_asset.primary_status" => method_str!([customer_asset], primary_status),
             "customer_asset.primary_status_reasons" => repeated_enum_str!([customer_asset], primary_status_reasons, AssetLinkPrimaryStatusReason),
+            "customer_asset.primary_status_details" => repeated_message_str!([customer_asset], primary_status_details),
             // ===== GEO_TARGET_CONSTANT =====
             "geo_target_constant.id" => attr_str!([geo_target_constant], id),
             "geo_target_constant.name" => attr_str!([geo_target_constant], name),
@@ -747,6 +750,7 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "asset_group_asset.performance_label" => method_str!([asset_group_asset], performance_label),
             "asset_group_asset.primary_status" => method_str!([asset_group_asset], primary_status),
             "asset_group_asset.primary_status_reasons" => repeated_enum_str!([asset_group_asset], primary_status_reasons, AssetLinkPrimaryStatusReason),
+            "asset_group_asset.primary_status_details" => repeated_message_str!([asset_group_asset], primary_status_details),
             // ===== ASSET_GROUP_SIGNAL (Phase 5) =====
             "asset_group_signal.resource_name" => attr_str!([asset_group_signal], resource_name),
             "asset_group_signal.asset_group" => attr_str!([asset_group_signal], asset_group),
