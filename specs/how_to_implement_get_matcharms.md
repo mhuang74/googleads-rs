@@ -59,7 +59,9 @@ Core decision rules by field category
 6) Repeated fields
 - For repeated of simple strings, join with ", " directly.
 - For repeated nested messages, use [macro_rules! enum_match_iterator_str()](src/lib.rs:160) to map to a leaf attribute, then join with ", ".
+- For repeated enum fields (stored as Vec<i32>), use [macro_rules! repeated_enum_str()](src/lib.rs:213) to convert to comma-separated enum names.
 - Example: change_event.changed_fields.paths (FieldMask) are rendered as a single quoted, comma-delimited list in existing code.
+- Example: campaign.primary_status_reasons (repeated enum) rendered with repeated_enum_str macro.
 
 7) Custom string mapping overrides
 - Some enums are rendered with a custom mapping rather than the default debug or numeric form.
@@ -137,6 +139,7 @@ Worked examples from existing code
 - ad_group_criterion.keyword.text → oneof select via [macro_rules! enum_match_str()](src/lib.rs:146); see [KeywordInfo.text](proto/google/ads/googleads/v19/common/criteria.proto:61).
 - campaign_criterion.location.geo_target_constant → optional oneof select via [macro_rules! optional_enum_match_str()](src/lib.rs:198); see [LocationInfo.geo_target_constant](proto/google/ads/googleads/v19/common/criteria.proto:120).
 - campaign.bidding_strategy_type → explicit enum-to-string mapping in the arm; see [Campaign.bidding_strategy_type](proto/google/ads/googleads/v19/resources/campaign.proto:529).
+- campaign.primary_status_reasons → repeated enum via [macro_rules! repeated_enum_str()](src/lib.rs:213); see [Campaign.primary_status_reasons](proto/google/ads/googleads/v19/resources/campaign.proto:398).
 
 Change management checklist when adding new arms
 - Verify GAQL path spelling matches API.
@@ -175,5 +178,6 @@ Macro reference anchors
 - [enum_match_str()](src/lib.rs:146)
 - [enum_match_iterator_str()](src/lib.rs:160)
 - [optional_enum_match_str()](src/lib.rs:198)
+- [repeated_enum_str()](src/lib.rs:213) - for repeated enum fields like primary_status_reasons
 - get() entrypoint: [GoogleAdsRow::get()](src/lib.rs:65)
-- match arms block: [match field_name](src/lib.rs:215)
+- match arms block: [match field_name](src/lib.rs:230)

@@ -27,6 +27,15 @@ use crate::google::ads::googleads::v19::enums::bidding_strategy_type_enum::{
     BiddingStrategyType::TargetImpressionShare, BiddingStrategyType::TargetRoas,
 };
 
+use crate::google::ads::googleads::v19::enums::{
+    ad_group_ad_primary_status_reason_enum::AdGroupAdPrimaryStatusReason,
+    ad_group_criterion_primary_status_reason_enum::AdGroupCriterionPrimaryStatusReason,
+    ad_group_primary_status_reason_enum::AdGroupPrimaryStatusReason,
+    asset_group_primary_status_reason_enum::AssetGroupPrimaryStatusReason,
+    asset_link_primary_status_reason_enum::AssetLinkPrimaryStatusReason,
+    campaign_primary_status_reason_enum::CampaignPrimaryStatusReason,
+};
+
 use crate::google::ads::googleads::v19::resources::{
     ad::AdData::ResponsiveSearchAd, ad_group_criterion::Criterion::Keyword,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
@@ -210,6 +219,52 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             };
         }
 
+        /// Macro to get repeated enum field as comma-separated debug string
+        /// Before:
+        ///     "campaign.primary_status_reasons" => {
+        ///         self.campaign.as_ref().unwrap()
+        ///             .primary_status_reasons
+        ///             .iter()
+        ///             .map(|&v| format!("{:#?}",
+        ///                 CampaignPrimaryStatusReason::from_i32(v).unwrap_or_default()))
+        ///             .collect::<Vec<String>>()
+        ///             .join(", ")
+        ///     }
+        /// With Macro:
+        ///     "campaign.primary_status_reasons" => repeated_enum_str!([campaign], primary_status_reasons, CampaignPrimaryStatusReason),
+        macro_rules! repeated_enum_str {
+            ([$( $parent:ident ),+], $attr:ident, $enum_type:ty) => {
+                self.$($parent.as_ref().unwrap().)+$attr
+                    .iter()
+                    .map(|&v| format!("{:#?}",
+                        <$enum_type>::from_i32(v).unwrap_or_default()))
+                    .collect::<Vec<String>>()
+                    .join(", ")
+            };
+        }
+
+        /// Macro to format repeated nested message fields as comma-separated strings
+        /// Before:
+        ///     "ad_group_asset.primary_status_details" => {
+        ///         self.ad_group_asset.as_ref().unwrap()
+        ///             .primary_status_details
+        ///             .iter()
+        ///             .map(|item| format!("{:#?}", item))
+        ///             .collect::<Vec<String>>()
+        ///             .join("; ")
+        ///     }
+        /// With Macro:
+        ///     "ad_group_asset.primary_status_details" => repeated_message_str!([ad_group_asset], primary_status_details),
+        macro_rules! repeated_message_str {
+            ([$( $parent:ident ),+], $attr:ident) => {
+                self.$($parent.as_ref().unwrap().)+$attr
+                    .iter()
+                    .map(|item| format!("{:#?}", item))
+                    .collect::<Vec<String>>()
+                    .join("; ")
+            };
+        }
+
         match field_name {
             "account_budget.id" => attr_str!([account_budget], id),
             "account_budget.name" => attr_str!([account_budget], name),
@@ -229,6 +284,8 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "ad_group.target_cpm_micros" => attr_str!([ad_group], target_cpm_micros),
             "ad_group.target_roas" => attr_str!([ad_group], target_roas),
             "ad_group.type" => method_str!([ad_group], r#type),
+            "ad_group.primary_status" => method_str!([ad_group], primary_status),
+            "ad_group.primary_status_reasons" => repeated_enum_str!([ad_group], primary_status_reasons, AdGroupPrimaryStatusReason),
             "ad_group.labels" => self.ad_group.as_ref().unwrap().labels.join(", "),
             "ad_group_ad.ad.id" => attr_str!([ad_group_ad, ad], id),
             "ad_group_ad.ad.name" => attr_str!([ad_group_ad, ad], name),
@@ -238,6 +295,8 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "ad_group_ad.ad.responsive_search_ad.path2" => enum_match_str!([ad_group_ad, ad], ad_data, ResponsiveSearchAd, path2),
             "ad_group_ad.ad.type" => method_str!([ad_group_ad, ad], r#type),
             "ad_group_ad.status" => method_str!([ad_group_ad], status),
+            "ad_group_ad.primary_status" => method_str!([ad_group_ad], primary_status),
+            "ad_group_ad.primary_status_reasons" => repeated_enum_str!([ad_group_ad], primary_status_reasons, AdGroupAdPrimaryStatusReason),
             "ad_group_ad.labels" => self.ad_group_ad.as_ref().unwrap().labels.join(", "),
             "ad_group_ad_asset_view.resource_name" => attr_str!([ad_group_ad_asset_view], resource_name),
             "ad_group_ad_asset_view.asset" => attr_str!([ad_group_ad_asset_view], asset),
@@ -261,6 +320,8 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "ad_group_criterion.keyword.match_type" => enum_match_str!([ad_group_criterion], criterion, Keyword, match_type),
             "ad_group_criterion.status" => method_str!([ad_group_criterion], status),
             "ad_group_criterion.type" => method_str!([ad_group_criterion], r#type),
+            "ad_group_criterion.primary_status" => method_str!([ad_group_criterion], primary_status),
+            "ad_group_criterion.primary_status_reasons" => repeated_enum_str!([ad_group_criterion], primary_status_reasons, AdGroupCriterionPrimaryStatusReason),
             "ad_group_criterion.labels" => self.ad_group_criterion.as_ref().unwrap().labels.join(", "),
             // ===== AD_GROUP_ASSET =====
             "ad_group_asset.resource_name" => attr_str!([ad_group_asset], resource_name),
@@ -270,6 +331,7 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "ad_group_asset.status" => method_str!([ad_group_asset], status),
             "ad_group_asset.source" => method_str!([ad_group_asset], source),
             "ad_group_asset.primary_status" => method_str!([ad_group_asset], primary_status),
+            "ad_group_asset.primary_status_reasons" => repeated_enum_str!([ad_group_asset], primary_status_reasons, AssetLinkPrimaryStatusReason),
             // ===== ASSET =====
             "asset.id" => attr_str!([asset], id),
             "asset.name" => attr_str!([asset], name),
@@ -287,6 +349,8 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "asset_group.resource_name" => attr_str!([asset_group], resource_name),
             "asset_group.campaign" => attr_str!([asset_group], campaign),
             "asset_group.ad_strength" => attr_str!([asset_group], ad_strength),
+            "asset_group.primary_status" => method_str!([asset_group], primary_status),
+            "asset_group.primary_status_reasons" => repeated_enum_str!([asset_group], primary_status_reasons, AssetGroupPrimaryStatusReason),
             "audience.description" => attr_str!([audience], description),
             "audience.id" => attr_str!([audience], id),
             "audience.name" => attr_str!([audience], name),
@@ -310,6 +374,8 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
                 }
 
             },
+            "campaign.primary_status" => method_str!([campaign], primary_status),
+            "campaign.primary_status_reasons" => repeated_enum_str!([campaign], primary_status_reasons, CampaignPrimaryStatusReason),
             "campaign_criterion.campaign" => optional_attr_str!(campaign_criterion, campaign),
             "campaign_criterion.criterion_id" => optional_attr_str!(campaign_criterion, criterion_id),
             "campaign_criterion.display_name" => optional_attr_str!(campaign_criterion, display_name),
@@ -345,6 +411,7 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "campaign_asset.status" => method_str!([campaign_asset], status),
             "campaign_asset.source" => method_str!([campaign_asset], source),
             "campaign_asset.primary_status" => method_str!([campaign_asset], primary_status),
+            "campaign_asset.primary_status_reasons" => repeated_enum_str!([campaign_asset], primary_status_reasons, AssetLinkPrimaryStatusReason),
             // ===== CONVERSION_ACTION =====
             "conversion_action.id" => attr_str!([conversion_action], id),
             "conversion_action.name" => attr_str!([conversion_action], name),
@@ -385,6 +452,7 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "customer_asset.status" => method_str!([customer_asset], status),
             "customer_asset.source" => method_str!([customer_asset], source),
             "customer_asset.primary_status" => method_str!([customer_asset], primary_status),
+            "customer_asset.primary_status_reasons" => repeated_enum_str!([customer_asset], primary_status_reasons, AssetLinkPrimaryStatusReason),
             // ===== GEO_TARGET_CONSTANT =====
             "geo_target_constant.id" => attr_str!([geo_target_constant], id),
             "geo_target_constant.name" => attr_str!([geo_target_constant], name),
@@ -677,6 +745,8 @@ impl google::ads::googleads::v19::services::GoogleAdsRow {
             "asset_group_asset.field_type" => method_str!([asset_group_asset], field_type),
             "asset_group_asset.status" => method_str!([asset_group_asset], status),
             "asset_group_asset.performance_label" => method_str!([asset_group_asset], performance_label),
+            "asset_group_asset.primary_status" => method_str!([asset_group_asset], primary_status),
+            "asset_group_asset.primary_status_reasons" => repeated_enum_str!([asset_group_asset], primary_status_reasons, AssetLinkPrimaryStatusReason),
             // ===== ASSET_GROUP_SIGNAL (Phase 5) =====
             "asset_group_signal.resource_name" => attr_str!([asset_group_signal], resource_name),
             "asset_group_signal.asset_group" => attr_str!([asset_group_signal], asset_group),
