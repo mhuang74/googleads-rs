@@ -11,9 +11,7 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Install deps
@@ -22,7 +20,48 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
-      
+
+  test-with-coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install deps
+      run: sudo apt-get -y install protobuf-compiler
+    - name: Install Rust (stable)
+      uses: dtolnay/rust-toolchain@stable
+    - name: Install cargo-tarpaulin
+      uses: taiki-e/install-action@cargo-tarpaulin
+    - name: Run tests, generate coverage and JUnit XML reports
+      run: cargo tarpaulin --all-features --workspace --out Xml --out xml --output-dir target/tarpaulin/
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        files: target/tarpaulin/cobertura.xml
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: target/tarpaulin/junit.xml
+        flags: rust-tarpaulin
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install deps
+      run: sudo apt-get -y install protobuf-compiler
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: clippy, rustfmt
+    - name: Run clippy
+      run: cargo clippy --all-targets --all-features -- -D warnings
+    - name: Check formatting
+      run: cargo fmt -- --check
+
   build-windows:
     runs-on: windows-latest
     steps:

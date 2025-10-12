@@ -1,6 +1,9 @@
-use std::{collections::HashSet, collections::HashMap, env, fmt::Write, fs, path::Path, path::MAIN_SEPARATOR};
-use walkdir::WalkDir;
 use build_print::info;
+use std::{
+    collections::HashMap, collections::HashSet, env, fmt::Write, fs, path::Path,
+    path::MAIN_SEPARATOR,
+};
+use walkdir::WalkDir;
 
 type Res = Result<(), Box<dyn std::error::Error>>;
 
@@ -26,10 +29,7 @@ fn main() -> Res {
                 path_str.contains(&format!("googleads{}v19", std::path::MAIN_SEPARATOR))
                     || path_str.contains(&format!("google{}rpc", std::path::MAIN_SEPARATOR))
                     || path_str.contains(&format!("google{}longrunning", std::path::MAIN_SEPARATOR))
-                ) && e
-                .path()
-                .extension()
-                .map_or(false, |ext| ext == "proto")
+            ) && e.path().extension().is_some_and(|ext| ext == "proto")
         })
     {
         let path = entry.path();
@@ -70,7 +70,10 @@ fn main() -> Res {
         for &package in &package_names {
             let pkg_str = format!("{MAIN_SEPARATOR}{package}{MAIN_SEPARATOR}");
             if path_str.contains(&pkg_str) {
-                protos_by_package.entry(package).or_insert_with(Vec::new).push(proto.clone());
+                protos_by_package
+                    .entry(package)
+                    .or_insert_with(Vec::new)
+                    .push(proto.clone());
                 matched = true;
                 // info!("added to {token}: {path_str}");
                 break;
@@ -85,19 +88,29 @@ fn main() -> Res {
 
     if !misc_protos.is_empty() {
         info!("> Compiling {} misc proto files", misc_protos.len());
-        tonic_build::configure()
-            .build_server(false)
-            .compile(&misc_protos, &[proto_path.clone()])?;
+        prost_build::Config::new()
+            .file_descriptor_set_path("target/descriptors.bin")
+            .type_attribute(".", "#[allow(clippy::all)]")
+            .compile_protos(&misc_protos, std::slice::from_ref(&proto_path))?;
     }
 
     for &package in &package_names {
         if let Some(protos) = protos_by_package.get(package) {
-            info!("> Compiling {} proto files from package '{}'", protos.len(), package);
+            info!(
+                "> Compiling {} proto files from package '{}'",
+                protos.len(),
+                package
+            );
             for chunk in protos.chunks(185) {
-                info!("  Compiling batch of {} proto files from package '{}'", chunk.len(), package);
-                tonic_build::configure()
-                    .build_server(false)
-                    .compile(chunk, &[proto_path.clone()])?;
+                info!(
+                    "  Compiling batch of {} proto files from package '{}'",
+                    chunk.len(),
+                    package
+                );
+                prost_build::Config::new()
+                    .file_descriptor_set_path("target/descriptors.bin")
+                    .type_attribute(".", "#[allow(clippy::all)]")
+                    .compile_protos(chunk, std::slice::from_ref(&proto_path))?;
             }
         }
     }
@@ -121,11 +134,7 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
             .split('.')
             .map(map_keyword)
             .enumerate()
-            .position(|(idx, pkg_seg)| {
-                path_stack
-                    .get(idx)
-                    .map_or(true, |stack_seg| stack_seg != &pkg_seg)
-            })
+            .position(|(idx, pkg_seg)| path_stack.get(idx) != Some(&pkg_seg))
             .unwrap_or(0);
 
         // pop stack
@@ -140,12 +149,8 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
             path_stack.push(seg);
         }
 
-        // write include_proto! inside module
-        writeln!(
-            protos_rs,
-            "tonic::include_proto!(\"{}\");",
-            path_stack.join(".")
-        )?;
+        // write include! inside module for prost_build
+        writeln!(protos_rs, "include!(\"{}.rs\");", path_stack.join("."))?;
     }
 
     // pop all stack
