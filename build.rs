@@ -88,10 +88,11 @@ fn main() -> Res {
 
     if !misc_protos.is_empty() {
         info!("> Compiling {} misc proto files", misc_protos.len());
-        prost_build::Config::new()
+        tonic_build::configure()
+            .build_server(false)
             .file_descriptor_set_path("target/descriptors.bin")
             .type_attribute(".", "#[allow(clippy::all)]")
-            .compile_protos(&misc_protos, std::slice::from_ref(&proto_path))?;
+            .compile(&misc_protos, std::slice::from_ref(&proto_path))?;
     }
 
     for &package in &package_names {
@@ -107,10 +108,11 @@ fn main() -> Res {
                     chunk.len(),
                     package
                 );
-                prost_build::Config::new()
+                tonic_build::configure()
+                    .build_server(false)
                     .file_descriptor_set_path("target/descriptors.bin")
                     .type_attribute(".", "#[allow(clippy::all)]")
-                    .compile_protos(chunk, std::slice::from_ref(&proto_path))?;
+                    .compile(chunk, std::slice::from_ref(&proto_path))?;
             }
         }
     }
