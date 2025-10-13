@@ -28,7 +28,7 @@ build-print = "0.1"
 version-sync = "0.9"
 tokio = { version = "1.39", features = ["full", "test-util", "macros"] }
 tokio-stream = "0.1"
-tower = "0.4"
+tower = "0.5"
 futures = "0.3"
 proptest = "1.0"
 
