@@ -92,8 +92,7 @@ fn test_field_mask_type_exists() {
 #[test]
 fn test_common_enum_types_exist() {
     use googleads_rs::google::ads::googleads::v21::enums::{
-        ad_group_status_enum::AdGroupStatus,
-        advertising_channel_type_enum::AdvertisingChannelType,
+        ad_group_status_enum::AdGroupStatus, advertising_channel_type_enum::AdvertisingChannelType,
         campaign_status_enum::CampaignStatus,
     };
 

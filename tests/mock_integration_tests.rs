@@ -437,5 +437,7 @@ async fn test_realistic_campaign_performance_query() {
     }
 
     // Verify dates are present
-    assert!(daily_data[6].iter().all(|date| date.starts_with("2024-10-")));
+    assert!(daily_data[6]
+        .iter()
+        .all(|date| date.starts_with("2024-10-")));
 }
