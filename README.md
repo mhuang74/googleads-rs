@@ -2,6 +2,7 @@
 
 ![Maintenance](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg)
 [![CI](https://github.com/mhuang74/googleads-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/mhuang74/googleads-rs/actions)
+[![codecov](https://codecov.io/github/mhuang74/googleads-rs/graph/badge.svg?token=0HUG6VCKU2)](https://codecov.io/github/mhuang74/googleads-rs)
 [![crates-io](https://img.shields.io/crates/v/googleads-rs.svg)](https://crates.io/crates/googleads-rs)
 [![api-docs](https://docs.rs/googleads-rs/badge.svg)](https://docs.rs/googleads-rs)
 
