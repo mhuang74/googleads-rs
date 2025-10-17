@@ -90,7 +90,6 @@ fn main() -> Res {
         info!("> Compiling {} misc proto files", misc_protos.len());
         tonic_build::configure()
             .build_server(false)
-            .file_descriptor_set_path("target/descriptors.bin")
             .type_attribute(".", "#[allow(clippy::all)]")
             .compile(&misc_protos, std::slice::from_ref(&proto_path))?;
     }
@@ -110,7 +109,6 @@ fn main() -> Res {
                 );
                 tonic_build::configure()
                     .build_server(false)
-                    .file_descriptor_set_path("target/descriptors.bin")
                     .type_attribute(".", "#[allow(clippy::all)]")
                     .compile(chunk, std::slice::from_ref(&proto_path))?;
             }
