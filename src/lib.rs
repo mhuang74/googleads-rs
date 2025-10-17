@@ -17,9 +17,15 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.11.1")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.11.2")]
 
-include!(concat!(env!("OUT_DIR"), "/protos.rs"));
+#[allow(clippy::all)]
+#[allow(clippy::doc_lazy_continuation)]
+#[allow(unused_must_use)]
+mod protos {
+    include!(concat!(env!("OUT_DIR"), "/protos.rs"));
+}
+pub use protos::*;
 
 use crate::google::ads::googleads::v21::enums::bidding_strategy_type_enum::{
     BiddingStrategyType::ManualCpc, BiddingStrategyType::MaximizeConversionValue,
@@ -237,7 +243,7 @@ impl google::ads::googleads::v21::services::GoogleAdsRow {
                 self.$($parent.as_ref().unwrap().)+$attr
                     .iter()
                     .map(|&v| format!("{:#?}",
-                        <$enum_type>::from_i32(v).unwrap_or_default()))
+                        <$enum_type>::try_from(v).unwrap_or_default()))
                     .collect::<Vec<String>>()
                     .join(", ")
             };
