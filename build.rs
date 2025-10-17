@@ -88,10 +88,10 @@ fn main() -> Res {
 
     if !misc_protos.is_empty() {
         info!("> Compiling {} misc proto files", misc_protos.len());
-        tonic_build::configure()
+        tonic_prost_build::configure()
             .build_server(false)
             .type_attribute(".", "#[allow(clippy::all)]")
-            .compile(&misc_protos, std::slice::from_ref(&proto_path))?;
+            .compile_protos(&misc_protos, std::slice::from_ref(&proto_path))?;
     }
 
     for &package in &package_names {
@@ -107,10 +107,10 @@ fn main() -> Res {
                     chunk.len(),
                     package
                 );
-                tonic_build::configure()
+                tonic_prost_build::configure()
                     .build_server(false)
                     .type_attribute(".", "#[allow(clippy::all)]")
-                    .compile(chunk, std::slice::from_ref(&proto_path))?;
+                    .compile_protos(chunk, std::slice::from_ref(&proto_path))?;
             }
         }
     }

@@ -1,8 +1,8 @@
 [package]
 name = "googleads-rs"
-version = "0.11.1"
+version = "0.11.2"
 authors = ["Michael S. Huang <mhuang74@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "MIT"
 repository = "https://github.com/mhuang74/googleads-rs"
 description = """
@@ -14,12 +14,14 @@ readme = "README.md"
 [lib]
 
 [dependencies]
-tonic = { version = "0.8.0", features = ["tls", "tls-roots"] }
-prost = "0.11.9"
-prost-types = "0.11.9"
+tonic = { version = "0.14.2", features = ["tls-ring", "tls-native-roots"] }
+tonic-prost = "0.14"
+prost = "0.14"
+prost-types = "0.14"
 
 [build-dependencies]
-tonic-build = "0.8.0"
+tonic-build = "0.14"
+tonic-prost-build = "0.14"
 prost-build = "0.14"
 walkdir = "2"
 build-print = "1.0"
