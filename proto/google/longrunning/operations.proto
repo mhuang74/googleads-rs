@@ -234,7 +234,7 @@ message WaitOperationRequest {
 }
 
 // A message representing the message types used by a long-running operation.
-//```ignore
+//
 // Example:
 //
 //     rpc Export(ExportRequest) returns (google.longrunning.Operation) {
@@ -243,7 +243,6 @@ message WaitOperationRequest {
 //         metadata_type: "ExportMetadata"
 //       };
 //     }
-//```
 message OperationInfo {
   // Required. The message name of the primary return type for this
   // long-running operation.
