@@ -43,7 +43,7 @@ fn test_account_budget_name() {
 
 #[test]
 fn test_account_budget_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::account_budget_status_enum::AccountBudgetStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::account_budget_status_enum::AccountBudgetStatus;
 
     let account_budget = AccountBudgetBuilder::new()
         .status(AccountBudgetStatus::Approved as i32)
@@ -58,7 +58,7 @@ fn test_account_budget_status() {
 
 #[test]
 fn test_account_budget_all_fields() {
-    use googleads_rs::google::ads::googleads::v21::enums::account_budget_status_enum::AccountBudgetStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::account_budget_status_enum::AccountBudgetStatus;
 
     let account_budget = AccountBudgetBuilder::new()
         .id(999888777)
@@ -105,7 +105,7 @@ fn test_asset_group_name() {
 
 #[test]
 fn test_asset_group_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_group_status_enum::AssetGroupStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_group_status_enum::AssetGroupStatus;
 
     let asset_group = AssetGroupBuilder::new()
         .status(AssetGroupStatus::Enabled as i32)
@@ -152,7 +152,7 @@ fn test_asset_group_campaign() {
 
 #[test]
 fn test_asset_group_ad_strength() {
-    use googleads_rs::google::ads::googleads::v21::enums::ad_strength_enum::AdStrength;
+    use googleads_rs::google::ads::googleads::v22::enums::ad_strength_enum::AdStrength;
 
     let asset_group = AssetGroupBuilder::new()
         .ad_strength(AdStrength::Excellent as i32)
@@ -204,7 +204,7 @@ fn test_audience_description() {
 
 #[test]
 fn test_audience_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::audience_status_enum::AudienceStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::audience_status_enum::AudienceStatus;
 
     let audience = AudienceBuilder::new()
         .status(AudienceStatus::Enabled as i32)
@@ -245,7 +245,7 @@ fn test_bidding_strategy_name() {
 
 #[test]
 fn test_bidding_strategy_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::bidding_strategy_status_enum::BiddingStrategyStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::bidding_strategy_status_enum::BiddingStrategyStatus;
 
     let bidding_strategy = BiddingStrategyBuilder::new()
         .status(BiddingStrategyStatus::Enabled as i32)
@@ -282,7 +282,7 @@ fn test_label_name() {
 
 #[test]
 fn test_label_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::label_status_enum::LabelStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::label_status_enum::LabelStatus;
 
     let label = LabelBuilder::new()
         .status(LabelStatus::Enabled as i32)
@@ -372,7 +372,7 @@ fn test_customer_client_manager() {
 
 #[test]
 fn test_customer_client_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::customer_status_enum::CustomerStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::customer_status_enum::CustomerStatus;
 
     let customer_client = CustomerClientBuilder::new()
         .status(CustomerStatus::Enabled as i32)
@@ -433,7 +433,7 @@ fn test_search_term_view_search_term() {
 
 #[test]
 fn test_search_term_view_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::search_term_targeting_status_enum::SearchTermTargetingStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::search_term_targeting_status_enum::SearchTermTargetingStatus;
 
     let search_term_view = SearchTermViewBuilder::new()
         .status(SearchTermTargetingStatus::Added as i32)
@@ -504,7 +504,7 @@ fn test_change_event_change_date_time() {
 
 #[test]
 fn test_change_event_change_resource_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::change_event_resource_type_enum::ChangeEventResourceType;
+    use googleads_rs::google::ads::googleads::v22::enums::change_event_resource_type_enum::ChangeEventResourceType;
 
     let change_event = ChangeEventBuilder::new()
         .change_resource_type(ChangeEventResourceType::Campaign as i32)
@@ -535,7 +535,7 @@ fn test_change_event_change_resource_name() {
 
 #[test]
 fn test_change_event_client_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::change_client_type_enum::ChangeClientType;
+    use googleads_rs::google::ads::googleads::v22::enums::change_client_type_enum::ChangeClientType;
 
     let change_event = ChangeEventBuilder::new()
         .client_type(ChangeClientType::GoogleAdsWebClient as i32)
@@ -563,7 +563,7 @@ fn test_change_event_user_email() {
 
 #[test]
 fn test_change_event_resource_change_operation() {
-    use googleads_rs::google::ads::googleads::v21::enums::resource_change_operation_enum::ResourceChangeOperation;
+    use googleads_rs::google::ads::googleads::v22::enums::resource_change_operation_enum::ResourceChangeOperation;
 
     let change_event = ChangeEventBuilder::new()
         .resource_change_operation(ResourceChangeOperation::Update as i32)
@@ -646,7 +646,7 @@ fn test_ad_group_ad_asset_view_asset() {
 
 #[test]
 fn test_ad_group_ad_asset_view_field_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_field_type_enum::AssetFieldType;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_field_type_enum::AssetFieldType;
 
     let ad_group_ad_asset_view = AdGroupAdAssetViewBuilder::new()
         .field_type(AssetFieldType::Headline as i32)
@@ -661,7 +661,7 @@ fn test_ad_group_ad_asset_view_field_type() {
 
 #[test]
 fn test_ad_group_ad_asset_view_pinned_field() {
-    use googleads_rs::google::ads::googleads::v21::enums::served_asset_field_type_enum::ServedAssetFieldType;
+    use googleads_rs::google::ads::googleads::v22::enums::served_asset_field_type_enum::ServedAssetFieldType;
 
     let ad_group_ad_asset_view = AdGroupAdAssetViewBuilder::new()
         .pinned_field(ServedAssetFieldType::Headline1 as i32)
@@ -676,7 +676,7 @@ fn test_ad_group_ad_asset_view_pinned_field() {
 
 #[test]
 fn test_ad_group_ad_asset_view_performance_label() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_performance_label_enum::AssetPerformanceLabel;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_performance_label_enum::AssetPerformanceLabel;
 
     let ad_group_ad_asset_view = AdGroupAdAssetViewBuilder::new()
         .performance_label(AssetPerformanceLabel::Best as i32)
@@ -695,7 +695,7 @@ fn test_ad_group_ad_asset_view_performance_label() {
 
 #[test]
 fn test_asset_field_type_view_field_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_field_type_enum::AssetFieldType;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_field_type_enum::AssetFieldType;
 
     let asset_field_type_view = AssetFieldTypeViewBuilder::new()
         .field_type(AssetFieldType::Description as i32)
@@ -714,8 +714,8 @@ fn test_asset_field_type_view_field_type() {
 
 #[test]
 fn test_multiple_phase3_resources_in_same_row() {
-    use googleads_rs::google::ads::googleads::v21::enums::audience_status_enum::AudienceStatus;
-    use googleads_rs::google::ads::googleads::v21::enums::label_status_enum::LabelStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::audience_status_enum::AudienceStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::label_status_enum::LabelStatus;
 
     let label = LabelBuilder::new()
         .id(111)

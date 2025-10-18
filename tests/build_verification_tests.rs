@@ -12,7 +12,7 @@
 
 #[test]
 fn test_google_ads_service_client_exists() {
-    use googleads_rs::google::ads::googleads::v21::services::google_ads_service_client::GoogleAdsServiceClient;
+    use googleads_rs::google::ads::googleads::v22::services::google_ads_service_client::GoogleAdsServiceClient;
 
     // This test passes if the type exists and compiles
     // We're not instantiating it, just verifying the type is available
@@ -21,7 +21,7 @@ fn test_google_ads_service_client_exists() {
 
 #[test]
 fn test_other_service_clients_exist() {
-    use googleads_rs::google::ads::googleads::v21::services::{
+    use googleads_rs::google::ads::googleads::v22::services::{
         ad_group_service_client::AdGroupServiceClient,
         campaign_service_client::CampaignServiceClient,
         customer_service_client::CustomerServiceClient,
@@ -39,7 +39,7 @@ fn test_other_service_clients_exist() {
 
 #[test]
 fn test_core_resource_types_exist() {
-    use googleads_rs::google::ads::googleads::v21::resources::{
+    use googleads_rs::google::ads::googleads::v22::resources::{
         AdGroup, AdGroupAd, AdGroupCriterion, Campaign, Customer,
     };
 
@@ -53,7 +53,7 @@ fn test_core_resource_types_exist() {
 
 #[test]
 fn test_metrics_and_segments_exist() {
-    use googleads_rs::google::ads::googleads::v21::common::{Metrics, Segments};
+    use googleads_rs::google::ads::googleads::v22::common::{Metrics, Segments};
 
     let _metrics = Metrics::default();
     let _segments = Segments::default();
@@ -65,7 +65,7 @@ fn test_metrics_and_segments_exist() {
 
 #[test]
 fn test_search_request_response_types_exist() {
-    use googleads_rs::google::ads::googleads::v21::services::{
+    use googleads_rs::google::ads::googleads::v22::services::{
         GoogleAdsRow, SearchGoogleAdsStreamRequest, SearchGoogleAdsStreamResponse,
     };
 
@@ -91,7 +91,7 @@ fn test_field_mask_type_exists() {
 
 #[test]
 fn test_common_enum_types_exist() {
-    use googleads_rs::google::ads::googleads::v21::enums::{
+    use googleads_rs::google::ads::googleads::v22::enums::{
         ad_group_status_enum::AdGroupStatus, advertising_channel_type_enum::AdvertisingChannelType,
         campaign_status_enum::CampaignStatus,
     };
