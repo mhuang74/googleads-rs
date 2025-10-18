@@ -259,7 +259,7 @@ fn test_default_bool_values() {
 
 #[test]
 fn test_default_enum_values() {
-    use googleads_rs::google::ads::googleads::v21::enums::campaign_status_enum::CampaignStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::campaign_status_enum::CampaignStatus;
 
     let campaign = CampaignBuilder::new()
         .status(CampaignStatus::Unspecified)

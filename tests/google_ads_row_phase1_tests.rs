@@ -14,8 +14,8 @@
 
 mod test_helpers;
 
-use googleads_rs::google::ads::googleads::v21::resources::conversion_action::ValueSettings;
-use googleads_rs::google::ads::googleads::v21::resources::{
+use googleads_rs::google::ads::googleads::v22::resources::conversion_action::ValueSettings;
+use googleads_rs::google::ads::googleads::v22::resources::{
     AdGroupAsset, Asset, CampaignAsset, ConversionAction, ConversionCustomVariable, CustomerAsset,
     GeoTargetConstant, UserList,
 };
@@ -72,7 +72,7 @@ fn test_conversion_action_resource_name() {
 
 #[test]
 fn test_conversion_action_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::conversion_action_status_enum::ConversionActionStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::conversion_action_status_enum::ConversionActionStatus;
 
     let conversion_action = ConversionAction {
         status: ConversionActionStatus::Enabled as i32,
@@ -145,7 +145,7 @@ fn test_conversion_action_value_settings_default_currency_code() {
 
 #[test]
 fn test_conversion_action_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::conversion_action_type_enum::ConversionActionType;
+    use googleads_rs::google::ads::googleads::v22::enums::conversion_action_type_enum::ConversionActionType;
 
     let conversion_action = ConversionAction {
         r#type: ConversionActionType::Webpage as i32,
@@ -161,7 +161,7 @@ fn test_conversion_action_type() {
 
 #[test]
 fn test_conversion_action_category() {
-    use googleads_rs::google::ads::googleads::v21::enums::conversion_action_category_enum::ConversionActionCategory;
+    use googleads_rs::google::ads::googleads::v22::enums::conversion_action_category_enum::ConversionActionCategory;
 
     let conversion_action = ConversionAction {
         category: ConversionActionCategory::Purchase as i32,
@@ -280,7 +280,7 @@ fn test_asset_resource_name() {
 
 #[test]
 fn test_asset_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_type_enum::AssetType;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_type_enum::AssetType;
 
     let asset = Asset {
         r#type: AssetType::Image as i32,
@@ -309,8 +309,8 @@ fn test_asset_tracking_url_template() {
 
 #[test]
 fn test_asset_policy_summary_approval_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::policy_approval_status_enum::PolicyApprovalStatus;
-    use googleads_rs::google::ads::googleads::v21::resources::AssetPolicySummary;
+    use googleads_rs::google::ads::googleads::v22::enums::policy_approval_status_enum::PolicyApprovalStatus;
+    use googleads_rs::google::ads::googleads::v22::resources::AssetPolicySummary;
 
     let asset = Asset {
         policy_summary: Some(AssetPolicySummary {
@@ -327,8 +327,8 @@ fn test_asset_policy_summary_approval_status() {
 
 #[test]
 fn test_asset_policy_summary_review_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::policy_review_status_enum::PolicyReviewStatus;
-    use googleads_rs::google::ads::googleads::v21::resources::AssetPolicySummary;
+    use googleads_rs::google::ads::googleads::v22::enums::policy_review_status_enum::PolicyReviewStatus;
+    use googleads_rs::google::ads::googleads::v22::resources::AssetPolicySummary;
 
     let asset = Asset {
         policy_summary: Some(AssetPolicySummary {
@@ -397,7 +397,7 @@ fn test_campaign_asset_asset() {
 
 #[test]
 fn test_campaign_asset_field_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_field_type_enum::AssetFieldType;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_field_type_enum::AssetFieldType;
 
     let campaign_asset = CampaignAsset {
         field_type: AssetFieldType::Headline as i32,
@@ -413,7 +413,7 @@ fn test_campaign_asset_field_type() {
 
 #[test]
 fn test_campaign_asset_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_link_status_enum::AssetLinkStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_link_status_enum::AssetLinkStatus;
 
     let campaign_asset = CampaignAsset {
         status: AssetLinkStatus::Enabled as i32,
@@ -481,7 +481,7 @@ fn test_ad_group_asset_asset() {
 
 #[test]
 fn test_ad_group_asset_field_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_field_type_enum::AssetFieldType;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_field_type_enum::AssetFieldType;
 
     let ad_group_asset = AdGroupAsset {
         field_type: AssetFieldType::Description as i32,
@@ -497,7 +497,7 @@ fn test_ad_group_asset_field_type() {
 
 #[test]
 fn test_ad_group_asset_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_link_status_enum::AssetLinkStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_link_status_enum::AssetLinkStatus;
 
     let ad_group_asset = AdGroupAsset {
         status: AssetLinkStatus::Paused as i32,
@@ -513,7 +513,7 @@ fn test_ad_group_asset_status() {
 
 #[test]
 fn test_ad_group_asset_primary_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_link_primary_status_enum::AssetLinkPrimaryStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_link_primary_status_enum::AssetLinkPrimaryStatus;
 
     let ad_group_asset = AdGroupAsset {
         primary_status: AssetLinkPrimaryStatus::Eligible as i32,
@@ -564,7 +564,7 @@ fn test_customer_asset_asset() {
 
 #[test]
 fn test_customer_asset_field_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_field_type_enum::AssetFieldType;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_field_type_enum::AssetFieldType;
 
     let customer_asset = CustomerAsset {
         field_type: AssetFieldType::Sitelink as i32,
@@ -580,7 +580,7 @@ fn test_customer_asset_field_type() {
 
 #[test]
 fn test_customer_asset_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::asset_link_status_enum::AssetLinkStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::asset_link_status_enum::AssetLinkStatus;
 
     let customer_asset = CustomerAsset {
         status: AssetLinkStatus::Enabled as i32,
@@ -738,7 +738,7 @@ fn test_user_list_eligible_for_display() {
 
 #[test]
 fn test_user_list_membership_status() {
-    use googleads_rs::google::ads::googleads::v21::enums::user_list_membership_status_enum::UserListMembershipStatus;
+    use googleads_rs::google::ads::googleads::v22::enums::user_list_membership_status_enum::UserListMembershipStatus;
 
     let user_list = UserList {
         membership_status: UserListMembershipStatus::Open as i32,
@@ -752,7 +752,7 @@ fn test_user_list_membership_status() {
 
 #[test]
 fn test_user_list_size_range_for_display() {
-    use googleads_rs::google::ads::googleads::v21::enums::user_list_size_range_enum::UserListSizeRange;
+    use googleads_rs::google::ads::googleads::v22::enums::user_list_size_range_enum::UserListSizeRange;
 
     let user_list = UserList {
         size_range_for_display: UserListSizeRange::TenThousandToFiftyThousand as i32,
@@ -769,7 +769,7 @@ fn test_user_list_size_range_for_display() {
 
 #[test]
 fn test_user_list_type() {
-    use googleads_rs::google::ads::googleads::v21::enums::user_list_type_enum::UserListType;
+    use googleads_rs::google::ads::googleads::v22::enums::user_list_type_enum::UserListType;
 
     let user_list = UserList {
         r#type: UserListType::Remarketing as i32,
