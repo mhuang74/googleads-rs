@@ -429,6 +429,7 @@ impl google::ads::googleads::v22::services::GoogleAdsRow {
             "campaign.performance_max_upgrade.status" => method_str!([campaign, performance_max_upgrade], status),
             "campaign.serving_status" => method_str!([campaign], serving_status),
             "campaign.status" => method_str!([campaign], status),
+            "campaign.start_date" => attr_str!([campaign], start_date),
             "campaign.labels" => self.campaign.as_ref().unwrap().labels.join(", "),
             "campaign_budget.amount_micros" => optional_attr_str!(campaign_budget, amount_micros),
             // ===== CAMPAIGN_ASSET =====
