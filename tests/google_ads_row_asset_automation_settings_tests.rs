@@ -26,7 +26,6 @@ fn create_asset_automation_setting(
     AssetAutomationSetting {
         asset_automation_type: automation_type,
         asset_automation_status: automation_status,
-        ..Default::default()
     }
 }
 
@@ -123,10 +122,10 @@ fn test_campaign_asset_automation_settings_realistic_pmax_campaign() {
         id: 123456,
         name: "Performance Max Campaign".to_string(),
         asset_automation_settings: vec![
-            create_asset_automation_setting(2, 2),  // TEXT_ASSET_AUTOMATION:OPTED_IN
-            create_asset_automation_setting(6, 2),  // GENERATE_ENHANCED_YOUTUBE_VIDEOS:OPTED_IN
-            create_asset_automation_setting(7, 2),  // GENERATE_IMAGE_ENHANCEMENT:OPTED_IN
-            create_asset_automation_setting(9, 2),  // GENERATE_IMAGE_EXTRACTION:OPTED_IN
+            create_asset_automation_setting(2, 2), // TEXT_ASSET_AUTOMATION:OPTED_IN
+            create_asset_automation_setting(6, 2), // GENERATE_ENHANCED_YOUTUBE_VIDEOS:OPTED_IN
+            create_asset_automation_setting(7, 2), // GENERATE_IMAGE_ENHANCEMENT:OPTED_IN
+            create_asset_automation_setting(9, 2), // GENERATE_IMAGE_EXTRACTION:OPTED_IN
             create_asset_automation_setting(11, 2), // FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION:OPTED_IN
         ],
         ..Default::default()
@@ -159,7 +158,7 @@ fn test_campaign_asset_automation_settings_realistic_search_campaign() {
         id: 789012,
         name: "Search Campaign".to_string(),
         asset_automation_settings: vec![
-            create_asset_automation_setting(2, 3),  // TEXT_ASSET_AUTOMATION:OPTED_OUT
+            create_asset_automation_setting(2, 3), // TEXT_ASSET_AUTOMATION:OPTED_OUT
             create_asset_automation_setting(11, 3), // FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION:OPTED_OUT
         ],
         ..Default::default()
@@ -308,11 +307,11 @@ fn test_campaign_asset_automation_settings_mixed_statuses() {
     // Mix of opted in and opted out
     let campaign = Campaign {
         asset_automation_settings: vec![
-            create_asset_automation_setting(2, 2),  // TEXT_ASSET_AUTOMATION:OPTED_IN
-            create_asset_automation_setting(3, 3),  // GENERATE_VERTICAL_YOUTUBE_VIDEOS:OPTED_OUT
-            create_asset_automation_setting(4, 2),  // GENERATE_SHORTER_YOUTUBE_VIDEOS:OPTED_IN
-            create_asset_automation_setting(5, 3),  // GENERATE_LANDING_PAGE_PREVIEW:OPTED_OUT
-            create_asset_automation_setting(6, 2),  // GENERATE_ENHANCED_YOUTUBE_VIDEOS:OPTED_IN
+            create_asset_automation_setting(2, 2), // TEXT_ASSET_AUTOMATION:OPTED_IN
+            create_asset_automation_setting(3, 3), // GENERATE_VERTICAL_YOUTUBE_VIDEOS:OPTED_OUT
+            create_asset_automation_setting(4, 2), // GENERATE_SHORTER_YOUTUBE_VIDEOS:OPTED_IN
+            create_asset_automation_setting(5, 3), // GENERATE_LANDING_PAGE_PREVIEW:OPTED_OUT
+            create_asset_automation_setting(6, 2), // GENERATE_ENHANCED_YOUTUBE_VIDEOS:OPTED_IN
         ],
         ..Default::default()
     };
