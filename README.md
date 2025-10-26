@@ -7,7 +7,7 @@
 [![api-docs](https://docs.rs/googleads-rs/badge.svg)](https://docs.rs/googleads-rs)
 
 
-Current Version 0.12.0 uses [Google Ads API v22](https://developers.google.com/google-ads/api/docs/release-notes)
+Current Version 0.12.1 uses [Google Ads API v22](https://developers.google.com/google-ads/api/docs/release-notes)
 
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
 

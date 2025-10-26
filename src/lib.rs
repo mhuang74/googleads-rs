@@ -17,7 +17,7 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.12.0")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.12.1")]
 
 #[allow(clippy::all)]
 #[allow(clippy::doc_lazy_continuation)]
@@ -271,6 +271,19 @@ impl google::ads::googleads::v22::services::GoogleAdsRow {
             };
         }
 
+        /// Macro to format repeated nested messages with two enum method accessors as "ENUM1:ENUM2" pairs
+        /// Use case: campaign.asset_automation_settings where each item has asset_automation_type() and asset_automation_status() methods
+        /// Example output: "TEXT_ASSET_AUTOMATION:OPTED_IN, GENERATE_VERTICAL_YOUTUBE_VIDEOS:OPTED_OUT"
+        macro_rules! repeated_nested_enum_pair_str {
+            ([$( $parent:ident ),+], $attr:ident, $method1:ident, $method2:ident) => {
+                self.$($parent.as_ref().unwrap().)+$attr
+                    .iter()
+                    .map(|item| format!("{:#?}:{:#?}", item.$method1(), item.$method2()))
+                    .collect::<Vec<String>>()
+                    .join(", ")
+            };
+        }
+
         match field_name {
             "account_budget.id" => attr_str!([account_budget], id),
             "account_budget.name" => attr_str!([account_budget], name),
@@ -358,6 +371,8 @@ impl google::ads::googleads::v22::services::GoogleAdsRow {
             "asset_group.ad_strength" => attr_str!([asset_group], ad_strength),
             "asset_group.primary_status" => method_str!([asset_group], primary_status),
             "asset_group.primary_status_reasons" => repeated_enum_str!([asset_group], primary_status_reasons, AssetGroupPrimaryStatusReason),
+            "asset_group.final_urls" => self.asset_group.as_ref().unwrap().final_urls.join(", "),
+            "asset_group.final_mobile_urls" => self.asset_group.as_ref().unwrap().final_mobile_urls.join(", "),
             "audience.description" => attr_str!([audience], description),
             "audience.id" => attr_str!([audience], id),
             "audience.name" => attr_str!([audience], name),
@@ -383,6 +398,12 @@ impl google::ads::googleads::v22::services::GoogleAdsRow {
             },
             "campaign.primary_status" => method_str!([campaign], primary_status),
             "campaign.primary_status_reasons" => repeated_enum_str!([campaign], primary_status_reasons, CampaignPrimaryStatusReason),
+            "campaign.asset_automation_settings" => repeated_nested_enum_pair_str!(
+                [campaign],
+                asset_automation_settings,
+                asset_automation_type,
+                asset_automation_status
+            ),
             "campaign_criterion.campaign" => optional_attr_str!(campaign_criterion, campaign),
             "campaign_criterion.criterion_id" => optional_attr_str!(campaign_criterion, criterion_id),
             "campaign_criterion.display_name" => optional_attr_str!(campaign_criterion, display_name),
@@ -408,6 +429,7 @@ impl google::ads::googleads::v22::services::GoogleAdsRow {
             "campaign.performance_max_upgrade.status" => method_str!([campaign, performance_max_upgrade], status),
             "campaign.serving_status" => method_str!([campaign], serving_status),
             "campaign.status" => method_str!([campaign], status),
+            "campaign.start_date" => attr_str!([campaign], start_date),
             "campaign.labels" => self.campaign.as_ref().unwrap().labels.join(", "),
             "campaign_budget.amount_micros" => optional_attr_str!(campaign_budget, amount_micros),
             // ===== CAMPAIGN_ASSET =====
