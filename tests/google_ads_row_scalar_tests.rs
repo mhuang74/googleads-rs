@@ -49,12 +49,12 @@ fn test_campaign_name_with_special_characters() {
 }
 
 #[test]
-fn test_campaign_end_date() {
-    let campaign = CampaignBuilder::new().end_date("20241231").build();
+fn test_campaign_end_date_time() {
+    let campaign = CampaignBuilder::new().end_date_time("20241231").build();
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.end_date"), "20241231");
+    assert_eq!(row.get("campaign.end_date_time"), "20241231");
 }
 
 #[test]

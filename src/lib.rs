@@ -17,7 +17,7 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.12.1")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.13.0")]
 
 #[allow(clippy::all)]
 #[allow(clippy::doc_lazy_continuation)]
@@ -27,13 +27,13 @@ mod protos {
 }
 pub use protos::*;
 
-use crate::google::ads::googleads::v22::enums::bidding_strategy_type_enum::{
+use crate::google::ads::googleads::v23::enums::bidding_strategy_type_enum::{
     BiddingStrategyType::ManualCpc, BiddingStrategyType::MaximizeConversionValue,
     BiddingStrategyType::MaximizeConversions, BiddingStrategyType::TargetCpa,
     BiddingStrategyType::TargetImpressionShare, BiddingStrategyType::TargetRoas,
 };
 
-use crate::google::ads::googleads::v22::enums::{
+use crate::google::ads::googleads::v23::enums::{
     ad_group_ad_primary_status_reason_enum::AdGroupAdPrimaryStatusReason,
     ad_group_criterion_primary_status_reason_enum::AdGroupCriterionPrimaryStatusReason,
     ad_group_primary_status_reason_enum::AdGroupPrimaryStatusReason,
@@ -42,13 +42,13 @@ use crate::google::ads::googleads::v22::enums::{
     campaign_primary_status_reason_enum::CampaignPrimaryStatusReason,
 };
 
-use crate::google::ads::googleads::v22::resources::{
+use crate::google::ads::googleads::v23::resources::{
     ad::AdData::ResponsiveSearchAd, ad_group_criterion::Criterion::Keyword,
     campaign_criterion::Criterion::Keyword as CampaignKeyword,
     campaign_criterion::Criterion::Location, shared_criterion::Criterion::Keyword as SharedKeyword,
 };
 
-impl google::ads::googleads::v22::services::GoogleAdsRow {
+impl google::ads::googleads::v23::services::GoogleAdsRow {
     /// Returns GoogleAdsRow field value by field name
     ///
     /// # Arguments
@@ -415,7 +415,7 @@ impl google::ads::googleads::v22::services::GoogleAdsRow {
             "campaign.dynamic_search_ads_setting.domain_name" => attr_str!([campaign, dynamic_search_ads_setting], domain_name),
             "campaign.dynamic_search_ads_setting.language_code" => attr_str!([campaign, dynamic_search_ads_setting], language_code),
             "campaign.dynamic_search_ads_setting.use_supplied_urls_only" => attr_str!([campaign, dynamic_search_ads_setting], use_supplied_urls_only),
-            "campaign.end_date" => attr_str!([campaign], end_date),
+            "campaign.end_date_time" => attr_str!([campaign], end_date_time),
             "campaign.experiment_type" => method_str!([campaign], experiment_type),
             "campaign.id" => attr_str!([campaign], id),
             "campaign.name" => attr_str!([campaign], name),
@@ -429,7 +429,7 @@ impl google::ads::googleads::v22::services::GoogleAdsRow {
             "campaign.performance_max_upgrade.status" => method_str!([campaign, performance_max_upgrade], status),
             "campaign.serving_status" => method_str!([campaign], serving_status),
             "campaign.status" => method_str!([campaign], status),
-            "campaign.start_date" => attr_str!([campaign], start_date),
+            "campaign.start_date_time" => attr_str!([campaign], start_date_time),
             "campaign.labels" => self.campaign.as_ref().unwrap().labels.join(", "),
             "campaign_budget.amount_micros" => optional_attr_str!(campaign_budget, amount_micros),
             // ===== CAMPAIGN_ASSET =====
@@ -819,16 +819,7 @@ impl google::ads::googleads::v22::services::GoogleAdsRow {
             "shared_criterion.type" => method_str!([shared_criterion], r#type),
             "shared_criterion.keyword.text" => enum_match_str!([shared_criterion], criterion, SharedKeyword, text),
             // ===== ASSET PERFORMANCE METRICS (Phase 7) =====
-            "metrics.asset_best_performance_cost_percentage" => attr_str!([metrics], asset_best_performance_cost_percentage),
-            "metrics.asset_best_performance_impression_percentage" => attr_str!([metrics], asset_best_performance_impression_percentage),
-            "metrics.asset_good_performance_cost_percentage" => attr_str!([metrics], asset_good_performance_cost_percentage),
-            "metrics.asset_good_performance_impression_percentage" => attr_str!([metrics], asset_good_performance_impression_percentage),
-            "metrics.asset_learning_performance_cost_percentage" => attr_str!([metrics], asset_learning_performance_cost_percentage),
-            "metrics.asset_learning_performance_impression_percentage" => attr_str!([metrics], asset_learning_performance_impression_percentage),
-            "metrics.asset_low_performance_cost_percentage" => attr_str!([metrics], asset_low_performance_cost_percentage),
-            "metrics.asset_low_performance_impression_percentage" => attr_str!([metrics], asset_low_performance_impression_percentage),
-            "metrics.asset_unrated_performance_cost_percentage" => attr_str!([metrics], asset_unrated_performance_cost_percentage),
-            "metrics.asset_unrated_performance_impression_percentage" => attr_str!([metrics], asset_unrated_performance_impression_percentage),
+            // Note: asset_*_performance_*_percentage fields removed in v23
             // ===== ASSET PINNING METRICS (Phase 7) =====
             "metrics.asset_pinned_as_description_position_one_count" => attr_str!([metrics], asset_pinned_as_description_position_one_count),
             "metrics.asset_pinned_as_description_position_two_count" => attr_str!([metrics], asset_pinned_as_description_position_two_count),

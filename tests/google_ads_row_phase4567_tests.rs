@@ -11,8 +11,8 @@
 
 mod test_helpers;
 
-use googleads_rs::google::ads::googleads::v22::common::{ClickLocation, Metrics, Segments};
-use googleads_rs::google::ads::googleads::v22::resources::{
+use googleads_rs::google::ads::googleads::v23::common::{ClickLocation, Metrics, Segments};
+use googleads_rs::google::ads::googleads::v23::resources::{
     AdGroupAdLabel, AdGroupLabel, AssetGroupAsset, AssetGroupSignal, CampaignLabel,
     CampaignSharedSet, ClickView, GeographicView, KeywordView, LandingPageView, Recommendation,
     SharedCriterion, SharedSet,
@@ -101,7 +101,7 @@ fn test_geographic_view_resource_name() {
 
 #[test]
 fn test_geographic_view_location_type() {
-    use googleads_rs::google::ads::googleads::v22::enums::geo_targeting_type_enum::GeoTargetingType;
+    use googleads_rs::google::ads::googleads::v23::enums::geo_targeting_type_enum::GeoTargetingType;
 
     let geographic_view = GeographicView {
         location_type: GeoTargetingType::LocationOfPresence as i32,
@@ -234,7 +234,7 @@ fn test_asset_group_asset_resource_name() {
 
 #[test]
 fn test_asset_group_asset_field_type() {
-    use googleads_rs::google::ads::googleads::v22::enums::asset_field_type_enum::AssetFieldType;
+    use googleads_rs::google::ads::googleads::v23::enums::asset_field_type_enum::AssetFieldType;
 
     let asset_group_asset = AssetGroupAsset {
         field_type: AssetFieldType::Headline as i32,
@@ -250,7 +250,7 @@ fn test_asset_group_asset_field_type() {
 
 #[test]
 fn test_asset_group_asset_status() {
-    use googleads_rs::google::ads::googleads::v22::enums::asset_link_status_enum::AssetLinkStatus;
+    use googleads_rs::google::ads::googleads::v23::enums::asset_link_status_enum::AssetLinkStatus;
 
     let asset_group_asset = AssetGroupAsset {
         status: AssetLinkStatus::Enabled as i32,
@@ -267,7 +267,7 @@ fn test_asset_group_asset_status() {
 // REMOVED IN V22: performance_label field no longer exists
 // #[test]
 // fn test_asset_group_asset_performance_label() {
-//     use googleads_rs::google::ads::googleads::v22::enums::asset_performance_label_enum::AssetPerformanceLabel;
+//     use googleads_rs::google::ads::googleads::v23::enums::asset_performance_label_enum::AssetPerformanceLabel;
 
 //     let asset_group_asset = AssetGroupAsset {
 //         performance_label: AssetPerformanceLabel::Best as i32,
@@ -401,7 +401,7 @@ fn test_recommendation_resource_name() {
 
 #[test]
 fn test_recommendation_type() {
-    use googleads_rs::google::ads::googleads::v22::enums::recommendation_type_enum::RecommendationType;
+    use googleads_rs::google::ads::googleads::v23::enums::recommendation_type_enum::RecommendationType;
 
     let recommendation = Recommendation {
         r#type: RecommendationType::Keyword as i32,
@@ -417,7 +417,7 @@ fn test_recommendation_type() {
 
 #[test]
 fn test_recommendation_impact_metrics() {
-    use googleads_rs::google::ads::googleads::v22::resources::recommendation::{
+    use googleads_rs::google::ads::googleads::v23::resources::recommendation::{
         RecommendationImpact, RecommendationMetrics,
     };
 
@@ -455,8 +455,8 @@ fn test_recommendation_impact_metrics() {
 
 #[test]
 fn test_shared_set_all_fields() {
-    use googleads_rs::google::ads::googleads::v22::enums::shared_set_status_enum::SharedSetStatus;
-    use googleads_rs::google::ads::googleads::v22::enums::shared_set_type_enum::SharedSetType;
+    use googleads_rs::google::ads::googleads::v23::enums::shared_set_status_enum::SharedSetStatus;
+    use googleads_rs::google::ads::googleads::v23::enums::shared_set_type_enum::SharedSetType;
 
     let shared_set = SharedSet {
         id: 123456,
@@ -485,9 +485,9 @@ fn test_shared_set_all_fields() {
 
 #[test]
 fn test_shared_criterion_keyword() {
-    use googleads_rs::google::ads::googleads::v22::common::KeywordInfo;
-    use googleads_rs::google::ads::googleads::v22::enums::criterion_type_enum::CriterionType;
-    use googleads_rs::google::ads::googleads::v22::resources::shared_criterion::Criterion;
+    use googleads_rs::google::ads::googleads::v23::common::KeywordInfo;
+    use googleads_rs::google::ads::googleads::v23::enums::criterion_type_enum::CriterionType;
+    use googleads_rs::google::ads::googleads::v23::resources::shared_criterion::Criterion;
 
     let shared_criterion = SharedCriterion {
         resource_name: "customers/123/sharedCriteria/456~789".to_string(),
@@ -524,7 +524,7 @@ fn test_shared_criterion_keyword() {
 
 #[test]
 fn test_campaign_shared_set_all_fields() {
-    use googleads_rs::google::ads::googleads::v22::enums::campaign_shared_set_status_enum::CampaignSharedSetStatus;
+    use googleads_rs::google::ads::googleads::v23::enums::campaign_shared_set_status_enum::CampaignSharedSetStatus;
 
     let campaign_shared_set = CampaignSharedSet {
         resource_name: "customers/123/campaignSharedSets/456~789".to_string(),
@@ -553,68 +553,8 @@ fn test_campaign_shared_set_all_fields() {
 }
 
 // ============================================================================
-// Phase 7: Asset Performance Metrics
+// Phase 7: Asset Performance Metrics — removed in v23
 // ============================================================================
-
-#[test]
-fn test_asset_performance_metrics() {
-    let metrics = Metrics {
-        asset_best_performance_cost_percentage: 15.5,
-        asset_best_performance_impression_percentage: 20.3,
-        asset_good_performance_cost_percentage: 35.2,
-        asset_good_performance_impression_percentage: 40.1,
-        asset_learning_performance_cost_percentage: 25.0,
-        asset_learning_performance_impression_percentage: 22.5,
-        asset_low_performance_cost_percentage: 15.3,
-        asset_low_performance_impression_percentage: 12.1,
-        asset_unrated_performance_cost_percentage: 9.0,
-        asset_unrated_performance_impression_percentage: 5.0,
-        ..Default::default()
-    };
-
-    let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
-
-    assert_eq!(
-        row.get("metrics.asset_best_performance_cost_percentage"),
-        "15.5"
-    );
-    assert_eq!(
-        row.get("metrics.asset_best_performance_impression_percentage"),
-        "20.3"
-    );
-    assert_eq!(
-        row.get("metrics.asset_good_performance_cost_percentage"),
-        "35.2"
-    );
-    assert_eq!(
-        row.get("metrics.asset_good_performance_impression_percentage"),
-        "40.1"
-    );
-    assert_eq!(
-        row.get("metrics.asset_learning_performance_cost_percentage"),
-        "25"
-    );
-    assert_eq!(
-        row.get("metrics.asset_learning_performance_impression_percentage"),
-        "22.5"
-    );
-    assert_eq!(
-        row.get("metrics.asset_low_performance_cost_percentage"),
-        "15.3"
-    );
-    assert_eq!(
-        row.get("metrics.asset_low_performance_impression_percentage"),
-        "12.1"
-    );
-    assert_eq!(
-        row.get("metrics.asset_unrated_performance_cost_percentage"),
-        "9"
-    );
-    assert_eq!(
-        row.get("metrics.asset_unrated_performance_impression_percentage"),
-        "5"
-    );
-}
 
 // ============================================================================
 // Phase 7: Asset Pinning Metrics
@@ -801,7 +741,7 @@ fn test_product_segments_types() {
 
 #[test]
 fn test_product_segments_attributes() {
-    use googleads_rs::google::ads::googleads::v22::enums::product_condition_enum::ProductCondition;
+    use googleads_rs::google::ads::googleads::v23::enums::product_condition_enum::ProductCondition;
 
     let segments = Segments {
         product_brand: "Nike".to_string(),
@@ -915,10 +855,10 @@ fn test_resource_name_segments() {
 
 #[test]
 fn test_hotel_segments() {
-    use googleads_rs::google::ads::googleads::v22::enums::day_of_week_enum::DayOfWeek;
-    use googleads_rs::google::ads::googleads::v22::enums::hotel_date_selection_type_enum::HotelDateSelectionType;
-    use googleads_rs::google::ads::googleads::v22::enums::hotel_price_bucket_enum::HotelPriceBucket;
-    use googleads_rs::google::ads::googleads::v22::enums::hotel_rate_type_enum::HotelRateType;
+    use googleads_rs::google::ads::googleads::v23::enums::day_of_week_enum::DayOfWeek;
+    use googleads_rs::google::ads::googleads::v23::enums::hotel_date_selection_type_enum::HotelDateSelectionType;
+    use googleads_rs::google::ads::googleads::v23::enums::hotel_price_bucket_enum::HotelPriceBucket;
+    use googleads_rs::google::ads::googleads::v23::enums::hotel_rate_type_enum::HotelRateType;
 
     let segments = Segments {
         hotel_booking_window_days: 14,
@@ -965,11 +905,11 @@ fn test_hotel_segments() {
 
 #[test]
 fn test_sk_ad_network_segments() {
-    use googleads_rs::google::ads::googleads::v22::enums::sk_ad_network_ad_event_type_enum::SkAdNetworkAdEventType;
-    use googleads_rs::google::ads::googleads::v22::enums::sk_ad_network_attribution_credit_enum::SkAdNetworkAttributionCredit;
-    use googleads_rs::google::ads::googleads::v22::enums::sk_ad_network_coarse_conversion_value_enum::SkAdNetworkCoarseConversionValue;
-    use googleads_rs::google::ads::googleads::v22::enums::sk_ad_network_source_type_enum::SkAdNetworkSourceType;
-    use googleads_rs::google::ads::googleads::v22::enums::sk_ad_network_user_type_enum::SkAdNetworkUserType;
+    use googleads_rs::google::ads::googleads::v23::enums::sk_ad_network_ad_event_type_enum::SkAdNetworkAdEventType;
+    use googleads_rs::google::ads::googleads::v23::enums::sk_ad_network_attribution_credit_enum::SkAdNetworkAttributionCredit;
+    use googleads_rs::google::ads::googleads::v23::enums::sk_ad_network_coarse_conversion_value_enum::SkAdNetworkCoarseConversionValue;
+    use googleads_rs::google::ads::googleads::v23::enums::sk_ad_network_source_type_enum::SkAdNetworkSourceType;
+    use googleads_rs::google::ads::googleads::v23::enums::sk_ad_network_user_type_enum::SkAdNetworkUserType;
 
     let segments = Segments {
         sk_ad_network_ad_event_type: SkAdNetworkAdEventType::Interaction as i32,

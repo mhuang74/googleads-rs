@@ -240,7 +240,7 @@ fn test_default_string_values() {
 
     // Default string values should be empty
     assert_eq!(row.get("campaign.name"), "");
-    assert_eq!(row.get("campaign.end_date"), "");
+    assert_eq!(row.get("campaign.end_date_time"), "");
 }
 
 #[test]
@@ -259,7 +259,7 @@ fn test_default_bool_values() {
 
 #[test]
 fn test_default_enum_values() {
-    use googleads_rs::google::ads::googleads::v22::enums::campaign_status_enum::CampaignStatus;
+    use googleads_rs::google::ads::googleads::v23::enums::campaign_status_enum::CampaignStatus;
 
     let campaign = CampaignBuilder::new()
         .status(CampaignStatus::Unspecified)

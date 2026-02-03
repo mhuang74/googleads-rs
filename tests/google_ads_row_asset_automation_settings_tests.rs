@@ -11,8 +11,8 @@
 
 mod test_helpers;
 
-use googleads_rs::google::ads::googleads::v22::resources::campaign::AssetAutomationSetting;
-use googleads_rs::google::ads::googleads::v22::resources::Campaign;
+use googleads_rs::google::ads::googleads::v23::resources::campaign::AssetAutomationSetting;
+use googleads_rs::google::ads::googleads::v23::resources::Campaign;
 use test_helpers::GoogleAdsRowBuilder;
 
 // ============================================================================
