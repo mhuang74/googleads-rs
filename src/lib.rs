@@ -40,6 +40,7 @@ use crate::google::ads::googleads::v23::enums::{
     asset_group_primary_status_reason_enum::AssetGroupPrimaryStatusReason,
     asset_link_primary_status_reason_enum::AssetLinkPrimaryStatusReason,
     campaign_primary_status_reason_enum::CampaignPrimaryStatusReason,
+    interaction_event_type_enum::InteractionEventType,
 };
 
 use crate::google::ads::googleads::v23::resources::{
@@ -609,6 +610,7 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
             "metrics.impressions_from_store_reach" => attr_str!([metrics], impressions_from_store_reach),
             "metrics.interaction_rate" => attr_str!([metrics], interaction_rate),
             "metrics.interactions" => attr_str!([metrics], interactions),
+            "metrics.interaction_event_types" => repeated_enum_str!([metrics], interaction_event_types, InteractionEventType),
             "metrics.invalid_click_rate" => attr_str!([metrics], invalid_click_rate),
             "metrics.invalid_clicks" => attr_str!([metrics], invalid_clicks),
             "metrics.message_chat_rate" => attr_str!([metrics], message_chat_rate),
@@ -653,6 +655,8 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
             "metrics.video_quartile_p75_rate" => attr_str!([metrics], video_quartile_p75_rate),
             "metrics.video_trueview_view_rate" => attr_str!([metrics], video_trueview_view_rate),
             "metrics.video_trueview_views" => attr_str!([metrics], video_trueview_views),
+            "metrics.video_watch_time_duration_millis" => attr_str!([metrics], video_watch_time_duration_millis),
+            "metrics.average_video_watch_time_duration_millis" => attr_str!([metrics], average_video_watch_time_duration_millis),
             "metrics.view_through_conversions" => attr_str!([metrics], view_through_conversions),
             // ===== E-COMMERCE METRICS (Phase 2) =====
             "metrics.average_cart_size" => attr_str!([metrics], average_cart_size),

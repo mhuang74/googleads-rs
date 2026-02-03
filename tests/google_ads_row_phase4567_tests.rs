@@ -682,6 +682,39 @@ fn test_specialized_metrics() {
     // assert_eq!(row.get("metrics.video_view_rate_shorts"), "0.35");
 }
 
+#[test]
+fn test_video_watch_time_metrics() {
+    let metrics = Metrics {
+        video_watch_time_duration_millis: 150000,
+        average_video_watch_time_duration_millis: 5000,
+        ..Default::default()
+    };
+
+    let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
+
+    assert_eq!(row.get("metrics.video_watch_time_duration_millis"), "150000");
+    assert_eq!(row.get("metrics.average_video_watch_time_duration_millis"), "5000");
+}
+
+#[test]
+fn test_interaction_event_types() {
+    use googleads_rs::google::ads::googleads::v23::enums::interaction_event_type_enum::InteractionEventType;
+
+    let metrics = Metrics {
+        interaction_event_types: vec![
+            InteractionEventType::Click as i32,
+            InteractionEventType::VideoView as i32,
+        ],
+        ..Default::default()
+    };
+
+    let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
+
+    let result = row.get("metrics.interaction_event_types");
+    assert!(result.contains("Click"));
+    assert!(result.contains("VideoView"));
+}
+
 // ============================================================================
 // Phase 3: Product Segments
 // ============================================================================
