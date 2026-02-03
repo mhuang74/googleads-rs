@@ -54,7 +54,7 @@ fn test_campaign_end_date() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.end_date"), "20241231");
+    assert_eq!(row.get("campaign.end_date_time"), "20241231");
 }
 
 #[test]
