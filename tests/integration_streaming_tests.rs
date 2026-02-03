@@ -6,12 +6,12 @@
 #![allow(clippy::field_reassign_with_default)]
 #![allow(clippy::useless_vec)]
 
-use googleads_rs::google::ads::googleads::v22::common::{Metrics, Segments};
-use googleads_rs::google::ads::googleads::v22::enums::{
+use googleads_rs::google::ads::googleads::v23::common::{Metrics, Segments};
+use googleads_rs::google::ads::googleads::v23::enums::{
     ad_group_status_enum::AdGroupStatus, campaign_status_enum::CampaignStatus,
 };
-use googleads_rs::google::ads::googleads::v22::resources::{AdGroup, Campaign, Customer};
-use googleads_rs::google::ads::googleads::v22::services::{
+use googleads_rs::google::ads::googleads::v23::resources::{AdGroup, Campaign, Customer};
+use googleads_rs::google::ads::googleads::v23::services::{
     GoogleAdsRow, SearchGoogleAdsStreamResponse,
 };
 use prost_types::FieldMask;
@@ -119,7 +119,7 @@ fn test_field_mask_with_nested_fields() {
     let mut campaign = Campaign::default();
     campaign.id = 55555;
     campaign.network_settings = Some(
-        googleads_rs::google::ads::googleads::v22::resources::campaign::NetworkSettings {
+        googleads_rs::google::ads::googleads::v23::resources::campaign::NetworkSettings {
             target_search_network: true,
             target_content_network: false,
             target_partner_search_network: false,
@@ -218,6 +218,7 @@ fn test_streaming_response_single_batch() {
         summary_row: None,
         request_id: "test-request-123".to_string(),
         query_resource_consumption: 0,
+        metric_attributes: vec![],
     };
 
     // Process the response
@@ -263,6 +264,7 @@ fn test_streaming_response_multiple_rows() {
         summary_row: None,
         request_id: "test-request-456".to_string(),
         query_resource_consumption: 0,
+        metric_attributes: vec![],
     };
 
     // Verify we got 5 rows
@@ -313,6 +315,7 @@ fn test_streaming_response_with_metrics() {
         summary_row: None,
         request_id: "test-request-789".to_string(),
         query_resource_consumption: 0,
+        metric_attributes: vec![],
     };
 
     let row = &response.results[0];
@@ -335,6 +338,7 @@ fn test_streaming_response_empty_results() {
         summary_row: None,
         request_id: "test-request-empty".to_string(),
         query_resource_consumption: 0,
+        metric_attributes: vec![],
     };
 
     assert_eq!(response.results.len(), 0);
@@ -461,6 +465,7 @@ fn test_realistic_campaign_report_query() {
         summary_row: None,
         request_id: "campaign-report-123".to_string(),
         query_resource_consumption: 0,
+        metric_attributes: vec![],
     };
 
     // Verify response structure
@@ -526,6 +531,7 @@ fn test_realistic_ad_group_query() {
         summary_row: None,
         request_id: "ad-group-query-456".to_string(),
         query_resource_consumption: 0,
+        metric_attributes: vec![],
     };
 
     let row = &response.results[0];

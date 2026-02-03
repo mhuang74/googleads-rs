@@ -14,7 +14,7 @@ fn test_google_ads_service_client_has_search_stream_method() {
     // This is a compile-time check to ensure the method exists with correct signature
     // We're using a trait bound to verify the method signature without calling it
 
-    use googleads_rs::google::ads::googleads::v22::services::{
+    use googleads_rs::google::ads::googleads::v23::services::{
         google_ads_service_client::GoogleAdsServiceClient, SearchGoogleAdsStreamRequest,
     };
     use tonic::transport::Channel;
@@ -34,10 +34,10 @@ fn test_google_ads_service_client_has_search_stream_method() {
 
 #[tokio::test]
 async fn test_process_mock_streaming_response() {
-    use googleads_rs::google::ads::googleads::v22::common::Metrics;
-    use googleads_rs::google::ads::googleads::v22::enums::campaign_status_enum::CampaignStatus;
-    use googleads_rs::google::ads::googleads::v22::resources::Campaign;
-    use googleads_rs::google::ads::googleads::v22::services::{
+    use googleads_rs::google::ads::googleads::v23::common::Metrics;
+    use googleads_rs::google::ads::googleads::v23::enums::campaign_status_enum::CampaignStatus;
+    use googleads_rs::google::ads::googleads::v23::resources::Campaign;
+    use googleads_rs::google::ads::googleads::v23::services::{
         GoogleAdsRow, SearchGoogleAdsStreamResponse,
     };
     use prost_types::FieldMask;
@@ -73,6 +73,7 @@ async fn test_process_mock_streaming_response() {
         }),
         summary_row: None,
         request_id: "test-request".to_string(),
+        metric_attributes: vec![],
         query_resource_consumption: 0,
     };
 
@@ -105,9 +106,9 @@ async fn test_process_mock_streaming_response() {
 
 #[tokio::test]
 async fn test_process_multiple_streaming_batches() {
-    use googleads_rs::google::ads::googleads::v22::enums::campaign_status_enum::CampaignStatus;
-    use googleads_rs::google::ads::googleads::v22::resources::Campaign;
-    use googleads_rs::google::ads::googleads::v22::services::{
+    use googleads_rs::google::ads::googleads::v23::enums::campaign_status_enum::CampaignStatus;
+    use googleads_rs::google::ads::googleads::v23::resources::Campaign;
+    use googleads_rs::google::ads::googleads::v23::services::{
         GoogleAdsRow, SearchGoogleAdsStreamResponse,
     };
     use prost_types::FieldMask;
@@ -138,6 +139,7 @@ async fn test_process_multiple_streaming_batches() {
         field_mask: Some(field_mask.clone()),
         summary_row: None,
         request_id: "batch-1".to_string(),
+        metric_attributes: vec![],
         query_resource_consumption: 0,
     });
 
@@ -160,6 +162,7 @@ async fn test_process_multiple_streaming_batches() {
         field_mask: Some(field_mask.clone()),
         summary_row: None,
         request_id: "batch-2".to_string(),
+        metric_attributes: vec![],
         query_resource_consumption: 0,
     });
 
@@ -194,12 +197,12 @@ async fn test_process_multiple_streaming_batches() {
 
 #[test]
 fn test_field_mask_all_paths_accessible() {
-    use googleads_rs::google::ads::googleads::v22::common::{Metrics, Segments};
-    use googleads_rs::google::ads::googleads::v22::enums::{
+    use googleads_rs::google::ads::googleads::v23::common::{Metrics, Segments};
+    use googleads_rs::google::ads::googleads::v23::enums::{
         ad_group_status_enum::AdGroupStatus, campaign_status_enum::CampaignStatus,
     };
-    use googleads_rs::google::ads::googleads::v22::resources::{AdGroup, Campaign, Customer};
-    use googleads_rs::google::ads::googleads::v22::services::GoogleAdsRow;
+    use googleads_rs::google::ads::googleads::v23::resources::{AdGroup, Campaign, Customer};
+    use googleads_rs::google::ads::googleads::v23::services::GoogleAdsRow;
     use prost_types::FieldMask;
 
     // Create a comprehensive field mask covering different resource types
@@ -288,8 +291,8 @@ fn test_field_mask_all_paths_accessible() {
 
 #[test]
 fn test_handle_missing_optional_resources() {
-    use googleads_rs::google::ads::googleads::v22::resources::Campaign;
-    use googleads_rs::google::ads::googleads::v22::services::GoogleAdsRow;
+    use googleads_rs::google::ads::googleads::v23::resources::Campaign;
+    use googleads_rs::google::ads::googleads::v23::services::GoogleAdsRow;
 
     // Create a row with only campaign (no budget, no ad_group)
     let mut campaign = Campaign::default();
@@ -315,8 +318,8 @@ fn test_handle_missing_optional_resources() {
 
 #[test]
 fn test_unimplemented_field_returns_not_implemented() {
-    use googleads_rs::google::ads::googleads::v22::resources::Campaign;
-    use googleads_rs::google::ads::googleads::v22::services::GoogleAdsRow;
+    use googleads_rs::google::ads::googleads::v23::resources::Campaign;
+    use googleads_rs::google::ads::googleads::v23::services::GoogleAdsRow;
 
     let mut campaign = Campaign::default();
     campaign.id = 123;
@@ -346,10 +349,10 @@ fn test_unimplemented_field_returns_not_implemented() {
 
 #[tokio::test]
 async fn test_realistic_campaign_performance_query() {
-    use googleads_rs::google::ads::googleads::v22::common::{Metrics, Segments};
-    use googleads_rs::google::ads::googleads::v22::enums::campaign_status_enum::CampaignStatus;
-    use googleads_rs::google::ads::googleads::v22::resources::Campaign;
-    use googleads_rs::google::ads::googleads::v22::services::{
+    use googleads_rs::google::ads::googleads::v23::common::{Metrics, Segments};
+    use googleads_rs::google::ads::googleads::v23::enums::campaign_status_enum::CampaignStatus;
+    use googleads_rs::google::ads::googleads::v23::resources::Campaign;
+    use googleads_rs::google::ads::googleads::v23::services::{
         GoogleAdsRow, SearchGoogleAdsStreamResponse,
     };
     use prost_types::FieldMask;
@@ -403,6 +406,7 @@ async fn test_realistic_campaign_performance_query() {
             summary_row: None,
             request_id: format!("query-day-{}", day),
             query_resource_consumption: 0,
+            metric_attributes: vec![],
         });
     }
 
