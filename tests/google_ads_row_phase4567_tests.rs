@@ -692,8 +692,14 @@ fn test_video_watch_time_metrics() {
 
     let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
 
-    assert_eq!(row.get("metrics.video_watch_time_duration_millis"), "150000");
-    assert_eq!(row.get("metrics.average_video_watch_time_duration_millis"), "5000");
+    assert_eq!(
+        row.get("metrics.video_watch_time_duration_millis"),
+        "150000"
+    );
+    assert_eq!(
+        row.get("metrics.average_video_watch_time_duration_millis"),
+        "5000"
+    );
 }
 
 #[test]
