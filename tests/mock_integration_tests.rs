@@ -74,7 +74,7 @@ async fn test_process_mock_streaming_response() {
         summary_row: None,
         request_id: "test-request".to_string(),
         query_resource_consumption: 0,
-            metric_attributes: vec![],
+        metric_attributes: vec![],
     };
 
     // Process the response as a user would
@@ -140,7 +140,7 @@ async fn test_process_multiple_streaming_batches() {
         summary_row: None,
         request_id: "batch-1".to_string(),
         query_resource_consumption: 0,
-            metric_attributes: vec![],
+        metric_attributes: vec![],
     });
 
     // Batch 2: 2 campaigns
@@ -163,7 +163,7 @@ async fn test_process_multiple_streaming_batches() {
         summary_row: None,
         request_id: "batch-2".to_string(),
         query_resource_consumption: 0,
-            metric_attributes: vec![],
+        metric_attributes: vec![],
     });
 
     // Process all batches (simulating stream processing)
