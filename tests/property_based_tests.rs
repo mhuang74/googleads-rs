@@ -11,7 +11,7 @@ use test_helpers::{
     MetricsBuilder, SegmentsBuilder,
 };
 
-use googleads_rs::google::ads::googleads::v22::enums::{
+use googleads_rs::google::ads::googleads::v23::enums::{
     ad_group_status_enum::AdGroupStatus, advertising_channel_type_enum::AdvertisingChannelType,
     campaign_status_enum::CampaignStatus,
 };
@@ -75,7 +75,7 @@ fn campaign_field_path_strategy() -> impl Strategy<Value = String> {
         "campaign.status".to_string(),
         "campaign.advertising_channel_type".to_string(),
         "campaign.bidding_strategy_type".to_string(),
-        "campaign.end_date".to_string(),
+        "campaign.end_date_time".to_string(),
         "campaign.campaign_budget".to_string(),
         "campaign.optimization_score".to_string(),
         "campaign.labels".to_string(),
