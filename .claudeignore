@@ -1,0 +1,5 @@
+target/
+proto/*
+!proto/google
+proto/google/*
+!proto/google/ads
