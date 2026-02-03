@@ -17,7 +17,7 @@
 //! ```
 //!
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/0.12.1")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/0.13.0")]
 
 #[allow(clippy::all)]
 #[allow(clippy::doc_lazy_continuation)]
