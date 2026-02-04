@@ -141,10 +141,9 @@ fn test_campaign_bidding_strategy_type_maximize_conversions() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    // Note: Custom mapping has typo "MaximizeConverions" (missing 's')
     assert_eq!(
         row.get("campaign.bidding_strategy_type"),
-        "MaximizeConverions"
+        "MaximizeConversions"
     );
 }
 

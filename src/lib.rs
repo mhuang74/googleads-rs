@@ -389,7 +389,7 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
                 let strategy = self.campaign.as_ref().unwrap().bidding_strategy_type();
                 match strategy {
                     ManualCpc => "ManualCPC".to_string(),
-                    MaximizeConversions => "MaximizeConverions".to_string(),
+                    MaximizeConversions => "MaximizeConversions".to_string(),
                     MaximizeConversionValue => "MaximizeConversionValue".to_string(),
                     TargetCpa => "TargetCPA".to_string(),
                     TargetRoas => "TargetROAS".to_string(),

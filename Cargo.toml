@@ -3,7 +3,7 @@ name = "googleads-rs"
 version = "0.13.0"
 authors = ["Michael S. Huang <mhuang74@gmail.com>"]
 edition = "2021"
-license = "MIT"
+license = "Apache-2.0"
 repository = "https://github.com/mhuang74/googleads-rs"
 description = """
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
