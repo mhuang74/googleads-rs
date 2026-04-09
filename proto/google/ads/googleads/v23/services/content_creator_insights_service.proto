@@ -20,6 +20,7 @@ import "google/ads/googleads/v23/common/additional_application_info.proto";
 import "google/ads/googleads/v23/common/audience_insights_attribute.proto";
 import "google/ads/googleads/v23/common/criteria.proto";
 import "google/ads/googleads/v23/enums/insights_trend.proto";
+import "google/ads/googleads/v23/enums/partnership_opportunity.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
@@ -92,9 +93,31 @@ message GenerateCreatorInsightsRequest {
     // is used to search for creators whose own viewers match the input
     // audience. Attributes age_range, gender, user_interest, entity, category,
     // device, parental_status, and income_range are supported. Attribute
-    // location is not supported.
+    // location is not supported. Attributes user_interest, entity, and category
+    // can only be set in audience_attributes when audience_combinations is
+    // unused.
     repeated google.ads.googleads.v23.common.AudienceInsightsAttribute
         audience_attributes = 1 [(google.api.field_behavior) = OPTIONAL];
+
+    // Optional. A list of audience attribute groups consisting of one or more
+    // Knowledge Graph entities, Product & Service Categories and user interests
+    // that describes an audience. The groups have a logical AND-of-ORs
+    // structure:
+    //
+    // 1. Attributes within each InsightsAudienceAttributeGroup are combined
+    // with OR.
+    //
+    // 2. The groups themselves are combined together with AND.
+    //
+    // For example, an audience (Interest A OR Interest B) AND (Entity C) is
+    // represented using two groups. The first group contains the two interests
+    // and the second group contains the entity.
+    //
+    // This field cannot be set if any Knowledge Graph entities, Product &
+    // Service Categories, or user interests are specified in
+    // audience_attributes.
+    repeated google.ads.googleads.v23.common.InsightsAudienceAttributeGroup
+        audience_combinations = 3 [(google.api.field_behavior) = OPTIONAL];
 
     // Optional. Creator attributes that describe a collection of types of
     // content. This is used to search for creators whose content matches the
@@ -116,8 +139,10 @@ message GenerateCreatorInsightsRequest {
         brand_entities = 1 [(google.api.field_behavior) = OPTIONAL];
 
     // Optional. When true, we will expand the search to beyond just the
-    // entities specified in [brand_entities] to other related knowledge graph
-    // entities similar to the brand. The default value is `false`.
+    // entities specified in
+    // [brand_entities][google.ads.googleads.v23.services.GenerateCreatorInsightsRequest.SearchBrand.brand_entities]
+    // to other related knowledge graph entities similar to the brand. The
+    // default value is `false`.
     bool include_related_topics = 2 [(google.api.field_behavior) = OPTIONAL];
   }
 
@@ -278,6 +303,10 @@ message YouTubeMetrics {
   // See https://support.google.com/google-ads/answer/13828964 for more
   // information about BrandConnect.
   bool is_brand_connect_creator = 15;
+
+  // Partnership opportunities available for this creator.
+  repeated google.ads.googleads.v23.enums.PartnershipOpportunityEnum
+      .PartnershipOpportunity partnership_opportunities = 17;
 }
 
 // YouTube Channel insights, and its metadata (such as channel name and channel
@@ -344,9 +373,32 @@ message YouTubeChannelInsights {
 // This is used to search for topics trending for the defined audience.
 message SearchAudience {
   // Required. Audience attributes that describe an audience of viewers. This is
-  // used to search for topics trending for the defined audience.
+  // used to search for topics trending for the defined audience. Attributes
+  // age_range, gender, user_interest, entity, category, parental_status, and
+  // income_range are supported. Attributes user_interest, entity, and category
+  // can only be set in audience_attributes when audience_combinations is
+  // unused.
   repeated google.ads.googleads.v23.common.AudienceInsightsAttribute
       audience_attributes = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Optional. A list of audience attribute groups consisting of one or more
+  // Knowledge Graph entities, Product & Service Categories and user interests
+  // that describes an audience. The groups have a logical AND-of-ORs structure:
+  //
+  // 1. Attributes within each InsightsAudienceAttributeGroup are combined
+  // with OR.
+  //
+  // 2. The groups themselves are combined together with AND.
+  //
+  // For example, an audience (Interest A OR Interest B) AND (Entity C) is
+  // represented using two groups. The first group contains the two interests
+  // and the second group contains the entity.
+  //
+  // This field cannot be set if any Knowledge Graph entities, Product &
+  // Service Categories, or user interests are specified in
+  // audience_attributes.
+  repeated google.ads.googleads.v23.common.InsightsAudienceAttributeGroup
+      audience_combinations = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // A collection of content topics to return trend information for.
@@ -354,6 +406,9 @@ message SearchTopics {
   // Required. A list of knowledge graph entities to retrieve trend information
   // for. Supported entities are tagged with
   // [CONTENT_TRENDING_INSIGHTS][google.ads.googleads.v23.enums.InsightsKnowledgeGraphEntityCapabilitiesEnum.InsightsKnowledgeGraphEntityCapabilities.CONTENT_TRENDING_INSIGHTS].
+  // Use
+  // [AudienceInsightsService.ListAudienceInsightsAttributes][google.ads.googleads.v23.services.AudienceInsightsService.ListAudienceInsightsAttributes]
+  // to get the list of supported entities.
   repeated google.ads.googleads.v23.common.AudienceInsightsEntity entities = 1
       [(google.api.field_behavior) = REQUIRED];
 }
@@ -364,11 +419,21 @@ message TrendInsight {
   google.ads.googleads.v23.common.AudienceInsightsAttributeMetadata
       trend_attribute = 1;
 
-  // Metrics associated with this trend.
+  // Metrics associated with this trend. These metrics are for the latest
+  // available month and the comparison period is 3 months.
   TrendInsightMetrics trend_metrics = 2;
 
-  // The direction of trend (such as RISING or DECLINING).
+  // Indicate if a trend is sustained or emerging. Use
+  // trend_metrics.trend_change_percent to determine the direction of the
+  // trend.
   google.ads.googleads.v23.enums.InsightsTrendEnum.InsightsTrend trend = 3;
+
+  // 3 years of historical data for the trend, including the most recent month
+  // the TrendInsight represents. Each data point represents 1 month of data and
+  // the comparison period is 1 month. The data points are ordered from most
+  // recent month to least recent month. Only populated for trends using
+  // search_topics.
+  repeated TrendInsightDataPoint trend_data_points = 6;
 
   // Related videos for this topic. Only populated for trends using
   // search_topics.
@@ -382,9 +447,13 @@ message TrendInsight {
 
 // Metrics associated with a trend insight.
 message TrendInsightMetrics {
-  // The number of views for this trend. This is only populated for SearchTopics
-  // requests.
+  // The number of views for this trend. This is only populated for the latest
+  // month of data for SearchTopics requests.
   int64 views_count = 1;
+
+  // Views value normalized to be in the range 0-100. This is only populated for
+  // SearchTopics requests.
+  int64 views_indexed_value = 4;
 
   // The fraction (from 0 to 1 inclusive) of the requested audience that has
   // has searched or viewed this trend. This is only populated for
@@ -392,9 +461,20 @@ message TrendInsightMetrics {
   double audience_share = 2;
 
   // The percentage of the change in the trend's value over the comparison
-  // period, where 1.0 represents 100%. If this is not set, it means that the
-  // trend is emerging.
+  // period, where 1.0 represents 100%. If this is 0, it means that the trend is
+  // emerging (new) or sustained (existing but unchanged).
   double trend_change_percent = 3;
+}
+
+// Trend data for a specific month.
+message TrendInsightDataPoint {
+  // The month that the trend data point represents in the string format
+  // "YYYY-MM".
+  string month = 1;
+
+  // Metrics associated with this trend and month. The comparison period for
+  // these metrics is 1 month.
+  TrendInsightMetrics trend_metrics = 2;
 }
 
 // Languages that pertain to a YouTube channel based on the channel content.
