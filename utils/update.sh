@@ -8,6 +8,16 @@ safe_run() {
   "$@" || echo "Command failed: $*" >&2
 }
 
+# Cross-platform in-place sed
+# Usage: sed_inplace 'pattern' file [file2 ...]
+sed_inplace() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "$@"
+  else
+    sed -i "$@"
+  fi
+}
+
 if [ -z "$1" ]; then
   echo "Error: must supply Google Ads API version, e.g., 'v17'"
   exit 1
@@ -17,10 +27,6 @@ GOOGLEADS_API_VERSION=$1
 # Determine the current Google Ads API version from build.rs
 current_version=$(grep -oE 'googleads\{\}v[0-9]+' build.rs | grep -oE 'v[0-9]+')
 
-if [ "$current_version" == "$GOOGLEADS_API_VERSION" ]; then
-  echo "Nothing Done. Already at target version $GOOGLEADS_API_VERSION"
-  exit 0
-fi
 
 echo "Updating googleads-rs to $GOOGLEADS_API_VERSION"
 
@@ -50,12 +56,12 @@ safe_run find proto -type f -not -name '*.proto' -delete
 
 # Remove optional keyword
 safe_run find proto -type f | while read -r file; do
-  sed -i '' -e 's/^ *optional//g' "$file" || echo "Failed to process $file"
+  sed_inplace -e 's/^ *optional//g' "$file" || echo "Failed to process $file"
 done
 
 # Remove comments from 2 proto files to avoid doc test errors
-safe_run sed -i '' -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
-safe_run sed -i '' -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
+safe_run sed_inplace -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
+safe_run sed_inplace -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
 
 # Remove extra proto-e files
 safe_run find proto -type f -name '*.proto-e' -delete
@@ -65,18 +71,18 @@ safe_run rm -rf googleapis-master master.zip
 
 # Update version references in Rust code
 # Update build.rs
-safe_run sed -i '' "s/googleads{}$current_version/googleads{}$GOOGLEADS_API_VERSION/g" build.rs
+safe_run sed_inplace "s/googleads{}$current_version/googleads{}$GOOGLEADS_API_VERSION/g" build.rs
 
 # Update src/lib.rs
-safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
+safe_run sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
 
 # Update tests/*.rs
-safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/*.rs
+safe_run sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/*.rs
 
 # Update tests/test_helpers/*.rs
-safe_run sed -i '' "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/test_helpers/*.rs
+safe_run sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/test_helpers/*.rs
 
 # Update README.md
-safe_run sed -i '' "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
+safe_run sed_inplace "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
 
 
