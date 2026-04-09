@@ -27,6 +27,10 @@ GOOGLEADS_API_VERSION=$1
 # Determine the current Google Ads API version from build.rs
 current_version=$(grep -oE 'googleads\{\}v[0-9]+' build.rs | grep -oE 'v[0-9]+')
 
+if [ "$current_version" == "$GOOGLEADS_API_VERSION" ]; then
+  echo "Nothing Done. Already at target version $GOOGLEADS_API_VERSION"
+  exit 0
+fi
 
 echo "Updating googleads-rs to $GOOGLEADS_API_VERSION"
 
