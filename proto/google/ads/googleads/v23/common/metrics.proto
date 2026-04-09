@@ -1233,6 +1233,31 @@ message Metrics {
  double cost_converted_currency_per_platform_comparable_conversion =
       392;
 
+  // This metric counts the unique individuals who were shown your video ad two
+  // or more times within the selected date range. This metric cannot be
+  // aggregated, and can only be requested for date ranges of 31 days or less.
+ int64 unique_users_two_plus = 393;
+
+  // This metric counts the unique individuals who were shown your video ad
+  // three or more times within the selected date range. This metric cannot be
+  // aggregated, and can only be requested for date ranges of 31 days or less.
+ int64 unique_users_three_plus = 394;
+
+  // This metric counts the unique individuals who were shown your video ad four
+  // or more times within the selected date range. This metric cannot be
+  // aggregated, and can only be requested for date ranges of 31 days or less.
+ int64 unique_users_four_plus = 395;
+
+  // This metric counts the unique individuals who were shown your video ad five
+  // or more times within the selected date range. This metric cannot be
+  // aggregated, and can only be requested for date ranges of 31 days or less.
+ int64 unique_users_five_plus = 396;
+
+  // This metric counts the unique individuals who were shown your video ad ten
+  // or more times within the selected date range. This metric cannot be
+  // aggregated, and can only be requested for date ranges of 31 days or less.
+ int64 unique_users_ten_plus = 397;
+
   // The conversion value rule adjustment from biddable conversions in all
   // conversion categories.
  double value_adjustment = 398;
@@ -1332,6 +1357,10 @@ message Metrics {
   // ad playback, divided by the total number of impressions measurable for
   // audibility.
  double active_view_audible_quartile_p100_rate = 425;
+
+  // The number of biddable first in app conversions where the app install was
+  // driven by interaction with a web campaign.
+ int64 biddable_indirect_install_first_in_app_conversion_micros = 426;
 }
 
 // Search volume range.
