@@ -38,7 +38,7 @@ fn test_campaign_primary_status_eligible() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -52,7 +52,7 @@ fn test_campaign_primary_status_paused() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 #[test]
@@ -66,7 +66,7 @@ fn test_campaign_primary_status_removed() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.primary_status");
 
-    assert_eq!(result, "Removed");
+    assert_eq!(result, "REMOVED");
 }
 
 #[test]
@@ -80,7 +80,7 @@ fn test_campaign_primary_status_unspecified() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.primary_status");
 
-    assert_eq!(result, "Unspecified");
+    assert_eq!(result, "UNSPECIFIED");
 }
 
 // ============================================================================
@@ -111,7 +111,7 @@ fn test_campaign_primary_status_reasons_single() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.primary_status_reasons");
 
-    assert_eq!(result, "CampaignPaused");
+    assert_eq!(result, "CAMPAIGN_PAUSED");
 }
 
 #[test]
@@ -142,7 +142,7 @@ fn test_campaign_primary_status_reasons_unspecified() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.primary_status_reasons");
 
-    assert_eq!(result, "Unspecified");
+    assert_eq!(result, "UNSPECIFIED");
 }
 
 // ============================================================================
@@ -160,7 +160,7 @@ fn test_ad_group_primary_status_eligible() {
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
     let result = row.get("ad_group.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -174,7 +174,7 @@ fn test_ad_group_primary_status_paused() {
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
     let result = row.get("ad_group.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 #[test]
@@ -188,7 +188,7 @@ fn test_ad_group_primary_status_removed() {
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
     let result = row.get("ad_group.primary_status");
 
-    assert_eq!(result, "Removed");
+    assert_eq!(result, "REMOVED");
 }
 
 // ============================================================================
@@ -257,7 +257,7 @@ fn test_ad_group_ad_primary_status_eligible() {
         .build();
     let result = row.get("ad_group_ad.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -273,7 +273,7 @@ fn test_ad_group_ad_primary_status_paused() {
         .build();
     let result = row.get("ad_group_ad.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 #[test]
@@ -289,7 +289,7 @@ fn test_ad_group_ad_primary_status_removed() {
         .build();
     let result = row.get("ad_group_ad.primary_status");
 
-    assert_eq!(result, "Removed");
+    assert_eq!(result, "REMOVED");
 }
 
 #[test]
@@ -305,7 +305,7 @@ fn test_ad_group_ad_primary_status_pending() {
         .build();
     let result = row.get("ad_group_ad.primary_status");
 
-    assert_eq!(result, "Pending");
+    assert_eq!(result, "PENDING");
 }
 
 // ============================================================================
@@ -340,7 +340,7 @@ fn test_ad_group_ad_primary_status_reasons_single() {
         .build();
     let result = row.get("ad_group_ad.primary_status_reasons");
 
-    assert_eq!(result, "CampaignRemoved");
+    assert_eq!(result, "CAMPAIGN_REMOVED");
 }
 
 #[test]
@@ -379,7 +379,7 @@ fn test_ad_group_criterion_primary_status_eligible() {
         .build();
     let result = row.get("ad_group_criterion.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -395,7 +395,7 @@ fn test_ad_group_criterion_primary_status_paused() {
         .build();
     let result = row.get("ad_group_criterion.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 #[test]
@@ -411,7 +411,7 @@ fn test_ad_group_criterion_primary_status_removed() {
         .build();
     let result = row.get("ad_group_criterion.primary_status");
 
-    assert_eq!(result, "Removed");
+    assert_eq!(result, "REMOVED");
 }
 
 #[test]
@@ -427,7 +427,7 @@ fn test_ad_group_criterion_primary_status_pending() {
         .build();
     let result = row.get("ad_group_criterion.primary_status");
 
-    assert_eq!(result, "Pending");
+    assert_eq!(result, "PENDING");
 }
 
 // ============================================================================
@@ -462,7 +462,7 @@ fn test_ad_group_criterion_primary_status_reasons_single() {
         .build();
     let result = row.get("ad_group_criterion.primary_status_reasons");
 
-    assert_eq!(result, "CampaignPending");
+    assert_eq!(result, "CAMPAIGN_PENDING");
 }
 
 #[test]
@@ -501,7 +501,7 @@ fn test_asset_group_primary_status_eligible() {
         .build();
     let result = row.get("asset_group.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -517,7 +517,7 @@ fn test_asset_group_primary_status_paused() {
         .build();
     let result = row.get("asset_group.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 #[test]
@@ -533,7 +533,7 @@ fn test_asset_group_primary_status_removed() {
         .build();
     let result = row.get("asset_group.primary_status");
 
-    assert_eq!(result, "Removed");
+    assert_eq!(result, "REMOVED");
 }
 
 #[test]
@@ -624,7 +624,7 @@ fn test_ad_group_asset_primary_status_eligible() {
         .build();
     let result = row.get("ad_group_asset.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -640,7 +640,7 @@ fn test_ad_group_asset_primary_status_paused() {
         .build();
     let result = row.get("ad_group_asset.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 // ============================================================================
@@ -675,7 +675,7 @@ fn test_ad_group_asset_primary_status_reasons_single() {
         .build();
     let result = row.get("ad_group_asset.primary_status_reasons");
 
-    assert_eq!(result, "AssetLinkPaused");
+    assert_eq!(result, "ASSET_LINK_PAUSED");
 }
 
 #[test]
@@ -714,7 +714,7 @@ fn test_campaign_asset_primary_status_eligible() {
         .build();
     let result = row.get("campaign_asset.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -730,7 +730,7 @@ fn test_campaign_asset_primary_status_paused() {
         .build();
     let result = row.get("campaign_asset.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 // ============================================================================
@@ -765,7 +765,7 @@ fn test_campaign_asset_primary_status_reasons_single() {
         .build();
     let result = row.get("campaign_asset.primary_status_reasons");
 
-    assert_eq!(result, "AssetLinkPaused");
+    assert_eq!(result, "ASSET_LINK_PAUSED");
 }
 
 #[test]
@@ -804,7 +804,7 @@ fn test_customer_asset_primary_status_eligible() {
         .build();
     let result = row.get("customer_asset.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -820,7 +820,7 @@ fn test_customer_asset_primary_status_paused() {
         .build();
     let result = row.get("customer_asset.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 // ============================================================================
@@ -855,7 +855,7 @@ fn test_customer_asset_primary_status_reasons_single() {
         .build();
     let result = row.get("customer_asset.primary_status_reasons");
 
-    assert_eq!(result, "AssetLinkPaused");
+    assert_eq!(result, "ASSET_LINK_PAUSED");
 }
 
 #[test]
@@ -894,7 +894,7 @@ fn test_asset_group_asset_primary_status_eligible() {
         .build();
     let result = row.get("asset_group_asset.primary_status");
 
-    assert_eq!(result, "Eligible");
+    assert_eq!(result, "ELIGIBLE");
 }
 
 #[test]
@@ -910,7 +910,7 @@ fn test_asset_group_asset_primary_status_paused() {
         .build();
     let result = row.get("asset_group_asset.primary_status");
 
-    assert_eq!(result, "Paused");
+    assert_eq!(result, "PAUSED");
 }
 
 #[test]
@@ -926,7 +926,7 @@ fn test_asset_group_asset_primary_status_limited() {
         .build();
     let result = row.get("asset_group_asset.primary_status");
 
-    assert_eq!(result, "Limited");
+    assert_eq!(result, "LIMITED");
 }
 
 #[test]
@@ -942,7 +942,7 @@ fn test_asset_group_asset_primary_status_not_eligible() {
         .build();
     let result = row.get("asset_group_asset.primary_status");
 
-    assert_eq!(result, "NotEligible");
+    assert_eq!(result, "NOT_ELIGIBLE");
 }
 
 // ============================================================================
@@ -977,7 +977,7 @@ fn test_asset_group_asset_primary_status_reasons_single() {
         .build();
     let result = row.get("asset_group_asset.primary_status_reasons");
 
-    assert_eq!(result, "AssetLinkPaused");
+    assert_eq!(result, "ASSET_LINK_PAUSED");
 }
 
 #[test]
@@ -1019,7 +1019,7 @@ fn test_campaign_paused_with_multiple_reasons() {
     let status = row.get("campaign.primary_status");
     let reasons = row.get("campaign.primary_status_reasons");
 
-    assert_eq!(status, "Paused");
+    assert_eq!(status, "PAUSED");
     assert!(reasons.contains(", "));
     assert_eq!(reasons.split(", ").count(), 2);
 }
@@ -1040,8 +1040,8 @@ fn test_ad_group_ad_pending_approval() {
     let status = row.get("ad_group_ad.primary_status");
     let reasons = row.get("ad_group_ad.primary_status_reasons");
 
-    assert_eq!(status, "Pending");
-    assert_eq!(reasons, "CampaignRemoved");
+    assert_eq!(status, "PENDING");
+    assert_eq!(reasons, "CAMPAIGN_REMOVED");
 }
 
 #[test]
@@ -1061,8 +1061,8 @@ fn test_asset_group_asset_not_eligible_with_disapproval() {
     let status = row.get("asset_group_asset.primary_status");
     let reasons = row.get("asset_group_asset.primary_status_reasons");
 
-    assert_eq!(status, "NotEligible");
-    assert_eq!(reasons, "AssetDisapproved");
+    assert_eq!(status, "NOT_ELIGIBLE");
+    assert_eq!(reasons, "ASSET_DISAPPROVED");
 }
 
 // ============================================================================

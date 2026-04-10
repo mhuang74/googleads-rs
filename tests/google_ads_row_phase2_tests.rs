@@ -640,11 +640,7 @@ fn test_phase2_metrics_absent_parent() {
     // Create row without metrics
     let row = GoogleAdsRowBuilder::new().build();
 
-    // All Phase 2 metric fields should panic (as they use attr_str! which calls unwrap())
-    // This is expected behavior for non-optional resources
-    let result = std::panic::catch_unwind(|| row.get("metrics.orders"));
-    assert!(
-        result.is_err(),
-        "Expected panic when metrics parent is absent"
-    );
+    // With prost-reflect, when parent resource is absent, accessing its fields returns empty string
+    let result = row.get("metrics.orders");
+    assert_eq!(result, "", "metrics.orders should return empty string when metrics is absent");
 }

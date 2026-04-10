@@ -114,7 +114,7 @@ fn test_geographic_view_location_type() {
 
     assert_eq!(
         row.get("geographic_view.location_type"),
-        "LocationOfPresence"
+        "LOCATION_OF_PRESENCE"
     );
 }
 
@@ -412,7 +412,7 @@ fn test_recommendation_type() {
         .with_recommendation(recommendation)
         .build();
 
-    assert_eq!(row.get("recommendation.type"), "Keyword");
+    assert_eq!(row.get("recommendation.type"), "KEYWORD");
 }
 
 #[test]
@@ -514,7 +514,7 @@ fn test_shared_criterion_keyword() {
         "customers/123/sharedSets/456"
     );
     assert_eq!(row.get("shared_criterion.criterion_id"), "789");
-    assert_eq!(row.get("shared_criterion.type"), "Keyword");
+    assert_eq!(row.get("shared_criterion.type"), "KEYWORD");
     assert_eq!(row.get("shared_criterion.keyword.text"), "cheap flights");
 }
 
@@ -717,8 +717,8 @@ fn test_interaction_event_types() {
     let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
 
     let result = row.get("metrics.interaction_event_types");
-    assert!(result.contains("Click"));
-    assert!(result.contains("VideoView"));
+    assert!(result.contains("CLICK"));
+    assert!(result.contains("VIDEO_VIEW"));
 }
 
 // ============================================================================
@@ -791,7 +791,7 @@ fn test_product_segments_attributes() {
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.product_brand"), "Nike");
-    assert_eq!(row.get("segments.product_condition"), "New");
+    assert_eq!(row.get("segments.product_condition"), "NEW");
     assert_eq!(row.get("segments.product_country"), "US");
     assert_eq!(row.get("segments.product_language"), "en");
     assert_eq!(row.get("segments.product_merchant_id"), "123456");
@@ -964,12 +964,12 @@ fn test_sk_ad_network_segments() {
 
     assert_eq!(
         row.get("segments.sk_ad_network_ad_event_type"),
-        "Interaction"
+        "INTERACTION"
     );
     assert_eq!(row.get("segments.sk_ad_network_attribution_credit"), "WON");
     assert_eq!(
         row.get("segments.sk_ad_network_coarse_conversion_value"),
-        "High"
+        "HIGH"
     );
     assert_eq!(
         row.get("segments.sk_ad_network_fine_conversion_value"),

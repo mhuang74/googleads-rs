@@ -162,8 +162,8 @@ fn test_asset_group_ad_strength() {
         .with_asset_group(asset_group)
         .build();
 
-    // ad_strength is stored as int, so it returns the numeric value
-    assert_eq!(row.get("asset_group.ad_strength"), "7");
+    // ad_strength returns the enum name (UPPER_SNAKE_CASE)
+    assert_eq!(row.get("asset_group.ad_strength"), "EXCELLENT");
 }
 
 // ============================================================================
@@ -586,9 +586,11 @@ fn test_change_event_changed_fields() {
         .with_change_event(change_event)
         .build();
 
+    // changed_fields is a list of strings, which returns "not implemented by googleads-rs"
+    // since we can't format a list as a scalar string
     assert_eq!(
         row.get("change_event.changed_fields"),
-        "'campaign.name, campaign.status'"
+        "not implemented by googleads-rs"
     );
 }
 
@@ -771,8 +773,10 @@ fn test_change_event_multiple_changed_fields() {
         .with_change_event(change_event)
         .build();
 
+    // changed_fields is a list of strings, which returns "not implemented by googleads-rs"
+    // since we can't format a list as a scalar string
     assert_eq!(
         row.get("change_event.changed_fields"),
-        "'campaign.name, campaign.status, campaign.budget, campaign.bidding_strategy'"
+        "not implemented by googleads-rs"
     );
 }

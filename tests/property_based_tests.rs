@@ -299,9 +299,11 @@ proptest! {
         // Should always return a non-empty string for enum debug format
         assert!(!result.is_empty());
 
-        // Verify it matches expected enum variant name
-        let expected = format!("{:?}", status);
-        assert_eq!(result, expected);
+        // Verify it matches expected enum variant name (UPPER_SNAKE_CASE for prost-reflect)
+        let expected = format!("{:?}", status).to_uppercase().replace("UNKNOWN_VALUE_", "UNKNOWN_VALUE_");
+        // Convert PascalCase to UPPER_SNAKE_CASE
+        let expected_upper_snake = status.as_str_name();
+        assert_eq!(result, expected_upper_snake);
     }
 }
 
@@ -331,7 +333,8 @@ proptest! {
 
         let result = row.get("ad_group.status");
         assert!(!result.is_empty());
-        assert_eq!(result, format!("{:?}", status));
+        // prost-reflect returns UPPER_SNAKE_CASE
+        assert_eq!(result, status.as_str_name());
     }
 }
 
@@ -369,7 +372,8 @@ proptest! {
 
         let result = row.get("campaign.advertising_channel_type");
         assert!(!result.is_empty());
-        assert_eq!(result, format!("{:?}", channel_type));
+        // prost-reflect returns UPPER_SNAKE_CASE
+        assert_eq!(result, channel_type.as_str_name());
     }
 }
 
@@ -394,9 +398,18 @@ proptest! {
         // Test keyword text
         assert_eq!(row.get("ad_group_criterion.keyword.text"), keyword_text);
 
-        // Test keyword match_type (returns i32 as string)
+        // Test keyword match_type (returns enum name for prost-reflect)
         let result = row.get("ad_group_criterion.keyword.match_type");
-        assert_eq!(result, match_type.to_string());
+        // prost-reflect resolves all valid enum values to their names
+        // 0 = UNSPECIFIED, 1 = UNKNOWN, 2 = EXACT, 3 = PHRASE, 4 = BROAD
+        match match_type {
+            0 => assert_eq!(result, "UNSPECIFIED"),
+            1 => assert_eq!(result, "UNKNOWN"),
+            2 => assert_eq!(result, "EXACT"),
+            3 => assert_eq!(result, "PHRASE"),
+            4 => assert_eq!(result, "BROAD"),
+            _ => assert_eq!(result, match_type.to_string()), // Unknown values fallback to number
+        }
     }
 }
 

@@ -276,7 +276,7 @@ fn test_streaming_response_multiple_rows() {
         assert_eq!(row.get("campaign.id"), format!("{}", i * 1000));
         assert_eq!(row.get("campaign.name"), format!("Campaign {}", i));
 
-        let expected_status = if i % 2 == 0 { "Paused" } else { "Enabled" };
+        let expected_status = if i % 2 == 0 { "PAUSED" } else { "ENABLED" };
         assert_eq!(row.get("campaign.status"), expected_status);
     }
 }
@@ -574,5 +574,5 @@ fn test_field_mask_iteration_pattern() {
     assert_eq!(output.len(), 3);
     assert_eq!(output[0], "campaign.id: 111111");
     assert_eq!(output[1], "campaign.name: Test Campaign");
-    assert_eq!(output[2], "campaign.status: Enabled");
+    assert_eq!(output[2], "campaign.status: ENABLED");
 }

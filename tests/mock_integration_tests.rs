@@ -94,7 +94,7 @@ async fn test_process_mock_streaming_response() {
     // Verify specific values
     assert_eq!(output[0].1, "12345");
     assert_eq!(output[1].1, "Test Campaign");
-    assert_eq!(output[2].1, "Enabled");
+    assert_eq!(output[2].1, "ENABLED");
     assert_eq!(output[3].1, "10000");
     assert_eq!(output[4].1, "500");
     assert_eq!(output[5].1, "0.05");
