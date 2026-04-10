@@ -810,7 +810,7 @@ message ErrorLocation {
     string field_name = 1;
 
     // If field_name is a repeated field, this is the element that failed
- int32 index = 3;
+    optional int32 index = 3;
   }
 
   // A field path that indicates which field was invalid in the request.

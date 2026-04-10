@@ -59,6 +59,6 @@ message GeographicView {
       location_type = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Criterion Id for the country.
- int64 country_criterion_id = 5
+  optional int64 country_criterion_id = 5
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }

@@ -36,30 +36,30 @@ message OfflineUserAddressInfo {
   // First name of the user, which is hashed as SHA-256 after normalized
   // (Lowercase all characters; Remove any extra spaces before, after, and in
   // between).
- string hashed_first_name = 7;
+  optional string hashed_first_name = 7;
 
   // Last name of the user, which is hashed as SHA-256 after normalized (lower
   // case only and no punctuation).
- string hashed_last_name = 8;
+  optional string hashed_last_name = 8;
 
   // City of the address. Only accepted for Store Sales and
   // ConversionAdjustmentUploadService.
- string city = 9;
+  optional string city = 9;
 
   // State code of the address. Only accepted for Store Sales and
   // ConversionAdjustmentUploadService.
- string state = 10;
+  optional string state = 10;
 
   // 2-letter country code in ISO-3166-1 alpha-2 of the user's address.
- string country_code = 11;
+  optional string country_code = 11;
 
   // Postal code of the user's address.
- string postal_code = 12;
+  optional string postal_code = 12;
 
   // The street address of the user hashed using SHA-256 hash function after
   // normalization (lower case only). Only accepted for
   // ConversionAdjustmentUploadService.
- string hashed_street_address = 13;
+  optional string hashed_street_address = 13;
 }
 
 // User identifying information.
@@ -108,32 +108,32 @@ message TransactionAttribute {
   // optional timezone offset from UTC. If the offset is absent, the API will
   // use the account's timezone as default.
   // Examples: "2018-03-05 09:15:00" or "2018-02-01 14:34:30+03:00"
- string transaction_date_time = 8;
+  optional string transaction_date_time = 8;
 
   // Transaction amount in micros. Required.
   // Transaction amount in micros needs to be greater than 1000.
   // If item Attributes are provided, it represents the total value of the
   // items, after multiplying the unit price per item by the quantity provided
   // in the ItemAttributes.
- double transaction_amount_micros = 9;
+  optional double transaction_amount_micros = 9;
 
   // Transaction currency code. ISO 4217 three-letter code is used. Required.
- string currency_code = 10;
+  optional string currency_code = 10;
 
   // The resource name of conversion action to report conversions to.
   // Required.
- string conversion_action = 11;
+  optional string conversion_action = 11;
 
   // Transaction order id. Useful to group transactions which are part of the
   // same order.
- string order_id = 12;
+  optional string order_id = 12;
 
   // Store attributes of the transaction.
   StoreAttribute store_attribute = 6;
 
   // Value of the custom variable for each transaction.
   // Allowed only if a custom key is provided in the store sales metadata.
- string custom_value = 13;
+  optional string custom_value = 13;
 
   // Item attributes of the transaction.
   // Accessible only to customers on the allow-list.
@@ -144,7 +144,7 @@ message TransactionAttribute {
 message StoreAttribute {
   // Store code from
   // https://support.google.com/business/answer/3370250#storecode
- string store_code = 2;
+  optional string store_code = 2;
 }
 
 // Item attributes of the transaction.
@@ -156,7 +156,7 @@ message ItemAttribute {
 
   // ID of the Merchant Center Account.
   // Required.
- int64 merchant_id = 2;
+  optional int64 merchant_id = 2;
 
   // Common Locale Data Repository (CLDR) territory code of the country
   // associated with the feed where your items are uploaded. See
@@ -191,19 +191,19 @@ message UserData {
 
   // The consent setting for the user. If set, will override the job level
   // consent for this user.
- Consent consent = 4;
+  optional Consent consent = 4;
 }
 
 // User attribute, can only be used with CUSTOMER_MATCH_WITH_ATTRIBUTES job
 // type.
 message UserAttribute {
   // Advertiser defined lifetime value for the user.
- int64 lifetime_value_micros = 1;
+  optional int64 lifetime_value_micros = 1;
 
   // Advertiser defined lifetime value bucket for the user. The valid range for
   // a lifetime value bucket is from 1 (low) to 10 (high), except for remove
   // operation where 0 will also be accepted.
- int32 lifetime_value_bucket = 2;
+  optional int32 lifetime_value_bucket = 2;
 
   // Timestamp of the last purchase made by the user.
   // The format is YYYY-MM-DD HH:MM:SS[+/-HH:MM], where [+/-HH:MM] is an
@@ -227,7 +227,7 @@ message UserAttribute {
   // The shopping loyalty related data. Shopping utilizes this data to provide
   // users with a better experience. Accessible only to merchants on the
   // allow-list with the user's consent.
- ShoppingLoyalty shopping_loyalty = 7;
+  optional ShoppingLoyalty shopping_loyalty = 7;
 
   // Optional. Advertiser defined lifecycle stage for the user. The accepted
   // values are "Lead", "Active" and "Churned".
@@ -277,17 +277,17 @@ message ShoppingLoyalty {
   // The membership tier. It is a free-form string as each merchant may have
   // their own loyalty system. For example, it could be a number from 1 to 10,
   // or a string such as "Golden" or "Silver", or even empty string "".
- string loyalty_tier = 1;
+  optional string loyalty_tier = 1;
 }
 
 // Metadata for customer match user list.
 message CustomerMatchUserListMetadata {
   // The resource name of remarketing list to update data.
   // Required for job of CUSTOMER_MATCH_USER_LIST type.
- string user_list = 2;
+  optional string user_list = 2;
 
   // The consent setting for all the users in this job.
- Consent consent = 3;
+  optional Consent consent = 3;
 }
 
 // Metadata for Store Sales Direct.
@@ -295,20 +295,20 @@ message StoreSalesMetadata {
   // This is the fraction of all transactions that are identifiable (for
   // example, associated with any form of customer information). Required. The
   // fraction needs to be between 0 and 1 (excluding 0).
- double loyalty_fraction = 5;
+  optional double loyalty_fraction = 5;
 
   // This is the ratio of sales being uploaded compared to the overall sales
   // that can be associated with a customer. Required.
   // The fraction needs to be between 0 and 1 (excluding 0). For example, if you
   // upload half the sales that you are able to associate with a customer, this
   // would be 0.5.
- double transaction_upload_fraction = 6;
+  optional double transaction_upload_fraction = 6;
 
   // Name of the store sales custom variable key. A predefined key that
   // can be applied to the transaction and then later used for custom
   // segmentation in reporting.
   // Accessible only to customers on the allow-list.
- string custom_key = 7;
+  optional string custom_key = 7;
 
   // Metadata for a third party Store Sales upload.
   StoreSalesThirdPartyMetadata third_party_metadata = 3;
@@ -322,29 +322,29 @@ message StoreSalesThirdPartyMetadata {
   // Time the advertiser uploaded the data to the partner. Required.
   // The format is "YYYY-MM-DD HH:MM:SS".
   // Examples: "2018-03-05 09:15:00" or "2018-02-01 14:34:30"
- string advertiser_upload_date_time = 7;
+  optional string advertiser_upload_date_time = 7;
 
   // The fraction of transactions that are valid. Invalid transactions may
   // include invalid formats or values.
   // Required.
   // The fraction needs to be between 0 and 1 (excluding 0).
- double valid_transaction_fraction = 8;
+  optional double valid_transaction_fraction = 8;
 
   // The fraction of valid transactions that are matched to a third party
   // assigned user ID on the partner side.
   // Required.
   // The fraction needs to be between 0 and 1 (excluding 0).
- double partner_match_fraction = 9;
+  optional double partner_match_fraction = 9;
 
   // The fraction of valid transactions that are uploaded by the partner to
   // Google.
   // Required.
   // The fraction needs to be between 0 and 1 (excluding 0).
- double partner_upload_fraction = 10;
+  optional double partner_upload_fraction = 10;
 
   // Version of partner IDs to be used for uploads. Required.
- string bridge_map_version_id = 11;
+  optional string bridge_map_version_id = 11;
 
   // ID of the third party partner updating the transaction feed.
- int64 partner_id = 12;
+  optional int64 partner_id = 12;
 }

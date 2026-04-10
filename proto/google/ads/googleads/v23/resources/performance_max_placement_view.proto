@@ -53,16 +53,16 @@ message PerformanceMaxPlacementView {
 
   // Output only. The default placement string, such as the website URL, mobile
   // application ID, or a YouTube video ID.
- string placement = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string placement = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The name displayed to represent the placement, such as the URL
   // name for websites, YouTube video name for YouTube videos, and translated
   // mobile app name for mobile apps.
- string display_name = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string display_name = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. URL of the placement, for example, website, link to the mobile
   // application in app store, or a YouTube video URL.
- string target_url = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string target_url = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Type of the placement. Possible values for Performance Max
   // placements are WEBSITE, MOBILE_APPLICATION, or YOUTUBE_VIDEO.

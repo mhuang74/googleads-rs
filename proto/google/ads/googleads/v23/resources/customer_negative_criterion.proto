@@ -51,7 +51,7 @@ message CustomerNegativeCriterion {
   ];
 
   // Output only. The ID of the criterion.
- int64 id = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The type of the criterion.
   google.ads.googleads.v23.enums.CriterionTypeEnum.CriterionType type = 3

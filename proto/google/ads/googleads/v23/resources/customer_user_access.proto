@@ -54,7 +54,7 @@ message CustomerUserAccess {
 
   // Output only. Email address of the user.
   // Read only field
- string email_address = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string email_address = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Access role of the user.
   google.ads.googleads.v23.enums.AccessRoleEnum.AccessRole access_role = 4;
@@ -63,11 +63,11 @@ message CustomerUserAccess {
   // Read only field
   // The format is "YYYY-MM-DD HH:MM:SS".
   // Examples: "2018-03-05 09:15:00" or "2018-02-01 14:34:30"
- string access_creation_date_time = 6
+  optional string access_creation_date_time = 6
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The email address of the inviter user.
   // Read only field
- string inviter_user_email_address = 7
+  optional string inviter_user_email_address = 7
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }

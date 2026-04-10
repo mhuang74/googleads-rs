@@ -32,10 +32,10 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Common";
 // A date range.
 message DateRange {
   // The start date, in yyyy-mm-dd format. This date is inclusive.
- string start_date = 3;
+  optional string start_date = 3;
 
   // The end date, in yyyy-mm-dd format. This date is inclusive.
- string end_date = 4;
+  optional string end_date = 4;
 }
 
 // The year month range inclusive of the start and end months.

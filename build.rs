@@ -60,6 +60,23 @@ fn main() -> Res {
         info!("Number of proto files: {}", protos.len());
     }
 
+    // Generate unified file descriptor set for prost-reflect
+    {
+        use prost_build::Config;
+        let out_dir = env::var("OUT_DIR").expect("OUT_DIR environment variable not set");
+        let descriptor_path = Path::new(&out_dir).join("file_descriptor_set.bin");
+        let tmp_out = Path::new(&out_dir).join("_fds_tmp");
+        std::fs::create_dir_all(&tmp_out).ok();
+
+        let mut config = Config::new();
+        config.file_descriptor_set_path(&descriptor_path);
+        config.out_dir(&tmp_out);
+        config.protoc_arg("--experimental_allow_proto3_optional");
+        config.compile_protos(&protos, std::slice::from_ref(&proto_path))?;
+
+        info!("Generated file descriptor set at {:?}", descriptor_path);
+    }
+
     let package_names = ["common", "enums", "errors", "resources", "services"];
     let mut protos_by_package: HashMap<&str, Vec<_>> = HashMap::new();
     let mut misc_protos: Vec<_> = Vec::new();
@@ -92,6 +109,7 @@ fn main() -> Res {
         tonic_prost_build::configure()
             .build_server(false)
             .type_attribute(".", "#[allow(clippy::all)]")
+            .protoc_arg("--experimental_allow_proto3_optional")
             .compile_protos(&misc_protos, std::slice::from_ref(&proto_path))?;
     }
 
@@ -111,6 +129,7 @@ fn main() -> Res {
                 tonic_prost_build::configure()
                     .build_server(false)
                     .type_attribute(".", "#[allow(clippy::all)]")
+                    .protoc_arg("--experimental_allow_proto3_optional")
                     .compile_protos(chunk, std::slice::from_ref(&proto_path))?;
             }
         }

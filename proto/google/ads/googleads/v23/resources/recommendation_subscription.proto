@@ -59,17 +59,17 @@ message RecommendationSubscription {
   // Output only. Time in seconds when the subscription was first created. The
   // datetime is in the customer's time zone and in "yyyy-MM-dd HH:mm:ss"
   // format.
- string create_date_time = 3
+  optional string create_date_time = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Contains the time in microseconds, when the Recommendation
   // Subscription was last updated. The datetime is in the customer's time zone
   // and in "yyyy-MM-dd HH:mm:ss.ssssss" format.
- string modify_date_time = 4
+  optional string modify_date_time = 4
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Required. Status of the subscription, either enabled or paused.
- google.ads.googleads.v23.enums.RecommendationSubscriptionStatusEnum
+  optional google.ads.googleads.v23.enums.RecommendationSubscriptionStatusEnum
       .RecommendationSubscriptionStatus status = 5
       [(google.api.field_behavior) = REQUIRED];
 }

@@ -40,10 +40,10 @@ message SmartCampaignSetting {
   // Phone number and country code in smart campaign settings.
   message PhoneNumber {
     // Phone number of the smart campaign.
- string phone_number = 1;
+    optional string phone_number = 1;
 
     // Upper-case, two-letter country code as defined by ISO-3166.
- string country_code = 2;
+    optional string country_code = 2;
   }
 
   // Settings for configuring a business profile optimized for ads as this
@@ -52,7 +52,7 @@ message SmartCampaignSetting {
     // Enabling a lead form on your business profile enables prospective
     // customers to contact your business by filling out a simple form,
     // and you'll receive their information through email.
- bool include_lead_form = 1;
+    optional bool include_lead_form = 1;
   }
 
   // Immutable. The resource name of the Smart campaign setting.

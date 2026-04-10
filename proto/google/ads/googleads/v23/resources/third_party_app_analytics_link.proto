@@ -50,6 +50,6 @@ message ThirdPartyAppAnalyticsLink {
   // Output only. The shareable link ID that should be provided to the third
   // party when setting up app analytics. This is able to be regenerated using
   // regenerate method in the ThirdPartyAppAnalyticsLinkService.
- string shareable_link_id = 3
+  optional string shareable_link_id = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }

@@ -50,7 +50,7 @@ message CampaignBidModifier {
   ];
 
   // Output only. The campaign to which this criterion belongs.
- string campaign = 6 [
+  optional string campaign = 6 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -60,10 +60,10 @@ message CampaignBidModifier {
   // Output only. The ID of the criterion to bid modify.
   //
   // This field is ignored for mutates.
- int64 criterion_id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 criterion_id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The modifier for the bid when the criterion matches.
- double bid_modifier = 8;
+  optional double bid_modifier = 8;
 
   // The criterion of this campaign bid modifier.
   //

@@ -51,7 +51,7 @@ message SharedCriterion {
   ];
 
   // Immutable. The shared set to which the shared criterion belongs.
- string shared_set = 10 [
+  optional string shared_set = 10 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/SharedSet"
@@ -61,7 +61,7 @@ message SharedCriterion {
   // Output only. The ID of the criterion.
   //
   // This field is ignored for mutates.
- int64 criterion_id = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 criterion_id = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The type of the criterion.
   google.ads.googleads.v23.enums.CriterionTypeEnum.CriterionType type = 4
@@ -69,7 +69,7 @@ message SharedCriterion {
 
   // Immutable. If true, the criterion is excluded. If false, the criterion is
   // targeted.
- bool negative = 15 [(google.api.field_behavior) = IMMUTABLE];
+  optional bool negative = 15 [(google.api.field_behavior) = IMMUTABLE];
 
   // The criterion.
   //

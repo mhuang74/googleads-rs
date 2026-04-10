@@ -91,13 +91,13 @@ message LocalServicesLead {
   string locale = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Note added by advertiser for the lead.
- Note note = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional Note note = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. True if the advertiser was charged for the lead.
   bool lead_charged = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Credit details of the lead.
- CreditDetails credit_details = 12
+  optional CreditDetails credit_details = 12
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. True if the advertiser submitted feedback for the lead.

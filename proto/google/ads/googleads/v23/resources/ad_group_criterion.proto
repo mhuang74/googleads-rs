@@ -55,7 +55,7 @@ message AdGroupCriterion {
     //
     // This field may not be populated if Google does not have enough
     // information to determine a value.
- int32 quality_score = 5
+    optional int32 quality_score = 5
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. The performance of the ad compared to other advertisers.
@@ -77,27 +77,27 @@ message AdGroupCriterion {
   message PositionEstimates {
     // Output only. The estimate of the CPC bid required for ad to be shown on
     // first page of search results.
- int64 first_page_cpc_micros = 6
+    optional int64 first_page_cpc_micros = 6
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. The estimate of the CPC bid required for ad to be displayed
     // in first position, at the top of the first page of search results.
- int64 first_position_cpc_micros = 7
+    optional int64 first_position_cpc_micros = 7
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. The estimate of the CPC bid required for ad to be displayed
     // at the top of the first page of search results.
- int64 top_of_page_cpc_micros = 8
+    optional int64 top_of_page_cpc_micros = 8
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. Estimate of how many clicks per week you might get by
     // changing your keyword bid to the value in first_position_cpc_micros.
- int64 estimated_add_clicks_at_first_position_cpc = 9
+    optional int64 estimated_add_clicks_at_first_position_cpc = 9
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. Estimate of how your cost per week might change when
     // changing your keyword bid to the value in first_position_cpc_micros.
- int64 estimated_add_cost_at_first_position_cpc = 10
+    optional int64 estimated_add_cost_at_first_position_cpc = 10
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 
@@ -115,7 +115,7 @@ message AdGroupCriterion {
   // Output only. The ID of the criterion.
   //
   // This field is ignored for mutates.
- int64 criterion_id = 56 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 criterion_id = 56 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The display name of the criterion.
   //
@@ -139,7 +139,7 @@ message AdGroupCriterion {
   QualityInfo quality_info = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. The ad group to which the criterion belongs.
- string ad_group = 57 [
+  optional string ad_group = 57 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroup"
@@ -154,7 +154,7 @@ message AdGroupCriterion {
   //
   // This field is immutable. To switch a criterion from positive to negative,
   // remove then re-add it.
- bool negative = 58 [(google.api.field_behavior) = IMMUTABLE];
+  optional bool negative = 58 [(google.api.field_behavior) = IMMUTABLE];
 
   // Output only. Serving status of the criterion.
   google.ads.googleads.v23.enums.CriterionSystemServingStatusEnum
@@ -186,37 +186,37 @@ message AdGroupCriterion {
 
   // The modifier for the bid when the criterion matches. The modifier must be
   // in the range: 0.1 - 10.0. Most targetable criteria types support modifiers.
- double bid_modifier = 61;
+  optional double bid_modifier = 61;
 
   // The CPC (cost-per-click) bid.
- int64 cpc_bid_micros = 62;
+  optional int64 cpc_bid_micros = 62;
 
   // The CPM (cost-per-thousand viewable impressions) bid.
- int64 cpm_bid_micros = 63;
+  optional int64 cpm_bid_micros = 63;
 
   // The CPV (cost-per-view) bid.
- int64 cpv_bid_micros = 64;
+  optional int64 cpv_bid_micros = 64;
 
   // The CPC bid amount, expressed as a fraction of the advertised price
   // for some good or service. The valid range for the fraction is [0,1) and the
   // value stored here is 1,000,000 * [fraction].
- int64 percent_cpc_bid_micros = 65;
+  optional int64 percent_cpc_bid_micros = 65;
 
   // Output only. The effective CPC (cost-per-click) bid.
- int64 effective_cpc_bid_micros = 66
+  optional int64 effective_cpc_bid_micros = 66
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The effective CPM (cost-per-thousand viewable impressions)
   // bid.
- int64 effective_cpm_bid_micros = 67
+  optional int64 effective_cpm_bid_micros = 67
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The effective CPV (cost-per-view) bid.
- int64 effective_cpv_bid_micros = 68
+  optional int64 effective_cpv_bid_micros = 68
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The effective Percent CPC bid amount.
- int64 effective_percent_cpc_bid_micros = 69
+  optional int64 effective_percent_cpc_bid_micros = 69
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Source of the effective CPC bid.
@@ -248,10 +248,10 @@ message AdGroupCriterion {
   repeated string final_mobile_urls = 71;
 
   // URL template for appending params to final URL.
- string final_url_suffix = 72;
+  optional string final_url_suffix = 72;
 
   // The URL template for constructing a tracking URL.
- string tracking_url_template = 73;
+  optional string tracking_url_template = 73;
 
   // The list of mappings used to substitute custom parameter tags in a
   // `tracking_url_template`, `final_urls`, or `mobile_final_urls`.
@@ -259,7 +259,7 @@ message AdGroupCriterion {
       url_custom_parameters = 14;
 
   // Output only. The primary status for the ad group criterion.
- google.ads.googleads.v23.enums.AdGroupCriterionPrimaryStatusEnum
+  optional google.ads.googleads.v23.enums.AdGroupCriterionPrimaryStatusEnum
       .AdGroupCriterionPrimaryStatus primary_status = 85
       [(google.api.field_behavior) = OUTPUT_ONLY];
 

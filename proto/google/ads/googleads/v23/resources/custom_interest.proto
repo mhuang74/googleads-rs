@@ -52,7 +52,7 @@ message CustomInterest {
   ];
 
   // Output only. Id of the custom interest.
- int64 id = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Status of this custom interest. Indicates whether the custom interest is
   // enabled or removed.
@@ -62,7 +62,7 @@ message CustomInterest {
   // Name of the custom interest. It should be unique across the same custom
   // affinity audience.
   // This field is required for create operations.
- string name = 9;
+  optional string name = 9;
 
   // Type of the custom interest, CUSTOM_AFFINITY or CUSTOM_INTENT.
   // By default the type is set to CUSTOM_AFFINITY.
@@ -70,7 +70,7 @@ message CustomInterest {
       type = 5;
 
   // Description of this custom interest audience.
- string description = 10;
+  optional string description = 10;
 
   // List of custom interest members that this custom interest is composed of.
   // Members can be added during CustomInterest creation. If members are
@@ -87,5 +87,5 @@ message CustomInterestMember {
 
   // Keyword text when member_type is KEYWORD or URL string when
   // member_type is URL.
- string parameter = 3;
+  optional string parameter = 3;
 }

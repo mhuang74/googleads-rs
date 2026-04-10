@@ -73,7 +73,7 @@ message ProductCategoryConstant {
   int64 category_id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Resource name of the parent product category.
- string product_category_constant_parent = 3 [
+  optional string product_category_constant_parent = 3 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/ProductCategoryConstant"

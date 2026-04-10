@@ -109,7 +109,7 @@ message MerchantCenterLinkInvitationIdentifier {
 message AdvertisingPartnerLinkInvitationIdentifier {
   // Immutable. The resource name of the advertising partner Google Ads account.
   // This field is read only.
- string customer = 1 [
+  optional string customer = 1 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Customer"
@@ -122,5 +122,5 @@ message AdvertisingPartnerLinkInvitationProperties {
   // Immutable. The allowed domain for the Advertising Partner link invitation.
   // The advertising partner will only be able to advertise on this domain. The
   // field is immutable after the creation of the link invitation.
- string allowed_domain = 1 [(google.api.field_behavior) = IMMUTABLE];
+  optional string allowed_domain = 1 [(google.api.field_behavior) = IMMUTABLE];
 }

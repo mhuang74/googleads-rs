@@ -211,13 +211,13 @@ message LineupAttributeMetadata {
   LocationInfo inventory_country = 1;
 
   // The median number of impressions per month on this lineup.
- int64 median_monthly_inventory = 2;
+  optional int64 median_monthly_inventory = 2;
 
   // The lower end of a range containing the number of channels in the lineup.
- int64 channel_count_lower_bound = 3;
+  optional int64 channel_count_lower_bound = 3;
 
   // The upper end of a range containing the number of channels in the lineup.
- int64 channel_count_upper_bound = 4;
+  optional int64 channel_count_upper_bound = 4;
 
   // Examples of channels that are included in the lineup.
   repeated SampleChannel sample_channels = 5;

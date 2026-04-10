@@ -52,10 +52,10 @@ message SearchTermView {
   ];
 
   // Output only. The search term.
- string search_term = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string search_term = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The ad group the search term served in.
- string ad_group = 6 [
+  optional string ad_group = 6 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroup"

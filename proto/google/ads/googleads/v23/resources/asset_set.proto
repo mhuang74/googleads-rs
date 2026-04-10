@@ -45,18 +45,18 @@ message AssetSet {
     int64 merchant_id = 1 [(google.api.field_behavior) = REQUIRED];
 
     // Optional. Feed Label from Google Merchant Center.
- string feed_label = 2 [(google.api.field_behavior) = OPTIONAL];
+    optional string feed_label = 2 [(google.api.field_behavior) = OPTIONAL];
   }
 
   // For Performance Max for travel goals campaigns with a Hotel
   // Center account link. Read-only.
   message HotelPropertyData {
     // Output only. The hotel center ID of the partner.
- int64 hotel_center_id = 1
+    optional int64 hotel_center_id = 1
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. Name of the hotel partner.
- string partner_name = 2
+    optional string partner_name = 2
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 

@@ -58,7 +58,7 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Common";
 // A keyword criterion.
 message KeywordInfo {
   // The text of the keyword (at most 80 characters and 10 words).
- string text = 3;
+  optional string text = 3;
 
   // The match type of the keyword.
   google.ads.googleads.v23.enums.KeywordMatchTypeEnum.KeywordMatchType
@@ -71,7 +71,7 @@ message PlacementInfo {
   // URL of the placement.
   //
   // For example, "http://www.domain.com".
- string url = 2;
+  optional string url = 2;
 }
 
 // A Negative Keyword List criterion. Represents a shared set
@@ -79,13 +79,13 @@ message PlacementInfo {
 // Only one negative keyword list criterion can be attached per account.
 message NegativeKeywordListInfo {
   // The NegativeKeywordListInfo shared set resource name.
- string shared_set = 1;
+  optional string shared_set = 1;
 }
 
 // A mobile app category criterion.
 message MobileAppCategoryInfo {
   // The mobile app category constant resource name.
- string mobile_app_category_constant = 2
+  optional string mobile_app_category_constant = 2
       [(google.api.resource_reference) = {
         type: "googleads.googleapis.com/MobileAppCategoryConstant"
       }];
@@ -108,16 +108,16 @@ message MobileApplicationInfo {
   // A well formed app id for Google Ads API would thus be "1-476943146" for iOS
   // and "2-com.labpixies.colordrips" for Android.
   // This field is required and must be set in CREATE operations.
- string app_id = 4;
+  optional string app_id = 4;
 
   // Name of this mobile application.
- string name = 5;
+  optional string name = 5;
 }
 
 // A location criterion.
 message LocationInfo {
   // The geo target constant resource name.
- string geo_target_constant = 2;
+  optional string geo_target_constant = 2;
 }
 
 // A device criterion.
@@ -137,10 +137,10 @@ message ListingGroupInfo {
 
   // Resource name of ad group criterion which is the parent listing group
   // subdivision. Null for the root group.
- string parent_ad_group_criterion = 4;
+  optional string parent_ad_group_criterion = 4;
 
   // The path of dimensions defining this listing group.
- ListingDimensionPath path = 5;
+  optional ListingDimensionPath path = 5;
 }
 
 // The path of dimensions defining a listing group.
@@ -238,31 +238,31 @@ message ListingDimensionInfo {
 // Advertiser-specific hotel ID.
 message HotelIdInfo {
   // String value of the hotel ID.
- string value = 2;
+  optional string value = 2;
 }
 
 // Class of the hotel as a number of stars 1 to 5.
 message HotelClassInfo {
   // Long value of the hotel class.
- int64 value = 2;
+  optional int64 value = 2;
 }
 
 // Country or Region the hotel is located in.
 message HotelCountryRegionInfo {
   // The Geo Target Constant resource name.
- string country_region_criterion = 2;
+  optional string country_region_criterion = 2;
 }
 
 // State the hotel is located in.
 message HotelStateInfo {
   // The Geo Target Constant resource name.
- string state_criterion = 2;
+  optional string state_criterion = 2;
 }
 
 // City the hotel is located in.
 message HotelCityInfo {
   // The Geo Target Constant resource name.
- string city_criterion = 2;
+  optional string city_criterion = 2;
 }
 
 // Category of a product offer.
@@ -271,7 +271,7 @@ message ProductCategoryInfo {
   //
   // This ID is equivalent to the google_product_category ID as described in
   // this article: https://support.google.com/merchants/answer/6324436
- int64 category_id = 1;
+  optional int64 category_id = 1;
 
   // Level of the product category.
   google.ads.googleads.v23.enums.ProductCategoryLevelEnum.ProductCategoryLevel
@@ -281,7 +281,7 @@ message ProductCategoryInfo {
 // Brand of the product.
 message ProductBrandInfo {
   // String value of the product brand.
- string value = 2;
+  optional string value = 2;
 }
 
 // Locality of a product offer.
@@ -307,7 +307,7 @@ message ProductConditionInfo {
 // Custom attribute of a product offer.
 message ProductCustomAttributeInfo {
   // String value of the product custom attribute.
- string value = 3;
+  optional string value = 3;
 
   // Indicates the index of the custom attribute.
   google.ads.googleads.v23.enums.ProductCustomAttributeIndexEnum
@@ -317,13 +317,13 @@ message ProductCustomAttributeInfo {
 // Item id of a product offer.
 message ProductItemIdInfo {
   // Value of the id.
- string value = 2;
+  optional string value = 2;
 }
 
 // Type of a product offer.
 message ProductTypeInfo {
   // Value of the type.
- string value = 3;
+  optional string value = 3;
 
   // Level of the type.
   google.ads.googleads.v23.enums.ProductTypeLevelEnum.ProductTypeLevel level =
@@ -334,28 +334,28 @@ message ProductTypeInfo {
 // supported only in Display campaigns.
 message ProductGroupingInfo {
   // String value of the product grouping.
- string value = 1;
+  optional string value = 1;
 }
 
 // Labels of a product offer. This listing dimension is deprecated and it is
 // supported only in Display campaigns.
 message ProductLabelsInfo {
   // String value of the product labels.
- string value = 1;
+  optional string value = 1;
 }
 
 // Legacy condition of a product offer. This listing dimension is deprecated and
 // it is supported only in Display campaigns.
 message ProductLegacyConditionInfo {
   // String value of the product legacy condition.
- string value = 1;
+  optional string value = 1;
 }
 
 // Full type of a product offer. This listing dimension is deprecated and it is
 // supported only in Display campaigns.
 message ProductTypeFullInfo {
   // String value of the product full type.
- string value = 1;
+  optional string value = 1;
 }
 
 // Unknown listing dimension.
@@ -371,19 +371,19 @@ message HotelDateSelectionTypeInfo {
 // Criterion for number of days prior to the stay the booking is being made.
 message HotelAdvanceBookingWindowInfo {
   // Low end of the number of days prior to the stay.
- int64 min_days = 3;
+  optional int64 min_days = 3;
 
   // High end of the number of days prior to the stay.
- int64 max_days = 4;
+  optional int64 max_days = 4;
 }
 
 // Criterion for length of hotel stay in nights.
 message HotelLengthOfStayInfo {
   // Low end of the number of nights in the stay.
- int64 min_nights = 3;
+  optional int64 min_nights = 3;
 
   // High end of the number of nights in the stay.
- int64 max_nights = 4;
+  optional int64 max_nights = 4;
 }
 
 // Criterion for a check-in date range.
@@ -404,34 +404,34 @@ message HotelCheckInDayInfo {
 // Advertiser-specific activity ID.
 message ActivityIdInfo {
   // String value of the activity ID.
- string value = 1;
+  optional string value = 1;
 }
 
 // Rating of the activity as a number 1 to 5, where 5 is the best.
 message ActivityRatingInfo {
   // Long value of the activity rating.
- int64 value = 1;
+  optional int64 value = 1;
 }
 
 // The country where the travel activity is available.
 message ActivityCountryInfo {
   // String value of the activity country. The Geo Target Constant resource
   // name.
- string value = 1;
+  optional string value = 1;
 }
 
 // The state where the travel activity is available.
 message ActivityStateInfo {
   // String value of the activity state. The Geo Target Constant resource
   // name.
- string value = 1;
+  optional string value = 1;
 }
 
 // The city where the travel activity is available.
 message ActivityCityInfo {
   // String value of the activity city. The Geo Target Constant resource
   // name.
- string value = 1;
+  optional string value = 1;
 }
 
 // Criterion for Interaction Type.
@@ -465,14 +465,14 @@ message AdScheduleInfo {
   //
   // This field is required for CREATE operations and is prohibited on UPDATE
   // operations.
- int32 start_hour = 6;
+  optional int32 start_hour = 6;
 
   // Ending hour in 24 hour time; 24 signifies end of the day.
   // This field must be between 0 and 24, inclusive.
   //
   // This field is required for CREATE operations and is prohibited on UPDATE
   // operations.
- int32 end_hour = 7;
+  optional int32 end_hour = 7;
 
   // Day of the week the schedule applies to.
   //
@@ -509,20 +509,20 @@ message ParentalStatusInfo {
 // A YouTube Video criterion.
 message YouTubeVideoInfo {
   // YouTube video id as it appears on the YouTube watch page.
- string video_id = 2;
+  optional string video_id = 2;
 }
 
 // A YouTube Channel criterion.
 message YouTubeChannelInfo {
   // The YouTube uploader channel id or the channel code of a YouTube channel.
- string channel_id = 2;
+  optional string channel_id = 2;
 }
 
 // A User List criterion. Represents a user list that is defined by the
 // advertiser to be targeted.
 message UserListInfo {
   // The User List resource name.
- string user_list = 2;
+  optional string user_list = 2;
 }
 
 // A Proximity criterion. The geo point and radius determine what geographical
@@ -538,7 +538,7 @@ message ProximityInfo {
   GeoPointInfo geo_point = 1;
 
   // The radius of the proximity.
- double radius = 5;
+  optional double radius = 5;
 
   // The unit of measurement of the radius. Default is KILOMETERS.
   google.ads.googleads.v23.enums.ProximityRadiusUnitsEnum.ProximityRadiusUnits
@@ -551,36 +551,36 @@ message ProximityInfo {
 // Geo point for proximity criterion.
 message GeoPointInfo {
   // Micro degrees for the longitude.
- int32 longitude_in_micro_degrees = 3;
+  optional int32 longitude_in_micro_degrees = 3;
 
   // Micro degrees for the latitude.
- int32 latitude_in_micro_degrees = 4;
+  optional int32 latitude_in_micro_degrees = 4;
 }
 
 // Address for proximity criterion.
 message AddressInfo {
   // Postal code.
- string postal_code = 8;
+  optional string postal_code = 8;
 
   // Province or state code.
- string province_code = 9;
+  optional string province_code = 9;
 
   // Country code.
- string country_code = 10;
+  optional string country_code = 10;
 
   // Province or state name.
- string province_name = 11;
+  optional string province_name = 11;
 
   // Street address line 1.
- string street_address = 12;
+  optional string street_address = 12;
 
   // Street address line 2. This field is write-only. It is only used for
   // calculating the longitude and latitude of an address when geo_point is
   // empty.
- string street_address2 = 13;
+  optional string street_address2 = 13;
 
   // Name of the city.
- string city_name = 14;
+  optional string city_name = 14;
 }
 
 // A topic criterion. Use topics to target or exclude placements in the
@@ -588,7 +588,7 @@ message AddressInfo {
 // (for example, "Pets & Animals/Pets/Dogs").
 message TopicInfo {
   // The Topic Constant resource name.
- string topic_constant = 3 [(google.api.resource_reference) = {
+  optional string topic_constant = 3 [(google.api.resource_reference) = {
     type: "googleads.googleapis.com/TopicConstant"
   }];
 
@@ -602,7 +602,7 @@ message TopicInfo {
 // A language criterion.
 message LanguageInfo {
   // The language constant resource name.
- string language_constant = 2;
+  optional string language_constant = 2;
 }
 
 // An IpBlock criterion used for excluding IP addresses.
@@ -630,7 +630,7 @@ message LanguageInfo {
 //  * CIDR block: 2001:db8::/48
 message IpBlockInfo {
   // The IP address or the CIDR block to be excluded.
- string ip_address = 2;
+  optional string ip_address = 2;
 }
 
 // Content Label for category exclusion.
@@ -642,7 +642,7 @@ message ContentLabelInfo {
 // Represents a Carrier Criterion.
 message CarrierInfo {
   // The Carrier constant resource name.
- string carrier_constant = 2 [(google.api.resource_reference) = {
+  optional string carrier_constant = 2 [(google.api.resource_reference) = {
     type: "googleads.googleapis.com/CarrierConstant"
   }];
 }
@@ -650,7 +650,7 @@ message CarrierInfo {
 // Represents a particular interest-based topic to be targeted.
 message UserInterestInfo {
   // The UserInterest resource name.
- string user_interest_category = 2;
+  optional string user_interest_category = 2;
 }
 
 // Represents a criterion for targeting webpages of an advertiser's website.
@@ -661,7 +661,7 @@ message WebpageInfo {
   //
   // This field is required for CREATE operations and is prohibited on UPDATE
   // operations.
- string criterion_name = 3;
+  optional string criterion_name = 3;
 
   // Conditions, or logical expressions, for webpage targeting. The list of
   // webpage targeting conditions are and-ed together when evaluated
@@ -695,13 +695,13 @@ message WebpageConditionInfo {
       operator = 2;
 
   // Argument of webpage targeting condition.
- string argument = 4;
+  optional string argument = 4;
 }
 
 // Represents a list of webpage criteria.
 message WebpageListInfo {
   // Shared set resource name of the webpage list.
- string shared_set = 1;
+  optional string shared_set = 1;
 }
 
 // List of sample urls that match the website target
@@ -713,7 +713,7 @@ message WebpageSampleInfo {
 // Represents an operating system version to be targeted.
 message OperatingSystemVersionInfo {
   // The operating system version constant resource name.
- string operating_system_version_constant = 2
+  optional string operating_system_version_constant = 2
       [(google.api.resource_reference) = {
         type: "googleads.googleapis.com/OperatingSystemVersionConstant"
       }];
@@ -729,7 +729,7 @@ message AppPaymentModelInfo {
 // A mobile device criterion.
 message MobileDeviceInfo {
   // The mobile device constant resource name.
- string mobile_device_constant = 2
+  optional string mobile_device_constant = 2
       [(google.api.resource_reference) = {
         type: "googleads.googleapis.com/MobileDeviceConstant"
       }];
@@ -739,14 +739,14 @@ message MobileDeviceInfo {
 // A criterion of this type is only targetable.
 message CustomAffinityInfo {
   // The CustomInterest resource name.
- string custom_affinity = 2;
+  optional string custom_affinity = 2;
 }
 
 // A custom intent criterion.
 // A criterion of this type is only targetable.
 message CustomIntentInfo {
   // The CustomInterest resource name.
- string custom_intent = 2;
+  optional string custom_intent = 2;
 }
 
 // A radius around a list of locations specified through a feed or assetSet.
@@ -758,7 +758,7 @@ message LocationGroupInfo {
 
   // Distance in units specifying the radius around targeted locations.
   // This is required and must be set in CREATE operations.
- int64 radius = 7;
+  optional int64 radius = 7;
 
   // Unit of the radius. Miles and meters are supported for geo target
   // constants. Milli miles and meters are supported for feed item sets and
@@ -777,7 +777,7 @@ message LocationGroupInfo {
   // feed, geo target constants or feed item sets. When using asset sets, either
   // this field or location_group_asset_sets should be specified. Both cannot be
   // used at the same time. This can only be set in CREATE operations.
- bool enable_customer_level_location_asset_set = 9;
+  optional bool enable_customer_level_location_asset_set = 9;
 
   // AssetSets whose Assets are targeted. If multiple IDs are specified, then
   // all items that appear in at least one set are targeted. This field cannot
@@ -845,21 +845,21 @@ message SearchThemeInfo {
 // graph.
 message BrandInfo {
   // Output only. A text representation of a brand.
- string display_name = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string display_name = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The Commercial KG MID for the brand.
- string entity_id = 1;
+  optional string entity_id = 1;
 
   // Output only. The primary url of a brand.
- string primary_url = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string primary_url = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The rejection reason when a brand status is REJECTED.
- google.ads.googleads.v23.enums.BrandRequestRejectionReasonEnum
+  optional google.ads.googleads.v23.enums.BrandRequestRejectionReasonEnum
       .BrandRequestRejectionReason rejection_reason = 4
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The status of a brand.
- google.ads.googleads.v23.enums.BrandStateEnum.BrandState status = 5
+  optional google.ads.googleads.v23.enums.BrandStateEnum.BrandState status = 5
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
@@ -868,40 +868,40 @@ message BrandInfo {
 // be either targeted or excluded.
 message BrandListInfo {
   // Shared set resource name of the brand list.
- string shared_set = 1;
+  optional string shared_set = 1;
 }
 
 // Represents a life event criterion.
 message LifeEventInfo {
   // Taxonomy id of the life event.
- int64 life_event_id = 1;
+  optional int64 life_event_id = 1;
 }
 
 // Represents an extended demographic criterion.
 message ExtendedDemographicInfo {
   // Taxonomy id of the extended demographic group.
- int64 extended_demographic_id = 1;
+  optional int64 extended_demographic_id = 1;
 }
 
 // A Video lineup criterion.
 message VideoLineupInfo {
   // ID for a Video lineup. Contact your Google business development
   // representative for details.
- int64 video_lineup_id = 1;
+  optional int64 video_lineup_id = 1;
 }
 
 // A Placement List criterion. Represents a shared set
 // of placements that can be excluded at the account-level.
 message PlacementListInfo {
   // The PlacementListInfo shared set resource name.
- string shared_set = 1;
+  optional string shared_set = 1;
 }
 
 // A criterion for targeting a shared set of rules for item groups in Vertical
 // Ads (e.g., for hotel ads).
 message VerticalAdsItemGroupRuleListInfo {
   // The shared set resource name of the vertical ads item group rule list.
- string shared_set = 1;
+  optional string shared_set = 1;
 }
 
 // A criterion to represent a single item group rule in Vertical Ads.

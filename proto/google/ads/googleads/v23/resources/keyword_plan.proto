@@ -53,13 +53,13 @@ message KeywordPlan {
   ];
 
   // Output only. The ID of the keyword plan.
- int64 id = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The name of the keyword plan.
   //
   // This field is required and should not be empty when creating new keyword
   // plans.
- string name = 6;
+  optional string name = 6;
 
   // The date period used for forecasting the plan.
   KeywordPlanForecastPeriod forecast_period = 4;

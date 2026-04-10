@@ -51,15 +51,15 @@ message KeywordPlanCampaignKeyword {
   ];
 
   // The Keyword Plan campaign to which this negative keyword belongs.
- string keyword_plan_campaign = 8 [(google.api.resource_reference) = {
+  optional string keyword_plan_campaign = 8 [(google.api.resource_reference) = {
     type: "googleads.googleapis.com/KeywordPlanCampaign"
   }];
 
   // Output only. The ID of the Keyword Plan negative keyword.
- int64 id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The keyword text.
- string text = 10;
+  optional string text = 10;
 
   // The keyword match type.
   google.ads.googleads.v23.enums.KeywordMatchTypeEnum.KeywordMatchType
@@ -67,5 +67,5 @@ message KeywordPlanCampaignKeyword {
 
   // Immutable. If true, the keyword is negative.
   // Must be set to true. Only negative campaign keywords are supported.
- bool negative = 11 [(google.api.field_behavior) = IMMUTABLE];
+  optional bool negative = 11 [(google.api.field_behavior) = IMMUTABLE];
 }

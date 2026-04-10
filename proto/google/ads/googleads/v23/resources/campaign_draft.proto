@@ -52,10 +52,10 @@ message CampaignDraft {
   // Output only. The ID of the draft.
   //
   // This field is read-only.
- int64 draft_id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 draft_id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. The base campaign to which the draft belongs.
- string base_campaign = 10 [
+  optional string base_campaign = 10 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -69,13 +69,13 @@ message CampaignDraft {
   //
   // It must not contain any null (code point 0x0), NL line feed
   // (code point 0xA) or carriage return (code point 0xD) characters.
- string name = 11;
+  optional string name = 11;
 
   // Output only. Resource name of the Campaign that results from overlaying the
   // draft changes onto the base campaign.
   //
   // This field is read-only.
- string draft_campaign = 12 [
+  optional string draft_campaign = 12 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -90,12 +90,12 @@ message CampaignDraft {
 
   // Output only. Whether there is an experiment based on this draft currently
   // serving.
- bool has_experiment_running = 13
+  optional bool has_experiment_running = 13
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The resource name of the long-running operation that can be
   // used to poll for completion of draft promotion. This is only set if the
   // draft promotion is in progress or finished.
- string long_running_operation = 14
+  optional string long_running_operation = 14
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }

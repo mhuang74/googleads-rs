@@ -30,17 +30,17 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Common";
 // Location criteria associated with a click.
 message ClickLocation {
   // The city location criterion associated with the impression.
- string city = 6;
+  optional string city = 6;
 
   // The country location criterion associated with the impression.
- string country = 7;
+  optional string country = 7;
 
   // The metro location criterion associated with the impression.
- string metro = 8;
+  optional string metro = 8;
 
   // The most specific location criterion associated with the impression.
- string most_specific = 9;
+  optional string most_specific = 9;
 
   // The region location criterion associated with the impression.
- string region = 10;
+  optional string region = 10;
 }

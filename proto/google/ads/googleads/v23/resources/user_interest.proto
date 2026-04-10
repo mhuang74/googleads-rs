@@ -56,14 +56,14 @@ message UserInterest {
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The ID of the user interest.
- int64 user_interest_id = 8
+  optional int64 user_interest_id = 8
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The name of the user interest.
- string name = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string name = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The parent of the user interest.
- string user_interest_parent = 10 [
+  optional string user_interest_parent = 10 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/UserInterest"
@@ -72,7 +72,7 @@ message UserInterest {
 
   // Output only. True if the user interest is launched to all channels and
   // locales.
- bool launched_to_all = 11
+  optional bool launched_to_all = 11
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Availability information of the user interest.

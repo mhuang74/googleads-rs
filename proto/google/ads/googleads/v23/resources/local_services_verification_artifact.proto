@@ -54,7 +54,7 @@ message LocalServicesVerificationArtifact {
   ];
 
   // Output only. The ID of the verification artifact.
- int64 id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The timestamp when this verification artifact was created.
   // The format is "YYYY-MM-DD HH:MM:SS" in the Google Ads account's timezone.
@@ -95,13 +95,13 @@ message LocalServicesVerificationArtifact {
 // A proto holding information specific to local services background check.
 message BackgroundCheckVerificationArtifact {
   // Output only. URL to access background case.
- string case_url = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string case_url = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The timestamp when this background check case result was
   // adjudicated. The format is "YYYY-MM-DD HH:MM:SS" in the Google Ads
   // account's timezone. Examples: "2018-03-05 09:15:00" or "2018-02-01
   // 14:34:30"
- string final_adjudication_date_time = 2
+  optional string final_adjudication_date_time = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
@@ -109,59 +109,59 @@ message BackgroundCheckVerificationArtifact {
 message InsuranceVerificationArtifact {
   // Output only. Insurance amount. This is measured in "micros" of the currency
   // mentioned in the insurance document.
- int64 amount_micros = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 amount_micros = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Insurance document's rejection reason.
-
+  optional
       google.ads.googleads.v23.enums.LocalServicesInsuranceRejectionReasonEnum
           .LocalServicesInsuranceRejectionReason rejection_reason = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The readonly field containing the information for an uploaded
   // insurance document.
- google.ads.googleads.v23.common.LocalServicesDocumentReadOnly
+  optional google.ads.googleads.v23.common.LocalServicesDocumentReadOnly
       insurance_document_readonly = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The timestamp when this insurance expires.
   // The format is "YYYY-MM-DD HH:MM:SS" in the Google Ads account's timezone.
   // Examples: "2018-03-05 09:15:00" or "2018-02-01 14:34:30"
- string expiration_date_time = 4
+  optional string expiration_date_time = 4
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // A proto holding information specific to a local services license.
 message LicenseVerificationArtifact {
   // Output only. License type / name.
- string license_type = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string license_type = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. License number.
- string license_number = 2
+  optional string license_number = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. First name of the licensee.
- string licensee_first_name = 3
+  optional string licensee_first_name = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Last name of the licensee.
- string licensee_last_name = 4
+  optional string licensee_last_name = 4
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. License rejection reason.
-
+  optional
       google.ads.googleads.v23.enums.LocalServicesLicenseRejectionReasonEnum
           .LocalServicesLicenseRejectionReason rejection_reason = 5
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The readonly field containing the information for an uploaded
   // license document.
- google.ads.googleads.v23.common.LocalServicesDocumentReadOnly
+  optional google.ads.googleads.v23.common.LocalServicesDocumentReadOnly
       license_document_readonly = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The timestamp when this license expires.
   // The format is "YYYY-MM-DD HH:MM:SS" in the Google Ads account's timezone.
   // Examples: "2018-03-05 09:15:00" or "2018-02-01 14:34:30"
- string expiration_date_time = 7
+  optional string expiration_date_time = 7
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
@@ -169,17 +169,17 @@ message LicenseVerificationArtifact {
 // registration check.
 message BusinessRegistrationCheckVerificationArtifact {
   // Output only. The type of business registration check (number, document).
-
+  optional
       google.ads.googleads.v23.enums.LocalServicesBusinessRegistrationTypeEnum
           .LocalServicesBusinessRegistrationType registration_type = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The id of the check, such as vat_tax_id, representing "VAT Tax
   // ID" requirement.
- string check_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string check_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Registration document rejection reason.
- google.ads.googleads.v23.enums
+  optional google.ads.googleads.v23.enums
       .LocalServicesBusinessRegistrationCheckRejectionReasonEnum
       .LocalServicesBusinessRegistrationCheckRejectionReason rejection_reason =
       5 [(google.api.field_behavior) = OUTPUT_ONLY];
@@ -201,7 +201,7 @@ message BusinessRegistrationCheckVerificationArtifact {
 // registration number.
 message BusinessRegistrationNumber {
   // Output only. Government-issued number for the business.
- string number = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string number = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // A proto holding information specific to a local services business
@@ -209,6 +209,6 @@ message BusinessRegistrationNumber {
 message BusinessRegistrationDocument {
   // Output only. The readonly field containing the information for an uploaded
   // business registration document.
- google.ads.googleads.v23.common.LocalServicesDocumentReadOnly
+  optional google.ads.googleads.v23.common.LocalServicesDocumentReadOnly
       document_readonly = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

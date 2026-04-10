@@ -91,7 +91,7 @@ message ShoppingProduct {
 
     // Output only. The name of the product's attribute, if any, that triggered
     // the issue.
- string attribute_name = 3
+    optional string attribute_name = 3
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. The short description of the issue in English.
@@ -139,41 +139,41 @@ message ShoppingProduct {
 
   // Output only. The id of the Multi Client Account of the merchant, if
   // present.
- int64 multi_client_account_id = 7
+  optional int64 multi_client_account_id = 7
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The title of the product as provided by the merchant.
- string title = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string title = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The brand of the product as provided by the merchant.
- string brand = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string brand = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The URI of the product image as provided by the merchant.
- string product_image_uri = 36
+  optional string product_image_uri = 36
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The price of the product in micros as provided by the
   // merchant, in the currency specified in `currency_code` (e.g. $2.97 is
   // reported as 2970000).
- int64 price_micros = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 price_micros = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The currency code as provided by the merchant, in ISO 4217
   // format.
- string currency_code = 11
+  optional string currency_code = 11
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The channel exclusivity of the product as provided by the
   // merchant.
- google.ads.googleads.v23.enums.ProductChannelExclusivityEnum
+  optional google.ads.googleads.v23.enums.ProductChannelExclusivityEnum
       .ProductChannelExclusivity channel_exclusivity = 12
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The condition of the product as provided by the merchant.
- google.ads.googleads.v23.enums.ProductConditionEnum.ProductCondition
+  optional google.ads.googleads.v23.enums.ProductConditionEnum.ProductCondition
       condition = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The availability of the product as provided by the merchant.
-
+  optional
       google.ads.googleads.v23.enums.ProductAvailabilityEnum.ProductAvailability
           availability = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
 
@@ -184,31 +184,31 @@ message ShoppingProduct {
 
   // Output only. The custom attribute 0 of the product as provided by the
   // merchant.
- string custom_attribute0 = 16
+  optional string custom_attribute0 = 16
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The custom attribute 1 of the product as provided by the
   // merchant.
- string custom_attribute1 = 17
+  optional string custom_attribute1 = 17
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The custom attribute 2 of the product as provided by the
   // merchant.
- string custom_attribute2 = 18
+  optional string custom_attribute2 = 18
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The custom attribute 3 of the product as provided by the
   // merchant.
- string custom_attribute3 = 19
+  optional string custom_attribute3 = 19
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The custom attribute 4 of the product as provided by the
   // merchant.
- string custom_attribute4 = 20
+  optional string custom_attribute4 = 20
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The category level 1 of the product.
- string category_level1 = 21 [
+  optional string category_level1 = 21 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/ProductCategoryConstant"
@@ -216,7 +216,7 @@ message ShoppingProduct {
   ];
 
   // Output only. The category level 2 of the product.
- string category_level2 = 22 [
+  optional string category_level2 = 22 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/ProductCategoryConstant"
@@ -224,7 +224,7 @@ message ShoppingProduct {
   ];
 
   // Output only. The category level 3 of the product.
- string category_level3 = 23 [
+  optional string category_level3 = 23 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/ProductCategoryConstant"
@@ -232,7 +232,7 @@ message ShoppingProduct {
   ];
 
   // Output only. The category level 4 of the product.
- string category_level4 = 24 [
+  optional string category_level4 = 24 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/ProductCategoryConstant"
@@ -240,7 +240,7 @@ message ShoppingProduct {
   ];
 
   // Output only. The category level 5 of the product.
- string category_level5 = 25 [
+  optional string category_level5 = 25 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/ProductCategoryConstant"
@@ -248,23 +248,23 @@ message ShoppingProduct {
   ];
 
   // Output only. The product type level 1 as provided by the merchant.
- string product_type_level1 = 26
+  optional string product_type_level1 = 26
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The product type level 2 as provided by the merchant.
- string product_type_level2 = 27
+  optional string product_type_level2 = 27
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The product type level 3 as provided by the merchant.
- string product_type_level3 = 28
+  optional string product_type_level3 = 28
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The product type level 4 as provided by the merchant.
- string product_type_level4 = 29
+  optional string product_type_level4 = 29
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The product type level 5 as provided by the merchant.
- string product_type_level5 = 30
+  optional string product_type_level5 = 30
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The effective maximum cost-per-click (effective max. CPC) of
@@ -273,7 +273,7 @@ message ShoppingProduct {
   // value is the highest bid set for the product in product groups across all
   // enabled ad groups. It represents the most you're willing to pay for a click
   // on the product. This field can take up to 24 hours to update.
- int64 effective_max_cpc_micros = 31
+  optional int64 effective_max_cpc_micros = 31
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The status that indicates whether the product can show in ads.
@@ -292,7 +292,7 @@ message ShoppingProduct {
   // Output only. A campaign that includes the product.
   // This field is selectable only in the campaign scope, which requires an
   // equality filter on `campaign`.
- string campaign = 34 [
+  optional string campaign = 34 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -302,7 +302,7 @@ message ShoppingProduct {
   // Output only. An ad group of a campaign that includes the product.
   // This field is selectable only in the ad group scope, which requires an
   // equality filter on `campaign` and `ad_group`.
- string ad_group = 35 [
+  optional string ad_group = 35 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroup"

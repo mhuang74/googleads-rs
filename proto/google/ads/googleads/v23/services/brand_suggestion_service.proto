@@ -56,7 +56,7 @@ message SuggestBrandsRequest {
   string customer_id = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Required. The prefix of a brand name.
- string brand_prefix = 2 [(google.api.field_behavior) = REQUIRED];
+  optional string brand_prefix = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Optional. Ids of the brands already selected by advertisers. They will be
   // excluded in response. These are expected to be brand ids not brand names.

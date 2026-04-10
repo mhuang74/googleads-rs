@@ -55,7 +55,7 @@ message CampaignAsset {
   ];
 
   // Immutable. The campaign to which the asset is linked.
- string campaign = 6 [
+  optional string campaign = 6 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -63,7 +63,7 @@ message CampaignAsset {
   ];
 
   // Immutable. The asset which is linked to the campaign.
- string asset = 7 [
+  optional string asset = 7 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = { type: "googleads.googleapis.com/Asset" }
   ];

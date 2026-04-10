@@ -111,10 +111,10 @@ message ConversionValueRule {
   // start of the itinerary.
   message ValueRuleItineraryAdvanceBookingWindow {
     // Minimum number of days between the date of the booking the start date.
- int32 min_days = 3;
+    optional int32 min_days = 3;
 
     // Maximum number of days between the date of the booking the start date.
- int32 max_days = 4;
+    optional int32 max_days = 4;
   }
 
   // Range for the itinerary length in number of nights.

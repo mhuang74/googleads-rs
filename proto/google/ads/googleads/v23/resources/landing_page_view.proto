@@ -50,6 +50,6 @@ message LandingPageView {
   ];
 
   // Output only. The advertiser-specified final URL.
- string unexpanded_final_url = 3
+  optional string unexpanded_final_url = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
