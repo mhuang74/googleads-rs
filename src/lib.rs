@@ -878,6 +878,13 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
             "segments.sk_ad_network_source_type" => method_str!([segments], sk_ad_network_source_type),
             "segments.sk_ad_network_user_type" => method_str!([segments], sk_ad_network_user_type),
             "segments.sk_ad_network_version" => attr_str!([segments], sk_ad_network_version),
+            // ===== CUSTOMER_USER_ACCESS =====
+            "customer_user_access.resource_name" => attr_str!([customer_user_access], resource_name),
+            "customer_user_access.user_id" => attr_str!([customer_user_access], user_id),
+            "customer_user_access.email_address" => attr_str!([customer_user_access], email_address),
+            "customer_user_access.access_role" => method_str!([customer_user_access], access_role),
+            "customer_user_access.access_creation_date_time" => attr_str!([customer_user_access], access_creation_date_time),
+            "customer_user_access.inviter_user_email_address" => attr_str!([customer_user_access], inviter_user_email_address),
             _ => "not implemented by googleads-rs".to_string()
         }
     }
