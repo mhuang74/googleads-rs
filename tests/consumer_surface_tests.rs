@@ -158,11 +158,11 @@ fn test_customer_client_sub_accounts_query_fields() {
 
     // Create a CustomerClient with populated fields
     let mut customer_client = CustomerClient::default();
-    customer_client.id = 1234567890;
-    customer_client.level = 1;
-    customer_client.currency_code = "USD".to_string();
-    customer_client.time_zone = "America/New_York".to_string();
-    customer_client.descriptive_name = "Test Account".to_string();
+    customer_client.id = Some(1234567890);
+    customer_client.level = Some(1);
+    customer_client.currency_code = Some("USD".to_string());
+    customer_client.time_zone = Some("America/New_York".to_string());
+    customer_client.descriptive_name = Some("Test Account".to_string());
 
     let row = GoogleAdsRow {
         customer_client: Some(customer_client),
@@ -224,11 +224,11 @@ async fn test_mcc_gaql_streaming_flow_simulation() {
 
     for i in 1..=3 {
         let mut customer_client = CustomerClient::default();
-        customer_client.id = 1000000000 + i as i64;
-        customer_client.level = i as i64;
-        customer_client.currency_code = "USD".to_string();
-        customer_client.time_zone = "America/Los_Angeles".to_string();
-        customer_client.descriptive_name = format!("Account {}", i);
+        customer_client.id = Some(1000000000 + i as i64);
+        customer_client.level = Some(i as i64);
+        customer_client.currency_code = Some("USD".to_string());
+        customer_client.time_zone = Some("America/Los_Angeles".to_string());
+        customer_client.descriptive_name = Some(format!("Account {}", i));
 
         results.push(GoogleAdsRow {
             customer_client: Some(customer_client),
@@ -309,13 +309,13 @@ async fn test_streaming_response_with_field_mask_integration() {
     };
 
     let mut campaign = Campaign::default();
-    campaign.id = 555555;
-    campaign.name = "Test Campaign".to_string();
+    campaign.id = Some(555555);
+    campaign.name = Some("Test Campaign".to_string());
     campaign.status = CampaignStatus::Enabled as i32;
 
     let mut metrics = Metrics::default();
-    metrics.impressions = 100000;
-    metrics.clicks = 5000;
+    metrics.impressions = Some(100000);
+    metrics.clicks = Some(5000);
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -348,7 +348,7 @@ async fn test_streaming_response_with_field_mask_integration() {
     // Verify specific values
     assert_eq!(row.get("campaign.id"), "555555");
     assert_eq!(row.get("campaign.name"), "Test Campaign");
-    assert_eq!(row.get("campaign.status"), "Enabled");
+    assert_eq!(row.get("campaign.status"), "ENABLED");
     assert_eq!(row.get("metrics.impressions"), "100000");
     assert_eq!(row.get("metrics.clicks"), "5000");
 }
