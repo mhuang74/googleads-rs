@@ -61,18 +61,34 @@ fn main() -> Res {
     }
 
     // Generate unified file descriptor set for prost-reflect
+    // Use response file approach to avoid Windows command line length limits
     {
-        use prost_build::Config;
         let out_dir = env::var("OUT_DIR").expect("OUT_DIR environment variable not set");
         let descriptor_path = Path::new(&out_dir).join("file_descriptor_set.bin");
-        let tmp_out = Path::new(&out_dir).join("_fds_tmp");
-        std::fs::create_dir_all(&tmp_out).ok();
 
-        let mut config = Config::new();
-        config.file_descriptor_set_path(&descriptor_path);
-        config.out_dir(&tmp_out);
-        config.protoc_arg("--experimental_allow_proto3_optional");
-        config.compile_protos(&protos, std::slice::from_ref(&proto_path))?;
+        // Write proto paths to a response file (one path per line)
+        let response_file = Path::new(&out_dir).join("proto_files.txt");
+        let mut response_content = String::new();
+        for proto in &protos {
+            writeln!(response_content, "{}", proto.display())?;
+        }
+        fs::write(&response_file, &response_content)?;
+
+        // Find protoc executable (respects PROTOC env var)
+        let protoc = prost_build::protoc_from_env();
+
+        // Build protoc command with response file (@file syntax)
+        let status = std::process::Command::new(&protoc)
+            .arg("--experimental_allow_proto3_optional")
+            .arg(format!("--proto_path={}", proto_path.display()))
+            .arg(format!("--descriptor_set_out={}", descriptor_path.display()))
+            .arg("--include_imports")
+            .arg(format!("@{}", response_file.display()))
+            .status()?;
+
+        if !status.success() {
+            return Err(format!("protoc failed with status: {}", status).into());
+        }
 
         info!("Generated file descriptor set at {:?}", descriptor_path);
     }
