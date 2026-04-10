@@ -31,6 +31,10 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Resources";
 // Proto file describing the video resource.
 
 // A video.
+//
+// If the video has any enhancements, the stats on all of them will be
+// aggregated and displayed on this video resource. To get stats for a specific
+// enhancement, use the VideoEnhancement resource instead.
 message Video {
   option (google.api.resource) = {
     type: "googleads.googleapis.com/Video"
@@ -47,15 +51,15 @@ message Video {
   ];
 
   // Output only. The ID of the video.
- string id = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string id = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The owner channel id of the video.
- string channel_id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string channel_id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The duration of the video in milliseconds.
- int64 duration_millis = 8
+  optional int64 duration_millis = 8
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The title of the video.
- string title = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string title = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

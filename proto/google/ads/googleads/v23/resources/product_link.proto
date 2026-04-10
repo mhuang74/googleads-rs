@@ -50,7 +50,7 @@ message ProductLink {
 
   // Output only. The ID of the link.
   // This field is read only.
- int64 product_link_id = 2
+  optional int64 product_link_id = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The type of the linked product.
@@ -75,6 +75,14 @@ message ProductLink {
     AdvertisingPartnerIdentifier advertising_partner = 13
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
+
+  // The properties for the product link.
+  oneof product_link_properties {
+    // Output only. Advertising Partner link properties. These properties are
+    // only applicable when the link is for an Advertising Partner.
+    AdvertisingPartnerProperties advertising_partner_properties = 15
+        [(google.api.field_behavior) = OUTPUT_ONLY];
+  }
 }
 
 // The identifier for Data Partner account.
@@ -83,7 +91,7 @@ message DataPartnerIdentifier {
   // This field is required and should not be empty when creating a new
   // data partner link. It is unable to be modified after the creation of
   // the link.
- int64 data_partner_id = 1 [(google.api.field_behavior) = IMMUTABLE];
+  optional int64 data_partner_id = 1 [(google.api.field_behavior) = IMMUTABLE];
 }
 
 // The identifier for Google Ads account.
@@ -92,7 +100,7 @@ message GoogleAdsIdentifier {
   // This field is required and should not be empty when creating a new
   // Google Ads link. It is unable to be modified after the creation of
   // the link.
- string customer = 1 [
+  optional string customer = 1 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Customer"
@@ -106,7 +114,7 @@ message MerchantCenterIdentifier {
   // This field is required and should not be empty when creating a new
   // Merchant Center link. It is unable to be modified after the creation of
   // the link.
- int64 merchant_center_id = 1
+  optional int64 merchant_center_id = 1
       [(google.api.field_behavior) = IMMUTABLE];
 }
 
@@ -116,10 +124,19 @@ message AdvertisingPartnerIdentifier {
   // account. This field is required and should not be empty when creating a new
   // Advertising Partner link. It is unable to be modified after the creation of
   // the link.
- string customer = 1 [
+  optional string customer = 1 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Customer"
     }
   ];
+}
+
+// Properties specific to an Advertising Partner link.
+message AdvertisingPartnerProperties {
+  // Output only. The allowed domain for the Advertising Partner link. The
+  // advertising partner will only be able to advertise on this domain. The
+  // field is immutable.
+  optional string allowed_domain = 1
+      [(google.api.field_behavior) = OUTPUT_ONLY];
 }

@@ -70,22 +70,22 @@ message FetchIncentiveRequest {
   // If not provided, the server will default to "en".
   // Possible language codes:
   // https://developers.google.com/google-ads/api/data/codes-formats#languages
- string language_code = 1 [(google.api.field_behavior) = OPTIONAL];
+  optional string language_code = 1 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. User's country code.
   // If not provided, the server will default to "US".
   // Possible country codes:
   // https://developers.google.com/google-ads/api/data/codes-formats#country_codes
- string country_code = 2 [(google.api.field_behavior) = OPTIONAL];
+  optional string country_code = 2 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Email of the user that the requested incentive is meant for.
   // Will be used for channel partners who do NOT use OAuth to authenticate on
   // behalf of user.
- string email = 3 [(google.api.field_behavior) = OPTIONAL];
+  optional string email = 3 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. The type of incentive to get.
   // Defaults to ACQUISITION.
- IncentiveType type = 4 [(google.api.field_behavior) = OPTIONAL];
+  optional IncentiveType type = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // An incentive that a user can claim for their account.
@@ -97,12 +97,12 @@ message Incentive {
       // Required. Amount in free spend that user will be granted after spending
       // target amount. Denominated in the currency of the country passed in the
       // get request.
- google.type.Money award_amount = 1
+      optional google.type.Money award_amount = 1
           [(google.api.field_behavior) = REQUIRED];
 
       // Required. Amount that user must spend to receive the award amount.
       // Denominated in the currency of the country passed in the get request.
- google.type.Money required_amount = 2
+      optional google.type.Money required_amount = 2
           [(google.api.field_behavior) = REQUIRED];
     }
 
@@ -118,33 +118,33 @@ message Incentive {
 
   // The incentive ID of this incentive. This is used to identify which
   // incentive is selected by the user in the CYO flow.
- int64 incentive_id = 1;
+  optional int64 incentive_id = 1;
 
   // The requirement for this incentive.
- Requirement requirement = 2;
+  optional Requirement requirement = 2;
 
   // The URL of the terms and conditions for THIS incentive offer ONLY.
   //
   // This is different from the terms_and_conditions_url field in
   // AcquisitionIncentiveOffer which is a combination of all the Incentive
   // offers in a CYO offer.
- string incentive_terms_and_conditions_url = 3;
+  optional string incentive_terms_and_conditions_url = 3;
 
   // The type of the incentive.
- FetchIncentiveRequest.IncentiveType type = 4;
+  optional FetchIncentiveRequest.IncentiveType type = 4;
 }
 
 // An incentive offer in the Choose-Your-Own Incentive feature where a user
 // can select from a set of incentives with different money amounts.
 message CyoIncentives {
   // Required. The CYO incentive with low target and award amounts.
- Incentive low_offer = 1 [(google.api.field_behavior) = REQUIRED];
+  optional Incentive low_offer = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Required. The CYO incentive with medium target and award amounts.
- Incentive medium_offer = 2 [(google.api.field_behavior) = REQUIRED];
+  optional Incentive medium_offer = 2 [(google.api.field_behavior) = REQUIRED];
 
   // Required. The CYO incentive with high target and award amounts.
- Incentive high_offer = 3 [(google.api.field_behavior) = REQUIRED];
+  optional Incentive high_offer = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 // An acquisition incentive offer for a user. An offer means how the user is
@@ -166,10 +166,10 @@ message IncentiveOffer {
   }
 
   // Required. The type of this acquisition incentive offer.
- OfferType type = 1 [(google.api.field_behavior) = REQUIRED];
+  optional OfferType type = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Optional. The URL of the terms and conditions for the incentive offer.
- string consolidated_terms_and_conditions_url = 2
+  optional string consolidated_terms_and_conditions_url = 2
       [(google.api.field_behavior) = OPTIONAL];
 
   // The specific incentive details, which can only be one of the following.
@@ -183,7 +183,7 @@ message IncentiveOffer {
 // specific marketing page.
 message FetchIncentiveResponse {
   // Required. The acquisition incentive offer for the user.
- IncentiveOffer incentive_offer = 1
+  optional IncentiveOffer incentive_offer = 1
       [(google.api.field_behavior) = REQUIRED];
 }
 
@@ -191,10 +191,10 @@ message FetchIncentiveResponse {
 message ApplyIncentiveRequest {
   // The incentive ID of this incentive. This is used to identify which
   // incentive is selected by the user in the CYO flow.
- int64 selected_incentive_id = 1;
+  optional int64 selected_incentive_id = 1;
 
   // The customer ID of the account that the incentive is being applied to.
- string customer_id = 2;
+  optional string customer_id = 2;
 
   // Required. User's country code.
   // Required. This field must be equal to the Google Ads account's billing
@@ -203,7 +203,7 @@ message ApplyIncentiveRequest {
   // incentive is applicable to the user.
   // Possible country codes:
   // https://developers.google.com/google-ads/api/data/codes-formats#country_codes
- string country_code = 3 [(google.api.field_behavior) = REQUIRED];
+  optional string country_code = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Response for applying an incentive.
@@ -212,9 +212,9 @@ message ApplyIncentiveResponse {
   // A globally unique identifier of the applied incentive.
   // This code is separate and distinct from the selected_incentive_id in the
   // request.
- string coupon_code = 1;
+  optional string coupon_code = 1;
 
   // The timestamp when this incentive was applied. The timestamp is in
   // UTC timezone and in "yyyy-MM-dd HH:mm:ss" format.
- string creation_time = 2;
+  optional string creation_time = 2;
 }

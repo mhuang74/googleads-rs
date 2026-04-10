@@ -51,10 +51,10 @@ message TopicConstant {
   ];
 
   // Output only. The ID of the topic.
- int64 id = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Resource name of parent of the topic constant.
- string topic_constant_parent = 6 [
+  optional string topic_constant_parent = 6 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/TopicConstant"

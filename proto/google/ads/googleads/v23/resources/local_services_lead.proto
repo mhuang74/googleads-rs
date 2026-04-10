@@ -91,13 +91,13 @@ message LocalServicesLead {
   string locale = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Note added by advertiser for the lead.
- Note note = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional Note note = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. True if the advertiser was charged for the lead.
   bool lead_charged = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Credit details of the lead.
- CreditDetails credit_details = 12
+  optional CreditDetails credit_details = 12
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. True if the advertiser submitted feedback for the lead.
@@ -106,7 +106,10 @@ message LocalServicesLead {
 
 // Fields containing consumer contact details.
 message ContactDetails {
-  // Output only. Consumer phone number in E164 format.
+  // Output only. Phone number of the consumer for the lead. This can be a real
+  // phone number or a tracking number. The phone number is returned in E164
+  // format. See https://support.google.com/google-ads/answer/16355235?hl=en to
+  // learn more. Example: +16504519489.
   string phone_number = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Consumer email address.

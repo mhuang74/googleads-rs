@@ -66,7 +66,7 @@ message Audience {
   // account. It must have a minimum length of 1 and maximum length of 255.
   // Required when scope is not set or is set to CUSTOMER. Cannot be set or
   // updated when scope is ASSET_GROUP.
- string name = 10;
+  optional string name = 10;
 
   // Description of this audience.
   string description = 5;

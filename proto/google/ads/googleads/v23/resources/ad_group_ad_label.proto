@@ -48,7 +48,7 @@ message AdGroupAdLabel {
   ];
 
   // Immutable. The ad group ad to which the label is attached.
- string ad_group_ad = 4 [
+  optional string ad_group_ad = 4 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroupAd"
@@ -56,7 +56,7 @@ message AdGroupAdLabel {
   ];
 
   // Immutable. The label assigned to the ad group ad.
- string label = 5 [
+  optional string label = 5 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = { type: "googleads.googleapis.com/Label" }
   ];

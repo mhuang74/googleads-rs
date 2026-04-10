@@ -51,7 +51,7 @@ message GoogleAdsField {
   ];
 
   // Output only. The name of the artifact.
- string name = 21 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string name = 21 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The category of the artifact.
   google.ads.googleads.v23.enums.GoogleAdsFieldCategoryEnum
@@ -60,15 +60,15 @@ message GoogleAdsField {
 
   // Output only. Whether the artifact can be used in a SELECT clause in search
   // queries.
- bool selectable = 22 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional bool selectable = 22 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Whether the artifact can be used in a WHERE clause in search
   // queries.
- bool filterable = 23 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional bool filterable = 23 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Whether the artifact can be used in a ORDER BY clause in
   // search queries.
- bool sortable = 24 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional bool sortable = 24 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The names of all resources, segments, and metrics that are
   // selectable with the described artifact.
@@ -106,8 +106,8 @@ message GoogleAdsField {
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The URL of proto describing the artifact's data type.
- string type_url = 30 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string type_url = 30 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Whether the field artifact is repeated.
- bool is_repeated = 31 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional bool is_repeated = 31 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

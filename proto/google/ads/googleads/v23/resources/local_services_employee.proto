@@ -49,7 +49,7 @@ message LocalServicesEmployee {
   ];
 
   // Output only. The ID of the employee.
- int64 id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Timestamp of employee creation.
   // The format is "YYYY-MM-DD HH:MM:SS" in the Google Ads account's timezone.
@@ -83,10 +83,10 @@ message LocalServicesEmployee {
 
   // Output only. Job title for this employee, such as "Senior partner" in legal
   // verticals.
- string job_title = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string job_title = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The year that this employee started practicing in this field.
- int32 year_started_practicing = 10
+  optional int32 year_started_practicing = 10
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Languages that the employee speaks, represented as language
@@ -100,34 +100,34 @@ message LocalServicesEmployee {
   repeated string category_ids = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. NPI id associated with the employee.
- string national_provider_id_number = 13
+  optional string national_provider_id_number = 13
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Email address of the employee.
- string email_address = 14
+  optional string email_address = 14
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. First name of the employee.
- string first_name = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string first_name = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Middle name of the employee.
- string middle_name = 16 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string middle_name = 16 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Last name of the employee.
- string last_name = 17 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string last_name = 17 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // A list of degrees this employee has obtained, and wants to feature.
 message UniversityDegree {
   // Output only. Name of the university at which the degree was obtained.
- string institution_name = 1
+  optional string institution_name = 1
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Name of the degree obtained.
- string degree = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string degree = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Year of graduation.
- int32 graduation_year = 3
+  optional int32 graduation_year = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
@@ -136,11 +136,11 @@ message UniversityDegree {
 // medical professional practices under the supervision of a senior clinician.
 message Residency {
   // Output only. Name of the institution at which the residency was completed.
- string institution_name = 1
+  optional string institution_name = 1
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Year of completion.
- int32 completion_year = 2
+  optional int32 completion_year = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
@@ -149,10 +149,10 @@ message Residency {
 // after finishing their residency.
 message Fellowship {
   // Output only. Name of the instutition at which the fellowship was completed.
- string institution_name = 1
+  optional string institution_name = 1
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Year of completion.
- int32 completion_year = 2
+  optional int32 completion_year = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }

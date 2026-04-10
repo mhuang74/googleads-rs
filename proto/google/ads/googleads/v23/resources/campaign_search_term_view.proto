@@ -51,10 +51,10 @@ message CampaignSearchTermView {
   ];
 
   // Output only. The search term.
- string search_term = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string search_term = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The campaign the search term served in.
- string campaign = 3 [
+  optional string campaign = 3 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"

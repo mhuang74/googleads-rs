@@ -51,7 +51,7 @@ message AiMaxSearchTermAdCombinationView {
   ];
 
   // Output only. Ad group where the search term served.
- string ad_group = 2 [
+  optional string ad_group = 2 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroup"
@@ -60,14 +60,14 @@ message AiMaxSearchTermAdCombinationView {
 
   // Output only. The search term that triggered the ad. This field is
   // read-only.
- string search_term = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string search_term = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The destination URL, which was dynamically generated. This
   // field is read-only.
- string landing_page = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string landing_page = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The concatenated string containing headline assets for the ad.
   // Up to three headline assets are concatenated, separated by " | ". This
   // field is read-only.
- string headline = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string headline = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

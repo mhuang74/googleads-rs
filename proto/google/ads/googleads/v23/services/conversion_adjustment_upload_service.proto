@@ -86,7 +86,7 @@ message UploadConversionAdjustmentsRequest {
   // generate a job ID in the range [2^31, (2^63)-1]. The API will return the
   // value for this request in the `job_id` field of the
   // `UploadConversionAdjustmentsResponse`.
- int32 job_id = 5 [(google.api.field_behavior) = OPTIONAL];
+  optional int32 job_id = 5 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response message for
@@ -119,18 +119,18 @@ message ConversionAdjustment {
   // The order ID of the conversion to be adjusted. If the conversion was
   // reported with an order ID specified, that order ID must be used as the
   // identifier here. The order ID is required for enhancements.
- string order_id = 13;
+  optional string order_id = 13;
 
   // Resource name of the conversion action associated with this conversion
   // adjustment. Note: Although this resource name consists of a customer id and
   // a conversion action id, validation will ignore the customer id and use the
   // conversion action id as the sole identifier of the conversion action.
- string conversion_action = 8;
+  optional string conversion_action = 8;
 
   // The date time at which the adjustment occurred. Must be after the
   // conversion_date_time. The timezone must be specified. The format is
   // "yyyy-mm-dd hh:mm:ss+|-hh:mm", for example, "2019-01-01 12:32:45-08:00".
- string adjustment_date_time = 9;
+  optional string adjustment_date_time = 9;
 
   // The adjustment type.
   google.ads.googleads.v23.enums.ConversionAdjustmentTypeEnum
@@ -158,7 +158,7 @@ message ConversionAdjustment {
   // should match the user agent of the request that sent the original
   // conversion so the conversion and its enhancement are either both attributed
   // as same-device or both attributed as cross-device.
- string user_agent = 11;
+  optional string user_agent = 11;
 }
 
 // Contains information needed to restate a conversion's value.
@@ -170,13 +170,13 @@ message RestatementValue {
   // value, it must have a new, more recent, adjustment occurrence time.
   // Otherwise, it will be treated as a duplicate of the previous restatement
   // and ignored.
- double adjusted_value = 3;
+  optional double adjusted_value = 3;
 
   // The currency of the restated value. If not provided, then the default
   // currency from the conversion action is used, and if that is not set then
   // the account currency is used. This is the ISO 4217 3-character currency
   // code for example, USD or EUR.
- string currency_code = 4;
+  optional string currency_code = 4;
 }
 
 // Uniquely identifies a conversion that was reported without an order ID
@@ -184,12 +184,12 @@ message RestatementValue {
 message GclidDateTimePair {
   // Google click ID (gclid) associated with the original conversion for this
   // adjustment.
- string gclid = 3;
+  optional string gclid = 3;
 
   // The date time at which the original conversion for this adjustment
   // occurred. The timezone must be specified. The format is "yyyy-mm-dd
   // hh:mm:ss+|-hh:mm", for example, "2019-01-01 12:32:45-08:00".
- string conversion_date_time = 4;
+  optional string conversion_date_time = 4;
 }
 
 // Information identifying a successfully processed ConversionAdjustment.
@@ -202,11 +202,11 @@ message ConversionAdjustmentResult {
 
   // Resource name of the conversion action associated with this conversion
   // adjustment.
- string conversion_action = 7;
+  optional string conversion_action = 7;
 
   // The date time at which the adjustment occurred. The format is
   // "yyyy-mm-dd hh:mm:ss+|-hh:mm", for example, "2019-01-01 12:32:45-08:00".
- string adjustment_date_time = 8;
+  optional string adjustment_date_time = 8;
 
   // The adjustment type.
   google.ads.googleads.v23.enums.ConversionAdjustmentTypeEnum

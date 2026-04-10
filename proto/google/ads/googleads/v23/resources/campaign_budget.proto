@@ -58,7 +58,7 @@ message CampaignBudget {
   // operation and is assigned a budget ID. A budget ID can be shared across
   // different campaigns; the system will then allocate the campaign budget
   // among different campaigns to get optimum results.
- int64 id = 19 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 19 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The name of the campaign budget.
   //
@@ -69,17 +69,30 @@ message CampaignBudget {
   //
   // The length of this string must be between 1 and 255, inclusive,
   // in UTF-8 bytes, (trimmed).
- string name = 20;
+  optional string name = 20;
 
-  // The amount of the budget, in the local currency for the account.
-  // Amount is specified in micros, where one million is equivalent to one
-  // currency unit. Monthly spend is capped at 30.4 times this amount.
- int64 amount_micros = 21;
+  // The average daily amount to be spent by the campaign.
+  // This field is used when the CampaignBudget `period` is set to `DAILY`,
+  // which is the default.
+  //
+  // Amount is specified in micros in the account's local currency.
+  // One million micros is equivalent to one currency unit.
+  // The effective monthly spend is capped at 30.4 times this daily amount.
+  //
+  // This field is mutually exclusive with 'total_amount_micros'. Only one
+  // of 'amount_micros' or 'total_amount_micros' should be set.
+  optional int64 amount_micros = 21;
 
-  // The lifetime amount of the budget, in the local currency for the account.
-  // Amount is specified in micros, where one million is equivalent to one
-  // currency unit.
- int64 total_amount_micros = 22;
+  // The total amount to be spent by the campaign over its entire duration.
+  // This field is used *only* when the CampaignBudget `period` is set to
+  // `CUSTOM_PERIOD`. It represents the budget cap for the campaign's lifetime,
+  // rather than a daily limit. The amount is specified in micros in the
+  // account's local currency. One million micros is equivalent to one currency
+  // unit.
+  //
+  // This field is mutually exclusive with 'amount_micros'. Only one of
+  // 'total_amount_micros' or 'amount_micros' should be set.
+  optional int64 total_amount_micros = 22;
 
   // Output only. The status of this campaign budget. This field is read-only.
   google.ads.googleads.v23.enums.BudgetStatusEnum.BudgetStatus status = 6
@@ -107,19 +120,19 @@ message CampaignBudget {
   // must also assign the budget a name.
   //
   // A shared campaign budget can never become non-shared.
- bool explicitly_shared = 23;
+  optional bool explicitly_shared = 23;
 
   // Output only. The number of campaigns actively using the budget.
   //
   // This field is read-only.
- int64 reference_count = 24
+  optional int64 reference_count = 24
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Indicates whether there is a recommended budget for this
   // campaign budget.
   //
   // This field is read-only.
- bool has_recommended_budget = 25
+  optional bool has_recommended_budget = 25
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The recommended budget amount. If no recommendation is
@@ -127,7 +140,7 @@ message CampaignBudget {
   // micros, where one million is equivalent to one currency unit.
   //
   // This field is read-only.
- int64 recommended_budget_amount_micros = 26
+  optional int64 recommended_budget_amount_micros = 26
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. Period over which to spend the budget. Defaults to DAILY if not
@@ -139,7 +152,7 @@ message CampaignBudget {
   // budget is applied.
   //
   // This field is read-only.
- int64 recommended_budget_estimated_change_weekly_clicks = 27
+  optional int64 recommended_budget_estimated_change_weekly_clicks = 27
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The estimated change in weekly cost in micros if the
@@ -147,21 +160,21 @@ message CampaignBudget {
   // unit.
   //
   // This field is read-only.
- int64 recommended_budget_estimated_change_weekly_cost_micros = 28
+  optional int64 recommended_budget_estimated_change_weekly_cost_micros = 28
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The estimated change in weekly interactions if the recommended
   // budget is applied.
   //
   // This field is read-only.
- int64 recommended_budget_estimated_change_weekly_interactions = 29
+  optional int64 recommended_budget_estimated_change_weekly_interactions = 29
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The estimated change in weekly views if the recommended budget
   // is applied.
   //
   // This field is read-only.
- int64 recommended_budget_estimated_change_weekly_views = 30
+  optional int64 recommended_budget_estimated_change_weekly_views = 30
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. The type of the campaign budget.

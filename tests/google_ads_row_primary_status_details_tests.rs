@@ -22,8 +22,8 @@ use test_helpers::GoogleAdsRowBuilder;
 /// Note: Using i32 directly since enum variants use proto naming (e.g., ASSET_LINK_PAUSED)
 fn create_simple_status_detail(reason: i32, status: i32) -> AssetLinkPrimaryStatusDetails {
     AssetLinkPrimaryStatusDetails {
-        reason,
-        status,
+        reason: Some(reason),
+        status: Some(status),
         details: None,
     }
 }
@@ -37,8 +37,8 @@ fn create_status_detail_with_disapproved(
     use googleads_rs::google::ads::googleads::v23::common::asset_link_primary_status_details::Details;
 
     AssetLinkPrimaryStatusDetails {
-        reason,
-        status,
+        reason: Some(reason),
+        status: Some(status),
         details: Some(Details::AssetDisapproved(AssetDisapproved {
             offline_evaluation_error_reasons: error_reasons,
         })),

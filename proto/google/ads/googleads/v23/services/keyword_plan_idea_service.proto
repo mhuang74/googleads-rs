@@ -130,7 +130,7 @@ message GenerateKeywordIdeasRequest {
   // Each keyword belongs to some set of languages; a keyword is included if
   // language is one of its languages.
   // If not set, all keywords will be included.
- string language = 14;
+  optional string language = 14;
 
   // The resource names of the location to target. Maximum is 10.
   // An empty list MAY be used to specify all targeting geos.
@@ -192,7 +192,7 @@ message GenerateKeywordIdeasRequest {
 // Keyword And Url Seed
 message KeywordAndUrlSeed {
   // The URL to crawl in order to generate keyword ideas.
- string url = 3;
+  optional string url = 3;
 
   // Requires at least one keyword and no more than 20 keywords.
   repeated string keywords = 4;
@@ -208,13 +208,13 @@ message KeywordSeed {
 message SiteSeed {
   // The domain name of the site. If the customer requesting the ideas doesn't
   // own the site provided only public information is returned.
- string site = 2;
+  optional string site = 2;
 }
 
 // Url Seed
 message UrlSeed {
   // The URL to crawl in order to generate keyword ideas.
- string url = 2;
+  optional string url = 2;
 }
 
 // Response message for
@@ -243,7 +243,7 @@ message GenerateKeywordIdeaResult {
   // As in Keyword Plan historical metrics, this text may not be an actual
   // keyword, but the canonical form of multiple keywords.
   // See KeywordPlanKeywordHistoricalMetrics message in KeywordPlanService.
- string text = 5;
+  optional string text = 5;
 
   // The historical metrics for the keyword.
   google.ads.googleads.v23.common.KeywordPlanHistoricalMetrics
@@ -277,7 +277,7 @@ message GenerateKeywordHistoricalMetricsRequest {
   // Each keyword belongs to some set of languages; a keyword is included if
   // language is one of its languages.
   // If not set, all keywords will be included.
- string language = 4;
+  optional string language = 4;
 
   // If true, adult keywords will be included in response.
   // The default value is false.
@@ -320,7 +320,7 @@ message GenerateKeywordHistoricalMetricsResult {
   // originally contained the keywords "car" and "cars", the returned search
   // query will only contain "cars". The list of de-duped queries will be
   // included in close_variants field.
- string text = 1;
+  optional string text = 1;
 
   // The list of close variants from the requested keywords whose stats
   // are combined into this GenerateKeywordHistoricalMetricsResult.
@@ -403,7 +403,7 @@ message GenerateKeywordForecastMetricsRequest {
   // Set this field only if the currency is different from the account currency.
   // The list of valid currency codes can be found at
   // https://developers.google.com/google-ads/api/data/codes-formats#currency-codes.
- string currency_code = 2;
+  optional string currency_code = 2;
 
   // The date range for the forecast. The start date must be in the future and
   // end date must be within 1 year from today. The reference timezone used is
@@ -458,7 +458,7 @@ message CampaignToForecast {
   // total clicks) as defined by the user. This value is expressed as a decimal
   // value, so an expected conversion rate of 2% should be entered as 0.02. If
   // left empty, an estimated conversion rate will be used.
- double conversion_rate = 6;
+  optional double conversion_rate = 6;
 
   // The ad groups in the new campaign to forecast.
   repeated ForecastAdGroup ad_groups = 7;
@@ -469,7 +469,7 @@ message ForecastAdGroup {
   // The max cpc to use for the ad group when generating forecasted traffic.
   // This value will override the max cpc value set in the bidding strategy.
   // Only specify this field for bidding strategies that max cpc values.
- int64 max_cpc_bid_micros = 1;
+  optional int64 max_cpc_bid_micros = 1;
 
   // Required. The list of biddable keywords to be used in the ad group when
   // doing the forecast. Requires at least one keyword.
@@ -491,7 +491,7 @@ message BiddableKeyword {
   // forecast simulation. This value will override the max cpc value set in the
   // bidding strategy and ad group. Only specify this field for bidding
   // strategies that support max cpc values.
- int64 max_cpc_bid_micros = 2;
+  optional int64 max_cpc_bid_micros = 2;
 }
 
 // Location Criterion bid modifier.
@@ -502,7 +502,7 @@ message CriterionBidModifier {
 
   // The associated multiplier for the criterion_id. If set, this value cannot
   // be 0.
- double bid_modifier = 2;
+  optional double bid_modifier = 2;
 }
 
 // Manual CPC Bidding Strategy.
@@ -510,7 +510,7 @@ message ManualCpcBiddingStrategy {
   // Campaign level budget in micros. If set, a minimum value
   // is enforced for the local currency used in the campaign. An error
   // will occur showing the minimum value if this field is set too low.
- int64 daily_budget_micros = 1;
+  optional int64 daily_budget_micros = 1;
 
   // Required. A bid in micros to be applied to ad groups within the campaign
   // for a manual CPC bidding strategy.
@@ -525,7 +525,7 @@ message MaximizeClicksBiddingStrategy {
   int64 daily_target_spend_micros = 1 [(google.api.field_behavior) = REQUIRED];
 
   // Ceiling on max CPC bids in micros.
- int64 max_cpc_bid_ceiling_micros = 2;
+  optional int64 max_cpc_bid_ceiling_micros = 2;
 }
 
 // Maximize Conversions Bidding Strategy.
@@ -539,32 +539,32 @@ message MaximizeConversionsBiddingStrategy {
 // [KeywordPlanIdeaService.GenerateKeywordForecastMetrics][google.ads.googleads.v23.services.KeywordPlanIdeaService.GenerateKeywordForecastMetrics].
 message GenerateKeywordForecastMetricsResponse {
   // Results of the campaign forecast.
- KeywordForecastMetrics campaign_forecast_metrics = 1;
+  optional KeywordForecastMetrics campaign_forecast_metrics = 1;
 }
 
 // The forecast metrics for the planless keyword campaign.
 message KeywordForecastMetrics {
   // The total number of impressions.
- double impressions = 1;
+  optional double impressions = 1;
 
   // The average click through rate. Available only if impressions > 0.
- double click_through_rate = 2;
+  optional double click_through_rate = 2;
 
   // The average cpc. Available only if clicks > 0.
- int64 average_cpc_micros = 3;
+  optional int64 average_cpc_micros = 3;
 
   // The total number of clicks.
- double clicks = 4;
+  optional double clicks = 4;
 
   // The total cost.
- int64 cost_micros = 5;
+  optional int64 cost_micros = 5;
 
   // Forecasted number of conversions: clicks * conversion_rate.
- double conversions = 6;
+  optional double conversions = 6;
 
   // Forecasted conversion rate.
- double conversion_rate = 7;
+  optional double conversion_rate = 7;
 
   // Average cost per acquisition calculated as cost_micros / conversions.
- int64 average_cpa_micros = 8;
+  optional int64 average_cpa_micros = 8;
 }

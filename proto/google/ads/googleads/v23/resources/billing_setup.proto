@@ -47,7 +47,7 @@ message BillingSetup {
     //
     // This must be passed as a string with dashes, for example,
     // "1234-5678-9012-3456".
- string payments_account_id = 6
+    optional string payments_account_id = 6
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Immutable. The name of the payments account associated with the billing
@@ -57,7 +57,7 @@ message BillingSetup {
     // to aid in reconciling monthly invoices.
     //
     // This name will be printed in the monthly invoices.
- string payments_account_name = 7
+    optional string payments_account_name = 7
         [(google.api.field_behavior) = IMMUTABLE];
 
     // Immutable. A 12 digit id used to identify the payments profile associated
@@ -65,18 +65,18 @@ message BillingSetup {
     //
     // This must be passed in as a string with dashes, for example,
     // "1234-5678-9012".
- string payments_profile_id = 8
+    optional string payments_profile_id = 8
         [(google.api.field_behavior) = IMMUTABLE];
 
     // Output only. The name of the payments profile associated with the billing
     // setup.
- string payments_profile_name = 9
+    optional string payments_profile_name = 9
         [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. A secondary payments profile id present in uncommon
     // situations, for example, when a sequential liability agreement has been
     // arranged.
- string secondary_payments_profile_id = 10
+    optional string secondary_payments_profile_id = 10
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 
@@ -92,7 +92,7 @@ message BillingSetup {
   ];
 
   // Output only. The ID of the billing setup.
- int64 id = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The status of the billing setup.
   google.ads.googleads.v23.enums.BillingSetupStatusEnum.BillingSetupStatus
@@ -106,7 +106,7 @@ message BillingSetup {
   // account (and then payments_account_info should not be set).
   // When getting a billing setup, this and payments_account_info will be
   // populated.
- string payments_account = 18 [
+  optional string payments_account = 18 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/PaymentsAccount"

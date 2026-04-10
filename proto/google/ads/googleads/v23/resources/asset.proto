@@ -59,10 +59,10 @@ message Asset {
   ];
 
   // Output only. The ID of the asset.
- int64 id = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Optional name of the asset.
- string name = 12;
+  optional string name = 12;
 
   // Output only. Type of the asset.
   google.ads.googleads.v23.enums.AssetTypeEnum.AssetType type = 4
@@ -75,7 +75,7 @@ message Asset {
   repeated string final_mobile_urls = 16;
 
   // URL template for constructing a tracking URL.
- string tracking_url_template = 17;
+  optional string tracking_url_template = 17;
 
   // A list of mappings to be used for substituting URL custom parameter tags in
   // the tracking_url_template, final_urls, and/or final_mobile_urls.
@@ -84,7 +84,7 @@ message Asset {
 
   // URL template for appending params to landing page URLs served with parallel
   // tracking.
- string final_url_suffix = 19;
+  optional string final_url_suffix = 19;
 
   // Output only. Source of the asset.
   google.ads.googleads.v23.enums.AssetSourceEnum.AssetSource source = 38
@@ -100,7 +100,7 @@ message Asset {
 
   // Output only. Orientation of the asset. This is only supported for image and
   // video assets.
- google.ads.googleads.v23.enums.AssetOrientationEnum.AssetOrientation
+  optional google.ads.googleads.v23.enums.AssetOrientationEnum.AssetOrientation
       orientation = 54 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The specific type of the asset.
@@ -219,15 +219,15 @@ message Asset {
 // Contains policy information for an asset under AssetFieldType context.
 message AssetFieldTypePolicySummary {
   // Output only. FieldType of this asset.
- google.ads.googleads.v23.enums.AssetFieldTypeEnum.AssetFieldType
+  optional google.ads.googleads.v23.enums.AssetFieldTypeEnum.AssetFieldType
       asset_field_type = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Source of this asset.
- google.ads.googleads.v23.enums.AssetSourceEnum.AssetSource
+  optional google.ads.googleads.v23.enums.AssetSourceEnum.AssetSource
       asset_source = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Policy summary.
- AssetPolicySummary policy_summary_info = 3
+  optional AssetPolicySummary policy_summary_info = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 

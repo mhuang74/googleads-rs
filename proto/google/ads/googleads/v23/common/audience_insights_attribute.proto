@@ -211,13 +211,13 @@ message LineupAttributeMetadata {
   LocationInfo inventory_country = 1;
 
   // The median number of impressions per month on this lineup.
- int64 median_monthly_inventory = 2;
+  optional int64 median_monthly_inventory = 2;
 
   // The lower end of a range containing the number of channels in the lineup.
- int64 channel_count_lower_bound = 3;
+  optional int64 channel_count_lower_bound = 3;
 
   // The upper end of a range containing the number of channels in the lineup.
- int64 channel_count_upper_bound = 4;
+  optional int64 channel_count_upper_bound = 4;
 
   // Examples of channels that are included in the lineup.
   repeated SampleChannel sample_channels = 5;
@@ -239,7 +239,8 @@ message UserInterestAttributeMetadata {
 
 // Metadata associated with a Knowledge Graph Entity attribute.
 message KnowledgeGraphAttributeMetadata {
-  // The capabilities of the entity used in [ContentCreatorInsightsService][].
+  // The capabilities of the entity used in
+  // [ContentCreatorInsightsService][google.ads.googleads.v23.services.ContentCreatorInsightsService].
   repeated google.ads.googleads.v23.enums
       .InsightsKnowledgeGraphEntityCapabilitiesEnum
       .InsightsKnowledgeGraphEntityCapabilities entity_capabilities = 1;
@@ -260,4 +261,14 @@ message UserListAttributeMetadata {
 message AudienceInsightsAttributeMetadataGroup {
   // Attributes with metadata returned in response to a search.
   repeated AudienceInsightsAttributeMetadata attributes = 1;
+}
+
+// A list of AudienceInsightsAttributes.
+message InsightsAudienceAttributeGroup {
+  // Required. A collection of audience attributes combined with logical OR.
+  // Attributes need not all be the same dimension. Only Knowledge Graph
+  // entities, Product & Service Categories, and user interests are supported in
+  // this context.
+  repeated AudienceInsightsAttribute attributes = 1
+      [(google.api.field_behavior) = REQUIRED];
 }

@@ -188,7 +188,7 @@ message GenerateConversionRatesRequest {
   string customer_id = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of the customer being planned for. This is a user-defined value.
- string customer_reach_group = 2;
+  optional string customer_reach_group = 2;
 
   // Optional. Additional information on the application issuing the request.
   google.ads.googleads.v23.common.AdditionalApplicationInfo
@@ -219,7 +219,7 @@ message ConversionRateSuggestion {
   // The surfaces associated with the plannable product.
   // If not present, the conversion rate is considered surface agnostic for this
   // product.
- SurfaceTargeting surface_targeting = 4;
+  optional SurfaceTargeting surface_targeting = 4;
 
   // The suggested conversion rate. The value is between 0 and 1 (exclusive).
   double conversion_rate = 3;
@@ -245,24 +245,24 @@ message ListPlannableLocationsResponse {
 // A plannable location: country, metro region, province, etc.
 message PlannableLocation {
   // The location identifier.
- string id = 4;
+  optional string id = 4;
 
   // The unique location name in English.
- string name = 5;
+  optional string name = 5;
 
   // The parent country (not present if location is a country).
   // If present, will always be a GeoTargetConstant ID. Additional information
   // such as country name is provided by
   // [ReachPlanService.ListPlannableLocations][google.ads.googleads.v23.services.ReachPlanService.ListPlannableLocations]
   // or GoogleAdsService.Search/SearchStream.
- int64 parent_country_id = 6;
+  optional int64 parent_country_id = 6;
 
   // The ISO-3166-1 alpha-2 country code that is associated with the location.
- string country_code = 7;
+  optional string country_code = 7;
 
   // The location's type. Location types correspond to target_type returned by
   // searching location type in GoogleAdsService.Search/SearchStream.
- string location_type = 8;
+  optional string location_type = 8;
 }
 
 // Request to list available products in a given location.
@@ -289,7 +289,7 @@ message ProductMetadata {
   // TRUEVIEW_IN_STREAM).
   // To list the available plannable product codes use
   // [ReachPlanService.ListPlannableProducts][google.ads.googleads.v23.services.ReachPlanService.ListPlannableProducts].
- string plannable_product_code = 4;
+  optional string plannable_product_code = 4;
 
   // The name associated with the ad product.
   string plannable_product_name = 3;
@@ -306,7 +306,7 @@ message ListPlannableUserListsRequest {
   string customer_id = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The name of the customer being planned for. This is a user-defined value.
- string customer_reach_group = 2;
+  optional string customer_reach_group = 2;
 
   // Optional. Additional information on the application issuing the request.
   google.ads.googleads.v23.common.AdditionalApplicationInfo
@@ -369,8 +369,15 @@ message PlannableTargeting {
   repeated google.ads.googleads.v23.enums.ReachPlanNetworkEnum.ReachPlanNetwork
       networks = 4;
 
-  // Targetable YouTube Select Lineups for the ad product.
+  // Targetable YouTube Select Lineups for the ad product. This field is
+  // deprecated in V23_2 and will eventually be removed. Use
+  // youtube_select_lineup_targeting instead.
   repeated YouTubeSelectLineUp youtube_select_lineups = 5;
+
+  // Targetable YouTube Select Lineups for the ad product.
+  //
+  // This field replaces the deprecated youtube_select_lineups field.
+  YouTubeSelectLineUpTargeting youtube_select_lineup_targeting = 7;
 
   // Targetable surface combinations for the ad product.
   SurfaceTargetingCombinations surface_targeting = 6;
@@ -393,12 +400,12 @@ message ListPlannableUserInterestsRequest {
   // A filter by user interest name. If set, only user interests with a name
   // containing the literal string (case insensitive) in the filter will be
   // returned. Maximum length is 200 characters.
- string name_query = 3;
+  optional string name_query = 3;
 
   // A filter by user interest path. If set, only user interests with a path
   // containing the literal string (case insensitive) in the filter will be
   // returned. Maximum length is 200 characters.
- string path_query = 4;
+  optional string path_query = 4;
 
   // Optional. Additional information on the application issuing the request.
   google.ads.googleads.v23.common.AdditionalApplicationInfo
@@ -440,7 +447,7 @@ message GenerateReachForecastRequest {
 
   // The currency code.
   // Three-character ISO 4217 currency code.
- string currency_code = 9;
+  optional string currency_code = 9;
 
   // Required. Campaign duration.
   CampaignDuration campaign_duration = 3
@@ -454,7 +461,7 @@ message GenerateReachForecastRequest {
   //
   // This field is deprecated in v4 and will eventually be removed.
   // Use cookie_frequency_cap_setting instead.
- int32 cookie_frequency_cap = 10;
+  optional int32 cookie_frequency_cap = 10;
 
   // Chosen cookie frequency cap to be applied to each planned product.
   // This is equivalent to the frequency cap exposed in Google Ads when creating
@@ -471,7 +478,7 @@ message GenerateReachForecastRequest {
   // If not specified, a default of 1 is applied.
   //
   // This field cannot be combined with the effective_frequency_limit field.
- int32 min_effective_frequency = 11;
+  optional int32 min_effective_frequency = 11;
 
   // The highest minimum effective frequency (the number of times a person was
   // exposed to the ad) value [1-10] to include in
@@ -483,7 +490,7 @@ message GenerateReachForecastRequest {
   // minimum effective frequency for the reported reach metrics.
   //
   // This field cannot be combined with the min_effective_frequency field.
- EffectiveFrequencyLimit effective_frequency_limit = 12;
+  optional EffectiveFrequencyLimit effective_frequency_limit = 12;
 
   // The targeting to be applied to all products selected in the product mix.
   //
@@ -502,7 +509,7 @@ message GenerateReachForecastRequest {
   ForecastMetricOptions forecast_metric_options = 13;
 
   // The name of the customer being planned for. This is a user-defined value.
- string customer_reach_group = 14;
+  optional string customer_reach_group = 14;
 
   // Optional. Additional information on the application issuing the request.
   google.ads.googleads.v23.common.AdditionalApplicationInfo
@@ -538,7 +545,7 @@ message Targeting {
   //
   // This field is deprecated as of V12 and will be removed in a future release.
   // Use `plannable_location_ids` instead.
- string plannable_location_id = 6;
+  optional string plannable_location_id = 6;
 
   // The list of plannable location IDs to target with this forecast.
   //
@@ -583,7 +590,7 @@ message CampaignDuration {
   // The duration value in days.
   //
   // This field cannot be combined with the date_range field.
- int32 duration_in_days = 2;
+  optional int32 duration_in_days = 2;
 
   // Date range of the campaign.
   // Dates are in the yyyy-mm-dd format and inclusive.
@@ -600,20 +607,20 @@ message PlannedProduct {
   // The code associated with the ad product (for example: Trueview, Bumper).
   // To list the available plannable product codes use
   // [ReachPlanService.ListPlannableProducts][google.ads.googleads.v23.services.ReachPlanService.ListPlannableProducts].
- string plannable_product_code = 3
+  optional string plannable_product_code = 3
       [(google.api.field_behavior) = REQUIRED];
 
   // Required. Maximum budget allocation in micros for the selected product.
   // The value is specified in the selected planning currency_code.
   // For example: 1 000 000$ = 1 000 000 000 000 micros.
- int64 budget_micros = 4 [(google.api.field_behavior) = REQUIRED];
+  optional int64 budget_micros = 4 [(google.api.field_behavior) = REQUIRED];
 
   // Conversion rate as a decimal between 0 and 1, exclusive.
   // For example: if 2% of ad interactions are expected to lead to conversions,
   // conversion_rate should be 0.02.
   // This field is required for DEMAND_GEN plannable products. It is not
   // supported for other plannable products.
- double conversion_rate = 6;
+  optional double conversion_rate = 6;
 
   // Targeting settings for the selected product.
   // To list the available targeting for each product use
@@ -659,7 +666,7 @@ message Forecast {
   // Note that a minimum number of unique people must be reached in order for
   // data to be reported. If the minimum number is not met, the on_target_reach
   // value will be rounded to 0.
- int64 on_target_reach = 5;
+  optional int64 on_target_reach = 5;
 
   // Total number of unique people reached at least
   // GenerateReachForecastRequest.min_effective_frequency or
@@ -669,21 +676,21 @@ message Forecast {
   // Note that a minimum number of unique people must be reached in order for
   // data to be reported. If the minimum number is not met, the total_reach
   // value will be rounded to 0.
- int64 total_reach = 6;
+  optional int64 total_reach = 6;
 
   // Number of ad impressions that exactly matches the Targeting.
- int64 on_target_impressions = 7;
+  optional int64 on_target_impressions = 7;
 
   // Total number of ad impressions. This includes impressions that may fall
   // outside the specified Targeting, due to insufficient information on
   // signed-in users.
- int64 total_impressions = 8;
+  optional int64 total_impressions = 8;
 
   // Number of times the ad's impressions were considered viewable.
   // See https://support.google.com/google-ads/answer/7029393 for
   // more information about what makes an ad viewable and how
   // viewability is measured.
- int64 viewable_impressions = 9;
+  optional int64 viewable_impressions = 9;
 
   // A list of effective frequency forecasts. The list is ordered starting with
   // 1+ and ending with the value set in
@@ -693,27 +700,27 @@ message Forecast {
 
   // Number of unique people reached that exactly matches the Targeting
   // including co-viewers.
- int64 on_target_coview_reach = 11;
+  optional int64 on_target_coview_reach = 11;
 
   // Number of unique people reached including co-viewers. This includes
   // people that may fall outside the specified Targeting.
- int64 total_coview_reach = 12;
+  optional int64 total_coview_reach = 12;
 
   // Number of ad impressions that exactly matches the Targeting including
   // co-viewers.
- int64 on_target_coview_impressions = 13;
+  optional int64 on_target_coview_impressions = 13;
 
   // Total number of ad impressions including co-viewers. This includes
   // impressions that may fall outside the specified Targeting, due to
   // insufficient information on signed-in users.
- int64 total_coview_impressions = 14;
+  optional int64 total_coview_impressions = 14;
 
   // The number of conversions.
   // This metric is only available for DEMAND_GEN plannable products.
   //
   // See https://support.google.com/google-ads/answer/2375431 for
   // more information on conversions.
- double conversions = 16;
+  optional double conversions = 16;
 
   // Number of ad views forecasted for the specified product and targeting.
   // A TrueView View is counted when a viewer views a larger portion or the
@@ -721,7 +728,14 @@ message Forecast {
   //
   // See https://support.google.com/google-ads/answer/2375431 for
   // more information on TrueView Views.
- int64 trueview_views = 17;
+  optional int64 trueview_views = 17;
+
+  // The number of clicks, which is the main user action associated with an ad
+  // format of bid type CPC (Cost-Per-Click).
+  //
+  // See https://support.google.com/google-ads/answer/31799 for more
+  // information on clicks.
+  optional int64 clicks = 18;
 }
 
 // The forecasted allocation and traffic metrics for a specific product
@@ -770,24 +784,24 @@ message PlannedProductForecast {
   // See https://support.google.com/google-ads/answer/7029393 for
   // more information about what makes an ad viewable and how
   // viewability is measured.
- int64 viewable_impressions = 5;
+  optional int64 viewable_impressions = 5;
 
   // Number of unique people reached that exactly matches the Targeting
   // including co-viewers.
- int64 on_target_coview_reach = 6;
+  optional int64 on_target_coview_reach = 6;
 
   // Number of unique people reached including co-viewers. This includes
   // people that may fall outside the specified Targeting.
- int64 total_coview_reach = 7;
+  optional int64 total_coview_reach = 7;
 
   // Number of ad impressions that exactly matches the Targeting including
   // co-viewers.
- int64 on_target_coview_impressions = 8;
+  optional int64 on_target_coview_impressions = 8;
 
   // Total number of ad impressions including co-viewers. This includes
   // impressions that may fall outside the specified Targeting, due to
   // insufficient information on signed-in users.
- int64 total_coview_impressions = 9;
+  optional int64 total_coview_impressions = 9;
 
   // The number of times per selected time unit a user will see an ad, averaged
   // over the number of time units in the forecast length. This field will only
@@ -795,14 +809,14 @@ message PlannedProductForecast {
   //
   // See https://support.google.com/google-ads/answer/12400225 for more
   // information about Target Frequency campaigns.
- double average_frequency = 10;
+  optional double average_frequency = 10;
 
   // The number of conversions.
   // This metric is only available for DEMAND_GEN plannable products.
   //
   // See https://support.google.com/google-ads/answer/2375431 for
   // more information on conversions.
- double conversions = 12;
+  optional double conversions = 12;
 
   // Number of ad views forecasted for the specified product and targeting.
   // A TrueView View is counted when a viewer views a larger portion or the
@@ -810,7 +824,14 @@ message PlannedProductForecast {
   //
   // See https://support.google.com/google-ads/answer/2375431 for
   // more information on TrueView Views.
- int64 trueview_views = 13;
+  optional int64 trueview_views = 13;
+
+  // The number of clicks, which is the main user action associated with an ad
+  // format of bid type CPC (Cost-Per-Click).
+  //
+  // See https://support.google.com/google-ads/answer/31799 for more
+  // information on clicks.
+  optional int64 clicks = 14;
 }
 
 // Audience metrics for the planned products.
@@ -822,10 +843,10 @@ message PlannedProductForecast {
 // - AudienceTargeting (only for youtube_audience_size)
 message OnTargetAudienceMetrics {
   // Reference audience size matching the considered targeting for YouTube.
- int64 youtube_audience_size = 3;
+  optional int64 youtube_audience_size = 3;
 
   // Reference audience size matching the considered targeting for Census.
- int64 census_audience_size = 4;
+  optional int64 census_audience_size = 4;
 }
 
 // A breakdown of the number of unique people reached at a given effective
@@ -852,11 +873,11 @@ message EffectiveFrequencyBreakdown {
 
   // The number of users (including co-viewing users) reached for the associated
   // effective_frequency value.
- int64 effective_coview_reach = 4;
+  optional int64 effective_coview_reach = 4;
 
   // The number of users (including co-viewing users) reached for the associated
   // effective_frequency value within the specified plan demographic.
- int64 on_target_effective_coview_reach = 5;
+  optional int64 on_target_effective_coview_reach = 5;
 }
 
 // Controls forecast metrics to return.
@@ -906,6 +927,15 @@ message YouTubeSelectLineUp {
 
   // The unique name of the YouTube Select Lineup.
   string lineup_name = 2;
+}
+
+// Targetable YouTube Select Lineups for the ad product and the default Lineup.
+message YouTubeSelectLineUpTargeting {
+  // Targetable YouTube Select Lineups for the ad product.
+  repeated YouTubeSelectLineUp youtube_select_lineups = 1;
+
+  // The default YouTube Select Lineup for the ad product if available.
+  YouTubeSelectLineUp default_youtube_select_lineup = 2;
 }
 
 // The surface targeting combinations available for an ad product.

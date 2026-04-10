@@ -67,7 +67,7 @@ message AccessibleBiddingStrategy {
     // Output only. Average CPA target.
     // This target should be greater than or equal to minimum billable unit
     // based on the currency for the account.
- int64 target_cpa_micros = 1
+    optional int64 target_cpa_micros = 1
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 
@@ -82,12 +82,12 @@ message AccessibleBiddingStrategy {
 
     // The chosen fraction of ads to be shown in the targeted location in
     // micros. For example, 1% equals 10,000.
- int64 location_fraction_micros = 2;
+    optional int64 location_fraction_micros = 2;
 
     // Output only. The highest CPC bid the automated bidding system is
     // permitted to specify. This is a required field entered by the advertiser
     // that sets the ceiling and specified in local micros.
- int64 cpc_bid_ceiling_micros = 3
+    optional int64 cpc_bid_ceiling_micros = 3
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 
@@ -96,7 +96,7 @@ message AccessibleBiddingStrategy {
   message TargetRoas {
     // Output only. The chosen revenue (based on conversion data) per unit of
     // spend.
- double target_roas = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+    optional double target_roas = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 
   // An automated bid strategy that sets your bids to help get as many clicks
@@ -109,12 +109,12 @@ message AccessibleBiddingStrategy {
     // This field is deprecated and should no longer be used. See
     // https://ads-developers.googleblog.com/2020/05/reminder-about-sunset-creation-of.html
     // for details.
- int64 target_spend_micros = 1
+    optional int64 target_spend_micros = 1
         [deprecated = true, (google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. Maximum bid limit that can be set by the bid strategy.
     // The limit applies to all keywords managed by the strategy.
- int64 cpc_bid_ceiling_micros = 2
+    optional int64 cpc_bid_ceiling_micros = 2
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 

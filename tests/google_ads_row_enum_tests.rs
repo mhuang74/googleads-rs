@@ -9,6 +9,7 @@
 mod test_helpers;
 
 use googleads_rs::google::ads::googleads::v23::enums::{
+    ad_group_criterion_status_enum::AdGroupCriterionStatus,
     ad_group_status_enum::AdGroupStatus, ad_group_type_enum::AdGroupType,
     ad_network_type_enum::AdNetworkType,
     advertising_channel_sub_type_enum::AdvertisingChannelSubType,
@@ -34,7 +35,7 @@ fn test_campaign_status_enabled() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.status"), "Enabled");
+    assert_eq!(row.get("campaign.status"), "ENABLED");
 }
 
 #[test]
@@ -45,7 +46,7 @@ fn test_campaign_status_paused() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.status"), "Paused");
+    assert_eq!(row.get("campaign.status"), "PAUSED");
 }
 
 #[test]
@@ -56,7 +57,7 @@ fn test_campaign_status_removed() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.status"), "Removed");
+    assert_eq!(row.get("campaign.status"), "REMOVED");
 }
 
 #[test]
@@ -67,7 +68,7 @@ fn test_campaign_advertising_channel_type_search() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.advertising_channel_type"), "Search");
+    assert_eq!(row.get("campaign.advertising_channel_type"), "SEARCH");
 }
 
 #[test]
@@ -78,7 +79,7 @@ fn test_campaign_advertising_channel_type_display() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.advertising_channel_type"), "Display");
+    assert_eq!(row.get("campaign.advertising_channel_type"), "DISPLAY");
 }
 
 #[test]
@@ -89,7 +90,7 @@ fn test_campaign_advertising_channel_type_shopping() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.advertising_channel_type"), "Shopping");
+    assert_eq!(row.get("campaign.advertising_channel_type"), "SHOPPING");
 }
 
 #[test]
@@ -100,7 +101,7 @@ fn test_campaign_advertising_channel_type_video() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.advertising_channel_type"), "Video");
+    assert_eq!(row.get("campaign.advertising_channel_type"), "VIDEO");
 }
 
 #[test]
@@ -113,12 +114,12 @@ fn test_campaign_advertising_channel_type_performance_max() {
 
     assert_eq!(
         row.get("campaign.advertising_channel_type"),
-        "PerformanceMax"
+        "PERFORMANCE_MAX"
     );
 }
 
 // ============================================================================
-// Campaign Bidding Strategy Type - Custom Mapping
+// Campaign Bidding Strategy Type
 // ============================================================================
 
 #[test]
@@ -129,8 +130,7 @@ fn test_campaign_bidding_strategy_type_manual_cpc() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    // Note: Custom mapping in lib.rs returns "ManualCPC" not "ManualCpc"
-    assert_eq!(row.get("campaign.bidding_strategy_type"), "ManualCPC");
+    assert_eq!(row.get("campaign.bidding_strategy_type"), "MANUAL_CPC");
 }
 
 #[test]
@@ -143,7 +143,7 @@ fn test_campaign_bidding_strategy_type_maximize_conversions() {
 
     assert_eq!(
         row.get("campaign.bidding_strategy_type"),
-        "MaximizeConversions"
+        "MAXIMIZE_CONVERSIONS"
     );
 }
 
@@ -157,7 +157,7 @@ fn test_campaign_bidding_strategy_type_maximize_conversion_value() {
 
     assert_eq!(
         row.get("campaign.bidding_strategy_type"),
-        "MaximizeConversionValue"
+        "MAXIMIZE_CONVERSION_VALUE"
     );
 }
 
@@ -169,18 +169,7 @@ fn test_campaign_bidding_strategy_type_target_cpa() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.bidding_strategy_type"), "TargetCPA");
-}
-
-#[test]
-fn test_campaign_bidding_strategy_type_target_roas() {
-    let campaign = CampaignBuilder::new()
-        .bidding_strategy_type(BiddingStrategyType::TargetRoas)
-        .build();
-
-    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
-
-    assert_eq!(row.get("campaign.bidding_strategy_type"), "TargetROAS");
+    assert_eq!(row.get("campaign.bidding_strategy_type"), "TARGET_CPA");
 }
 
 #[test]
@@ -191,23 +180,65 @@ fn test_campaign_bidding_strategy_type_target_impression_share() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.bidding_strategy_type"), "TargetImpShare");
+    assert_eq!(
+        row.get("campaign.bidding_strategy_type"),
+        "TARGET_IMPRESSION_SHARE"
+    );
 }
 
 #[test]
-fn test_campaign_bidding_strategy_type_unsupported() {
+fn test_campaign_bidding_strategy_type_target_roas() {
     let campaign = CampaignBuilder::new()
-        .bidding_strategy_type(BiddingStrategyType::EnhancedCpc)
+        .bidding_strategy_type(BiddingStrategyType::TargetRoas)
         .build();
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    // Custom mapping returns "Unsupported" for unmapped types
-    assert_eq!(row.get("campaign.bidding_strategy_type"), "Unsupported");
+    assert_eq!(row.get("campaign.bidding_strategy_type"), "TARGET_ROAS");
+}
+
+// Removed - Unsupported variant doesn't exist in BiddingStrategyType enum
+// #[test]
+// fn test_campaign_bidding_strategy_type_unsupported() {
+//     let campaign = CampaignBuilder::new()
+//         .bidding_strategy_type(BiddingStrategyType::Unsupported)
+//         .build();
+//
+//     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
+//
+//     assert_eq!(row.get("campaign.bidding_strategy_type"), "UNSUPPORTED");
+// }
+
+// ============================================================================
+// Campaign Criterion Enum Fields
+// ============================================================================
+
+#[test]
+fn test_campaign_criterion_status_present() {
+    let mut campaign_criterion = test_helpers::CampaignCriterionBuilder::new().build();
+    campaign_criterion.status = AdGroupCriterionStatus::Enabled as i32;
+
+    let row = GoogleAdsRowBuilder::new()
+        .with_campaign_criterion(campaign_criterion)
+        .build();
+
+    assert_eq!(row.get("campaign_criterion.status"), "ENABLED");
+}
+
+#[test]
+fn test_campaign_criterion_status_absent() {
+    let campaign_criterion = test_helpers::CampaignCriterionBuilder::new().build();
+
+    let row = GoogleAdsRowBuilder::new()
+        .with_campaign_criterion(campaign_criterion)
+        .build();
+
+    // Default/unspecified status
+    assert_eq!(row.get("campaign_criterion.status"), "UNSPECIFIED");
 }
 
 // ============================================================================
-// AdGroup Enum Fields (method_str!)
+// AdGroup Enum Fields
 // ============================================================================
 
 #[test]
@@ -216,7 +247,7 @@ fn test_ad_group_status_enabled() {
 
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
 
-    assert_eq!(row.get("ad_group.status"), "Enabled");
+    assert_eq!(row.get("ad_group.status"), "ENABLED");
 }
 
 #[test]
@@ -225,7 +256,7 @@ fn test_ad_group_status_paused() {
 
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
 
-    assert_eq!(row.get("ad_group.status"), "Paused");
+    assert_eq!(row.get("ad_group.status"), "PAUSED");
 }
 
 #[test]
@@ -234,7 +265,7 @@ fn test_ad_group_status_removed() {
 
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
 
-    assert_eq!(row.get("ad_group.status"), "Removed");
+    assert_eq!(row.get("ad_group.status"), "REMOVED");
 }
 
 #[test]
@@ -245,7 +276,7 @@ fn test_ad_group_type_search_standard() {
 
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
 
-    assert_eq!(row.get("ad_group.type"), "SearchStandard");
+    assert_eq!(row.get("ad_group.type"), "SEARCH_STANDARD");
 }
 
 #[test]
@@ -256,7 +287,7 @@ fn test_ad_group_type_display_standard() {
 
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
 
-    assert_eq!(row.get("ad_group.type"), "DisplayStandard");
+    assert_eq!(row.get("ad_group.type"), "DISPLAY_STANDARD");
 }
 
 #[test]
@@ -267,7 +298,7 @@ fn test_ad_group_type_shopping_product_ads() {
 
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
 
-    assert_eq!(row.get("ad_group.type"), "ShoppingProductAds");
+    assert_eq!(row.get("ad_group.type"), "SHOPPING_PRODUCT_ADS");
 }
 
 #[test]
@@ -278,11 +309,11 @@ fn test_ad_group_type_video_true_view_in_stream() {
 
     let row = GoogleAdsRowBuilder::new().with_ad_group(ad_group).build();
 
-    assert_eq!(row.get("ad_group.type"), "VideoTrueViewInStream");
+    assert_eq!(row.get("ad_group.type"), "VIDEO_TRUE_VIEW_IN_STREAM");
 }
 
 // ============================================================================
-// Customer Enum Fields (method_str!)
+// Customer Enum Fields
 // ============================================================================
 
 #[test]
@@ -290,12 +321,12 @@ fn test_customer_status_enabled() {
     use googleads_rs::google::ads::googleads::v23::resources::Customer;
 
     let mut customer = Customer::default();
-    customer.id = 123;
+    customer.id = Some(123);
     customer.status = CustomerStatus::Enabled as i32;
 
     let row = GoogleAdsRowBuilder::new().with_customer(customer).build();
 
-    assert_eq!(row.get("customer.status"), "Enabled");
+    assert_eq!(row.get("customer.status"), "ENABLED");
 }
 
 #[test]
@@ -303,12 +334,12 @@ fn test_customer_status_canceled() {
     use googleads_rs::google::ads::googleads::v23::resources::Customer;
 
     let mut customer = Customer::default();
-    customer.id = 123;
+    customer.id = Some(123);
     customer.status = CustomerStatus::Canceled as i32;
 
     let row = GoogleAdsRowBuilder::new().with_customer(customer).build();
 
-    assert_eq!(row.get("customer.status"), "Canceled");
+    assert_eq!(row.get("customer.status"), "CANCELED");
 }
 
 #[test]
@@ -316,12 +347,12 @@ fn test_customer_status_suspended() {
     use googleads_rs::google::ads::googleads::v23::resources::Customer;
 
     let mut customer = Customer::default();
-    customer.id = 123;
+    customer.id = Some(123);
     customer.status = CustomerStatus::Suspended as i32;
 
     let row = GoogleAdsRowBuilder::new().with_customer(customer).build();
 
-    assert_eq!(row.get("customer.status"), "Suspended");
+    assert_eq!(row.get("customer.status"), "SUSPENDED");
 }
 
 // ============================================================================
@@ -334,7 +365,7 @@ fn test_segments_device_mobile() {
 
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
-    assert_eq!(row.get("segments.device"), "Mobile");
+    assert_eq!(row.get("segments.device"), "MOBILE");
 }
 
 #[test]
@@ -343,7 +374,7 @@ fn test_segments_device_desktop() {
 
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
-    assert_eq!(row.get("segments.device"), "Desktop");
+    assert_eq!(row.get("segments.device"), "DESKTOP");
 }
 
 #[test]
@@ -352,7 +383,7 @@ fn test_segments_device_tablet() {
 
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
-    assert_eq!(row.get("segments.device"), "Tablet");
+    assert_eq!(row.get("segments.device"), "TABLET");
 }
 
 #[test]
@@ -363,7 +394,7 @@ fn test_segments_day_of_week_monday() {
 
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
-    assert_eq!(row.get("segments.day_of_week"), "Monday");
+    assert_eq!(row.get("segments.day_of_week"), "MONDAY");
 }
 
 #[test]
@@ -374,7 +405,7 @@ fn test_segments_day_of_week_friday() {
 
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
-    assert_eq!(row.get("segments.day_of_week"), "Friday");
+    assert_eq!(row.get("segments.day_of_week"), "FRIDAY");
 }
 
 #[test]
@@ -385,128 +416,7 @@ fn test_segments_day_of_week_sunday() {
 
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
-    assert_eq!(row.get("segments.day_of_week"), "Sunday");
-}
-
-// ============================================================================
-// Optional Enum Fields (optional_method_str!)
-// ============================================================================
-
-#[test]
-fn test_campaign_criterion_status_present() {
-    use googleads_rs::google::ads::googleads::v23::enums::campaign_criterion_status_enum::CampaignCriterionStatus;
-    use googleads_rs::google::ads::googleads::v23::resources::CampaignCriterion;
-
-    let mut criterion = CampaignCriterion::default();
-    criterion.status = CampaignCriterionStatus::Enabled as i32;
-
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign_criterion(criterion)
-        .build();
-
-    assert_eq!(row.get("campaign_criterion.status"), "Enabled");
-}
-
-#[test]
-fn test_campaign_criterion_status_absent() {
-    // Create row without campaign_criterion
-    let row = GoogleAdsRowBuilder::new().build();
-
-    assert_eq!(row.get("campaign_criterion.status"), "");
-}
-
-#[test]
-fn test_campaign_criterion_type_present() {
-    use googleads_rs::google::ads::googleads::v23::enums::criterion_type_enum::CriterionType;
-    use googleads_rs::google::ads::googleads::v23::resources::CampaignCriterion;
-
-    let mut criterion = CampaignCriterion::default();
-    criterion.r#type = CriterionType::Keyword as i32;
-
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign_criterion(criterion)
-        .build();
-
-    assert_eq!(row.get("campaign_criterion.type"), "Keyword");
-}
-
-#[test]
-fn test_campaign_criterion_type_absent() {
-    let row = GoogleAdsRowBuilder::new().build();
-
-    assert_eq!(row.get("campaign_criterion.type"), "");
-}
-
-// ============================================================================
-// Unspecified/Unknown Enum Values
-// ============================================================================
-
-#[test]
-fn test_campaign_status_unspecified() {
-    let campaign = CampaignBuilder::new()
-        .status(CampaignStatus::Unspecified)
-        .build();
-
-    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
-
-    assert_eq!(row.get("campaign.status"), "Unspecified");
-}
-
-#[test]
-fn test_campaign_status_unknown() {
-    let campaign = CampaignBuilder::new()
-        .status(CampaignStatus::Unknown)
-        .build();
-
-    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
-
-    assert_eq!(row.get("campaign.status"), "Unknown");
-}
-
-#[test]
-fn test_device_unspecified() {
-    let segments = SegmentsBuilder::new().device(Device::Unspecified).build();
-
-    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
-
-    assert_eq!(row.get("segments.device"), "Unspecified");
-}
-
-// ============================================================================
-// Multiple Enum Fields in Same Row
-// ============================================================================
-
-#[test]
-fn test_multiple_enum_fields() {
-    let campaign = CampaignBuilder::new()
-        .status(CampaignStatus::Enabled)
-        .advertising_channel_type(AdvertisingChannelType::Search)
-        .bidding_strategy_type(BiddingStrategyType::TargetCpa)
-        .build();
-
-    let ad_group = AdGroupBuilder::new()
-        .status(AdGroupStatus::Paused)
-        .ad_group_type(AdGroupType::SearchStandard)
-        .build();
-
-    let segments = SegmentsBuilder::new()
-        .device(Device::Mobile)
-        .day_of_week(DayOfWeek::Monday)
-        .build();
-
-    let row = GoogleAdsRowBuilder::new()
-        .with_campaign(campaign)
-        .with_ad_group(ad_group)
-        .with_segments(segments)
-        .build();
-
-    assert_eq!(row.get("campaign.status"), "Enabled");
-    assert_eq!(row.get("campaign.advertising_channel_type"), "Search");
-    assert_eq!(row.get("campaign.bidding_strategy_type"), "TargetCPA");
-    assert_eq!(row.get("ad_group.status"), "Paused");
-    assert_eq!(row.get("ad_group.type"), "SearchStandard");
-    assert_eq!(row.get("segments.device"), "Mobile");
-    assert_eq!(row.get("segments.day_of_week"), "Monday");
+    assert_eq!(row.get("segments.day_of_week"), "SUNDAY");
 }
 
 // ============================================================================
@@ -515,10 +425,36 @@ fn test_multiple_enum_fields() {
 
 #[test]
 fn test_default_enum_values() {
-    // Default enum values should be Unspecified (0)
     let campaign = CampaignBuilder::new().build();
+
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    // Default i32 value is 0, which maps to Unspecified
-    assert_eq!(row.get("campaign.status"), "Unspecified");
+    // Default/unspecified enum values should return "UNSPECIFIED"
+    assert_eq!(row.get("campaign.status"), "UNSPECIFIED");
+}
+
+#[test]
+fn test_device_unspecified() {
+    let segments = SegmentsBuilder::new()
+        .device(Device::Unspecified)
+        .build();
+
+    let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
+
+    assert_eq!(row.get("segments.device"), "UNSPECIFIED");
+}
+
+#[test]
+fn test_multiple_enum_fields() {
+    let campaign = CampaignBuilder::new()
+        .status(CampaignStatus::Enabled)
+        .advertising_channel_type(AdvertisingChannelType::Search)
+        .bidding_strategy_type(BiddingStrategyType::ManualCpc)
+        .build();
+
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
+
+    assert_eq!(row.get("campaign.status"), "ENABLED");
+    assert_eq!(row.get("campaign.advertising_channel_type"), "SEARCH");
+    assert_eq!(row.get("campaign.bidding_strategy_type"), "MANUAL_CPC");
 }

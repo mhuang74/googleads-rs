@@ -46,14 +46,14 @@ message Label {
   ];
 
   // Output only. ID of the label. Read only.
- int64 id = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The name of the label.
   //
   // This field is required and should not be empty when creating a new label.
   //
   // The length of this string should be between 1 and 80, inclusive.
- string name = 7;
+  optional string name = 7;
 
   // Output only. Status of the label. Read only.
   google.ads.googleads.v23.enums.LabelStatusEnum.LabelStatus status = 4

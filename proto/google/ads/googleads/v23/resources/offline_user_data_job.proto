@@ -57,10 +57,10 @@ message OfflineUserDataJob {
   ];
 
   // Output only. ID of this offline user data job.
- int64 id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. User specified job ID.
- int64 external_id = 10 [(google.api.field_behavior) = IMMUTABLE];
+  optional int64 external_id = 10 [(google.api.field_behavior) = IMMUTABLE];
 
   // Immutable. Type of the job.
   google.ads.googleads.v23.enums.OfflineUserDataJobTypeEnum

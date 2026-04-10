@@ -185,14 +185,14 @@ message SuggestSmartCampaignBudgetOptionsResponse {
   }
 
   // Optional. The lowest budget option.
- BudgetOption low = 1 [(google.api.field_behavior) = OPTIONAL];
+  optional BudgetOption low = 1 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. The recommended budget option.
- BudgetOption recommended = 2
+  optional BudgetOption recommended = 2
       [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. The highest budget option.
- BudgetOption high = 3 [(google.api.field_behavior) = OPTIONAL];
+  optional BudgetOption high = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Request message for

@@ -79,7 +79,7 @@ message GetSmartCampaignStatusRequest {
 // Details related to Smart campaigns that are not eligible to serve.
 message SmartCampaignNotEligibleDetails {
   // The reason why the Smart campaign is not eligible to serve.
- google.ads.googleads.v23.enums.SmartCampaignNotEligibleReasonEnum
+  optional google.ads.googleads.v23.enums.SmartCampaignNotEligibleReasonEnum
       .SmartCampaignNotEligibleReason not_eligible_reason = 1;
 }
 
@@ -89,12 +89,12 @@ message SmartCampaignEligibleDetails {
   // campaign.
   // The timestamp is in the customer’s timezone and in
   // “yyyy-MM-dd HH:mm:ss” format.
- string last_impression_date_time = 1;
+  optional string last_impression_date_time = 1;
 
   // The timestamp of when the campaign will end, if applicable.
   // The timestamp is in the customer’s timezone and in
   // “yyyy-MM-dd HH:mm:ss” format.
- string end_date_time = 2;
+  optional string end_date_time = 2;
 }
 
 // Details related to paused Smart campaigns.
@@ -102,7 +102,7 @@ message SmartCampaignPausedDetails {
   // The timestamp of when the campaign was last paused.
   // The timestamp is in the customer’s timezone and in
   // “yyyy-MM-dd HH:mm:ss” format.
- string paused_date_time = 1;
+  optional string paused_date_time = 1;
 }
 
 // Details related to removed Smart campaigns.
@@ -110,7 +110,7 @@ message SmartCampaignRemovedDetails {
   // The timestamp of when the campaign was removed.
   // The timestamp is in the customer’s timezone and in
   // “yyyy-MM-dd HH:mm:ss” format.
- string removed_date_time = 1;
+  optional string removed_date_time = 1;
 }
 
 // Details related to Smart campaigns that have ended.
@@ -118,7 +118,7 @@ message SmartCampaignEndedDetails {
   // The timestamp of when the campaign ended.
   // The timestamp is in the customer’s timezone and in
   // “yyyy-MM-dd HH:mm:ss” format.
- string end_date_time = 1;
+  optional string end_date_time = 1;
 }
 
 // Response message for

@@ -44,14 +44,14 @@ async fn test_process_mock_streaming_response() {
 
     // Simulate a streaming response batch
     let mut campaign = Campaign::default();
-    campaign.id = 12345;
-    campaign.name = "Test Campaign".to_string();
+    campaign.id = Some(12345);
+    campaign.name = Some("Test Campaign".to_string());
     campaign.status = CampaignStatus::Enabled as i32;
 
     let mut metrics = Metrics::default();
-    metrics.impressions = 10000;
-    metrics.clicks = 500;
-    metrics.ctr = 0.05;
+    metrics.impressions = Some(10000);
+    metrics.clicks = Some(500);
+    metrics.ctr = Some(0.05);
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -124,8 +124,8 @@ async fn test_process_multiple_streaming_batches() {
     let mut batch1_rows = Vec::new();
     for i in 1..=3 {
         let mut campaign = Campaign::default();
-        campaign.id = i * 100;
-        campaign.name = format!("Campaign {}", i);
+        campaign.id = Some(i * 100);
+        campaign.name = Some(format!("Campaign {}", i));
         campaign.status = CampaignStatus::Enabled as i32;
 
         batch1_rows.push(GoogleAdsRow {
@@ -147,8 +147,8 @@ async fn test_process_multiple_streaming_batches() {
     let mut batch2_rows = Vec::new();
     for i in 4..=5 {
         let mut campaign = Campaign::default();
-        campaign.id = i * 100;
-        campaign.name = format!("Campaign {}", i);
+        campaign.id = Some(i * 100);
+        campaign.name = Some(format!("Campaign {}", i));
         campaign.status = CampaignStatus::Enabled as i32;
 
         batch2_rows.push(GoogleAdsRow {
@@ -231,26 +231,26 @@ fn test_field_mask_all_paths_accessible() {
 
     // Create a fully populated row
     let mut campaign = Campaign::default();
-    campaign.id = 111;
-    campaign.name = "Campaign A".to_string();
+    campaign.id = Some(111);
+    campaign.name = Some("Campaign A".to_string());
     campaign.status = CampaignStatus::Enabled as i32;
 
     let mut ad_group = AdGroup::default();
-    ad_group.id = 222;
-    ad_group.name = "Ad Group B".to_string();
+    ad_group.id = Some(222);
+    ad_group.name = Some("Ad Group B".to_string());
     ad_group.status = AdGroupStatus::Paused as i32;
 
     let mut customer = Customer::default();
-    customer.id = 333;
-    customer.descriptive_name = "Test Account".to_string();
+    customer.id = Some(333);
+    customer.descriptive_name = Some("Test Account".to_string());
 
     let mut metrics = Metrics::default();
-    metrics.impressions = 50000;
-    metrics.clicks = 1000;
-    metrics.cost_micros = 75000000;
+    metrics.impressions = Some(50000);
+    metrics.clicks = Some(1000);
+    metrics.cost_micros = Some(75000000);
 
     let mut segments = Segments::default();
-    segments.date = "2024-10-14".to_string();
+    segments.date = Some("2024-10-14".to_string());
     segments.device = 2; // Mobile
 
     let row = GoogleAdsRow {
@@ -296,7 +296,7 @@ fn test_handle_missing_optional_resources() {
 
     // Create a row with only campaign (no budget, no ad_group)
     let mut campaign = Campaign::default();
-    campaign.id = 999;
+    campaign.id = Some(999);
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -322,7 +322,7 @@ fn test_unimplemented_field_returns_not_implemented() {
     use googleads_rs::google::ads::googleads::v23::services::GoogleAdsRow;
 
     let mut campaign = Campaign::default();
-    campaign.id = 123;
+    campaign.id = Some(123);
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -383,17 +383,17 @@ async fn test_realistic_campaign_performance_query() {
 
     for day in 8..=14 {
         let mut campaign = Campaign::default();
-        campaign.id = campaign_id;
-        campaign.name = campaign_name.to_string();
+        campaign.id = Some(campaign_id);
+        campaign.name = Some(campaign_name.to_string());
         campaign.status = CampaignStatus::Enabled as i32;
 
         let mut metrics = Metrics::default();
-        metrics.impressions = 5000 + (day * 100);
-        metrics.clicks = 250 + (day * 5);
-        metrics.cost_micros = 50000000 + (day * 1000000);
+        metrics.impressions = Some(5000 + (day * 100));
+        metrics.clicks = Some(250 + (day * 5));
+        metrics.cost_micros = Some(50000000 + (day * 1000000));
 
         let mut segments = Segments::default();
-        segments.date = format!("2024-10-{:02}", day);
+        segments.date = Some(format!("2024-10-{:02}", day));
 
         responses.push(SearchGoogleAdsStreamResponse {
             results: vec![GoogleAdsRow {

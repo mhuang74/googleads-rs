@@ -53,7 +53,7 @@ fn test_account_budget_status() {
         .with_account_budget(account_budget)
         .build();
 
-    assert_eq!(row.get("account_budget.status"), "Approved");
+    assert_eq!(row.get("account_budget.status"), "APPROVED");
 }
 
 #[test]
@@ -72,7 +72,7 @@ fn test_account_budget_all_fields() {
 
     assert_eq!(row.get("account_budget.id"), "999888777");
     assert_eq!(row.get("account_budget.name"), "Annual Budget 2024");
-    assert_eq!(row.get("account_budget.status"), "Approved");
+    assert_eq!(row.get("account_budget.status"), "APPROVED");
 }
 
 // ============================================================================
@@ -115,7 +115,7 @@ fn test_asset_group_status() {
         .with_asset_group(asset_group)
         .build();
 
-    assert_eq!(row.get("asset_group.status"), "Enabled");
+    assert_eq!(row.get("asset_group.status"), "ENABLED");
 }
 
 #[test]
@@ -212,7 +212,7 @@ fn test_audience_status() {
 
     let row = GoogleAdsRowBuilder::new().with_audience(audience).build();
 
-    assert_eq!(row.get("audience.status"), "Enabled");
+    assert_eq!(row.get("audience.status"), "ENABLED");
 }
 
 // ============================================================================
@@ -255,7 +255,7 @@ fn test_bidding_strategy_status() {
         .with_bidding_strategy(bidding_strategy)
         .build();
 
-    assert_eq!(row.get("bidding_strategy.status"), "Enabled");
+    assert_eq!(row.get("bidding_strategy.status"), "ENABLED");
 }
 
 // ============================================================================
@@ -290,7 +290,7 @@ fn test_label_status() {
 
     let row = GoogleAdsRowBuilder::new().with_label(label).build();
 
-    assert_eq!(row.get("label.status"), "Enabled");
+    assert_eq!(row.get("label.status"), "ENABLED");
 }
 
 // ============================================================================
@@ -382,7 +382,7 @@ fn test_customer_client_status() {
         .with_customer_client(customer_client)
         .build();
 
-    assert_eq!(row.get("customer_client.status"), "Enabled");
+    assert_eq!(row.get("customer_client.status"), "ENABLED");
 }
 
 #[test]
@@ -443,7 +443,7 @@ fn test_search_term_view_status() {
         .with_search_term_view(search_term_view)
         .build();
 
-    assert_eq!(row.get("search_term_view.status"), "Added");
+    assert_eq!(row.get("search_term_view.status"), "ADDED");
 }
 
 // ============================================================================
@@ -514,7 +514,7 @@ fn test_change_event_change_resource_type() {
         .with_change_event(change_event)
         .build();
 
-    assert_eq!(row.get("change_event.change_resource_type"), "Campaign");
+    assert_eq!(row.get("change_event.change_resource_type"), "CAMPAIGN");
 }
 
 #[test]
@@ -545,7 +545,7 @@ fn test_change_event_client_type() {
         .with_change_event(change_event)
         .build();
 
-    assert_eq!(row.get("change_event.client_type"), "GoogleAdsWebClient");
+    assert_eq!(row.get("change_event.client_type"), "GOOGLE_ADS_WEB_CLIENT");
 }
 
 #[test]
@@ -573,7 +573,7 @@ fn test_change_event_resource_change_operation() {
         .with_change_event(change_event)
         .build();
 
-    assert_eq!(row.get("change_event.resource_change_operation"), "Update");
+    assert_eq!(row.get("change_event.resource_change_operation"), "UPDATE");
 }
 
 #[test]
@@ -656,7 +656,7 @@ fn test_ad_group_ad_asset_view_field_type() {
         .with_ad_group_ad_asset_view(ad_group_ad_asset_view)
         .build();
 
-    assert_eq!(row.get("ad_group_ad_asset_view.field_type"), "Headline");
+    assert_eq!(row.get("ad_group_ad_asset_view.field_type"), "HEADLINE");
 }
 
 #[test]
@@ -671,7 +671,7 @@ fn test_ad_group_ad_asset_view_pinned_field() {
         .with_ad_group_ad_asset_view(ad_group_ad_asset_view)
         .build();
 
-    assert_eq!(row.get("ad_group_ad_asset_view.pinned_field"), "Headline1");
+    assert_eq!(row.get("ad_group_ad_asset_view.pinned_field"), "HEADLINE_1");
 }
 
 #[test]
@@ -686,7 +686,7 @@ fn test_ad_group_ad_asset_view_performance_label() {
         .with_ad_group_ad_asset_view(ad_group_ad_asset_view)
         .build();
 
-    assert_eq!(row.get("ad_group_ad_asset_view.performance_label"), "Best");
+    assert_eq!(row.get("ad_group_ad_asset_view.performance_label"), "BEST");
 }
 
 // ============================================================================
@@ -705,7 +705,7 @@ fn test_asset_field_type_view_field_type() {
         .with_asset_field_type_view(asset_field_type_view)
         .build();
 
-    assert_eq!(row.get("asset_field_type_view.field_type"), "Description");
+    assert_eq!(row.get("asset_field_type_view.field_type"), "DESCRIPTION");
 }
 
 // ============================================================================

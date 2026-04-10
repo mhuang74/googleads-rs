@@ -17,7 +17,7 @@ GOOGLEADS_API_VERSION=$1
 # Determine the current Google Ads API version from build.rs
 current_version=$(grep -oE 'googleads\{\}v[0-9]+' build.rs | grep -oE 'v[0-9]+')
 
-if [ "$current_version" == "$GOOGLEADS_API_VERSION" ]; then
+if [ "$current_version" == "$GOOGLEADS_API_VERSION" ] && [ "$2" != "--force" ]; then
   echo "Nothing Done. Already at target version $GOOGLEADS_API_VERSION"
   exit 0
 fi
@@ -47,11 +47,6 @@ mv googleapis-master/google/ads/googleads/$GOOGLEADS_API_VERSION proto/google/ad
 
 # only keep proto files
 safe_run find proto -type f -not -name '*.proto' -delete
-
-# Remove optional keyword
-safe_run find proto -type f | while read -r file; do
-  sed -i '' -e 's/^ *optional//g' "$file" || echo "Failed to process $file"
-done
 
 # Remove comments from 2 proto files to avoid doc test errors
 safe_run sed -i '' -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto

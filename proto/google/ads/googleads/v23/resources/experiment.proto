@@ -54,7 +54,7 @@ message Experiment {
   ];
 
   // Output only. The ID of the experiment. Read only.
- int64 experiment_id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 experiment_id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Required. The name of the experiment. It must have a minimum length of 1
   // and maximum length of 1024. It must be unique under a customer.
@@ -85,7 +85,7 @@ message Experiment {
   //
   // Format: YYYY-MM-DD
   // Example: 2019-03-14
- string start_date = 15;
+  optional string start_date = 15;
 
   // Date when the experiment ends. By default, the experiment ends on
   // the campaign's end date. If this field is set, then the experiment ends at
@@ -93,7 +93,7 @@ message Experiment {
   //
   // Format: YYYY-MM-DD
   // Example: 2019-04-18
- string end_date = 16;
+  optional string end_date = 16;
 
   // The goals of this experiment.
   repeated google.ads.googleads.v23.common.MetricGoal goals = 17;
@@ -101,7 +101,7 @@ message Experiment {
   // Output only. The resource name of the long-running operation that can be
   // used to poll for completion of experiment schedule or promote. The most
   // recent long running operation is returned.
- string long_running_operation = 18
+  optional string long_running_operation = 18
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The status of the experiment promotion process.
@@ -111,5 +111,5 @@ message Experiment {
   // Immutable. Set to true if changes to base campaigns should be synced to the
   // trial campaigns. Any changes made directly to trial campaigns will be
   // preserved. This field can only be set when the experiment is being created.
- bool sync_enabled = 20 [(google.api.field_behavior) = IMMUTABLE];
+  optional bool sync_enabled = 20 [(google.api.field_behavior) = IMMUTABLE];
 }

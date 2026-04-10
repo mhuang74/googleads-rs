@@ -50,7 +50,7 @@ message FinalUrlExpansionAssetView {
   ];
 
   // Output only. Campaign in which the asset served.
- string campaign = 2 [
+  optional string campaign = 2 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -58,7 +58,7 @@ message FinalUrlExpansionAssetView {
   ];
 
   // Output only. The ID of the asset.
- string asset = 3 [
+  optional string asset = 3 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = { type: "googleads.googleapis.com/Asset" }
   ];
@@ -68,7 +68,7 @@ message FinalUrlExpansionAssetView {
       4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Status of the FinalUrlExpansionAsset.
- google.ads.googleads.v23.enums.AssetLinkStatusEnum.AssetLinkStatus
+  optional google.ads.googleads.v23.enums.AssetLinkStatusEnum.AssetLinkStatus
       status = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Final URL of the FinalUrlExpansionAsset.

@@ -57,7 +57,7 @@ message LookalikeUserListInfo {
 // UserList. These lists are read-only and automatically created by Google.
 message SimilarUserListInfo {
   // Seed UserList from which this list is derived.
- string seed_user_list = 2;
+  optional string seed_user_list = 2;
 }
 
 // UserList of CRM users provided by the advertiser.
@@ -72,7 +72,7 @@ message CrmBasedUserListInfo {
   // https://play.google.com/store/apps/details?id=com.labpixies.colordrips).
   // Required when creating CrmBasedUserList for uploading mobile advertising
   // IDs.
- string app_id = 4;
+  optional string app_id = 4;
 
   // Matching key type of the list.
   // Mixed data types are not allowed on the same list.
@@ -120,7 +120,7 @@ message UserListRuleItemInfo {
   // For websites, there are two built-in variable URL (name = 'url__') and
   // referrer URL (name = 'ref_url__').
   // This field must be populated when creating a new rule item.
- string name = 5;
+  optional string name = 5;
 
   // An atomic rule item.
   oneof rule_item {
@@ -147,12 +147,12 @@ message UserListDateRuleItemInfo {
   // String representing date value to be compared with the rule variable.
   // Supported date format is YYYY-MM-DD.
   // Times are reported in the customer's time zone.
- string value = 4;
+  optional string value = 4;
 
   // The relative date value of the right hand side denoted by number of days
   // offset from now. The value field will override this field when both are
   // present.
- int64 offset_in_days = 5;
+  optional int64 offset_in_days = 5;
 }
 
 // A rule item composed of a number operation.
@@ -167,7 +167,7 @@ message UserListNumberRuleItemInfo {
   // Number value to be compared with the variable.
   // This field is required and must be populated when creating a new number
   // rule item.
- double value = 3;
+  optional double value = 3;
 }
 
 // A rule item composed of a string operation.
@@ -183,7 +183,7 @@ message UserListStringRuleItemInfo {
   // the value can not contain illegal URL chars such as newlines, quotes,
   // tabs, or parentheses. This field is required and must be populated when
   // creating a new string rule item.
- string value = 3;
+  optional string value = 3;
 }
 
 // Flexible rule that wraps the common rule and a lookback window.
@@ -193,7 +193,7 @@ message FlexibleRuleOperandInfo {
   UserListRuleInfo rule = 1;
 
   // Lookback window for this rule in days. From now until X days ago.
- int64 lookback_window_days = 2;
+  optional int64 lookback_window_days = 2;
 }
 
 // Flexible rule representation of visitors with one or multiple actions. The
@@ -267,7 +267,7 @@ message UserListLogicalRuleInfo {
 // Operand of logical user list that consists of a user list.
 message LogicalUserListOperandInfo {
   // Resource name of a user list as an operand.
- string user_list = 2;
+  optional string user_list = 2;
 }
 
 // User list targeting as a collection of conversions or remarketing actions.

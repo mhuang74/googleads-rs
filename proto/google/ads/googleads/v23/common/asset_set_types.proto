@@ -161,7 +161,7 @@ message DynamicBusinessProfileLocationGroupFilter {
   repeated string label_filters = 1;
 
   // Used to filter Business Profile locations by business name.
- BusinessProfileBusinessNameFilter business_name_filter = 2;
+  optional BusinessProfileBusinessNameFilter business_name_filter = 2;
 
   // Used to filter Business Profile locations by listing ids.
   repeated int64 listing_id_filters = 3;

@@ -132,13 +132,13 @@ message AdStrengthActionItem {
         asset_field_type = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. The number of assets to add.
- int32 asset_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+    optional int32 asset_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. For video field types, the required aspect ratio of the
     // video. When unset and asset_field_type is YOUTUBE_VIDEO, the system
     // recommends the advertiser upload any YouTube video, regardless of aspect
     // ratio.
- google.ads.googleads.v23.enums
+    optional google.ads.googleads.v23.enums
         .AssetCoverageVideoAspectRatioRequirementEnum
         .AssetCoverageVideoAspectRatioRequirement
             video_aspect_ratio_requirement = 3

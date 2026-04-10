@@ -50,21 +50,21 @@ message KeywordPlanAdGroup {
   ];
 
   // The keyword plan campaign to which this ad group belongs.
- string keyword_plan_campaign = 6 [(google.api.resource_reference) = {
+  optional string keyword_plan_campaign = 6 [(google.api.resource_reference) = {
     type: "googleads.googleapis.com/KeywordPlanCampaign"
   }];
 
   // Output only. The ID of the keyword plan ad group.
- int64 id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The name of the keyword plan ad group.
   //
   // This field is required and should not be empty when creating keyword plan
   // ad group.
- string name = 8;
+  optional string name = 8;
 
   // A default ad group max cpc bid in micros in account currency for all
   // biddable keywords under the keyword plan ad group.
   // If not set, will inherit from parent campaign.
- int64 cpc_bid_micros = 9;
+  optional int64 cpc_bid_micros = 9;
 }

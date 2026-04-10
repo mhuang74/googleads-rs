@@ -171,12 +171,12 @@ message AddOfflineUserDataJobOperationsRequest {
   ];
 
   // True to enable partial failure for the offline user data job.
- bool enable_partial_failure = 4;
+  optional bool enable_partial_failure = 4;
 
   // True to enable warnings for the offline user data job. When enabled, a
   // warning will not block the OfflineUserDataJobOperation, and will also
   // return warning messages about malformed field values.
- bool enable_warnings = 6;
+  optional bool enable_warnings = 6;
 
   // Required. The list of operations to be done.
   repeated OfflineUserDataJobOperation operations = 3

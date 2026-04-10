@@ -47,14 +47,14 @@ message Goal {
   ];
 
   // Output only. The ID of this goal.
- int64 goal_id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 goal_id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The type of this goal.
   google.ads.googleads.v23.enums.GoalTypeEnum.GoalType goal_type = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The resource name of the goal owner customer.
- string owner_customer = 4 [
+  optional string owner_customer = 4 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Customer"

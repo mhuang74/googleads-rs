@@ -53,7 +53,7 @@ message ChangeStatus {
 
   // Output only. Time at which the most recent change has occurred on this
   // resource.
- string last_change_date_time = 24
+  optional string last_change_date_time = 24
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Represents the type of the changed resource. This dictates
@@ -64,7 +64,7 @@ message ChangeStatus {
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The Campaign affected by this change.
- string campaign = 17 [
+  optional string campaign = 17 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -72,7 +72,7 @@ message ChangeStatus {
   ];
 
   // Output only. The AdGroup affected by this change.
- string ad_group = 18 [
+  optional string ad_group = 18 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroup"
@@ -84,7 +84,7 @@ message ChangeStatus {
       resource_status = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The AdGroupAd affected by this change.
- string ad_group_ad = 25 [
+  optional string ad_group_ad = 25 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroupAd"
@@ -92,7 +92,7 @@ message ChangeStatus {
   ];
 
   // Output only. The AdGroupCriterion affected by this change.
- string ad_group_criterion = 26 [
+  optional string ad_group_criterion = 26 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroupCriterion"
@@ -100,7 +100,7 @@ message ChangeStatus {
   ];
 
   // Output only. The CampaignCriterion affected by this change.
- string campaign_criterion = 27 [
+  optional string campaign_criterion = 27 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/CampaignCriterion"
@@ -108,7 +108,7 @@ message ChangeStatus {
   ];
 
   // Output only. The AdGroupBidModifier affected by this change.
- string ad_group_bid_modifier = 32 [
+  optional string ad_group_bid_modifier = 32 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroupBidModifier"

@@ -65,7 +65,7 @@ message CriterionCategoryChannelAvailability {
   // advertising_channel_type being DISPLAY and include_default_channel_sub_type
   // being false means that the default display campaign where channel sub type
   // is not set is not included in this availability configuration.
- bool include_default_channel_sub_type = 5;
+  optional bool include_default_channel_sub_type = 5;
 }
 
 // Information about which locales a category is available in.
@@ -78,8 +78,8 @@ message CriterionCategoryLocaleAvailability {
       .CriterionCategoryLocaleAvailabilityMode availability_mode = 1;
 
   // The ISO-3166-1 alpha-2 country code associated with the category.
- string country_code = 4;
+  optional string country_code = 4;
 
   // ISO 639-1 code of the language associated with the category.
- string language_code = 5;
+  optional string language_code = 5;
 }

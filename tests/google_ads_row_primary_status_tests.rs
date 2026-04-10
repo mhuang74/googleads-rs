@@ -370,7 +370,7 @@ fn test_ad_group_ad_primary_status_reasons_multiple() {
 fn test_ad_group_criterion_primary_status_eligible() {
     // 2 = ELIGIBLE
     let ad_group_criterion = AdGroupCriterion {
-        primary_status: 2,
+        primary_status: Some(2),
         ..Default::default()
     };
 
@@ -386,7 +386,7 @@ fn test_ad_group_criterion_primary_status_eligible() {
 fn test_ad_group_criterion_primary_status_paused() {
     // 3 = PAUSED
     let ad_group_criterion = AdGroupCriterion {
-        primary_status: 3,
+        primary_status: Some(3),
         ..Default::default()
     };
 
@@ -402,7 +402,7 @@ fn test_ad_group_criterion_primary_status_paused() {
 fn test_ad_group_criterion_primary_status_removed() {
     // 4 = REMOVED
     let ad_group_criterion = AdGroupCriterion {
-        primary_status: 4,
+        primary_status: Some(4),
         ..Default::default()
     };
 
@@ -418,7 +418,7 @@ fn test_ad_group_criterion_primary_status_removed() {
 fn test_ad_group_criterion_primary_status_pending() {
     // 5 = PENDING
     let ad_group_criterion = AdGroupCriterion {
-        primary_status: 5,
+        primary_status: Some(5),
         ..Default::default()
     };
 
@@ -1007,8 +1007,8 @@ fn test_asset_group_asset_primary_status_reasons_multiple() {
 fn test_campaign_paused_with_multiple_reasons() {
     // Realistic scenario: Campaign is paused with multiple reasons
     let campaign = Campaign {
-        id: 12345,
-        name: "Test Campaign".to_string(),
+        id: Some(12345),
+        name: Some("Test Campaign".to_string()),
         primary_status: 3,                   // PAUSED
         primary_status_reasons: vec![3, 11], // CAMPAIGN_PAUSED, BUDGET_CONSTRAINED
         ..Default::default()

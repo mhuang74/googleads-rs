@@ -34,6 +34,7 @@ import "google/ads/googleads/v23/enums/asset_field_type.proto";
 import "google/ads/googleads/v23/enums/asset_set_type.proto";
 import "google/ads/googleads/v23/enums/bidding_strategy_system_status.proto";
 import "google/ads/googleads/v23/enums/bidding_strategy_type.proto";
+import "google/ads/googleads/v23/enums/booking_status.proto";
 import "google/ads/googleads/v23/enums/brand_safety_suitability.proto";
 import "google/ads/googleads/v23/enums/campaign_experiment_type.proto";
 import "google/ads/googleads/v23/enums/campaign_keyword_match_type.proto";
@@ -44,6 +45,7 @@ import "google/ads/googleads/v23/enums/campaign_status.proto";
 import "google/ads/googleads/v23/enums/eu_political_advertising_status.proto";
 import "google/ads/googleads/v23/enums/listing_type.proto";
 import "google/ads/googleads/v23/enums/location_source_type.proto";
+import "google/ads/googleads/v23/enums/messaging_restriction_type.proto";
 import "google/ads/googleads/v23/enums/negative_geo_target_type.proto";
 import "google/ads/googleads/v23/enums/non_skippable_max_duration.proto";
 import "google/ads/googleads/v23/enums/non_skippable_min_duration.proto";
@@ -107,32 +109,38 @@ message Campaign {
   // The network settings for the campaign.
   message NetworkSettings {
     // Whether ads will be served with google.com search results.
- bool target_google_search = 5;
+    optional bool target_google_search = 5;
 
-    // Whether ads will be served on partner sites in the Google Search Network
+    // Whether ads will be served on sites in the Google Search Partners Network
     // (requires `target_google_search` to also be `true`).
- bool target_search_network = 6;
+    optional bool target_search_network = 6;
 
     // Whether ads will be served on specified placements in the Google Display
     // Network. Placements are specified using the Placement criterion.
- bool target_content_network = 7;
+    optional bool target_content_network = 7;
 
-    // Whether ads will be served on the Google Partner Network.
-    // This is available only to some select Google partner accounts.
- bool target_partner_search_network = 8;
+    // Whether ads will be served on the partner network. This is available
+    // only to some select partner accounts. Unless you have been instructed to
+    // use this field, it likely does not apply to your account. This does not
+    // control whether ads will be served on Google Search Partners Network; use
+    // `target_search_network` for that instead.
+    optional bool target_partner_search_network = 8;
 
     // Whether ads will be served on YouTube.
- bool target_youtube = 9;
+    optional bool target_youtube = 9;
 
     // Whether ads will be served on the Google TV network.
- bool target_google_tv_network = 10;
+    optional bool target_google_tv_network = 10;
   }
 
   // Campaign-level settings for hotel ads.
   message HotelSettingInfo {
-    // Immutable. The linked Hotel Center account.
- int64 hotel_center_id = 2
-        [(google.api.field_behavior) = IMMUTABLE];
+    // The linked Hotel Center account.
+    optional int64 hotel_center_id = 2;
+
+    // Disable the optional hotel setting. This field is currently supported
+    // only for Demand Gen campaigns.
+    optional bool disable_hotel_setting = 3;
   }
 
   // The setting for controlling Dynamic Search Ads (DSA).
@@ -146,7 +154,7 @@ message Campaign {
     string language_code = 7 [(google.api.field_behavior) = REQUIRED];
 
     // Whether the campaign uses advertiser supplied URLs exclusively.
- bool use_supplied_urls_only = 8;
+    optional bool use_supplied_urls_only = 8;
   }
 
   // The setting for Shopping campaigns. Defines the universe of products that
@@ -156,7 +164,7 @@ message Campaign {
     // ID of the Merchant Center account.
     // This field is required for create operations. This field is immutable for
     // Shopping campaigns.
- int64 merchant_id = 5;
+    optional int64 merchant_id = 5;
 
     // Feed label of products to include in the campaign.
     // Valid feed labels may contain a maximum of 20 characters including
@@ -174,10 +182,10 @@ message Campaign {
     // 2, inclusive.
     // This field is optional for Smart Shopping campaigns, but must be equal to
     // 3 if set.
- int32 campaign_priority = 7;
+    optional int32 campaign_priority = 7;
 
     // Whether to include local products.
- bool enable_local = 8;
+    optional bool enable_local = 8;
 
     // Immutable. Whether to target Vehicle Listing inventory. This field is
     // supported only in Smart Shopping Campaigns. For setting Vehicle Listing
@@ -196,13 +204,13 @@ message Campaign {
     // only for Demand Gen campaigns. See
     // https://support.google.com/google-ads/answer/13721750 to learn more about
     // this feature.
- bool disable_product_feed = 12;
+    optional bool disable_product_feed = 12;
   }
 
   // Campaign-level settings for tracking information.
   message TrackingSetting {
     // Output only. The url used for dynamic tracking.
- string tracking_url = 2
+    optional string tracking_url = 2
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 
@@ -232,7 +240,7 @@ message Campaign {
         .AppCampaignBiddingStrategyGoalType bidding_strategy_goal_type = 1;
 
     // Immutable. A string that uniquely identifies a mobile application.
- string app_id = 4 [(google.api.field_behavior) = IMMUTABLE];
+    optional string app_id = 4 [(google.api.field_behavior) = IMMUTABLE];
 
     // Immutable. The application store that distributes this specific app.
     google.ads.googleads.v23.enums.AppCampaignAppStoreEnum.AppCampaignAppStore
@@ -277,7 +285,7 @@ message Campaign {
     // Immutable. If true, this campaign uses an Audience resource for audience
     // targeting. If false, this campaign may use audience segment criteria
     // instead.
- bool use_audience_grouped = 1
+    optional bool use_audience_grouped = 1
         [(google.api.field_behavior) = IMMUTABLE];
   }
 
@@ -291,22 +299,22 @@ message Campaign {
   message CategoryBid {
     // Category for which the bid will be associated with. For example,
     // xcat:service_area_business_plumber.
- string category_id = 1;
+    optional string category_id = 1;
 
     // Manual CPA bid for the category. Bid must be greater than the
     // reserve price associated for that category. Value is in micros
     // and in the advertiser's currency.
- int64 manual_cpa_bid_micros = 2;
+    optional int64 manual_cpa_bid_micros = 2;
 
     // Target CPA bid for the category. Value is in micros and in the
     // advertiser's currency.
- int64 target_cpa_bid_micros = 3;
+    optional int64 target_cpa_bid_micros = 3;
   }
 
   // Settings for Travel campaign.
   message TravelCampaignSettings {
     // Immutable. The Travel account ID associated with the Travel campaign.
- int64 travel_account_id = 1
+    optional int64 travel_account_id = 1
         [(google.api.field_behavior) = IMMUTABLE];
   }
 
@@ -317,7 +325,7 @@ message Campaign {
     // language targeting at the ad group level as opposed to the standard
     // campaign-level targeting. This field defaults to `true`, and can only be
     // set when creating a campaign.
- bool upgraded_targeting = 1
+    optional bool upgraded_targeting = 1
         [(google.api.field_behavior) = IMMUTABLE];
   }
 
@@ -328,19 +336,19 @@ message Campaign {
     // with the bidding strategies TARGET_CPM and FIXED_CPM.
     message VideoAdInventoryControl {
       // Determine if video responsive ads can be used for in-stream video ads.
- bool allow_in_stream = 1;
+      optional bool allow_in_stream = 1;
 
       // Determine if video responsive ads can be used for in-feed video ads.
- bool allow_in_feed = 2;
+      optional bool allow_in_feed = 2;
 
       // Determine if video responsive ads can be used as shorts format.
- bool allow_shorts = 3;
+      optional bool allow_shorts = 3;
 
       // Determine if video responsive ads can be used for non-skippable
       // in-stream ads. This is only available for campaigns that allow mixing
       // of non-skippable with other formats (Video reach campaign with Target
       // Frequency bidding strategy goal).
- bool allow_non_skippable_in_stream = 4;
+      optional bool allow_non_skippable_in_stream = 4;
     }
 
     // Format-restricting control enabling usage of video responsive ads in
@@ -401,8 +409,53 @@ message Campaign {
           .VideoAdSequenceInteractionType previous_step_interaction_type = 5;
     }
 
+    // Container for ad category self-disclosure for campaigns with the
+    // FIXED_CPM or FIXED_SHARE_OF_VOICE bidding strategies.
+    message ReservationAdCategorySelfDisclosure {
+      // The campaign is expected to contain gambling-related ads.
+      bool gambling = 1;
+
+      // The campaign is expected to contain alcohol-related ads.
+      bool alcohol = 2;
+
+      // The campaign is expected to contain politics-related ads.
+      bool politics = 3;
+    }
+
+    // Container for booking details for campaigns with the FIXED_CPM or
+    // FIXED_SHARE_OF_VOICE bidding strategies.
+    message BookingDetails {
+      // Output only. The status of the booking.
+      google.ads.googleads.v23.enums.BookingStatusEnum.BookingStatus status = 1
+          [(google.api.field_behavior) = OUTPUT_ONLY];
+
+      // Output only. Time until which booked inventory will be held or has been
+      // held for this campaign. Available for status HELD and HOLD_EXPIRED.
+      // Format is "yyyy-MM-dd HH:mm:ss" in the customer's time zone.
+      string hold_expiration_date_time = 2
+          [(google.api.field_behavior) = OUTPUT_ONLY];
+
+      // Output only. Time when the booked inventory of this campaign will be
+      // cancelled or has been cancelled. Available for primary status
+      // NOT_ELIGIBLE if the campaign will be cancelled and for primary status
+      // reason BOOKING_CANCELLED. Format is "yyyy-MM-dd HH:mm:ss" in the
+      // customer's time zone.
+      string cancellation_date_time = 3
+          [(google.api.field_behavior) = OUTPUT_ONLY];
+    }
+
     // Container for video ads sequencing definition.
     VideoAdSequence video_ad_sequence = 4;
+
+    // Ad category self-disclosure for campaigns with the FIXED_CPM or
+    // FIXED_SHARE_OF_VOICE bidding strategies.
+    ReservationAdCategorySelfDisclosure
+        reservation_ad_category_self_disclosure = 5;
+
+    // Output only. Booking information for campaigns with the FIXED_CPM or
+    // FIXED_SHARE_OF_VOICE bidding strategies.
+    BookingDetails booking_details = 6
+        [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Controls for defining video responsive ads behavior.
     oneof fluidity_control {
@@ -420,7 +473,7 @@ message Campaign {
     // Overrides of brand targeting for various ad types.
     message BrandTargetingOverrides {
       // If true, brand exclusions are ignored for Shopping ads.
- bool ignore_exclusions_for_shopping_ads = 1;
+      optional bool ignore_exclusions_for_shopping_ads = 1;
     }
 
     // Overrides of brand targeting for various ad types.
@@ -431,11 +484,11 @@ message Campaign {
   // asset automation opt-in/out status
   message AssetAutomationSetting {
     // The asset automation type advertiser would like to opt-in/out.
- google.ads.googleads.v23.enums.AssetAutomationTypeEnum
+    optional google.ads.googleads.v23.enums.AssetAutomationTypeEnum
         .AssetAutomationType asset_automation_type = 1;
 
     // The opt-in/out status of asset automation type.
- google.ads.googleads.v23.enums.AssetAutomationStatusEnum
+    optional google.ads.googleads.v23.enums.AssetAutomationStatusEnum
         .AssetAutomationStatus asset_automation_status = 2;
   }
 
@@ -455,6 +508,31 @@ message Campaign {
     // sensitive): Open Sans, Roboto, Montserrat, Poppins, Lato, Oswald,
     // Playfair Display, Roboto Slab.
     string predefined_font_family = 3;
+  }
+
+  // Settings to control automatically generated text assets.
+  message TextGuidelines {
+    // Exact words or phrases that will be excluded from generated text
+    // assets. At most 25 exclusions may be provided. Valid exclusions may
+    // contain a maximum of 30 characters.
+    repeated string term_exclusions = 1;
+
+    // Freeform instructions that will be used to guide text asset generation
+    // using LLM inference. At most 40 restrictions may be provided.
+    repeated MessagingRestriction messaging_restrictions = 2;
+  }
+
+  // Freeform instructions that will be used to guide text asset generation
+  // using LLM inference.
+  message MessagingRestriction {
+    // Freeform instructions to guide text asset generation using LLM
+    // inference. Valid instructions may contain a maximum of 300 characters.
+    string restriction_text = 1;
+
+    // Determines how the guideline is applied. Only
+    // `RESTRICTION_BASED_EXCLUSION` is currently supported.
+    google.ads.googleads.v23.enums.MessagingRestrictionTypeEnum
+        .MessagingRestrictionType restriction_type = 2;
   }
 
   // Settings for AI Max in search campaigns.
@@ -488,12 +566,12 @@ message Campaign {
     //
     // Search Term Matching is enabled by default when AI Max is enabled, and
     // can be disabled at the ad group level.
- bool enable_ai_max = 1;
+    optional bool enable_ai_max = 1;
 
     // Output only. Indicates whether a search campaign has adopted AI Max
     // before, and is required to have AI Max enabled to adopt campaign-level
     // text asset automation and brand list targeting in all API versions.
- AiMaxBundlingRequired bundling_required = 2
+    optional AiMaxBundlingRequired bundling_required = 2
         [(google.api.field_behavior) = OUTPUT_ONLY];
   }
 
@@ -509,7 +587,7 @@ message Campaign {
   ];
 
   // Output only. The ID of the campaign.
- int64 id = 59 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 59 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The name of the campaign.
   //
@@ -518,7 +596,7 @@ message Campaign {
   //
   // It must not contain any null (code point 0x0), NL line feed
   // (code point 0xA) or carriage return (code point 0xD) characters.
- string name = 58;
+  optional string name = 58;
 
   // Output only. The primary status of the campaign.
   //
@@ -577,7 +655,7 @@ message Campaign {
       [(google.api.field_behavior) = IMMUTABLE];
 
   // The URL template for constructing a tracking URL.
- string tracking_url_template = 60;
+  optional string tracking_url_template = 60;
 
   // The list of mappings used to substitute custom parameter tags in a
   // `tracking_url_template`, `final_urls`, or `mobile_final_urls`.
@@ -607,8 +685,8 @@ message Campaign {
   // The network settings for the campaign.
   NetworkSettings network_settings = 14;
 
-  // Immutable. The hotel setting for the campaign.
-  HotelSettingInfo hotel_setting = 32 [(google.api.field_behavior) = IMMUTABLE];
+  // The hotel setting for the campaign.
+  HotelSettingInfo hotel_setting = 32;
 
   // The setting for controlling Dynamic Search Ads (DSA).
   DynamicSearchAdsSetting dynamic_search_ads_setting = 33;
@@ -620,7 +698,7 @@ message Campaign {
   google.ads.googleads.v23.common.TargetingSetting targeting_setting = 43;
 
   // Immutable. Setting for audience related features.
- AudienceSetting audience_setting = 73
+  optional AudienceSetting audience_setting = 73
       [(google.api.field_behavior) = IMMUTABLE];
 
   // The setting for ads geotargeting.
@@ -649,7 +727,7 @@ message Campaign {
   // experiment campaign. For base campaigns, this is equal to `resource_name`.
   //
   // This field is read-only.
- string base_campaign = 56 [
+  optional string base_campaign = 56 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -657,7 +735,7 @@ message Campaign {
   ];
 
   // The resource name of the campaign budget of the campaign.
- string campaign_budget = 62 [(google.api.resource_reference) = {
+  optional string campaign_budget = 62 [(google.api.resource_reference) = {
     type: "googleads.googleapis.com/CampaignBudget"
   }];
 
@@ -687,7 +765,7 @@ message Campaign {
   ];
 
   // The resource name of the campaign group that this campaign belongs to.
- string campaign_group = 76 [(google.api.resource_reference) = {
+  optional string campaign_group = 76 [(google.api.resource_reference) = {
     type: "googleads.googleapis.com/CampaignGroup"
   }];
 
@@ -695,18 +773,18 @@ message Campaign {
   // the customer's time zone and in "yyyy-MM-dd HH:mm:ss" format. Set the time
   // component to 00:00:00 for daily granularity, time granularity is only
   // supported for some campaign types.
- string start_date_time = 104;
+  optional string start_date_time = 104;
 
   // The last day and time of the campaign in serving customer's timezone in
   // "yyyy-MM-dd HH:mm:ss" format. Set the time component to 23:59:59 for daily
   // granularity, time granularity is only supported for some campaign types. On
   // create, defaults to running indefinitely. To set an existing campaign to
   // run indefinitely, clear this field.
- string end_date_time = 105;
+  optional string end_date_time = 105;
 
   // Suffix used to append query parameters to landing pages that are served
   // with parallel tracking.
- string final_url_suffix = 65;
+  optional string final_url_suffix = 65;
 
   // A list that limits how often each user will see this campaign's ads.
   repeated google.ads.googleads.v23.common.FrequencyCapEntry frequency_caps =
@@ -750,7 +828,7 @@ message Campaign {
   // https://support.google.com/google-ads/answer/9061546.
   //
   // This field is read-only.
- double optimization_score = 66
+  optional double optimization_score = 66
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The asset field types that should be excluded from this campaign. Asset
@@ -778,7 +856,7 @@ message Campaign {
 
   // Immutable. The resource name for a set of hotel properties for Performance
   // Max for travel goals campaigns.
- string hotel_property_asset_set = 83 [
+  optional string hotel_property_asset_set = 83 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AssetSet"
@@ -787,7 +865,7 @@ message Campaign {
 
   // Immutable. Listing type of ads served for this campaign.
   // Field is restricted for usage with Performance Max campaigns.
- google.ads.googleads.v23.enums.ListingTypeEnum.ListingType
+  optional google.ads.googleads.v23.enums.ListingTypeEnum.ListingType
       listing_type = 86 [(google.api.field_behavior) = IMMUTABLE];
 
   // Contains the opt-in/out status of each AssetAutomationType.
@@ -819,13 +897,18 @@ message Campaign {
   // Incompatible with Travel Goals: This feature is not supported for
   // Performance Max campaigns with Travel Goals. Attempting to set this field
   // to true for a Travel Goals campaign will result in an error.
- bool brand_guidelines_enabled = 96
+  optional bool brand_guidelines_enabled = 96
       [(google.api.field_behavior) = IMMUTABLE];
 
   // These settings control how your brand appears in automatically generated
   // assets and formats within this campaign. Note: These settings can only be
   // used for Performance Max campaigns that have Brand Guidelines enabled.
   BrandGuidelines brand_guidelines = 98;
+
+  // Settings to control automatically generated text assets. Only available
+  // in Performance Max and Search campaigns (Brand Guidelines does not need
+  // to be enabled).
+  TextGuidelines text_guidelines = 107;
 
   // Third-Party integration partners.
   google.ads.googleads.v23.common.CampaignThirdPartyIntegrationPartners
@@ -842,6 +925,15 @@ message Campaign {
   // Output only. Types of feeds that are attached directly to this campaign.
   repeated google.ads.googleads.v23.enums.AssetSetTypeEnum.AssetSetType
       feed_types = 103 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Output only. Indicates whether this campaign is missing a declaration about
+  // whether it contains political advertising targeted towards the EU and is
+  // ineligible for any exemptions. If this field is true, use the
+  // contains_eu_political_advertising field to add the required declaration.
+  //
+  // This field is read-only.
+  bool missing_eu_political_advertising_declaration = 108
+      [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The bidding strategy for the campaign.
   //
