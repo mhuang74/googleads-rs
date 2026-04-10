@@ -642,5 +642,8 @@ fn test_phase2_metrics_absent_parent() {
 
     // With prost-reflect, when parent resource is absent, accessing its fields returns empty string
     let result = row.get("metrics.orders");
-    assert_eq!(result, "", "metrics.orders should return empty string when metrics is absent");
+    assert_eq!(
+        result, "",
+        "metrics.orders should return empty string when metrics is absent"
+    );
 }

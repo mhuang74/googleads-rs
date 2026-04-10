@@ -69,7 +69,11 @@ fn test_ad_group_asset_single_status_detail() {
     // which contains EnumNumber values instead of "reason:" labels
     assert!(!result.is_empty(), "Result should not be empty");
     // The debug format contains the struct representation
-    assert!(result.contains("AssetLinkPrimaryStatusDetails") || result.contains("EnumNumber"), "Result: {}", result);
+    assert!(
+        result.contains("AssetLinkPrimaryStatusDetails") || result.contains("EnumNumber"),
+        "Result: {}",
+        result
+    );
 }
 
 #[test]
@@ -93,12 +97,24 @@ fn test_ad_group_asset_multiple_status_details() {
     let result = row.get("ad_group_asset.primary_status_details");
 
     // Multiple details should be separated by semicolons (prost-reflect format)
-    assert!(result.contains(";"), "Result should contain semicolons: {}", result);
+    assert!(
+        result.contains(";"),
+        "Result should contain semicolons: {}",
+        result
+    );
     // Should contain AssetLinkPrimaryStatusDetails in the output (debug format has multiple occurrences)
-    assert!(result.contains("AssetLinkPrimaryStatusDetails"), "Result should contain AssetLinkPrimaryStatusDetails: {}", result);
+    assert!(
+        result.contains("AssetLinkPrimaryStatusDetails"),
+        "Result should contain AssetLinkPrimaryStatusDetails: {}",
+        result
+    );
     // Should have 2 messages (indicated by semicolon separator between them)
     let semicolon_count = result.matches(";").count();
-    assert!(semicolon_count >= 1, "Expected at least 1 semicolon, found {}", semicolon_count);
+    assert!(
+        semicolon_count >= 1,
+        "Expected at least 1 semicolon, found {}",
+        semicolon_count
+    );
 }
 
 #[test]
@@ -121,7 +137,8 @@ fn test_ad_group_asset_status_detail_with_asset_disapproved() {
     // Should contain nested details in prost-reflect debug format
     assert!(
         result.contains("AssetDisapproved") || result.contains("AssetLinkPrimaryStatusDetails"),
-        "Result should contain message types: {}", result
+        "Result should contain message types: {}",
+        result
     );
     // The debug format will show the nested structure
     assert!(!result.is_empty(), "Result should not be empty");
@@ -174,9 +191,17 @@ fn test_ad_group_asset_complex_scenario() {
     let result = row.get("ad_group_asset.primary_status_details");
 
     // Should have 3 details separated by semicolons in prost-reflect format
-    assert!(result.matches(";").count() >= 2, "Expected at least 2 semicolons: {}", result);
+    assert!(
+        result.matches(";").count() >= 2,
+        "Expected at least 2 semicolons: {}",
+        result
+    );
     // Should contain AssetLinkPrimaryStatusDetails in the output
-    assert!(result.contains("AssetLinkPrimaryStatusDetails"), "Result should contain AssetLinkPrimaryStatusDetails: {}", result);
+    assert!(
+        result.contains("AssetLinkPrimaryStatusDetails"),
+        "Result should contain AssetLinkPrimaryStatusDetails: {}",
+        result
+    );
 }
 
 // ============================================================================
@@ -204,7 +229,8 @@ fn test_campaign_asset_single_status_detail() {
     // prost-reflect returns debug format for repeated messages
     assert!(
         result.contains("AssetLinkPrimaryStatusDetails") || result.contains("EnumNumber"),
-        "Result should contain struct info: {}", result
+        "Result should contain struct info: {}",
+        result
     );
     assert!(!result.is_empty());
 }
@@ -276,7 +302,8 @@ fn test_campaign_asset_with_disapproved_details() {
     // prost-reflect returns debug format with nested message structure
     assert!(
         result.contains("AssetDisapproved") || result.contains("AssetLinkPrimaryStatusDetails"),
-        "Result should contain message types: {}", result
+        "Result should contain message types: {}",
+        result
     );
     assert!(!result.is_empty());
 }
@@ -306,7 +333,8 @@ fn test_customer_asset_single_status_detail() {
     // prost-reflect returns debug format for repeated messages
     assert!(
         result.contains("AssetLinkPrimaryStatusDetails") || result.contains("EnumNumber"),
-        "Result should contain struct info: {}", result
+        "Result should contain struct info: {}",
+        result
     );
     assert!(!result.is_empty());
 }
@@ -380,7 +408,8 @@ fn test_asset_group_asset_single_status_detail() {
     // prost-reflect returns debug format for repeated messages
     assert!(
         result.contains("AssetLinkPrimaryStatusDetails") || result.contains("EnumNumber"),
-        "Result should contain struct info: {}", result
+        "Result should contain struct info: {}",
+        result
     );
     assert!(!result.is_empty());
 }
@@ -460,11 +489,23 @@ fn test_asset_group_asset_realistic_scenario() {
     let result = row.get("asset_group_asset.primary_status_details");
 
     // Should contain both status details (2 entries with debug format)
-    assert!(result.matches(";").count() >= 1, "Expected at least 1 semicolon: {}", result);
+    assert!(
+        result.matches(";").count() >= 1,
+        "Expected at least 1 semicolon: {}",
+        result
+    );
     // Should contain AssetLinkPrimaryStatusDetails entries
-    assert!(result.contains("AssetLinkPrimaryStatusDetails"), "Result should contain AssetLinkPrimaryStatusDetails: {}", result);
+    assert!(
+        result.contains("AssetLinkPrimaryStatusDetails"),
+        "Result should contain AssetLinkPrimaryStatusDetails: {}",
+        result
+    );
     // Debug format contains AssetDisapproved for the second entry
-    assert!(result.contains("AssetDisapproved"), "Result should contain AssetDisapproved: {}", result);
+    assert!(
+        result.contains("AssetDisapproved"),
+        "Result should contain AssetDisapproved: {}",
+        result
+    );
 }
 
 // ============================================================================
@@ -497,10 +538,18 @@ fn test_semicolon_separator_not_comma() {
     let result = row.get("ad_group_asset.primary_status_details");
 
     // Should use semicolon separator in prost-reflect format
-    assert!(result.contains(";"), "Result should contain semicolons: {}", result);
+    assert!(
+        result.contains(";"),
+        "Result should contain semicolons: {}",
+        result
+    );
 
     // The separator between status details should be "; " (semicolon space)
-    assert!(result.contains("; "), "Result should contain '; ': {}", result);
+    assert!(
+        result.contains("; "),
+        "Result should contain '; ': {}",
+        result
+    );
 }
 
 #[test]
@@ -524,7 +573,8 @@ fn test_debug_format_structure() {
     // prost-reflect returns debug format for repeated messages
     assert!(
         result.contains("AssetLinkPrimaryStatusDetails") || result.contains("EnumNumber"),
-        "Result should contain struct info: {}", result
+        "Result should contain struct info: {}",
+        result
     );
     assert!(!result.is_empty());
 }
@@ -601,7 +651,15 @@ fn test_max_status_details_handling() {
     let result = row.get("ad_group_asset.primary_status_details");
 
     // Should contain AssetLinkPrimaryStatusDetails entries
-    assert!(result.contains("AssetLinkPrimaryStatusDetails"), "Result should contain AssetLinkPrimaryStatusDetails: {}", result);
+    assert!(
+        result.contains("AssetLinkPrimaryStatusDetails"),
+        "Result should contain AssetLinkPrimaryStatusDetails: {}",
+        result
+    );
     // Should have semicolons separating items
-    assert!(result.contains("; "), "Result should contain semicolons: {}", result);
+    assert!(
+        result.contains("; "),
+        "Result should contain semicolons: {}",
+        result
+    );
 }

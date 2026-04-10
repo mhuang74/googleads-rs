@@ -300,8 +300,6 @@ proptest! {
         assert!(!result.is_empty());
 
         // Verify it matches expected enum variant name (UPPER_SNAKE_CASE for prost-reflect)
-        let expected = format!("{:?}", status).to_uppercase().replace("UNKNOWN_VALUE_", "UNKNOWN_VALUE_");
-        // Convert PascalCase to UPPER_SNAKE_CASE
         let expected_upper_snake = status.as_str_name();
         assert_eq!(result, expected_upper_snake);
     }

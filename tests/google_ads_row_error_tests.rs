@@ -357,9 +357,10 @@ fn test_sql_injection_like_input() {
         let result = row.get(input);
         // Invalid field names (containing special characters) return "not implemented"
         assert!(
-            result == "" || result == "not implemented by googleads-rs",
+            result.is_empty() || result == "not implemented by googleads-rs",
             "Weird input '{}' should return empty or not implemented, got: '{}'",
-            input, result
+            input,
+            result
         );
     }
 }

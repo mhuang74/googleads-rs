@@ -9,9 +9,8 @@
 mod test_helpers;
 
 use googleads_rs::google::ads::googleads::v23::enums::{
-    ad_group_criterion_status_enum::AdGroupCriterionStatus,
-    ad_group_status_enum::AdGroupStatus, ad_group_type_enum::AdGroupType,
-    ad_network_type_enum::AdNetworkType,
+    ad_group_criterion_status_enum::AdGroupCriterionStatus, ad_group_status_enum::AdGroupStatus,
+    ad_group_type_enum::AdGroupType, ad_network_type_enum::AdNetworkType,
     advertising_channel_sub_type_enum::AdvertisingChannelSubType,
     advertising_channel_type_enum::AdvertisingChannelType,
     bidding_strategy_type_enum::BiddingStrategyType,
@@ -435,9 +434,7 @@ fn test_default_enum_values() {
 
 #[test]
 fn test_device_unspecified() {
-    let segments = SegmentsBuilder::new()
-        .device(Device::Unspecified)
-        .build();
+    let segments = SegmentsBuilder::new().device(Device::Unspecified).build();
 
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 

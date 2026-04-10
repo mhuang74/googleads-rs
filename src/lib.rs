@@ -73,9 +73,8 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
         }
 
         // Get the GoogleAdsRow message descriptor
-        let descriptor = DESCRIPTOR_POOL.get_message_by_name(
-            "google.ads.googleads.v23.services.GoogleAdsRow"
-        );
+        let descriptor =
+            DESCRIPTOR_POOL.get_message_by_name("google.ads.googleads.v23.services.GoogleAdsRow");
 
         let Some(descriptor) = descriptor else {
             return "not implemented by googleads-rs".to_string();
@@ -93,22 +92,33 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
     pub fn get_many(&self, field_names: &[&str]) -> Vec<String> {
         let mut buf = Vec::new();
         if self.encode(&mut buf).is_err() {
-            return field_names.iter().map(|_| "not implemented by googleads-rs".to_string()).collect();
+            return field_names
+                .iter()
+                .map(|_| "not implemented by googleads-rs".to_string())
+                .collect();
         }
 
-        let descriptor = DESCRIPTOR_POOL.get_message_by_name(
-            "google.ads.googleads.v23.services.GoogleAdsRow"
-        );
+        let descriptor =
+            DESCRIPTOR_POOL.get_message_by_name("google.ads.googleads.v23.services.GoogleAdsRow");
 
         let Some(descriptor) = descriptor else {
-            return field_names.iter().map(|_| "not implemented by googleads-rs".to_string()).collect();
+            return field_names
+                .iter()
+                .map(|_| "not implemented by googleads-rs".to_string())
+                .collect();
         };
 
         let Ok(dynamic) = DynamicMessage::decode(descriptor, &*buf) else {
-            return field_names.iter().map(|_| "not implemented by googleads-rs".to_string()).collect();
+            return field_names
+                .iter()
+                .map(|_| "not implemented by googleads-rs".to_string())
+                .collect();
         };
 
-        field_names.iter().map(|path| Self::walk_path(&dynamic, path)).collect()
+        field_names
+            .iter()
+            .map(|path| Self::walk_path(&dynamic, path))
+            .collect()
     }
 
     /// Walks a dotted GAQL field path and returns the value as a string
@@ -168,11 +178,16 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
     /// Returns the default value for a field as a string
     fn default_value_for_field(field: &prost_reflect::FieldDescriptor) -> String {
         match field.kind() {
-            prost_reflect::Kind::Int32 | prost_reflect::Kind::Int64 |
-            prost_reflect::Kind::Sint32 | prost_reflect::Kind::Sint64 |
-            prost_reflect::Kind::Sfixed32 | prost_reflect::Kind::Sfixed64 => "0".to_string(),
-            prost_reflect::Kind::Uint32 | prost_reflect::Kind::Uint64 |
-            prost_reflect::Kind::Fixed32 | prost_reflect::Kind::Fixed64 => "0".to_string(),
+            prost_reflect::Kind::Int32
+            | prost_reflect::Kind::Int64
+            | prost_reflect::Kind::Sint32
+            | prost_reflect::Kind::Sint64
+            | prost_reflect::Kind::Sfixed32
+            | prost_reflect::Kind::Sfixed64 => "0".to_string(),
+            prost_reflect::Kind::Uint32
+            | prost_reflect::Kind::Uint64
+            | prost_reflect::Kind::Fixed32
+            | prost_reflect::Kind::Fixed64 => "0".to_string(),
             prost_reflect::Kind::Float | prost_reflect::Kind::Double => "0".to_string(),
             prost_reflect::Kind::Bool => "false".to_string(),
             prost_reflect::Kind::String => "".to_string(),
@@ -229,8 +244,15 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
                 // Format based on the element type
                 let first = &list[0];
                 match first {
-                    Value::String(_) | Value::I64(_) | Value::I32(_) | Value::U64(_) | Value::U32(_) |
-                    Value::F64(_) | Value::F32(_) | Value::Bool(_) | Value::EnumNumber(_) => {
+                    Value::String(_)
+                    | Value::I64(_)
+                    | Value::I32(_)
+                    | Value::U64(_)
+                    | Value::U32(_)
+                    | Value::F64(_)
+                    | Value::F32(_)
+                    | Value::Bool(_)
+                    | Value::EnumNumber(_) => {
                         // Scalars and enums - join with ", "
                         list.iter()
                             .map(|v| Self::format_value(v, field_desc))
@@ -244,12 +266,11 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
                             .collect::<Vec<_>>()
                             .join("; ")
                     }
-                    _ => {
-                        list.iter()
-                            .map(|v| Self::format_value(v, field_desc))
-                            .collect::<Vec<_>>()
-                            .join(", ")
-                    }
+                    _ => list
+                        .iter()
+                        .map(|v| Self::format_value(v, field_desc))
+                        .collect::<Vec<_>>()
+                        .join(", "),
                 }
             }
             Value::Map(map) => {
