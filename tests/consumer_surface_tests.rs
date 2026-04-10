@@ -51,8 +51,8 @@ fn test_client_method_signatures_exist() {
     // Compile-check that critical client methods exist
     use googleads_rs::google::ads::googleads::v23::services::{
         google_ads_field_service_client::GoogleAdsFieldServiceClient,
-        google_ads_service_client::GoogleAdsServiceClient,
-        SearchGoogleAdsFieldsRequest, SearchGoogleAdsStreamRequest,
+        google_ads_service_client::GoogleAdsServiceClient, SearchGoogleAdsFieldsRequest,
+        SearchGoogleAdsStreamRequest,
     };
 
     // These closures verify the method signatures without calling them
@@ -88,7 +88,10 @@ fn test_search_google_ads_request_construction() {
     };
 
     assert_eq!(request.customer_id, "1234567890");
-    assert_eq!(request.query, "SELECT campaign.id, campaign.name FROM campaign");
+    assert_eq!(
+        request.query,
+        "SELECT campaign.id, campaign.name FROM campaign"
+    );
 }
 
 #[test]
@@ -102,7 +105,10 @@ fn test_search_google_ads_fields_request_construction() {
         page_size: 100,
     };
 
-    assert_eq!(request.query, "SELECT name, data_type FROM google_ads_fields");
+    assert_eq!(
+        request.query,
+        "SELECT name, data_type FROM google_ads_fields"
+    );
     assert_eq!(request.page_token, "some-token");
     assert_eq!(request.page_size, 100);
 }
@@ -122,7 +128,9 @@ fn test_search_google_ads_fields_response_has_results() {
 
 #[test]
 fn test_search_google_ads_stream_response_fields_exist() {
-    use googleads_rs::google::ads::googleads::v23::services::{GoogleAdsRow, SearchGoogleAdsStreamResponse};
+    use googleads_rs::google::ads::googleads::v23::services::{
+        GoogleAdsRow, SearchGoogleAdsStreamResponse,
+    };
 
     // Verify critical response fields exist
     let response = SearchGoogleAdsStreamResponse {
@@ -195,7 +203,9 @@ async fn test_mcc_gaql_streaming_flow_simulation() {
     // 4. Assert no "not implemented" values
 
     use googleads_rs::google::ads::googleads::v23::resources::CustomerClient;
-    use googleads_rs::google::ads::googleads::v23::services::{GoogleAdsRow, SearchGoogleAdsStreamResponse};
+    use googleads_rs::google::ads::googleads::v23::services::{
+        GoogleAdsRow, SearchGoogleAdsStreamResponse,
+    };
     use prost_types::FieldMask;
 
     // Create field mask simulating SUB_ACCOUNTS_QUERY fields
@@ -247,8 +257,7 @@ async fn test_mcc_gaql_streaming_flow_simulation() {
                     let value = row.get(path);
                     // Critical consumer assertion: no "not implemented" values
                     assert_ne!(
-                        value,
-                        "not implemented by googleads-rs",
+                        value, "not implemented by googleads-rs",
                         "Field '{}' returned not implemented error",
                         path
                     );
@@ -283,7 +292,9 @@ async fn test_streaming_response_with_field_mask_integration() {
     use googleads_rs::google::ads::googleads::v23::common::Metrics;
     use googleads_rs::google::ads::googleads::v23::enums::campaign_status_enum::CampaignStatus;
     use googleads_rs::google::ads::googleads::v23::resources::Campaign;
-    use googleads_rs::google::ads::googleads::v23::services::{GoogleAdsRow, SearchGoogleAdsStreamResponse};
+    use googleads_rs::google::ads::googleads::v23::services::{
+        GoogleAdsRow, SearchGoogleAdsStreamResponse,
+    };
     use prost_types::FieldMask;
 
     // Simulate a campaign performance query
@@ -327,8 +338,7 @@ async fn test_streaming_response_with_field_mask_integration() {
     for path in &field_mask.paths {
         let value = row.get(path);
         assert_ne!(
-            value,
-            "not implemented by googleads-rs",
+            value, "not implemented by googleads-rs",
             "Field '{}' is not implemented",
             path
         );
