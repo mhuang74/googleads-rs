@@ -68,7 +68,20 @@ fn main() -> Res {
     let mut prost_config = prost_build::Config::new();
     prost_config.file_descriptor_set_path(&descriptor_path);
     prost_config.protoc_arg("--experimental_allow_proto3_optional");
-    prost_config.compile_protos(&protos, std::slice::from_ref(&proto_path))?;
+    if let Err(e) = prost_config.compile_protos(&protos, std::slice::from_ref(&proto_path)) {
+        #[cfg(windows)]
+        if e.to_string().contains("too long") || e.to_string().contains("206") {
+            eprintln!("\n=== Windows Path Length Error ===");
+            eprintln!("The build failed due to Windows' 260-character path limit (MAX_PATH).");
+            eprintln!("\nTo fix this, enable long path support:");
+            eprintln!(r"  1. Registry: Set HKLM\SYSTEM\CurrentControlSet\Control\FileSystem\LongPathsEnabled = 1");
+            eprintln!(r"  2. Or as admin: fsutil behavior set disable8dot3 0");
+            eprintln!(r"  3. Move project to a shorter path (e.g., C:\proj\)");
+            eprintln!(r"  4. Use cargo --target-dir with a short path");
+            eprintln!("===================================\n");
+        }
+        return Err(e.into());
+    }
 
     let package_names = ["common", "enums", "errors", "resources", "services"];
     let mut protos_by_package: HashMap<&str, Vec<_>> = HashMap::new();
@@ -106,6 +119,8 @@ fn main() -> Res {
             .compile_protos(&misc_protos, std::slice::from_ref(&proto_path))?;
     }
 
+    // Compile order matters: common/enums -> errors -> resources -> services
+    // Each package's files must be compiled together as they may have internal dependencies
     for &package in &package_names {
         if let Some(protos) = protos_by_package.get(package) {
             info!(
@@ -113,18 +128,23 @@ fn main() -> Res {
                 protos.len(),
                 package
             );
-            for chunk in protos.chunks(185) {
-                info!(
-                    "  Compiling batch of {} proto files from package '{}'",
-                    chunk.len(),
-                    package
-                );
-                tonic_prost_build::configure()
-                    .protoc_arg("--experimental_allow_proto3_optional")
-                    .build_server(false)
-                    .type_attribute(".", "#[allow(clippy::all)]")
-                    .compile_protos(chunk, std::slice::from_ref(&proto_path))?;
+
+            // Check for Windows long path issue and warn
+            #[cfg(windows)]
+            {
+                let max_len = protos.iter().map(|p| p.to_str().unwrap().len()).max().unwrap_or(0);
+                if max_len > 200 {
+                    info!("  Note: Long proto paths detected (max {} chars). If build fails with 'filename too long', enable Windows long path support:", max_len);
+                    info!(r"    1. Registry: Set HKLM\SYSTEM\CurrentControlSet\Control\FileSystem\LongPathsEnabled = 1");
+                    info!(r"    2. Or use shorter project path (e.g., C:\proj\)");
+                }
             }
+
+            tonic_prost_build::configure()
+                .protoc_arg("--experimental_allow_proto3_optional")
+                .build_server(false)
+                .type_attribute(".", "#[allow(clippy::all)]")
+                .compile_protos(protos, std::slice::from_ref(&proto_path))?;
         }
     }
 
