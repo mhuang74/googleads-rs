@@ -210,8 +210,8 @@ fn test_campaign_budget_amount_micros_default_value() {
         .with_campaign_budget(budget)
         .build();
 
-    // Default i64 value is 0
-    assert_eq!(row.get("campaign_budget.amount_micros"), "0");
+    // Default i64 value (None) returns empty string with prost-reflect
+    assert_eq!(row.get("campaign_budget.amount_micros"), "");
 }
 
 // ============================================================================

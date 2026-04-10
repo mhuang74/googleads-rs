@@ -22,8 +22,8 @@ use test_helpers::GoogleAdsRowBuilder;
 /// Note: Using i32 directly since enum variants use proto naming (e.g., ASSET_LINK_PAUSED)
 fn create_simple_status_detail(reason: i32, status: i32) -> AssetLinkPrimaryStatusDetails {
     AssetLinkPrimaryStatusDetails {
-        reason,
-        status,
+        reason: Some(reason),
+        status: Some(status),
         details: None,
     }
 }
@@ -37,8 +37,8 @@ fn create_status_detail_with_disapproved(
     use googleads_rs::google::ads::googleads::v23::common::asset_link_primary_status_details::Details;
 
     AssetLinkPrimaryStatusDetails {
-        reason,
-        status,
+        reason: Some(reason),
+        status: Some(status),
         details: Some(Details::AssetDisapproved(AssetDisapproved {
             offline_evaluation_error_reasons: error_reasons,
         })),
@@ -116,10 +116,12 @@ fn test_ad_group_asset_status_detail_with_asset_disapproved() {
 
     let result = row.get("ad_group_asset.primary_status_details");
 
+    println!("ACTUAL RESULT: {}", result);
+
     // Should contain nested details
-    assert!(result.contains("details:"));
-    assert!(result.contains("AssetDisapproved") || result.contains("asset_disapproved"));
-    assert!(result.contains("offline_evaluation_error_reasons"));
+    assert!(result.contains("details:") || result.contains("asset_disapproved:"), "Result: {}", result);
+    assert!(result.contains("AssetDisapproved") || result.contains("asset_disapproved"), "Result: {}", result);
+    assert!(result.contains("offline_evaluation_error_reasons"), "Result: {}", result);
 }
 
 #[test]
@@ -444,7 +446,7 @@ fn test_asset_group_asset_realistic_scenario() {
     // Should contain status details with reason and status fields
     assert!(result.contains("reason:"));
     assert!(result.contains("status:"));
-    assert!(result.contains("details:"));
+    assert!(result.contains("asset_disapproved:") || result.contains("details:"));
 }
 
 // ============================================================================
@@ -505,7 +507,7 @@ fn test_debug_format_structure() {
     // Debug format should include field names
     assert!(result.contains("reason:"));
     assert!(result.contains("status:"));
-    assert!(result.contains("details:"));
+    // Note: simple status details don't have the details oneof set, so no asset_disapproved field
 }
 
 #[test]

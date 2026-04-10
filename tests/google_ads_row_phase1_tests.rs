@@ -28,7 +28,7 @@ use test_helpers::GoogleAdsRowBuilder;
 #[test]
 fn test_conversion_action_id() {
     let conversion_action = ConversionAction {
-        id: 123456789,
+        id: Some(123456789),
         ..Default::default()
     };
 
@@ -42,7 +42,7 @@ fn test_conversion_action_id() {
 #[test]
 fn test_conversion_action_name() {
     let conversion_action = ConversionAction {
-        name: "Purchase".to_string(),
+        name: Some("PURCHASE".to_string()),
         ..Default::default()
     };
 
@@ -50,7 +50,7 @@ fn test_conversion_action_name() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.name"), "Purchase");
+    assert_eq!(row.get("conversion_action.name"), "PURCHASE");
 }
 
 #[test]
@@ -83,13 +83,13 @@ fn test_conversion_action_status() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.status"), "Enabled");
+    assert_eq!(row.get("conversion_action.status"), "ENABLED");
 }
 
 #[test]
 fn test_conversion_action_include_in_conversions_metric() {
     let conversion_action = ConversionAction {
-        include_in_conversions_metric: true,
+        include_in_conversions_metric: Some(true),
         ..Default::default()
     };
 
@@ -107,7 +107,7 @@ fn test_conversion_action_include_in_conversions_metric() {
 fn test_conversion_action_value_settings_default_value() {
     let conversion_action = ConversionAction {
         value_settings: Some(ValueSettings {
-            default_value: 49.99,
+            default_value: Some(49.99),
             ..Default::default()
         }),
         ..Default::default()
@@ -127,7 +127,7 @@ fn test_conversion_action_value_settings_default_value() {
 fn test_conversion_action_value_settings_default_currency_code() {
     let conversion_action = ConversionAction {
         value_settings: Some(ValueSettings {
-            default_currency_code: "USD".to_string(),
+            default_currency_code: Some("USD".to_string()),
             ..Default::default()
         }),
         ..Default::default()
@@ -156,7 +156,7 @@ fn test_conversion_action_type() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.type"), "Webpage");
+    assert_eq!(row.get("conversion_action.type"), "WEBPAGE");
 }
 
 #[test]
@@ -172,7 +172,7 @@ fn test_conversion_action_category() {
         .with_conversion_action(conversion_action)
         .build();
 
-    assert_eq!(row.get("conversion_action.category"), "Purchase");
+    assert_eq!(row.get("conversion_action.category"), "PURCHASE");
 }
 
 // ============================================================================
@@ -245,7 +245,7 @@ fn test_conversion_custom_variable_resource_name() {
 #[test]
 fn test_asset_id() {
     let asset = Asset {
-        id: 111222333,
+        id: Some(111222333),
         ..Default::default()
     };
 
@@ -257,7 +257,7 @@ fn test_asset_id() {
 #[test]
 fn test_asset_name() {
     let asset = Asset {
-        name: "Summer Sale Image".to_string(),
+        name: Some("Summer Sale Image".to_string()),
         ..Default::default()
     };
 
@@ -289,13 +289,13 @@ fn test_asset_type() {
 
     let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
-    assert_eq!(row.get("asset.type"), "Image");
+    assert_eq!(row.get("asset.type"), "IMAGE");
 }
 
 #[test]
 fn test_asset_tracking_url_template() {
     let asset = Asset {
-        tracking_url_template: "https://example.com/track?id={lpurl}".to_string(),
+        tracking_url_template: Some("https://example.com/track?id={lpurl}".to_string()),
         ..Default::default()
     };
 
@@ -322,7 +322,7 @@ fn test_asset_policy_summary_approval_status() {
 
     let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
-    assert_eq!(row.get("asset.policy_summary.approval_status"), "Approved");
+    assert_eq!(row.get("asset.policy_summary.approval_status"), "APPROVED");
 }
 
 #[test]
@@ -340,7 +340,7 @@ fn test_asset_policy_summary_review_status() {
 
     let row = GoogleAdsRowBuilder::new().with_asset(asset).build();
 
-    assert_eq!(row.get("asset.policy_summary.review_status"), "Reviewed");
+    assert_eq!(row.get("asset.policy_summary.review_status"), "REVIEWED");
 }
 
 // ============================================================================
@@ -367,7 +367,7 @@ fn test_campaign_asset_resource_name() {
 #[test]
 fn test_campaign_asset_campaign() {
     let campaign_asset = CampaignAsset {
-        campaign: "customers/123/campaigns/456".to_string(),
+        campaign: Some("customers/123/campaigns/456".to_string()),
         ..Default::default()
     };
 
@@ -384,7 +384,7 @@ fn test_campaign_asset_campaign() {
 #[test]
 fn test_campaign_asset_asset() {
     let campaign_asset = CampaignAsset {
-        asset: "customers/123/assets/789".to_string(),
+        asset: Some("customers/123/assets/789".to_string()),
         ..Default::default()
     };
 
@@ -408,7 +408,7 @@ fn test_campaign_asset_field_type() {
         .with_campaign_asset(campaign_asset)
         .build();
 
-    assert_eq!(row.get("campaign_asset.field_type"), "Headline");
+    assert_eq!(row.get("campaign_asset.field_type"), "HEADLINE");
 }
 
 #[test]
@@ -424,7 +424,7 @@ fn test_campaign_asset_status() {
         .with_campaign_asset(campaign_asset)
         .build();
 
-    assert_eq!(row.get("campaign_asset.status"), "Enabled");
+    assert_eq!(row.get("campaign_asset.status"), "ENABLED");
 }
 
 // ============================================================================
@@ -492,7 +492,7 @@ fn test_ad_group_asset_field_type() {
         .with_ad_group_asset(ad_group_asset)
         .build();
 
-    assert_eq!(row.get("ad_group_asset.field_type"), "Description");
+    assert_eq!(row.get("ad_group_asset.field_type"), "DESCRIPTION");
 }
 
 #[test]
@@ -508,7 +508,7 @@ fn test_ad_group_asset_status() {
         .with_ad_group_asset(ad_group_asset)
         .build();
 
-    assert_eq!(row.get("ad_group_asset.status"), "Paused");
+    assert_eq!(row.get("ad_group_asset.status"), "PAUSED");
 }
 
 #[test]
@@ -524,7 +524,7 @@ fn test_ad_group_asset_primary_status() {
         .with_ad_group_asset(ad_group_asset)
         .build();
 
-    assert_eq!(row.get("ad_group_asset.primary_status"), "Eligible");
+    assert_eq!(row.get("ad_group_asset.primary_status"), "ELIGIBLE");
 }
 
 // ============================================================================
@@ -575,7 +575,7 @@ fn test_customer_asset_field_type() {
         .with_customer_asset(customer_asset)
         .build();
 
-    assert_eq!(row.get("customer_asset.field_type"), "Sitelink");
+    assert_eq!(row.get("customer_asset.field_type"), "SITELINK");
 }
 
 #[test]
@@ -591,7 +591,7 @@ fn test_customer_asset_status() {
         .with_customer_asset(customer_asset)
         .build();
 
-    assert_eq!(row.get("customer_asset.status"), "Enabled");
+    assert_eq!(row.get("customer_asset.status"), "ENABLED");
 }
 
 // ============================================================================
@@ -601,7 +601,7 @@ fn test_customer_asset_status() {
 #[test]
 fn test_user_list_id() {
     let user_list = UserList {
-        id: 555666777,
+        id: Some(555666777),
         ..Default::default()
     };
 
@@ -613,7 +613,7 @@ fn test_user_list_id() {
 #[test]
 fn test_user_list_name() {
     let user_list = UserList {
-        name: "Website Visitors - Last 30 Days".to_string(),
+        name: Some("Website Visitors - Last 30 Days".to_string()),
         ..Default::default()
     };
 
@@ -625,7 +625,7 @@ fn test_user_list_name() {
 #[test]
 fn test_user_list_description() {
     let user_list = UserList {
-        description: "Users who visited the website in the last 30 days".to_string(),
+        description: Some("Users who visited the website in the last 30 days".to_string()),
         ..Default::default()
     };
 
@@ -655,7 +655,7 @@ fn test_user_list_resource_name() {
 #[test]
 fn test_user_list_membership_life_span() {
     let user_list = UserList {
-        membership_life_span: 30,
+        membership_life_span: Some(30),
         ..Default::default()
     };
 
@@ -667,7 +667,7 @@ fn test_user_list_membership_life_span() {
 #[test]
 fn test_user_list_size_for_display() {
     let user_list = UserList {
-        size_for_display: 15000,
+        size_for_display: Some(15000),
         ..Default::default()
     };
 
@@ -679,7 +679,7 @@ fn test_user_list_size_for_display() {
 #[test]
 fn test_user_list_size_for_search() {
     let user_list = UserList {
-        size_for_search: 12000,
+        size_for_search: Some(12000),
         ..Default::default()
     };
 
@@ -691,7 +691,7 @@ fn test_user_list_size_for_search() {
 #[test]
 fn test_user_list_match_rate_percentage() {
     let user_list = UserList {
-        match_rate_percentage: 85,
+        match_rate_percentage: Some(85),
         ..Default::default()
     };
 
@@ -703,7 +703,7 @@ fn test_user_list_match_rate_percentage() {
 #[test]
 fn test_user_list_read_only() {
     let user_list = UserList {
-        read_only: true,
+        read_only: Some(true),
         ..Default::default()
     };
 
@@ -715,7 +715,7 @@ fn test_user_list_read_only() {
 #[test]
 fn test_user_list_eligible_for_search() {
     let user_list = UserList {
-        eligible_for_search: true,
+        eligible_for_search: Some(true),
         ..Default::default()
     };
 
@@ -727,7 +727,7 @@ fn test_user_list_eligible_for_search() {
 #[test]
 fn test_user_list_eligible_for_display() {
     let user_list = UserList {
-        eligible_for_display: true,
+        eligible_for_display: Some(true),
         ..Default::default()
     };
 
@@ -747,7 +747,7 @@ fn test_user_list_membership_status() {
 
     let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
-    assert_eq!(row.get("user_list.membership_status"), "Open");
+    assert_eq!(row.get("user_list.membership_status"), "OPEN");
 }
 
 #[test]
@@ -763,7 +763,7 @@ fn test_user_list_size_range_for_display() {
 
     assert_eq!(
         row.get("user_list.size_range_for_display"),
-        "TenThousandToFiftyThousand"
+        "TEN_THOUSAND_TO_FIFTY_THOUSAND"
     );
 }
 
@@ -778,7 +778,7 @@ fn test_user_list_type() {
 
     let row = GoogleAdsRowBuilder::new().with_user_list(user_list).build();
 
-    assert_eq!(row.get("user_list.type"), "Remarketing");
+    assert_eq!(row.get("user_list.type"), "REMARKETING");
 }
 
 // ============================================================================
@@ -788,7 +788,7 @@ fn test_user_list_type() {
 #[test]
 fn test_geo_target_constant_id() {
     let geo_target = GeoTargetConstant {
-        id: 1023191,
+        id: Some(1023191),
         ..Default::default()
     };
 
@@ -802,7 +802,7 @@ fn test_geo_target_constant_id() {
 #[test]
 fn test_geo_target_constant_name() {
     let geo_target = GeoTargetConstant {
-        name: "New York,NY,United States".to_string(),
+        name: Some("New York,NY,United States".to_string()),
         ..Default::default()
     };
 
@@ -819,7 +819,7 @@ fn test_geo_target_constant_name() {
 #[test]
 fn test_geo_target_constant_canonical_name() {
     let geo_target = GeoTargetConstant {
-        canonical_name: "New York,New York,United States".to_string(),
+        canonical_name: Some("New York,New York,United States".to_string()),
         ..Default::default()
     };
 
@@ -836,7 +836,7 @@ fn test_geo_target_constant_canonical_name() {
 #[test]
 fn test_geo_target_constant_country_code() {
     let geo_target = GeoTargetConstant {
-        country_code: "US".to_string(),
+        country_code: Some("US".to_string()),
         ..Default::default()
     };
 
@@ -850,7 +850,7 @@ fn test_geo_target_constant_country_code() {
 #[test]
 fn test_geo_target_constant_target_type() {
     let geo_target = GeoTargetConstant {
-        target_type: "City".to_string(),
+        target_type: Some("City".to_string()),
         ..Default::default()
     };
 
@@ -885,20 +885,20 @@ fn test_geo_target_constant_resource_name() {
 #[test]
 fn test_multiple_phase1_resources_in_same_row() {
     let conversion_action = ConversionAction {
-        id: 111,
-        name: "Purchase".to_string(),
+        id: Some(111),
+        name: Some("PURCHASE".to_string()),
         ..Default::default()
     };
 
     let user_list = UserList {
-        id: 222,
-        name: "Buyers".to_string(),
+        id: Some(222),
+        name: Some("Buyers".to_string()),
         ..Default::default()
     };
 
     let geo_target = GeoTargetConstant {
-        id: 333,
-        name: "California".to_string(),
+        id: Some(333),
+        name: Some("California".to_string()),
         ..Default::default()
     };
 
@@ -909,7 +909,7 @@ fn test_multiple_phase1_resources_in_same_row() {
         .build();
 
     assert_eq!(row.get("conversion_action.id"), "111");
-    assert_eq!(row.get("conversion_action.name"), "Purchase");
+    assert_eq!(row.get("conversion_action.name"), "PURCHASE");
     assert_eq!(row.get("user_list.id"), "222");
     assert_eq!(row.get("user_list.name"), "Buyers");
     assert_eq!(row.get("geo_target_constant.id"), "333");
@@ -919,7 +919,7 @@ fn test_multiple_phase1_resources_in_same_row() {
 #[test]
 fn test_empty_string_values_phase1() {
     let asset = Asset {
-        name: "".to_string(),
+        name: Some("".to_string()),
         ..Default::default()
     };
 
@@ -931,7 +931,7 @@ fn test_empty_string_values_phase1() {
 #[test]
 fn test_special_characters_in_phase1_names() {
     let conversion_action = ConversionAction {
-        name: "Purchase: Q4 2024 - \"Special\" (Test)".to_string(),
+        name: Some("Purchase: Q4 2024 - \"Special\" (Test)".to_string()),
         ..Default::default()
     };
 
@@ -948,8 +948,8 @@ fn test_special_characters_in_phase1_names() {
 #[test]
 fn test_zero_values_phase1() {
     let user_list = UserList {
-        id: 0,
-        size_for_display: 0,
+        id: Some(0),
+        size_for_display: Some(0),
         ..Default::default()
     };
 
@@ -962,7 +962,7 @@ fn test_zero_values_phase1() {
 #[test]
 fn test_very_large_numbers_phase1() {
     let conversion_action = ConversionAction {
-        id: 9_223_372_036_854_775_807, // i64::MAX
+        id: Some(9_223_372_036_854_775_807), // i64::MAX
         ..Default::default()
     };
 

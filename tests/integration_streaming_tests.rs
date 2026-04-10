@@ -33,8 +33,8 @@ fn test_field_mask_with_campaign_fields() {
 
     // Create a row with campaign data
     let mut campaign = Campaign::default();
-    campaign.id = 12345;
-    campaign.name = "Test Campaign".to_string();
+    campaign.id = Some(12345);
+    campaign.name = Some("Test Campaign".to_string());
     campaign.status = CampaignStatus::Enabled as i32;
 
     let row = GoogleAdsRow {
@@ -56,7 +56,7 @@ fn test_field_mask_with_campaign_fields() {
     // Verify specific values
     assert_eq!(row.get("campaign.id"), "12345");
     assert_eq!(row.get("campaign.name"), "Test Campaign");
-    assert_eq!(row.get("campaign.status"), "Enabled");
+    assert_eq!(row.get("campaign.status"), "ENABLED");
 }
 
 #[test]
@@ -74,15 +74,15 @@ fn test_field_mask_with_metrics_and_segments() {
 
     // Create a row with campaign, metrics, and segments
     let mut campaign = Campaign::default();
-    campaign.id = 99999;
+    campaign.id = Some(99999);
 
     let mut metrics = Metrics::default();
-    metrics.impressions = 10000;
-    metrics.clicks = 500;
-    metrics.ctr = 0.05;
+    metrics.impressions = Some(10000);
+    metrics.clicks = Some(500);
+    metrics.ctr = Some(0.05);
 
     let mut segments = Segments::default();
-    segments.date = "2024-10-10".to_string();
+    segments.date = Some("2024-10-10".to_string());
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -117,13 +117,13 @@ fn test_field_mask_with_nested_fields() {
 
     // Create campaign with network settings
     let mut campaign = Campaign::default();
-    campaign.id = 55555;
+    campaign.id = Some(55555);
     campaign.network_settings = Some(
         googleads_rs::google::ads::googleads::v23::resources::campaign::NetworkSettings {
-            target_search_network: true,
-            target_content_network: false,
-            target_partner_search_network: false,
-            target_google_search: true,
+            target_search_network: Some(true),
+            target_content_network: Some(false),
+            target_partner_search_network: Some(false),
+            target_google_search: Some(true),
             ..Default::default()
         },
     );
@@ -159,15 +159,15 @@ fn test_field_mask_all_paths_accessible() {
     };
 
     let mut campaign = Campaign::default();
-    campaign.id = 111;
-    campaign.name = "Campaign 1".to_string();
+    campaign.id = Some(111);
+    campaign.name = Some("Campaign 1".to_string());
 
     let mut ad_group = AdGroup::default();
-    ad_group.id = 222;
-    ad_group.name = "Ad Group 1".to_string();
+    ad_group.id = Some(222);
+    ad_group.name = Some("Ad Group 1".to_string());
 
     let mut customer = Customer::default();
-    customer.id = 333;
+    customer.id = Some(333);
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -197,8 +197,8 @@ fn test_field_mask_all_paths_accessible() {
 fn test_streaming_response_single_batch() {
     // Simulate a single batch streaming response
     let mut campaign = Campaign::default();
-    campaign.id = 11111;
-    campaign.name = "Campaign A".to_string();
+    campaign.id = Some(11111);
+    campaign.name = Some("Campaign A".to_string());
     campaign.status = CampaignStatus::Enabled as i32;
 
     let row = GoogleAdsRow {
@@ -228,7 +228,7 @@ fn test_streaming_response_single_batch() {
     let row = &response.results[0];
     assert_eq!(row.get("campaign.id"), "11111");
     assert_eq!(row.get("campaign.name"), "Campaign A");
-    assert_eq!(row.get("campaign.status"), "Enabled");
+    assert_eq!(row.get("campaign.status"), "ENABLED");
 }
 
 #[test]
@@ -238,8 +238,8 @@ fn test_streaming_response_multiple_rows() {
 
     for i in 1..=5 {
         let mut campaign = Campaign::default();
-        campaign.id = i * 1000;
-        campaign.name = format!("Campaign {}", i);
+        campaign.id = Some(i * 1000);
+        campaign.name = Some(format!("Campaign {}", i));
         campaign.status = if i % 2 == 0 {
             CampaignStatus::Paused as i32
         } else {
@@ -276,7 +276,7 @@ fn test_streaming_response_multiple_rows() {
         assert_eq!(row.get("campaign.id"), format!("{}", i * 1000));
         assert_eq!(row.get("campaign.name"), format!("Campaign {}", i));
 
-        let expected_status = if i % 2 == 0 { "Paused" } else { "Enabled" };
+        let expected_status = if i % 2 == 0 { "PAUSED" } else { "ENABLED" };
         assert_eq!(row.get("campaign.status"), expected_status);
     }
 }
@@ -285,14 +285,14 @@ fn test_streaming_response_multiple_rows() {
 fn test_streaming_response_with_metrics() {
     // Test streaming response that includes metrics
     let mut campaign = Campaign::default();
-    campaign.id = 77777;
-    campaign.name = "Performance Campaign".to_string();
+    campaign.id = Some(77777);
+    campaign.name = Some("Performance Campaign".to_string());
 
     let mut metrics = Metrics::default();
-    metrics.impressions = 50000;
-    metrics.clicks = 2500;
-    metrics.ctr = 0.05;
-    metrics.cost_micros = 125000000; // $125 in micros
+    metrics.impressions = Some(50000);
+    metrics.clicks = Some(2500);
+    metrics.ctr = Some(0.05);
+    metrics.cost_micros = Some(125000000); // $125 in micros
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -360,7 +360,7 @@ fn test_invalid_field_path_returns_not_implemented() {
     };
 
     let mut campaign = Campaign::default();
-    campaign.id = 12345;
+    campaign.id = Some(12345);
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -395,7 +395,7 @@ fn test_field_mask_with_optional_resources() {
     };
 
     let mut campaign = Campaign::default();
-    campaign.id = 99999;
+    campaign.id = Some(99999);
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -437,19 +437,19 @@ fn test_realistic_campaign_report_query() {
 
     for (idx, date) in dates.iter().enumerate() {
         let mut campaign = Campaign::default();
-        campaign.id = 555555;
-        campaign.name = "Q4 Campaign".to_string();
+        campaign.id = Some(555555);
+        campaign.name = Some("Q4 Campaign".to_string());
         campaign.status = CampaignStatus::Enabled as i32;
 
         let mut metrics = Metrics::default();
-        metrics.impressions = 5000 + (idx as i64 * 500);
-        metrics.clicks = 250 + (idx as i64 * 25);
-        metrics.ctr = 0.05;
-        metrics.cost_micros = 50000000;
-        metrics.conversions = 10.0 + (idx as f64 * 2.0);
+        metrics.impressions = Some(5000 + (idx as i64 * 500));
+        metrics.clicks = Some(250 + (idx as i64 * 25));
+        metrics.ctr = Some(0.05);
+        metrics.cost_micros = Some(50000000);
+        metrics.conversions = Some(10.0 + (idx as f64 * 2.0));
 
         let mut segments = Segments::default();
-        segments.date = date.to_string();
+        segments.date = Some(date.to_string());
 
         rows.push(GoogleAdsRow {
             campaign: Some(campaign),
@@ -475,7 +475,7 @@ fn test_realistic_campaign_report_query() {
     for (idx, row) in response.results.iter().enumerate() {
         assert_eq!(row.get("campaign.id"), "555555");
         assert_eq!(row.get("campaign.name"), "Q4 Campaign");
-        assert_eq!(row.get("campaign.status"), "Enabled");
+        assert_eq!(row.get("campaign.status"), "ENABLED");
         assert_eq!(row.get("segments.date"), dates[idx]);
 
         // Verify metrics progression
@@ -510,14 +510,14 @@ fn test_realistic_ad_group_query() {
     };
 
     let mut campaign = Campaign::default();
-    campaign.id = 123456;
-    campaign.name = "Parent Campaign".to_string();
+    campaign.id = Some(123456);
+    campaign.name = Some("Parent Campaign".to_string());
 
     let mut ad_group = AdGroup::default();
-    ad_group.id = 789012;
-    ad_group.name = "Brand Keywords".to_string();
+    ad_group.id = Some(789012);
+    ad_group.name = Some("Brand Keywords".to_string());
     ad_group.status = AdGroupStatus::Enabled as i32;
-    ad_group.cpc_bid_micros = 5000000; // $5 CPC bid
+    ad_group.cpc_bid_micros = Some(5000000); // $5 CPC bid
 
     let row = GoogleAdsRow {
         campaign: Some(campaign),
@@ -539,7 +539,7 @@ fn test_realistic_ad_group_query() {
     assert_eq!(row.get("campaign.name"), "Parent Campaign");
     assert_eq!(row.get("ad_group.id"), "789012");
     assert_eq!(row.get("ad_group.name"), "Brand Keywords");
-    assert_eq!(row.get("ad_group.status"), "Enabled");
+    assert_eq!(row.get("ad_group.status"), "ENABLED");
     assert_eq!(row.get("ad_group.cpc_bid_micros"), "5000000");
 }
 
@@ -555,8 +555,8 @@ fn test_field_mask_iteration_pattern() {
     };
 
     let mut campaign = Campaign::default();
-    campaign.id = 111111;
-    campaign.name = "Test Campaign".to_string();
+    campaign.id = Some(111111);
+    campaign.name = Some("Test Campaign".to_string());
     campaign.status = CampaignStatus::Enabled as i32;
 
     let row = GoogleAdsRow {
@@ -574,5 +574,5 @@ fn test_field_mask_iteration_pattern() {
     assert_eq!(output.len(), 3);
     assert_eq!(output[0], "campaign.id: 111111");
     assert_eq!(output[1], "campaign.name: Test Campaign");
-    assert_eq!(output[2], "campaign.status: Enabled");
+    assert_eq!(output[2], "campaign.status: ENABLED");
 }

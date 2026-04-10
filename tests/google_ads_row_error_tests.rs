@@ -229,8 +229,8 @@ fn test_default_numeric_values() {
     let campaign = CampaignBuilder::new().build();
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    // Default i64 values should be 0
-    assert_eq!(row.get("campaign.id"), "0");
+    // Default i64 values (None) return empty string with prost-reflect
+    assert_eq!(row.get("campaign.id"), "");
 }
 
 #[test]
@@ -267,7 +267,8 @@ fn test_default_enum_values() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.status"), "Unspecified");
+    // Enum values are now returned in SCREAMING_SNAKE_CASE
+    assert_eq!(row.get("campaign.status"), "UNSPECIFIED");
 }
 
 // ============================================================================

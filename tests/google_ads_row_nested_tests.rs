@@ -297,8 +297,8 @@ fn test_campaign_with_nested_and_enum_fields() {
     assert_eq!(row.get("campaign.name"), "Complex Campaign");
 
     // Enum fields
-    assert_eq!(row.get("campaign.status"), "Enabled");
-    assert_eq!(row.get("campaign.advertising_channel_type"), "Search");
+    assert_eq!(row.get("campaign.status"), "ENABLED");
+    assert_eq!(row.get("campaign.advertising_channel_type"), "SEARCH");
 
     // Nested fields
     assert_eq!(

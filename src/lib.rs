@@ -174,6 +174,29 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
             .join(", ")
     }
 
+    /// Format FieldMask as comma-separated list of paths
+    fn format_field_mask(&self, field_mask: &DynamicMessage) -> String {
+        let paths_field = match field_mask.descriptor().get_field_by_name("paths") {
+            Some(f) => f,
+            None => return String::new(),
+        };
+
+        // Don't check has_field for repeated fields - just get the value
+        let paths_value = field_mask.get_field(&paths_field);
+        match &*paths_value {
+            Value::List(list) => {
+                list.iter()
+                    .filter_map(|item| match item {
+                        Value::String(s) => Some(s.clone()),
+                        _ => None,
+                    })
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            }
+            _ => String::new(),
+        }
+    }
+
     /// Format value at a dotted path
     fn format_value_at_path(&self, msg: &DynamicMessage, path: &str) -> String {
         let path_segments: Vec<&str> = path.split('.').collect();
@@ -181,21 +204,19 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
     }
 
     /// Recursively format value at a path
-    fn format_value_recursive(&self, msg: &DynamicMessage, path: &[&str], field_desc: Option<&prost_reflect::FieldDescriptor>) -> String {
+    fn format_value_recursive(&self, msg: &DynamicMessage, path: &[&str], _field_desc: Option<&prost_reflect::FieldDescriptor>) -> String {
         if path.is_empty() {
-            if let Some(desc) = field_desc {
-                let value = msg.get_field(desc);
-                return match &*value {
-                    Value::Message(sub) => format!("{:?}", sub),
-                    Value::List(list) => self.format_list(list, desc),
-                    _ => self.format_scalar(&value, desc),
-                };
-            } else {
-                return format!("{:?}", msg);
-            }
+            // This shouldn't happen in normal usage
+            return format!("{:?}", msg);
         }
 
         let segment = path[0];
+
+        // Check for empty segment (from trailing dots or double dots)
+        if segment.is_empty() {
+            return "not implemented by googleads-rs".to_string();
+        }
+
         let remaining = &path[1..];
 
         // Look up the field by name
@@ -206,6 +227,18 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
 
         // Check if field has presence and is unset
         if desc.supports_presence() && !msg.has_field(&desc) {
+            // Before returning empty, validate that remaining path would be valid
+            // This ensures invalid paths like "campaign.invalid_field" return "not implemented"
+            // even when campaign is not set
+            if !remaining.is_empty() {
+                // Try to validate the remaining path by checking field existence
+                if let prost_reflect::Kind::Message(msg_desc) = desc.kind() {
+                    // Validate the next segment exists
+                    if msg_desc.get_field_by_name(remaining[0]).is_none() {
+                        return "not implemented by googleads-rs".to_string();
+                    }
+                }
+            }
             return String::new();
         }
 
@@ -213,7 +246,18 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
 
         match &*value {
             Value::Message(sub_msg) => {
-                self.format_value_recursive(sub_msg, remaining, Some(&desc))
+                if remaining.is_empty() {
+                    // Format the message directly
+                    if sub_msg.descriptor().full_name() == "google.protobuf.FieldMask" {
+                        self.format_field_mask(sub_msg)
+                    } else {
+                        // Partial paths (e.g., "campaign" without a field) are not supported
+                        "not implemented by googleads-rs".to_string()
+                    }
+                } else {
+                    // Continue traversing the path
+                    self.format_value_recursive(sub_msg, remaining, None)
+                }
             }
             Value::List(list) => {
                 if remaining.is_empty() {
@@ -222,10 +266,9 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
                     // Walk into each message item
                     list.iter()
                         .map(|item| match item {
-                            Value::Message(sub) => self.format_value_recursive(sub, remaining, Some(&desc)),
+                            Value::Message(sub) => self.format_value_recursive(sub, remaining, None),
                             _ => String::new()
                         })
-                        .filter(|s| !s.is_empty())
                         .collect::<Vec<_>>()
                         .join(", ")
                 }
@@ -234,8 +277,8 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
                 if remaining.is_empty() {
                     self.format_scalar(&value, &desc)
                 } else {
-                    // Can't recurse into scalar types
-                    String::new()
+                    // Can't recurse into scalar types - any remaining path is invalid
+                    "not implemented by googleads-rs".to_string()
                 }
             }
         }
@@ -280,10 +323,37 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
 
         items.iter()
             .map(|item| match item {
-                Value::Message(msg) => format!("{:?}", msg),
+                Value::Message(msg) => self.format_message_compact(msg),
                 _ => self.format_scalar(item, field_desc)
             })
             .collect::<Vec<_>>()
             .join(sep)
+    }
+
+    /// Format a message in a compact "field:value" format
+    fn format_message_compact(&self, msg: &DynamicMessage) -> String {
+        let fields: Vec<String> = msg.descriptor()
+            .fields()
+            .filter_map(|field_desc| {
+                // Only show fields that are set
+                if field_desc.supports_presence() && !msg.has_field(&field_desc) {
+                    return None;
+                }
+
+                let value = msg.get_field(&field_desc);
+                let formatted_value = match &*value {
+                    Value::Message(sub_msg) => self.format_message_compact(sub_msg),
+                    _ => self.format_scalar(&value, &field_desc)
+                };
+
+                if formatted_value.is_empty() {
+                    None
+                } else {
+                    Some(format!("{}:{}", field_desc.name(), formatted_value))
+                }
+            })
+            .collect();
+
+        fields.join(" ")
     }
 }
