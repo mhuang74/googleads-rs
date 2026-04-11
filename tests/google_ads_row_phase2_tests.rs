@@ -643,5 +643,8 @@ fn test_phase2_metrics_absent_parent() {
     // Prost-reflect implementation returns empty string for missing resources
     // This is a more lenient behavior than the previous panic-based approach
     let result = row.get("metrics.orders");
-    assert_eq!(result, "", "Expected empty string when metrics parent is absent");
+    assert_eq!(
+        result, "",
+        "Expected empty string when metrics parent is absent"
+    );
 }

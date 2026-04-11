@@ -191,7 +191,10 @@ fn test_campaign_bidding_strategy_type_target_impression_share() {
 
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
-    assert_eq!(row.get("campaign.bidding_strategy_type"), "TARGET_IMPRESSION_SHARE");
+    assert_eq!(
+        row.get("campaign.bidding_strategy_type"),
+        "TARGET_IMPRESSION_SHARE"
+    );
 }
 
 #[test]

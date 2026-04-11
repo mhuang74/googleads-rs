@@ -94,7 +94,8 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
         let dynamic_msg = DynamicMessage::decode(descriptor, Cursor::new(&encoded))
             .expect("Failed to decode GoogleAdsRow as DynamicMessage");
 
-        field_names.iter()
+        field_names
+            .iter()
             .map(|field_name| self.get_field_from_dynamic(&dynamic_msg, field_name))
             .collect()
     }
@@ -107,20 +108,24 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
                 self.format_asset_automation_settings(dyn_msg)
             }
             // Special case for ad_group_ad.ad.responsive_search_ad.headlines/descriptions
-            field if field.starts_with("ad_group_ad.ad.responsive_search_ad.headlines") ||
-                   field.starts_with("ad_group_ad.ad.responsive_search_ad.descriptions") => {
+            field
+                if field.starts_with("ad_group_ad.ad.responsive_search_ad.headlines")
+                    || field.starts_with("ad_group_ad.ad.responsive_search_ad.descriptions") =>
+            {
                 // The GAQL path stops at the repeated message, but users expect .text extracted
                 self.format_value_at_path(dyn_msg, &format!("{}.text", field_name))
             }
             // General case: use reflection to walk the path
-            _ => self.format_value_at_path(dyn_msg, field_name)
+            _ => self.format_value_at_path(dyn_msg, field_name),
         }
     }
 
     /// Format asset_automation_settings as "TYPE:STATUS" pairs
     fn format_asset_automation_settings(&self, dyn_msg: &DynamicMessage) -> String {
         // Navigate to campaign message
-        let campaign_field = dyn_msg.descriptor().get_field_by_name("campaign")
+        let campaign_field = dyn_msg
+            .descriptor()
+            .get_field_by_name("campaign")
             .expect("campaign field not found");
 
         if !dyn_msg.has_field(&campaign_field) {
@@ -134,7 +139,9 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
         };
 
         // Get asset_automation_settings repeated field
-        let settings_field = campaign_msg.descriptor().get_field_by_name("asset_automation_settings")
+        let settings_field = campaign_msg
+            .descriptor()
+            .get_field_by_name("asset_automation_settings")
             .expect("asset_automation_settings field not found");
 
         if !campaign_msg.has_field(&settings_field) {
@@ -148,16 +155,23 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
         };
 
         // Format each item as "TYPE:STATUS"
-        settings_list.iter()
+        settings_list
+            .iter()
             .filter_map(|item| match item {
                 Value::Message(setting_msg) => {
-                    let type_field = match setting_msg.descriptor().get_field_by_name("asset_automation_type") {
+                    let type_field = match setting_msg
+                        .descriptor()
+                        .get_field_by_name("asset_automation_type")
+                    {
                         Some(f) => f,
                         None => return None,
                     };
                     let type_value = setting_msg.get_field(&type_field);
 
-                    let status_field = match setting_msg.descriptor().get_field_by_name("asset_automation_status") {
+                    let status_field = match setting_msg
+                        .descriptor()
+                        .get_field_by_name("asset_automation_status")
+                    {
                         Some(f) => f,
                         None => return None,
                     };
@@ -168,7 +182,7 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
 
                     Some(format!("{}:{}", type_name, status_name))
                 }
-                _ => None
+                _ => None,
             })
             .collect::<Vec<_>>()
             .join(", ")
@@ -184,15 +198,14 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
         // Don't check has_field for repeated fields - just get the value
         let paths_value = field_mask.get_field(&paths_field);
         match &*paths_value {
-            Value::List(list) => {
-                list.iter()
-                    .filter_map(|item| match item {
-                        Value::String(s) => Some(s.clone()),
-                        _ => None,
-                    })
-                    .collect::<Vec<_>>()
-                    .join(", ")
-            }
+            Value::List(list) => list
+                .iter()
+                .filter_map(|item| match item {
+                    Value::String(s) => Some(s.clone()),
+                    _ => None,
+                })
+                .collect::<Vec<_>>()
+                .join(", "),
             _ => String::new(),
         }
     }
@@ -204,7 +217,12 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
     }
 
     /// Recursively format value at a path
-    fn format_value_recursive(&self, msg: &DynamicMessage, path: &[&str], _field_desc: Option<&prost_reflect::FieldDescriptor>) -> String {
+    fn format_value_recursive(
+        &self,
+        msg: &DynamicMessage,
+        path: &[&str],
+        _field_desc: Option<&prost_reflect::FieldDescriptor>,
+    ) -> String {
         if path.is_empty() {
             // This shouldn't happen in normal usage
             return format!("{:?}", msg);
@@ -222,7 +240,7 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
         // Look up the field by name
         let desc = match msg.descriptor().get_field_by_name(segment) {
             Some(desc) => desc,
-            None => return "not implemented by googleads-rs".to_string()
+            None => return "not implemented by googleads-rs".to_string(),
         };
 
         // Check if field has presence and is unset
@@ -266,8 +284,10 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
                     // Walk into each message item
                     list.iter()
                         .map(|item| match item {
-                            Value::Message(sub) => self.format_value_recursive(sub, remaining, None),
-                            _ => String::new()
+                            Value::Message(sub) => {
+                                self.format_value_recursive(sub, remaining, None)
+                            }
+                            _ => String::new(),
                         })
                         .collect::<Vec<_>>()
                         .join(", ")
@@ -290,7 +310,8 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
             Value::EnumNumber(n) => {
                 // Resolve enum number to name
                 if let prost_reflect::Kind::Enum(enum_desc) = field_desc.kind() {
-                    enum_desc.get_value(*n)
+                    enum_desc
+                        .get_value(*n)
                         .map(|v| v.name().to_string())
                         .unwrap_or_else(|| n.to_string())
                 } else {
@@ -306,7 +327,7 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
             Value::F32(f) => f.to_string(),
             Value::F64(d) => d.to_string(),
             Value::Bytes(b) => format!("{:?}", b),
-            _ => format!("{:?}", value)
+            _ => format!("{:?}", value),
         }
     }
 
@@ -321,10 +342,11 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
         // For messages, use ; as separator (matches existing behavior)
         let sep = if is_message_list { "; " } else { ", " };
 
-        items.iter()
+        items
+            .iter()
             .map(|item| match item {
                 Value::Message(msg) => self.format_message_compact(msg),
-                _ => self.format_scalar(item, field_desc)
+                _ => self.format_scalar(item, field_desc),
             })
             .collect::<Vec<_>>()
             .join(sep)
@@ -332,7 +354,8 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
 
     /// Format a message in a compact "field:value" format
     fn format_message_compact(&self, msg: &DynamicMessage) -> String {
-        let fields: Vec<String> = msg.descriptor()
+        let fields: Vec<String> = msg
+            .descriptor()
             .fields()
             .filter_map(|field_desc| {
                 // Only show fields that are set
@@ -343,7 +366,7 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
                 let value = msg.get_field(&field_desc);
                 let formatted_value = match &*value {
                     Value::Message(sub_msg) => self.format_message_compact(sub_msg),
-                    _ => self.format_scalar(&value, &field_desc)
+                    _ => self.format_scalar(&value, &field_desc),
                 };
 
                 if formatted_value.is_empty() {

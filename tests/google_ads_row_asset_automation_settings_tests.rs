@@ -464,5 +464,8 @@ fn test_campaign_asset_automation_settings_campaign_absent() {
     // This is a more lenient behavior than the previous panic-based approach
     let result = row.get("campaign.asset_automation_settings");
 
-    assert_eq!(result, "", "Should return empty string when campaign is absent");
+    assert_eq!(
+        result, "",
+        "Should return empty string when campaign is absent"
+    );
 }

@@ -119,9 +119,21 @@ fn test_ad_group_asset_status_detail_with_asset_disapproved() {
     println!("ACTUAL RESULT: {}", result);
 
     // Should contain nested details
-    assert!(result.contains("details:") || result.contains("asset_disapproved:"), "Result: {}", result);
-    assert!(result.contains("AssetDisapproved") || result.contains("asset_disapproved"), "Result: {}", result);
-    assert!(result.contains("offline_evaluation_error_reasons"), "Result: {}", result);
+    assert!(
+        result.contains("details:") || result.contains("asset_disapproved:"),
+        "Result: {}",
+        result
+    );
+    assert!(
+        result.contains("AssetDisapproved") || result.contains("asset_disapproved"),
+        "Result: {}",
+        result
+    );
+    assert!(
+        result.contains("offline_evaluation_error_reasons"),
+        "Result: {}",
+        result
+    );
 }
 
 #[test]
