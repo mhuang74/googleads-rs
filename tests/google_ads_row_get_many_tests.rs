@@ -2,13 +2,14 @@
 
 mod test_helpers;
 
-use test_helpers::{
-    CampaignBuilder, GoogleAdsRowBuilder, MetricsBuilder, SegmentsBuilder,
-};
+use test_helpers::{CampaignBuilder, GoogleAdsRowBuilder, MetricsBuilder, SegmentsBuilder};
 
 #[test]
 fn test_get_many_single_field() {
-    let campaign = CampaignBuilder::new().id(12345).name("Test Campaign").build();
+    let campaign = CampaignBuilder::new()
+        .id(12345)
+        .name("Test Campaign")
+        .build();
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let fields = vec!["campaign.id"];
     let values = row.get_many(&fields);
@@ -18,7 +19,10 @@ fn test_get_many_single_field() {
 
 #[test]
 fn test_get_many_multiple_fields() {
-    let campaign = CampaignBuilder::new().id(12345).name("Test Campaign").build();
+    let campaign = CampaignBuilder::new()
+        .id(12345)
+        .name("Test Campaign")
+        .build();
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let fields = vec!["campaign.id", "campaign.name"];
     let values = row.get_many(&fields);
@@ -38,7 +42,10 @@ fn test_get_many_empty_fields() {
 
 #[test]
 fn test_get_many_cross_resources() {
-    let campaign = CampaignBuilder::new().id(12345).name("Test Campaign").build();
+    let campaign = CampaignBuilder::new()
+        .id(12345)
+        .name("Test Campaign")
+        .build();
     let metrics = MetricsBuilder::new().clicks(100).impressions(1000).build();
     let segments = SegmentsBuilder::new().date("2024-01-15").build();
     let row = GoogleAdsRowBuilder::new()
@@ -46,7 +53,13 @@ fn test_get_many_cross_resources() {
         .with_metrics(metrics)
         .with_segments(segments)
         .build();
-    let fields = vec!["campaign.id", "campaign.name", "metrics.clicks", "metrics.impressions", "segments.date"];
+    let fields = vec![
+        "campaign.id",
+        "campaign.name",
+        "metrics.clicks",
+        "metrics.impressions",
+        "segments.date",
+    ];
     let values = row.get_many(&fields);
     assert_eq!(values.len(), 5);
     assert_eq!(values[0], "12345");
@@ -68,7 +81,10 @@ fn test_get_many_missing_parent_resource() {
 
 #[test]
 fn test_get_many_equivalent_to_multiple_get() {
-    let campaign = CampaignBuilder::new().id(12345).name("Test Campaign").build();
+    let campaign = CampaignBuilder::new()
+        .id(12345)
+        .name("Test Campaign")
+        .build();
     let metrics = MetricsBuilder::new().clicks(100).build();
     let row = GoogleAdsRowBuilder::new()
         .with_campaign(campaign)

@@ -423,10 +423,7 @@ fn test_empty_segment_trailing_dot() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Trailing dot creates an empty segment
-    assert_eq!(
-        row.get("campaign.id."),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaign.id."), "not implemented by googleads-rs");
 }
 
 #[test]
@@ -435,10 +432,7 @@ fn test_empty_segment_double_dot() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Double dot creates an empty segment in the middle
-    assert_eq!(
-        row.get("campaign..id"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaign..id"), "not implemented by googleads-rs");
 }
 
 #[test]
@@ -447,10 +441,7 @@ fn test_empty_segment_leading_dot() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Leading dot creates an empty first segment
-    assert_eq!(
-        row.get(".campaign.id"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get(".campaign.id"), "not implemented by googleads-rs");
 }
 
 #[test]
@@ -459,10 +450,7 @@ fn test_empty_segment_multiple_dots() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // Multiple consecutive dots create multiple empty segments
-    assert_eq!(
-        row.get("campaign...id"),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("campaign...id"), "not implemented by googleads-rs");
 }
 
 #[test]
@@ -470,10 +458,7 @@ fn test_empty_segment_only_dot() {
     let row = GoogleAdsRowBuilder::new().build();
 
     // Just a single dot
-    assert_eq!(
-        row.get("."),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("."), "not implemented by googleads-rs");
 }
 
 #[test]
@@ -481,10 +466,7 @@ fn test_empty_segment_only_dots() {
     let row = GoogleAdsRowBuilder::new().build();
 
     // Multiple dots only
-    assert_eq!(
-        row.get("..."),
-        "not implemented by googleads-rs"
-    );
+    assert_eq!(row.get("..."), "not implemented by googleads-rs");
 }
 
 // ============================================================================

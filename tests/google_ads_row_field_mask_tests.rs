@@ -71,9 +71,18 @@ fn test_field_mask_with_complex_paths() {
     };
 
     assert_eq!(field_mask.paths.len(), 3);
-    assert!(field_mask.paths.iter().any(|p: &String| p.contains("network_settings")));
-    assert!(field_mask.paths.iter().any(|p: &String| p.contains("metrics")));
-    assert!(field_mask.paths.iter().any(|p: &String| p.contains("ad_group")));
+    assert!(field_mask
+        .paths
+        .iter()
+        .any(|p: &String| p.contains("network_settings")));
+    assert!(field_mask
+        .paths
+        .iter()
+        .any(|p: &String| p.contains("metrics")));
+    assert!(field_mask
+        .paths
+        .iter()
+        .any(|p: &String| p.contains("ad_group")));
 }
 
 // ============================================================================
@@ -83,7 +92,10 @@ fn test_field_mask_with_complex_paths() {
 #[test]
 fn test_basic_field_access_still_works() {
     // Ensure normal field access is not affected by FieldMask handling
-    let campaign = CampaignBuilder::new().id(12345).name("Test Campaign").build();
+    let campaign = CampaignBuilder::new()
+        .id(12345)
+        .name("Test Campaign")
+        .build();
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
 
     // These should work normally
