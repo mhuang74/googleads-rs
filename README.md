@@ -9,6 +9,18 @@
 
 Current Version 23.2.0 uses [Google Ads API v23.2](https://developers.google.com/google-ads/api/docs/release-notes)
 
+---
+
+> **Versioning Convention**
+>
+> The crate version directly corresponds to the Google Ads API version it supports.
+> - **major.minor** = Google Ads API version (e.g., `23.2.0` → API v23.2)
+> - **patch** = bug fixes and library updates
+>
+> This eliminates the mental friction of mapping between the `googleads-rs` version and the Google Ads API version.
+
+---
+
 A gRPC client library for Google Ads API, generated automatically from the API definition files.
 
 I use it for my [mcc-gaql](https://github.com/mhuang74/mcc-gaql-rs) command line tool to run Google Ads Query Language queries across large number of MCC-linked accounts.
