@@ -39,8 +39,8 @@ fn test_ad_group_criterion_keyword_match_type() {
         .with_ad_group_criterion(criterion)
         .build();
 
-    // Match type is returned as numeric string
-    assert_eq!(row.get("ad_group_criterion.keyword.match_type"), "3");
+    // Match type is returned as enum name (SCREAMING_SNAKE_CASE)
+    assert_eq!(row.get("ad_group_criterion.keyword.match_type"), "PHRASE");
 }
 
 #[test]
@@ -54,7 +54,7 @@ fn test_ad_group_criterion_keyword_broad_match() {
         .build();
 
     assert_eq!(row.get("ad_group_criterion.keyword.text"), "shoes");
-    assert_eq!(row.get("ad_group_criterion.keyword.match_type"), "4");
+    assert_eq!(row.get("ad_group_criterion.keyword.match_type"), "BROAD");
 }
 
 #[test]

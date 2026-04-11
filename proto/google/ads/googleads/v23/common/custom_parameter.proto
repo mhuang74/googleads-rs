@@ -31,8 +31,8 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Common";
 // `tracking_url_template`, `final_urls`, or `mobile_final_urls`.
 message CustomParameter {
   // The key matching the parameter tag name.
- string key = 3;
+  optional string key = 3;
 
   // The value to be substituted.
- string value = 4;
+  optional string value = 4;
 }

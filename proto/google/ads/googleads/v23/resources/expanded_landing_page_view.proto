@@ -50,6 +50,6 @@ message ExpandedLandingPageView {
   ];
 
   // Output only. The final URL that clicks are directed to.
- string expanded_final_url = 3
+  optional string expanded_final_url = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }

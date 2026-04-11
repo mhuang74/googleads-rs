@@ -52,7 +52,7 @@ message CampaignAggregateAssetView {
   ];
 
   // Output only. Campaign in which the asset served.
- string campaign = 2 [
+  optional string campaign = 2 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -60,16 +60,16 @@ message CampaignAggregateAssetView {
   ];
 
   // Output only. The ID of the asset.
- string asset = 3 [
+  optional string asset = 3 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = { type: "googleads.googleapis.com/Asset" }
   ];
 
   // Output only. Source of the asset link.
- google.ads.googleads.v23.enums.AssetSourceEnum.AssetSource
+  optional google.ads.googleads.v23.enums.AssetSourceEnum.AssetSource
       asset_source = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. FieldType of the asset.
- google.ads.googleads.v23.enums.AssetFieldTypeEnum.AssetFieldType
+  optional google.ads.googleads.v23.enums.AssetFieldTypeEnum.AssetFieldType
       field_type = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

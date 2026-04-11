@@ -195,7 +195,7 @@ message QuotaFailure {
     
     
     
- int64 future_quota_value = 8;
+    optional int64 future_quota_value = 8;
   }
 
   

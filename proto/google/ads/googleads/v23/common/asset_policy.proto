@@ -58,11 +58,11 @@ message AdAssetPolicySummary {
 // evaluation errors which led to the asset being disapproved.
 message AssetLinkPrimaryStatusDetails {
   // Provides the reason of this PrimaryStatus.
- google.ads.googleads.v23.enums.AssetLinkPrimaryStatusReasonEnum
+  optional google.ads.googleads.v23.enums.AssetLinkPrimaryStatusReasonEnum
       .AssetLinkPrimaryStatusReason reason = 1;
 
   // Provides the PrimaryStatus of this status detail.
- google.ads.googleads.v23.enums.AssetLinkPrimaryStatusEnum
+  optional google.ads.googleads.v23.enums.AssetLinkPrimaryStatusEnum
       .AssetLinkPrimaryStatus status = 2;
 
   // Provides the details associated with the asset link primary status.

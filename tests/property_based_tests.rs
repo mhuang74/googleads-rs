@@ -16,6 +16,18 @@ use googleads_rs::google::ads::googleads::v23::enums::{
     campaign_status_enum::CampaignStatus,
 };
 
+// Helper function to convert PascalCase to SCREAMING_SNAKE_CASE
+fn to_screaming_snake_case(s: &str) -> String {
+    let mut result = String::new();
+    for (i, ch) in s.chars().enumerate() {
+        if ch.is_uppercase() && i > 0 {
+            result.push('_');
+        }
+        result.push(ch.to_ascii_uppercase());
+    }
+    result
+}
+
 // ============================================================================
 // Property Test 1: get() Never Panics with Random Field Paths
 // ============================================================================
@@ -146,16 +158,23 @@ proptest! {
 
         let result = row.get(&field_path);
 
-        // All metrics should return numeric strings
+        // All metrics should return numeric strings or empty for unset optional fields
         match field_path.as_str() {
             "metrics.impressions" => assert_eq!(result, impressions.to_string()),
             "metrics.clicks" => assert_eq!(result, clicks.to_string()),
-            "metrics.ctr" | "metrics.average_cpc" | "metrics.average_cpm" => {
-                // Should be parseable as f64
+            "metrics.ctr" => {
+                // Should be parseable as f64 (this is set in the builder)
                 result.parse::<f64>().expect("Should be valid f64");
             },
             "metrics.cost_micros" => {
                 result.parse::<i64>().expect("Should be valid i64");
+            },
+            // Optional fields that aren't set return empty string
+            "metrics.average_cpc" | "metrics.average_cpm" | "metrics.conversions" | "metrics.conversions_value" => {
+                // Empty string for unset optional fields, or parseable f64 if set
+                if !result.is_empty() {
+                    result.parse::<f64>().expect("Should be valid f64 if set");
+                }
             },
             _ => {},
         }
@@ -299,8 +318,9 @@ proptest! {
         // Should always return a non-empty string for enum debug format
         assert!(!result.is_empty());
 
-        // Verify it matches expected enum variant name
-        let expected = format!("{:?}", status);
+        // Verify it matches expected enum variant name in SCREAMING_SNAKE_CASE
+        let debug_format = format!("{:?}", status);
+        let expected = to_screaming_snake_case(&debug_format);
         assert_eq!(result, expected);
     }
 }
@@ -331,7 +351,9 @@ proptest! {
 
         let result = row.get("ad_group.status");
         assert!(!result.is_empty());
-        assert_eq!(result, format!("{:?}", status));
+        let debug_format = format!("{:?}", status);
+        let expected = to_screaming_snake_case(&debug_format);
+        assert_eq!(result, expected);
     }
 }
 
@@ -369,7 +391,9 @@ proptest! {
 
         let result = row.get("campaign.advertising_channel_type");
         assert!(!result.is_empty());
-        assert_eq!(result, format!("{:?}", channel_type));
+        let debug_format = format!("{:?}", channel_type);
+        let expected = to_screaming_snake_case(&debug_format);
+        assert_eq!(result, expected);
     }
 }
 
@@ -394,9 +418,17 @@ proptest! {
         // Test keyword text
         assert_eq!(row.get("ad_group_criterion.keyword.text"), keyword_text);
 
-        // Test keyword match_type (returns i32 as string)
+        // Test keyword match_type (returns enum name in SCREAMING_SNAKE_CASE)
         let result = row.get("ad_group_criterion.keyword.match_type");
-        assert_eq!(result, match_type.to_string());
+        let expected_match_type = match match_type {
+            0 => "UNSPECIFIED",
+            1 => "UNKNOWN",
+            2 => "EXACT",
+            3 => "PHRASE",
+            4 => "BROAD",
+            _ => "UNSPECIFIED", // Default fallback
+        };
+        assert_eq!(result, expected_match_type);
     }
 }
 

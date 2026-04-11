@@ -52,14 +52,14 @@ message BiddingStrategy {
   ];
 
   // Output only. The ID of the bidding strategy.
- int64 id = 16 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 16 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The name of the bidding strategy.
   // All bidding strategies within an account must be named distinctly.
   //
   // The length of this string should be between 1 and 255, inclusive,
   // in UTF-8 bytes, (trimmed).
- string name = 17;
+  optional string name = 17;
 
   // Output only. The status of the bidding strategy.
   //
@@ -94,7 +94,7 @@ message BiddingStrategy {
   // Bidding strategy metrics are reported in this currency.
   //
   // This field is read-only.
- string effective_currency_code = 20
+  optional string effective_currency_code = 20
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // ID of the campaign budget that this portfolio bidding strategy
@@ -107,14 +107,14 @@ message BiddingStrategy {
   // Output only. The number of campaigns attached to this bidding strategy.
   //
   // This field is read-only.
- int64 campaign_count = 18
+  optional int64 campaign_count = 18
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The number of non-removed campaigns attached to this bidding
   // strategy.
   //
   // This field is read-only.
- int64 non_removed_campaign_count = 19
+  optional int64 non_removed_campaign_count = 19
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The bidding scheme.

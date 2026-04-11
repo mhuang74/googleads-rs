@@ -34,7 +34,7 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Common";
 // A text asset used inside an ad.
 message AdTextAsset {
   // Asset text.
- string text = 4;
+  optional string text = 4;
 
   // The pinned field of the asset. This restricts the asset to only serve
   // within this field. Multiple assets can be pinned to the same field. An
@@ -54,16 +54,16 @@ message AdTextAsset {
 // An image asset used inside an ad.
 message AdImageAsset {
   // The Asset resource name of this image.
- string asset = 2;
+  optional string asset = 2;
 }
 
 // A video asset used inside an ad.
 message AdVideoAsset {
   // The Asset resource name of this video.
- string asset = 2;
+  optional string asset = 2;
 
   // Contains info fields for this AdVideoAsset.
- AdVideoAssetInfo ad_video_asset_info = 4;
+  optional AdVideoAssetInfo ad_video_asset_info = 4;
 }
 
 // Contains info fields for AdVideoAssets.
@@ -76,57 +76,57 @@ message AdVideoAssetInfo {
   // with a matching preference for that inventory. Videos with no preferences
   // are chosen only when a video with matching preference and eligible for a
   // given ad slot can be found.
- AdVideoAssetInventoryPreferences
+  optional AdVideoAssetInventoryPreferences
       ad_video_asset_inventory_preferences = 1;
 
   // Defines feature controls for this AdVideoAsset during serving time.
   // For example, whether YouTube comments should be enabled for Partnership Ads
   // served on YouTube Shorts.
- AdVideoAssetLinkFeatureControl ad_video_asset_feature_control = 2;
+  optional AdVideoAssetLinkFeatureControl ad_video_asset_feature_control = 2;
 }
 
 // YouTube Video Asset inventory preferences.
 message AdVideoAssetInventoryPreferences {
   // When true, YouTube Video Asset with this inventory preference will be
   // preferred when choosing a video to serve In Feed.
- bool in_feed_preference = 1;
+  optional bool in_feed_preference = 1;
 
   // When true, YouTube Video Asset with this inventory preference will be
   // preferred when choosing a video to serve In Stream.
- bool in_stream_preference = 2;
+  optional bool in_stream_preference = 2;
 
   // When true, YouTube Video Asset with this inventory preference will be
   // preferred when choosing a video to serve on YouTube Shorts.
- bool shorts_preference = 3;
+  optional bool shorts_preference = 3;
 }
 
 // YouTube Video Asset feature controls.
 message AdVideoAssetLinkFeatureControl {
   // Defines if YouTube comments should be enabled for the creative
   // using this YouTube video asset served on YouTube Shorts.
- bool allow_youtube_comments = 1;
+  optional bool allow_youtube_comments = 1;
 }
 
 // A media bundle asset used inside an ad.
 message AdMediaBundleAsset {
   // The Asset resource name of this media bundle.
- string asset = 2;
+  optional string asset = 2;
 }
 
 // A Demand Gen carousel card asset used inside an ad.
 message AdDemandGenCarouselCardAsset {
   // The Asset resource name of this discovery carousel card.
- string asset = 1;
+  optional string asset = 1;
 }
 
 // A call to action asset used inside an ad.
 message AdCallToActionAsset {
   // The Asset resource name of this call to action asset.
- string asset = 1;
+  optional string asset = 1;
 }
 
 // An app deep link used inside an ad.
 message AdAppDeepLinkAsset {
   // The Asset resource name of this app deep link asset.
- string asset = 1;
+  optional string asset = 1;
 }

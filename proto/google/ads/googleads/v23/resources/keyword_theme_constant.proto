@@ -51,13 +51,13 @@ message KeywordThemeConstant {
   // Output only. The ISO-3166 Alpha-2 country code of the constant, eg. "US".
   // To display and query matching purpose, the keyword theme needs to be
   // localized.
- string country_code = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string country_code = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The ISO-639-1 language code with 2 letters of the constant,
   // eg. "en". To display and query matching purpose, the keyword theme needs to
   // be localized.
- string language_code = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string language_code = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The display name of the keyword theme or sub keyword theme.
- string display_name = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string display_name = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

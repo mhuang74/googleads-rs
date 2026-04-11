@@ -69,7 +69,7 @@ message AdGroupSimulation {
   ];
 
   // Output only. Ad group id of the simulation.
- int64 ad_group_id = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 ad_group_id = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The field that the simulation modifies.
   google.ads.googleads.v23.enums.SimulationTypeEnum.SimulationType type = 3
@@ -82,11 +82,11 @@ message AdGroupSimulation {
 
   // Output only. First day on which the simulation is based, in YYYY-MM-DD
   // format.
- string start_date = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string start_date = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Last day on which the simulation is based, in YYYY-MM-DD
   // format
- string end_date = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string end_date = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // List of simulation points.
   oneof point_list {

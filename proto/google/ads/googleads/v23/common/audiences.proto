@@ -73,19 +73,19 @@ message AgeDimension {
   repeated AgeSegment age_ranges = 1;
 
   // Include users whose age is not determined.
- bool include_undetermined = 2;
+  optional bool include_undetermined = 2;
 }
 
 // Contiguous age range.
 message AgeSegment {
   // Minimum age to include. A minimum age must be specified and must be at
   // least 18. Allowed values are 18, 25, 35, 45, 55, and 65.
- int32 min_age = 1;
+  optional int32 min_age = 1;
 
   // Maximum age to include. A maximum age need not be specified. If specified,
   // max_age must be greater than min_age, and allowed values are 24, 34, 44,
   // 54, and 64.
- int32 max_age = 2;
+  optional int32 max_age = 2;
 }
 
 // Dimension specifying users by their gender.
@@ -94,7 +94,7 @@ message GenderDimension {
   repeated google.ads.googleads.v23.enums.GenderTypeEnum.GenderType genders = 1;
 
   // Include users whose gender is not determined.
- bool include_undetermined = 2;
+  optional bool include_undetermined = 2;
 }
 
 // Dimension specifying users by their household income.
@@ -104,7 +104,7 @@ message HouseholdIncomeDimension {
       income_ranges = 1;
 
   // Include users whose household income is not determined.
- bool include_undetermined = 2;
+  optional bool include_undetermined = 2;
 }
 
 // Dimension specifying users by their parental status.
@@ -115,7 +115,7 @@ message ParentalStatusDimension {
           parental_statuses = 1;
 
   // Include users whose parental status is undetermined.
- bool include_undetermined = 2;
+  optional bool include_undetermined = 2;
 }
 
 // Dimension specifying users by their membership in other audience segments.
@@ -149,19 +149,19 @@ message AudienceSegment {
 // User list segment.
 message UserListSegment {
   // The user list resource.
- string user_list = 1;
+  optional string user_list = 1;
 }
 
 // User interest segment.
 message UserInterestSegment {
   // The user interest resource.
- string user_interest_category = 1;
+  optional string user_interest_category = 1;
 }
 
 // Live event segment.
 message LifeEventSegment {
   // The life event resource.
- string life_event = 1 [(google.api.resource_reference) = {
+  optional string life_event = 1 [(google.api.resource_reference) = {
     type: "googleads.googleapis.com/LifeEvent"
   }];
 }
@@ -169,7 +169,7 @@ message LifeEventSegment {
 // Detailed demographic segment.
 message DetailedDemographicSegment {
   // The detailed demographic resource.
- string detailed_demographic = 1 [(google.api.resource_reference) = {
+  optional string detailed_demographic = 1 [(google.api.resource_reference) = {
     type: "googleads.googleapis.com/DetailedDemographic"
   }];
 }
@@ -177,5 +177,5 @@ message DetailedDemographicSegment {
 // Custom audience segment.
 message CustomAudienceSegment {
   // The custom audience resource.
- string custom_audience = 1;
+  optional string custom_audience = 1;
 }

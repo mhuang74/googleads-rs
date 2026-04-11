@@ -61,5 +61,5 @@ message AdGroupAdAssetCombinationView {
   // version of the ad. If true, the asset combination is linked to the latest
   // version of the ad. If false, it means the link once existed but has been
   // removed and is no longer present in the latest version of the ad.
- bool enabled = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional bool enabled = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

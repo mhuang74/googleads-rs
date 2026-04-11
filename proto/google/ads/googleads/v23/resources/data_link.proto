@@ -51,12 +51,12 @@ message DataLink {
 
   // Output only. The ID of the link.
   // This field is read only.
- int64 product_link_id = 2
+  optional int64 product_link_id = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The ID of the data link.
   // This field is read only.
- int64 data_link_id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 data_link_id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The type of the data.
   google.ads.googleads.v23.enums.DataLinkTypeEnum.DataLinkType type = 4
@@ -78,11 +78,11 @@ message DataLink {
 message YoutubeVideoIdentifier {
   // Immutable. The ID of the hosting channel of the video. This is a string
   // value with “UC” prefix. For example, "UCK8sQmJBp8GCxrOtXWBpyEA".
- string channel_id = 1 [(google.api.field_behavior) = IMMUTABLE];
+  optional string channel_id = 1 [(google.api.field_behavior) = IMMUTABLE];
 
   // Immutable. The ID of the video associated with the video link. This is the
   // 11 character string value used in the YouTube video URL. For example, video
   // ID is jV1vkHv4zq8 from the YouTube video URL
   // "https://www.youtube.com/watch?v=jV1vkHv4zq8&t=2s".
- string video_id = 2 [(google.api.field_behavior) = IMMUTABLE];
+  optional string video_id = 2 [(google.api.field_behavior) = IMMUTABLE];
 }

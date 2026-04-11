@@ -113,12 +113,12 @@ message IdentityVerification {
 
   // The verification requirement for this verification program for this
   // customer.
- IdentityVerificationRequirement identity_verification_requirement =
+  optional IdentityVerificationRequirement identity_verification_requirement =
       2;
 
   // Information regarding progress for this verification program for this
   // customer.
- IdentityVerificationProgress verification_progress = 3;
+  optional IdentityVerificationProgress verification_progress = 3;
 }
 
 // Information regarding the verification progress for a verification program

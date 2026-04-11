@@ -51,7 +51,7 @@ message CampaignSharedSet {
   ];
 
   // Immutable. The campaign to which the campaign shared set belongs.
- string campaign = 5 [
+  optional string campaign = 5 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -64,7 +64,7 @@ message CampaignSharedSet {
   // but have no serving effect. Only negative keyword shared sets can be
   // associated with Shopping campaigns. Only negative placement shared sets can
   // be associated with Display mobile app campaigns.
- string shared_set = 6 [
+  optional string shared_set = 6 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/SharedSet"

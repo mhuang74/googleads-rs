@@ -398,12 +398,12 @@ impl CampaignBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.campaign.id = id;
+        self.campaign.id = Some(id);
         self
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.campaign.name = name.to_string();
+        self.campaign.name = Some(name.to_string());
         self
     }
 
@@ -423,22 +423,22 @@ impl CampaignBuilder {
     }
 
     pub fn campaign_budget(mut self, budget: &str) -> Self {
-        self.campaign.campaign_budget = budget.to_string();
+        self.campaign.campaign_budget = Some(budget.to_string());
         self
     }
 
     pub fn start_date(mut self, date: &str) -> Self {
-        self.campaign.start_date_time = date.to_string();
+        self.campaign.start_date_time = Some(date.to_string());
         self
     }
 
     pub fn end_date(mut self, date: &str) -> Self {
-        self.campaign.end_date_time = date.to_string();
+        self.campaign.end_date_time = Some(date.to_string());
         self
     }
 
     pub fn optimization_score(mut self, score: f64) -> Self {
-        self.campaign.optimization_score = score;
+        self.campaign.optimization_score = Some(score);
         self
     }
 
@@ -471,12 +471,12 @@ impl AdGroupBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.ad_group.id = id;
+        self.ad_group.id = Some(id);
         self
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.ad_group.name = name.to_string();
+        self.ad_group.name = Some(name.to_string());
         self
     }
 
@@ -491,17 +491,17 @@ impl AdGroupBuilder {
     }
 
     pub fn cpc_bid_micros(mut self, bid: i64) -> Self {
-        self.ad_group.cpc_bid_micros = bid;
+        self.ad_group.cpc_bid_micros = Some(bid);
         self
     }
 
     pub fn cpm_bid_micros(mut self, bid: i64) -> Self {
-        self.ad_group.cpm_bid_micros = bid;
+        self.ad_group.cpm_bid_micros = Some(bid);
         self
     }
 
     pub fn target_cpa_micros(mut self, cpa: i64) -> Self {
-        self.ad_group.target_cpa_micros = cpa;
+        self.ad_group.target_cpa_micros = Some(cpa);
         self
     }
 
@@ -534,17 +534,17 @@ impl CampaignBudgetBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.budget.id = id;
+        self.budget.id = Some(id);
         self
     }
 
     pub fn amount_micros(mut self, amount: i64) -> Self {
-        self.budget.amount_micros = amount;
+        self.budget.amount_micros = Some(amount);
         self
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.budget.name = name.to_string();
+        self.budget.name = Some(name.to_string());
         self
     }
 
@@ -572,22 +572,22 @@ impl CustomerBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.customer.id = id;
+        self.customer.id = Some(id);
         self
     }
 
     pub fn descriptive_name(mut self, name: &str) -> Self {
-        self.customer.descriptive_name = name.to_string();
+        self.customer.descriptive_name = Some(name.to_string());
         self
     }
 
     pub fn currency_code(mut self, code: &str) -> Self {
-        self.customer.currency_code = code.to_string();
+        self.customer.currency_code = Some(code.to_string());
         self
     }
 
     pub fn time_zone(mut self, tz: &str) -> Self {
-        self.customer.time_zone = tz.to_string();
+        self.customer.time_zone = Some(tz.to_string());
         self
     }
 
@@ -615,42 +615,42 @@ impl MetricsBuilder {
     }
 
     pub fn impressions(mut self, impressions: i64) -> Self {
-        self.metrics.impressions = impressions;
+        self.metrics.impressions = Some(impressions);
         self
     }
 
     pub fn clicks(mut self, clicks: i64) -> Self {
-        self.metrics.clicks = clicks;
+        self.metrics.clicks = Some(clicks);
         self
     }
 
     pub fn ctr(mut self, ctr: f64) -> Self {
-        self.metrics.ctr = ctr;
+        self.metrics.ctr = Some(ctr);
         self
     }
 
     pub fn cost_micros(mut self, cost: i64) -> Self {
-        self.metrics.cost_micros = cost;
+        self.metrics.cost_micros = Some(cost);
         self
     }
 
     pub fn conversions(mut self, conversions: f64) -> Self {
-        self.metrics.conversions = conversions;
+        self.metrics.conversions = Some(conversions);
         self
     }
 
     pub fn conversions_value(mut self, value: f64) -> Self {
-        self.metrics.conversions_value = value;
+        self.metrics.conversions_value = Some(value);
         self
     }
 
     pub fn average_cpc(mut self, cpc: f64) -> Self {
-        self.metrics.average_cpc = cpc;
+        self.metrics.average_cpc = Some(cpc);
         self
     }
 
     pub fn average_cpm(mut self, cpm: f64) -> Self {
-        self.metrics.average_cpm = cpm;
+        self.metrics.average_cpm = Some(cpm);
         self
     }
 
@@ -678,7 +678,7 @@ impl SegmentsBuilder {
     }
 
     pub fn date(mut self, date: &str) -> Self {
-        self.segments.date = date.to_string();
+        self.segments.date = Some(date.to_string());
         self
     }
 
@@ -693,17 +693,17 @@ impl SegmentsBuilder {
     }
 
     pub fn hour(mut self, hour: i32) -> Self {
-        self.segments.hour = hour;
+        self.segments.hour = Some(hour);
         self
     }
 
     pub fn month(mut self, month: &str) -> Self {
-        self.segments.month = month.to_string();
+        self.segments.month = Some(month.to_string());
         self
     }
 
     pub fn year(mut self, year: i32) -> Self {
-        self.segments.year = year;
+        self.segments.year = Some(year);
         self
     }
 
@@ -731,7 +731,7 @@ impl AdGroupCriterionBuilder {
     }
 
     pub fn criterion_id(mut self, id: i64) -> Self {
-        self.criterion.criterion_id = id;
+        self.criterion.criterion_id = Some(id);
         self
     }
 
@@ -741,7 +741,7 @@ impl AdGroupCriterionBuilder {
     }
 
     pub fn cpc_bid_micros(mut self, bid: i64) -> Self {
-        self.criterion.cpc_bid_micros = bid;
+        self.criterion.cpc_bid_micros = Some(bid);
         self
     }
 
@@ -750,7 +750,7 @@ impl AdGroupCriterionBuilder {
         use googleads_rs::google::ads::googleads::v23::resources::ad_group_criterion::Criterion;
 
         self.criterion.criterion = Some(Criterion::Keyword(KeywordInfo {
-            text: text.to_string(),
+            text: Some(text.to_string()),
             match_type,
         }));
         self
@@ -785,7 +785,7 @@ impl CampaignCriterionBuilder {
     }
 
     pub fn criterion_id(mut self, id: i64) -> Self {
-        self.criterion.criterion_id = id;
+        self.criterion.criterion_id = Some(id);
         self
     }
 
@@ -804,7 +804,7 @@ impl CampaignCriterionBuilder {
         use googleads_rs::google::ads::googleads::v23::resources::campaign_criterion::Criterion;
 
         self.criterion.criterion = Some(Criterion::Keyword(KeywordInfo {
-            text: text.to_string(),
+            text: Some(text.to_string()),
             match_type: 0,
         }));
         self
@@ -815,7 +815,7 @@ impl CampaignCriterionBuilder {
         use googleads_rs::google::ads::googleads::v23::resources::campaign_criterion::Criterion;
 
         self.criterion.criterion = Some(Criterion::Location(LocationInfo {
-            geo_target_constant: geo_target_constant.to_string(),
+            geo_target_constant: Some(geo_target_constant.to_string()),
         }));
         self
     }
@@ -842,12 +842,12 @@ impl AdBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.ad.id = id;
+        self.ad.id = Some(id);
         self
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.ad.name = name.to_string();
+        self.ad.name = Some(name.to_string());
         self
     }
 
@@ -871,7 +871,7 @@ impl AdBuilder {
         let headline_assets: Vec<AdTextAsset> = headlines
             .iter()
             .map(|text| AdTextAsset {
-                text: text.to_string(),
+                text: Some(text.to_string()),
                 ..Default::default()
             })
             .collect();
@@ -879,7 +879,7 @@ impl AdBuilder {
         let description_assets: Vec<AdTextAsset> = descriptions
             .iter()
             .map(|text| AdTextAsset {
-                text: text.to_string(),
+                text: Some(text.to_string()),
                 ..Default::default()
             })
             .collect();
@@ -887,8 +887,8 @@ impl AdBuilder {
         self.ad.ad_data = Some(AdData::ResponsiveSearchAd(ResponsiveSearchAdInfo {
             headlines: headline_assets,
             descriptions: description_assets,
-            path1: path1.unwrap_or("").to_string(),
-            path2: path2.unwrap_or("").to_string(),
+            path1: Some(path1.unwrap_or("").to_string()),
+            path2: Some(path2.unwrap_or("").to_string()),
             ..Default::default()
         }));
         self
@@ -955,10 +955,10 @@ impl CampaignBuilder {
         use googleads_rs::google::ads::googleads::v23::resources::campaign::NetworkSettings;
 
         self.campaign.network_settings = Some(NetworkSettings {
-            target_search_network: target_search,
-            target_content_network: target_content,
-            target_partner_search_network: target_partner,
-            target_google_search,
+            target_search_network: Some(target_search),
+            target_content_network: Some(target_content),
+            target_partner_search_network: Some(target_partner),
+            target_google_search: Some(target_google_search),
             ..Default::default()
         });
         self
@@ -975,7 +975,7 @@ impl CampaignBuilder {
         self.campaign.dynamic_search_ads_setting = Some(DynamicSearchAdsSetting {
             domain_name: domain_name.to_string(),
             language_code: language_code.to_string(),
-            use_supplied_urls_only,
+            use_supplied_urls_only: Some(use_supplied_urls_only),
             ..Default::default()
         });
         self
@@ -999,12 +999,12 @@ impl AccountBudgetBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.account_budget.id = id;
+        self.account_budget.id = Some(id);
         self
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.account_budget.name = name.to_string();
+        self.account_budget.name = Some(name.to_string());
         self
     }
 
@@ -1095,7 +1095,7 @@ impl AudienceBuilder {
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.audience.name = name.to_string();
+        self.audience.name = Some(name.to_string());
         self
     }
 
@@ -1133,12 +1133,12 @@ impl BiddingStrategyBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.bidding_strategy.id = id;
+        self.bidding_strategy.id = Some(id);
         self
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.bidding_strategy.name = name.to_string();
+        self.bidding_strategy.name = Some(name.to_string());
         self
     }
 
@@ -1171,12 +1171,12 @@ impl LabelBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.label.id = id;
+        self.label.id = Some(id);
         self
     }
 
     pub fn name(mut self, name: &str) -> Self {
-        self.label.name = name.to_string();
+        self.label.name = Some(name.to_string());
         self
     }
 
@@ -1209,32 +1209,32 @@ impl CustomerClientBuilder {
     }
 
     pub fn id(mut self, id: i64) -> Self {
-        self.customer_client.id = id;
+        self.customer_client.id = Some(id);
         self
     }
 
     pub fn client_customer(mut self, client: &str) -> Self {
-        self.customer_client.client_customer = client.to_string();
+        self.customer_client.client_customer = Some(client.to_string());
         self
     }
 
     pub fn currency_code(mut self, code: &str) -> Self {
-        self.customer_client.currency_code = code.to_string();
+        self.customer_client.currency_code = Some(code.to_string());
         self
     }
 
     pub fn descriptive_name(mut self, name: &str) -> Self {
-        self.customer_client.descriptive_name = name.to_string();
+        self.customer_client.descriptive_name = Some(name.to_string());
         self
     }
 
     pub fn level(mut self, level: i64) -> Self {
-        self.customer_client.level = level;
+        self.customer_client.level = Some(level);
         self
     }
 
     pub fn manager(mut self, manager: bool) -> Self {
-        self.customer_client.manager = manager;
+        self.customer_client.manager = Some(manager);
         self
     }
 
@@ -1244,7 +1244,7 @@ impl CustomerClientBuilder {
     }
 
     pub fn time_zone(mut self, tz: &str) -> Self {
-        self.customer_client.time_zone = tz.to_string();
+        self.customer_client.time_zone = Some(tz.to_string());
         self
     }
 
@@ -1272,12 +1272,12 @@ impl SearchTermViewBuilder {
     }
 
     pub fn ad_group(mut self, ad_group: &str) -> Self {
-        self.search_term_view.ad_group = ad_group.to_string();
+        self.search_term_view.ad_group = Some(ad_group.to_string());
         self
     }
 
     pub fn search_term(mut self, term: &str) -> Self {
-        self.search_term_view.search_term = term.to_string();
+        self.search_term_view.search_term = Some(term.to_string());
         self
     }
 
@@ -1413,7 +1413,7 @@ impl AdGroupAdAssetViewBuilder {
     }
 
     pub fn asset(mut self, asset: &str) -> Self {
-        self.ad_group_ad_asset_view.asset = asset.to_string();
+        self.ad_group_ad_asset_view.asset = Some(asset.to_string());
         self
     }
 

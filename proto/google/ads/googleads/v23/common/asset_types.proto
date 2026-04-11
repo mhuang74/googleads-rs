@@ -54,7 +54,7 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Common";
 message YoutubeVideoAsset {
   // YouTube video id. This is the 11 character string value used in the
   // YouTube video URL.
- string youtube_video_id = 2;
+  optional string youtube_video_id = 2;
 
   // YouTube video title.
   string youtube_video_title = 3;
@@ -66,16 +66,16 @@ message MediaBundleAsset {
   // depends on the ad field where it will be used. For more information on the
   // format, see the documentation of the ad field where you plan on using the
   // MediaBundleAsset. This field is mutate only.
- bytes data = 2;
+  optional bytes data = 2;
 }
 
 // An Image asset.
 message ImageAsset {
   // The raw bytes data of an image. This field is mutate only.
- bytes data = 5;
+  optional bytes data = 5;
 
   // File size of the image asset in bytes.
- int64 file_size = 6;
+  optional int64 file_size = 6;
 
   // MIME type of the image asset.
   google.ads.googleads.v23.enums.MimeTypeEnum.MimeType mime_type = 3;
@@ -87,19 +87,19 @@ message ImageAsset {
 // Metadata for an image at a certain size, either original or resized.
 message ImageDimension {
   // Height of the image.
- int64 height_pixels = 4;
+  optional int64 height_pixels = 4;
 
   // Width of the image.
- int64 width_pixels = 5;
+  optional int64 width_pixels = 5;
 
   // A URL that returns the image with this height and width.
- string url = 6;
+  optional string url = 6;
 }
 
 // A Text asset.
 message TextAsset {
   // Text content of the text asset.
- string text = 2;
+  optional string text = 2;
 }
 
 // A Lead Form asset.
@@ -131,11 +131,11 @@ message LeadFormAsset {
 
   // Headline of text shown after form submission that describes how the
   // advertiser will follow up with the user.
- string post_submit_headline = 15;
+  optional string post_submit_headline = 15;
 
   // Detailed description shown after form submission that describes how the
   // advertiser will follow up with the user.
- string post_submit_description = 16;
+  optional string post_submit_description = 16;
 
   // Ordered list of input fields. This field can be updated by reordering
   // questions, but not by adding or removing questions.
@@ -156,7 +156,7 @@ message LeadFormAsset {
 
   // Asset resource name of the background image.
   // The image dimensions must be exactly 1200x628.
- string background_image_asset = 20;
+  optional string background_image_asset = 20;
 
   // Chosen intent for the lead form, for example, more volume or more
   // qualified.
@@ -165,7 +165,7 @@ message LeadFormAsset {
 
   // Custom disclosure shown along with Google disclaimer on the lead form.
   // Accessible to allowed customers only.
- string custom_disclosure = 22;
+  optional string custom_disclosure = 22;
 }
 
 // One input field instance within a form.
@@ -238,13 +238,13 @@ message LeadFormDeliveryMethod {
 // Google publishes as part of form ads documentation.
 message WebhookDelivery {
   // Webhook url specified by advertiser to send the lead.
- string advertiser_webhook_url = 4;
+  optional string advertiser_webhook_url = 4;
 
   // Anti-spoofing secret set by the advertiser as part of the webhook payload.
- string google_secret = 5;
+  optional string google_secret = 5;
 
   // The schema version that this delivery instance will use.
- int64 payload_schema_version = 6;
+  optional int64 payload_schema_version = 6;
 }
 
 // A Book on Google asset. Used to redirect user to book through Google.
@@ -1114,7 +1114,7 @@ message BusinessMessageAsset {
   string starter_message = 2 [(google.api.field_behavior) = REQUIRED];
 
   // A call to action for the business message asset.
- BusinessMessageCallToActionInfo call_to_action = 3;
+  optional BusinessMessageCallToActionInfo call_to_action = 3;
 
   // Message provider information to use for messaging.
   oneof message_provider_data {

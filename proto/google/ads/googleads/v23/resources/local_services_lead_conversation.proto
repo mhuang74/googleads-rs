@@ -83,12 +83,12 @@ message LocalServicesLeadConversation {
   string event_date_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Details of phone call conversation in case of PHONE_CALL.
- PhoneCallDetails phone_call_details = 7
+  optional PhoneCallDetails phone_call_details = 7
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Details of message conversation in case of EMAIL, MESSAGE or
   // SMS.
- MessageDetails message_details = 8
+  optional MessageDetails message_details = 8
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 

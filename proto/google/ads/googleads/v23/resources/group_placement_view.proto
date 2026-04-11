@@ -51,15 +51,15 @@ message GroupPlacementView {
 
   // Output only. The automatic placement string at group level, e. g. web
   // domain, mobile app ID, or a YouTube channel ID.
- string placement = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string placement = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Domain name for websites and YouTube channel name for YouTube
   // channels.
- string display_name = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string display_name = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. URL of the group placement, for example, domain, link to the
   // mobile application in app store, or a YouTube channel URL.
- string target_url = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string target_url = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Type of the placement, for example, Website, YouTube Channel,
   // Mobile Application.

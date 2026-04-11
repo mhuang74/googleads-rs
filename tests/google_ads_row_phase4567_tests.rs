@@ -47,7 +47,7 @@ fn test_keyword_view_resource_name() {
 fn test_landing_page_view_resource_name() {
     let landing_page_view = LandingPageView {
         resource_name: "customers/123/landingPageViews/456".to_string(),
-        unexpanded_final_url: "https://example.com/product".to_string(),
+        unexpanded_final_url: Some("https://example.com/product".to_string()),
         ..Default::default()
     };
 
@@ -64,7 +64,7 @@ fn test_landing_page_view_resource_name() {
 #[test]
 fn test_landing_page_view_unexpanded_final_url() {
     let landing_page_view = LandingPageView {
-        unexpanded_final_url: "https://example.com/landing?param=value".to_string(),
+        unexpanded_final_url: Some("https://example.com/landing?param=value".to_string()),
         ..Default::default()
     };
 
@@ -114,14 +114,14 @@ fn test_geographic_view_location_type() {
 
     assert_eq!(
         row.get("geographic_view.location_type"),
-        "LocationOfPresence"
+        "LOCATION_OF_PRESENCE"
     );
 }
 
 #[test]
 fn test_geographic_view_country_criterion_id() {
     let geographic_view = GeographicView {
-        country_criterion_id: 2840, // United States
+        country_criterion_id: Some(2840), // United States
         ..Default::default()
     };
 
@@ -156,7 +156,7 @@ fn test_click_view_resource_name() {
 #[test]
 fn test_click_view_gclid() {
     let click_view = ClickView {
-        gclid: "TeSter-123".to_string(),
+        gclid: Some("TeSter-123".to_string()),
         ..Default::default()
     };
 
@@ -171,8 +171,8 @@ fn test_click_view_gclid() {
 fn test_click_view_area_of_interest() {
     let click_view = ClickView {
         area_of_interest: Some(ClickLocation {
-            city: "San Francisco".to_string(),
-            country: "United States".to_string(),
+            city: Some("San Francisco".to_string()),
+            country: Some("United States".to_string()),
             ..Default::default()
         }),
         ..Default::default()
@@ -193,8 +193,8 @@ fn test_click_view_area_of_interest() {
 fn test_click_view_location_of_presence() {
     let click_view = ClickView {
         location_of_presence: Some(ClickLocation {
-            city: "New York".to_string(),
-            country: "United States".to_string(),
+            city: Some("New York".to_string()),
+            country: Some("United States".to_string()),
             ..Default::default()
         }),
         ..Default::default()
@@ -245,7 +245,7 @@ fn test_asset_group_asset_field_type() {
         .with_asset_group_asset(asset_group_asset)
         .build();
 
-    assert_eq!(row.get("asset_group_asset.field_type"), "Headline");
+    assert_eq!(row.get("asset_group_asset.field_type"), "HEADLINE");
 }
 
 #[test]
@@ -261,7 +261,7 @@ fn test_asset_group_asset_status() {
         .with_asset_group_asset(asset_group_asset)
         .build();
 
-    assert_eq!(row.get("asset_group_asset.status"), "Enabled");
+    assert_eq!(row.get("asset_group_asset.status"), "ENABLED");
 }
 
 // REMOVED IN V22: performance_label field no longer exists
@@ -310,8 +310,8 @@ fn test_asset_group_signal_resource_name() {
 fn test_campaign_label_resource_name() {
     let campaign_label = CampaignLabel {
         resource_name: "customers/123/campaignLabels/456~789".to_string(),
-        campaign: "customers/123/campaigns/456".to_string(),
-        label: "customers/123/labels/789".to_string(),
+        campaign: Some("customers/123/campaigns/456".to_string()),
+        label: Some("customers/123/labels/789".to_string()),
     };
 
     let row = GoogleAdsRowBuilder::new()
@@ -333,8 +333,8 @@ fn test_campaign_label_resource_name() {
 fn test_ad_group_label_all_fields() {
     let ad_group_label = AdGroupLabel {
         resource_name: "customers/123/adGroupLabels/456~789".to_string(),
-        ad_group: "customers/123/adGroups/456".to_string(),
-        label: "customers/123/labels/789".to_string(),
+        ad_group: Some("customers/123/adGroups/456".to_string()),
+        label: Some("customers/123/labels/789".to_string()),
     };
 
     let row = GoogleAdsRowBuilder::new()
@@ -356,8 +356,8 @@ fn test_ad_group_label_all_fields() {
 fn test_ad_group_ad_label_all_fields() {
     let ad_group_ad_label = AdGroupAdLabel {
         resource_name: "customers/123/adGroupAdLabels/456~789~012".to_string(),
-        ad_group_ad: "customers/123/adGroupAds/456~012".to_string(),
-        label: "customers/123/labels/789".to_string(),
+        ad_group_ad: Some("customers/123/adGroupAds/456~012".to_string()),
+        label: Some("customers/123/labels/789".to_string()),
     };
 
     let row = GoogleAdsRowBuilder::new()
@@ -412,7 +412,7 @@ fn test_recommendation_type() {
         .with_recommendation(recommendation)
         .build();
 
-    assert_eq!(row.get("recommendation.type"), "Keyword");
+    assert_eq!(row.get("recommendation.type"), "KEYWORD");
 }
 
 #[test]
@@ -424,9 +424,9 @@ fn test_recommendation_impact_metrics() {
     let recommendation = Recommendation {
         impact: Some(RecommendationImpact {
             base_metrics: Some(RecommendationMetrics {
-                clicks: 1000.0,
-                impressions: 50000.0,
-                cost_micros: 25000000,
+                clicks: Some(1000.0),
+                impressions: Some(50000.0),
+                cost_micros: Some(25000000),
                 ..Default::default()
             }),
             ..Default::default()
@@ -459,11 +459,11 @@ fn test_shared_set_all_fields() {
     use googleads_rs::google::ads::googleads::v23::enums::shared_set_type_enum::SharedSetType;
 
     let shared_set = SharedSet {
-        id: 123456,
-        name: "Negative Keywords List".to_string(),
+        id: Some(123456),
+        name: Some("Negative Keywords List".to_string()),
         r#type: SharedSetType::NegativeKeywords as i32,
         status: SharedSetStatus::Enabled as i32,
-        member_count: 42,
+        member_count: Some(42),
         resource_name: "customers/123/sharedSets/456".to_string(),
         ..Default::default()
     };
@@ -474,8 +474,8 @@ fn test_shared_set_all_fields() {
 
     assert_eq!(row.get("shared_set.id"), "123456");
     assert_eq!(row.get("shared_set.name"), "Negative Keywords List");
-    assert_eq!(row.get("shared_set.type"), "NegativeKeywords");
-    assert_eq!(row.get("shared_set.status"), "Enabled");
+    assert_eq!(row.get("shared_set.type"), "NEGATIVE_KEYWORDS");
+    assert_eq!(row.get("shared_set.status"), "ENABLED");
     assert_eq!(row.get("shared_set.member_count"), "42");
     assert_eq!(
         row.get("shared_set.resource_name"),
@@ -491,11 +491,11 @@ fn test_shared_criterion_keyword() {
 
     let shared_criterion = SharedCriterion {
         resource_name: "customers/123/sharedCriteria/456~789".to_string(),
-        shared_set: "customers/123/sharedSets/456".to_string(),
-        criterion_id: 789,
+        shared_set: Some("customers/123/sharedSets/456".to_string()),
+        criterion_id: Some(789),
         r#type: CriterionType::Keyword as i32,
         criterion: Some(Criterion::Keyword(KeywordInfo {
-            text: "cheap flights".to_string(),
+            text: Some("cheap flights".to_string()),
             match_type: 2, // PHRASE
         })),
         ..Default::default()
@@ -514,7 +514,7 @@ fn test_shared_criterion_keyword() {
         "customers/123/sharedSets/456"
     );
     assert_eq!(row.get("shared_criterion.criterion_id"), "789");
-    assert_eq!(row.get("shared_criterion.type"), "Keyword");
+    assert_eq!(row.get("shared_criterion.type"), "KEYWORD");
     assert_eq!(row.get("shared_criterion.keyword.text"), "cheap flights");
 }
 
@@ -528,8 +528,8 @@ fn test_campaign_shared_set_all_fields() {
 
     let campaign_shared_set = CampaignSharedSet {
         resource_name: "customers/123/campaignSharedSets/456~789".to_string(),
-        campaign: "customers/123/campaigns/456".to_string(),
-        shared_set: "customers/123/sharedSets/789".to_string(),
+        campaign: Some("customers/123/campaigns/456".to_string()),
+        shared_set: Some("customers/123/sharedSets/789".to_string()),
         status: CampaignSharedSetStatus::Enabled as i32,
     };
 
@@ -549,7 +549,7 @@ fn test_campaign_shared_set_all_fields() {
         row.get("campaign_shared_set.shared_set"),
         "customers/123/sharedSets/789"
     );
-    assert_eq!(row.get("campaign_shared_set.status"), "Enabled");
+    assert_eq!(row.get("campaign_shared_set.status"), "ENABLED");
 }
 
 // ============================================================================
@@ -559,12 +559,12 @@ fn test_campaign_shared_set_all_fields() {
 #[test]
 fn test_asset_pinning_metrics() {
     let metrics = Metrics {
-        asset_pinned_as_description_position_one_count: 10,
-        asset_pinned_as_description_position_two_count: 8,
-        asset_pinned_as_headline_position_one_count: 15,
-        asset_pinned_as_headline_position_two_count: 12,
-        asset_pinned_as_headline_position_three_count: 9,
-        asset_pinned_total_count: 54,
+        asset_pinned_as_description_position_one_count: Some(10),
+        asset_pinned_as_description_position_two_count: Some(8),
+        asset_pinned_as_headline_position_one_count: Some(15),
+        asset_pinned_as_headline_position_two_count: Some(12),
+        asset_pinned_as_headline_position_three_count: Some(9),
+        asset_pinned_total_count: Some(54),
         ..Default::default()
     };
 
@@ -600,12 +600,12 @@ fn test_asset_pinning_metrics() {
 #[test]
 fn test_auction_insights_metrics() {
     let metrics = Metrics {
-        auction_insight_search_absolute_top_impression_percentage: 25.5,
-        auction_insight_search_impression_share: 45.2,
-        auction_insight_search_outranking_share: 60.1,
-        auction_insight_search_overlap_rate: 15.3,
-        auction_insight_search_position_above_rate: 35.8,
-        auction_insight_search_top_impression_percentage: 50.0,
+        auction_insight_search_absolute_top_impression_percentage: Some(25.5),
+        auction_insight_search_impression_share: Some(45.2),
+        auction_insight_search_outranking_share: Some(60.1),
+        auction_insight_search_overlap_rate: Some(15.3),
+        auction_insight_search_position_above_rate: Some(35.8),
+        auction_insight_search_top_impression_percentage: Some(50.0),
         ..Default::default()
     };
 
@@ -644,12 +644,12 @@ fn test_auction_insights_metrics() {
 #[test]
 fn test_specialized_metrics() {
     let metrics = Metrics {
-        average_target_cpa_micros: 5000000,
-        average_target_roas: 3.5,
-        cross_device_conversions_value_micros: 125000000,
-        general_invalid_click_rate: 0.02,
-        general_invalid_clicks: 15,
-        linked_entities_count: 42,
+        average_target_cpa_micros: Some(5000000),
+        average_target_roas: Some(3.5),
+        cross_device_conversions_value_micros: Some(125000000),
+        general_invalid_click_rate: Some(0.02),
+        general_invalid_clicks: Some(15),
+        linked_entities_count: Some(42),
         publisher_organic_clicks: 100,
         publisher_purchased_clicks: 500,
         publisher_unknown_clicks: 25,
@@ -685,8 +685,8 @@ fn test_specialized_metrics() {
 #[test]
 fn test_video_watch_time_metrics() {
     let metrics = Metrics {
-        video_watch_time_duration_millis: 150000,
-        average_video_watch_time_duration_millis: 5000,
+        video_watch_time_duration_millis: Some(150000),
+        average_video_watch_time_duration_millis: Some(5000),
         ..Default::default()
     };
 
@@ -717,8 +717,8 @@ fn test_interaction_event_types() {
     let row = GoogleAdsRowBuilder::new().with_metrics(metrics).build();
 
     let result = row.get("metrics.interaction_event_types");
-    assert!(result.contains("Click"));
-    assert!(result.contains("VideoView"));
+    assert!(result.contains("CLICK"));
+    assert!(result.contains("VIDEO_VIEW"));
 }
 
 // ============================================================================
@@ -728,11 +728,11 @@ fn test_interaction_event_types() {
 #[test]
 fn test_product_segments_categories() {
     let segments = Segments {
-        product_category_level1: "Electronics".to_string(),
-        product_category_level2: "Computers & Accessories".to_string(),
-        product_category_level3: "Laptops".to_string(),
-        product_category_level4: "Gaming Laptops".to_string(),
-        product_category_level5: "High Performance".to_string(),
+        product_category_level1: Some("Electronics".to_string()),
+        product_category_level2: Some("Computers & Accessories".to_string()),
+        product_category_level3: Some("Laptops".to_string()),
+        product_category_level4: Some("Gaming Laptops".to_string()),
+        product_category_level5: Some("High Performance".to_string()),
         ..Default::default()
     };
 
@@ -757,11 +757,11 @@ fn test_product_segments_categories() {
 #[test]
 fn test_product_segments_types() {
     let segments = Segments {
-        product_type_l1: "Apparel".to_string(),
-        product_type_l2: "Men's Clothing".to_string(),
-        product_type_l3: "Jackets".to_string(),
-        product_type_l4: "Winter Jackets".to_string(),
-        product_type_l5: "Down Jackets".to_string(),
+        product_type_l1: Some("Apparel".to_string()),
+        product_type_l2: Some("Men's Clothing".to_string()),
+        product_type_l3: Some("Jackets".to_string()),
+        product_type_l4: Some("Winter Jackets".to_string()),
+        product_type_l5: Some("Down Jackets".to_string()),
         ..Default::default()
     };
 
@@ -779,19 +779,19 @@ fn test_product_segments_attributes() {
     use googleads_rs::google::ads::googleads::v23::enums::product_condition_enum::ProductCondition;
 
     let segments = Segments {
-        product_brand: "Nike".to_string(),
+        product_brand: Some("Nike".to_string()),
         product_condition: ProductCondition::New as i32,
-        product_country: "US".to_string(),
-        product_language: "en".to_string(),
-        product_merchant_id: 123456,
-        product_title: "Nike Air Max Running Shoes".to_string(),
+        product_country: Some("US".to_string()),
+        product_language: Some("en".to_string()),
+        product_merchant_id: Some(123456),
+        product_title: Some("Nike Air Max Running Shoes".to_string()),
         ..Default::default()
     };
 
     let row = GoogleAdsRowBuilder::new().with_segments(segments).build();
 
     assert_eq!(row.get("segments.product_brand"), "Nike");
-    assert_eq!(row.get("segments.product_condition"), "New");
+    assert_eq!(row.get("segments.product_condition"), "NEW");
     assert_eq!(row.get("segments.product_country"), "US");
     assert_eq!(row.get("segments.product_language"), "en");
     assert_eq!(row.get("segments.product_merchant_id"), "123456");
@@ -808,11 +808,11 @@ fn test_product_segments_attributes() {
 #[test]
 fn test_geo_target_segments() {
     let segments = Segments {
-        geo_target_city: "San Francisco".to_string(),
-        geo_target_country: "United States".to_string(),
-        geo_target_state: "California".to_string(),
-        geo_target_postal_code: "94102".to_string(),
-        geo_target_metro: "San Francisco-Oakland-San Jose CA".to_string(),
+        geo_target_city: Some("San Francisco".to_string()),
+        geo_target_country: Some("United States".to_string()),
+        geo_target_state: Some("California".to_string()),
+        geo_target_postal_code: Some("94102".to_string()),
+        geo_target_metro: Some("San Francisco-Oakland-San Jose CA".to_string()),
         ..Default::default()
     };
 
@@ -831,13 +831,13 @@ fn test_geo_target_segments() {
 #[test]
 fn test_geo_target_segments_additional() {
     let segments = Segments {
-        geo_target_airport: "SFO".to_string(),
-        geo_target_canton: "Zurich".to_string(),
-        geo_target_county: "San Francisco County".to_string(),
-        geo_target_district: "Financial District".to_string(),
-        geo_target_province: "Ontario".to_string(),
-        geo_target_region: "West Coast".to_string(),
-        geo_target_most_specific_location: "94102, San Francisco, CA".to_string(),
+        geo_target_airport: Some("SFO".to_string()),
+        geo_target_canton: Some("Zurich".to_string()),
+        geo_target_county: Some("San Francisco County".to_string()),
+        geo_target_district: Some("Financial District".to_string()),
+        geo_target_province: Some("Ontario".to_string()),
+        geo_target_region: Some("West Coast".to_string()),
+        geo_target_most_specific_location: Some("94102, San Francisco, CA".to_string()),
         ..Default::default()
     };
 
@@ -868,9 +868,9 @@ fn test_geo_target_segments_additional() {
 #[test]
 fn test_resource_name_segments() {
     let segments = Segments {
-        campaign: "customers/123/campaigns/456".to_string(),
-        ad_group: "customers/123/adGroups/789".to_string(),
-        asset_group: "customers/123/assetGroups/012".to_string(),
+        campaign: Some("customers/123/campaigns/456".to_string()),
+        ad_group: Some("customers/123/adGroups/789".to_string()),
+        asset_group: Some("customers/123/assetGroups/012".to_string()),
         ..Default::default()
     };
 
@@ -896,20 +896,20 @@ fn test_hotel_segments() {
     use googleads_rs::google::ads::googleads::v23::enums::hotel_rate_type_enum::HotelRateType;
 
     let segments = Segments {
-        hotel_booking_window_days: 14,
-        hotel_center_id: 123456,
-        hotel_check_in_date: "2024-12-25".to_string(),
+        hotel_booking_window_days: Some(14),
+        hotel_center_id: Some(123456),
+        hotel_check_in_date: Some("2024-12-25".to_string()),
         hotel_check_in_day_of_week: DayOfWeek::Wednesday as i32,
-        hotel_city: "San Francisco".to_string(),
-        hotel_class: 4,
-        hotel_country: "US".to_string(),
+        hotel_city: Some("San Francisco".to_string()),
+        hotel_class: Some(4),
+        hotel_country: Some("US".to_string()),
         hotel_date_selection_type: HotelDateSelectionType::DefaultSelection as i32,
-        hotel_length_of_stay: 3,
+        hotel_length_of_stay: Some(3),
         hotel_price_bucket: HotelPriceBucket::LowestUnique as i32,
-        hotel_rate_rule_id: "WEEKEND_SPECIAL".to_string(),
+        hotel_rate_rule_id: Some("WEEKEND_SPECIAL".to_string()),
         hotel_rate_type: HotelRateType::QualifiedRate as i32,
-        hotel_state: "CA".to_string(),
-        partner_hotel_id: "HOTEL_987654".to_string(),
+        hotel_state: Some("CA".to_string()),
+        partner_hotel_id: Some("HOTEL_987654".to_string()),
         ..Default::default()
     };
 
@@ -918,18 +918,18 @@ fn test_hotel_segments() {
     assert_eq!(row.get("segments.hotel_booking_window_days"), "14");
     assert_eq!(row.get("segments.hotel_center_id"), "123456");
     assert_eq!(row.get("segments.hotel_check_in_date"), "2024-12-25");
-    assert_eq!(row.get("segments.hotel_check_in_day_of_week"), "Wednesday");
+    assert_eq!(row.get("segments.hotel_check_in_day_of_week"), "WEDNESDAY");
     assert_eq!(row.get("segments.hotel_city"), "San Francisco");
     assert_eq!(row.get("segments.hotel_class"), "4");
     assert_eq!(row.get("segments.hotel_country"), "US");
     assert_eq!(
         row.get("segments.hotel_date_selection_type"),
-        "DefaultSelection"
+        "DEFAULT_SELECTION"
     );
     assert_eq!(row.get("segments.hotel_length_of_stay"), "3");
-    assert_eq!(row.get("segments.hotel_price_bucket"), "LowestUnique");
+    assert_eq!(row.get("segments.hotel_price_bucket"), "LOWEST_UNIQUE");
     assert_eq!(row.get("segments.hotel_rate_rule_id"), "WEEKEND_SPECIAL");
-    assert_eq!(row.get("segments.hotel_rate_type"), "QualifiedRate");
+    assert_eq!(row.get("segments.hotel_rate_type"), "QUALIFIED_RATE");
     assert_eq!(row.get("segments.hotel_state"), "CA");
     assert_eq!(row.get("segments.partner_hotel_id"), "HOTEL_987654");
 }
@@ -950,13 +950,13 @@ fn test_sk_ad_network_segments() {
         sk_ad_network_ad_event_type: SkAdNetworkAdEventType::Interaction as i32,
         sk_ad_network_attribution_credit: SkAdNetworkAttributionCredit::Won as i32,
         sk_ad_network_coarse_conversion_value: SkAdNetworkCoarseConversionValue::High as i32,
-        sk_ad_network_fine_conversion_value: 42,
-        sk_ad_network_postback_sequence_index: 1,
-        sk_ad_network_redistributed_fine_conversion_value: 40,
-        sk_ad_network_source_domain: "example.com".to_string(),
+        sk_ad_network_fine_conversion_value: Some(42),
+        sk_ad_network_postback_sequence_index: Some(1),
+        sk_ad_network_redistributed_fine_conversion_value: Some(40),
+        sk_ad_network_source_domain: Some("example.com".to_string()),
         sk_ad_network_source_type: SkAdNetworkSourceType::Website as i32,
         sk_ad_network_user_type: SkAdNetworkUserType::NewInstaller as i32,
-        sk_ad_network_version: "4.0".to_string(),
+        sk_ad_network_version: Some("4.0".to_string()),
         ..Default::default()
     };
 
@@ -964,12 +964,12 @@ fn test_sk_ad_network_segments() {
 
     assert_eq!(
         row.get("segments.sk_ad_network_ad_event_type"),
-        "Interaction"
+        "INTERACTION"
     );
-    assert_eq!(row.get("segments.sk_ad_network_attribution_credit"), "Won");
+    assert_eq!(row.get("segments.sk_ad_network_attribution_credit"), "WON");
     assert_eq!(
         row.get("segments.sk_ad_network_coarse_conversion_value"),
-        "High"
+        "HIGH"
     );
     assert_eq!(
         row.get("segments.sk_ad_network_fine_conversion_value"),
@@ -987,7 +987,7 @@ fn test_sk_ad_network_segments() {
         row.get("segments.sk_ad_network_source_domain"),
         "example.com"
     );
-    assert_eq!(row.get("segments.sk_ad_network_source_type"), "Website");
-    assert_eq!(row.get("segments.sk_ad_network_user_type"), "NewInstaller");
+    assert_eq!(row.get("segments.sk_ad_network_source_type"), "WEBSITE");
+    assert_eq!(row.get("segments.sk_ad_network_user_type"), "NEW_INSTALLER");
     assert_eq!(row.get("segments.sk_ad_network_version"), "4.0");
 }

@@ -30,5 +30,5 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Common";
 // A Local Services Document with read only accessible data.
 message LocalServicesDocumentReadOnly {
   // URL to access an already uploaded Local Services document.
- string document_url = 1;
+  optional string document_url = 1;
 }

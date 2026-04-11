@@ -22,7 +22,7 @@ use test_helpers::{GoogleAdsRowBuilder, MetricsBuilder};
 fn test_metrics_average_cart_size() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.average_cart_size = 3.5;
+    metrics_with_field.average_cart_size = Some(3.5);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -35,7 +35,7 @@ fn test_metrics_average_cart_size() {
 fn test_metrics_average_order_value_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.average_order_value_micros = 75500000; // $75.50
+    metrics_with_field.average_order_value_micros = Some(75500000); // $75.50
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -48,7 +48,7 @@ fn test_metrics_average_order_value_micros() {
 fn test_metrics_cost_of_goods_sold_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.cost_of_goods_sold_micros = 12300000; // $12.30
+    metrics_with_field.cost_of_goods_sold_micros = Some(12300000); // $12.30
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -61,7 +61,7 @@ fn test_metrics_cost_of_goods_sold_micros() {
 fn test_metrics_cross_sell_cost_of_goods_sold_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.cross_sell_cost_of_goods_sold_micros = 5400000; // $5.40
+    metrics_with_field.cross_sell_cost_of_goods_sold_micros = Some(5400000); // $5.40
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -77,7 +77,7 @@ fn test_metrics_cross_sell_cost_of_goods_sold_micros() {
 fn test_metrics_cross_sell_gross_profit_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.cross_sell_gross_profit_micros = 8600000; // $8.60
+    metrics_with_field.cross_sell_gross_profit_micros = Some(8600000); // $8.60
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -90,7 +90,7 @@ fn test_metrics_cross_sell_gross_profit_micros() {
 fn test_metrics_cross_sell_revenue_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.cross_sell_revenue_micros = 14000000; // $14.00
+    metrics_with_field.cross_sell_revenue_micros = Some(14000000); // $14.00
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -103,7 +103,7 @@ fn test_metrics_cross_sell_revenue_micros() {
 fn test_metrics_cross_sell_units_sold() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.cross_sell_units_sold = 127.0;
+    metrics_with_field.cross_sell_units_sold = Some(127.0);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -116,7 +116,7 @@ fn test_metrics_cross_sell_units_sold() {
 fn test_metrics_gross_profit_margin() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.gross_profit_margin = 0.42; // 42%
+    metrics_with_field.gross_profit_margin = Some(0.42); // 42%
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -129,7 +129,7 @@ fn test_metrics_gross_profit_margin() {
 fn test_metrics_gross_profit_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.gross_profit_micros = 45000000; // $45.00
+    metrics_with_field.gross_profit_micros = Some(45000000); // $45.00
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -142,7 +142,7 @@ fn test_metrics_gross_profit_micros() {
 fn test_metrics_lead_cost_of_goods_sold_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.lead_cost_of_goods_sold_micros = 3200000; // $3.20
+    metrics_with_field.lead_cost_of_goods_sold_micros = Some(3200000); // $3.20
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -155,7 +155,7 @@ fn test_metrics_lead_cost_of_goods_sold_micros() {
 fn test_metrics_lead_gross_profit_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.lead_gross_profit_micros = 7800000; // $7.80
+    metrics_with_field.lead_gross_profit_micros = Some(7800000); // $7.80
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -168,7 +168,7 @@ fn test_metrics_lead_gross_profit_micros() {
 fn test_metrics_lead_revenue_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.lead_revenue_micros = 11000000; // $11.00
+    metrics_with_field.lead_revenue_micros = Some(11000000); // $11.00
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -181,7 +181,7 @@ fn test_metrics_lead_revenue_micros() {
 fn test_metrics_lead_units_sold() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.lead_units_sold = 89.0;
+    metrics_with_field.lead_units_sold = Some(89.0);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -194,7 +194,7 @@ fn test_metrics_lead_units_sold() {
 fn test_metrics_orders() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.orders = 523.0;
+    metrics_with_field.orders = Some(523.0);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -207,7 +207,7 @@ fn test_metrics_orders() {
 fn test_metrics_revenue_micros() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.revenue_micros = 125000000; // $125.00
+    metrics_with_field.revenue_micros = Some(125000000); // $125.00
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -220,7 +220,7 @@ fn test_metrics_revenue_micros() {
 fn test_metrics_units_sold() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.units_sold = 1247.0;
+    metrics_with_field.units_sold = Some(1247.0);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -237,7 +237,7 @@ fn test_metrics_units_sold() {
 fn test_metrics_all_conversions_from_location_asset_click_to_call() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.all_conversions_from_location_asset_click_to_call = 45.5;
+    metrics_with_field.all_conversions_from_location_asset_click_to_call = Some(45.5);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -253,7 +253,7 @@ fn test_metrics_all_conversions_from_location_asset_click_to_call() {
 fn test_metrics_all_conversions_from_location_asset_directions() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.all_conversions_from_location_asset_directions = 125.3;
+    metrics_with_field.all_conversions_from_location_asset_directions = Some(125.3);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -269,7 +269,7 @@ fn test_metrics_all_conversions_from_location_asset_directions() {
 fn test_metrics_all_conversions_from_location_asset_menu() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.all_conversions_from_location_asset_menu = 32.7;
+    metrics_with_field.all_conversions_from_location_asset_menu = Some(32.7);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -285,7 +285,7 @@ fn test_metrics_all_conversions_from_location_asset_menu() {
 fn test_metrics_all_conversions_from_location_asset_order() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.all_conversions_from_location_asset_order = 78.2;
+    metrics_with_field.all_conversions_from_location_asset_order = Some(78.2);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -301,7 +301,7 @@ fn test_metrics_all_conversions_from_location_asset_order() {
 fn test_metrics_all_conversions_from_location_asset_other_engagement() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.all_conversions_from_location_asset_other_engagement = 15.9;
+    metrics_with_field.all_conversions_from_location_asset_other_engagement = Some(15.9);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -317,7 +317,7 @@ fn test_metrics_all_conversions_from_location_asset_other_engagement() {
 fn test_metrics_all_conversions_from_location_asset_store_visits() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.all_conversions_from_location_asset_store_visits = 234.6;
+    metrics_with_field.all_conversions_from_location_asset_store_visits = Some(234.6);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -333,7 +333,7 @@ fn test_metrics_all_conversions_from_location_asset_store_visits() {
 fn test_metrics_all_conversions_from_location_asset_website() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.all_conversions_from_location_asset_website = 189.4;
+    metrics_with_field.all_conversions_from_location_asset_website = Some(189.4);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -349,7 +349,7 @@ fn test_metrics_all_conversions_from_location_asset_website() {
 fn test_metrics_eligible_impressions_from_location_asset_store_reach() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.eligible_impressions_from_location_asset_store_reach = 50000;
+    metrics_with_field.eligible_impressions_from_location_asset_store_reach = Some(50000);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -365,7 +365,7 @@ fn test_metrics_eligible_impressions_from_location_asset_store_reach() {
 fn test_metrics_view_through_conversions_from_location_asset_click_to_call() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.view_through_conversions_from_location_asset_click_to_call = 12.3;
+    metrics_with_field.view_through_conversions_from_location_asset_click_to_call = Some(12.3);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -381,7 +381,7 @@ fn test_metrics_view_through_conversions_from_location_asset_click_to_call() {
 fn test_metrics_view_through_conversions_from_location_asset_directions() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.view_through_conversions_from_location_asset_directions = 28.7;
+    metrics_with_field.view_through_conversions_from_location_asset_directions = Some(28.7);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -397,7 +397,7 @@ fn test_metrics_view_through_conversions_from_location_asset_directions() {
 fn test_metrics_view_through_conversions_from_location_asset_menu() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.view_through_conversions_from_location_asset_menu = 7.1;
+    metrics_with_field.view_through_conversions_from_location_asset_menu = Some(7.1);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -413,7 +413,7 @@ fn test_metrics_view_through_conversions_from_location_asset_menu() {
 fn test_metrics_view_through_conversions_from_location_asset_order() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.view_through_conversions_from_location_asset_order = 19.5;
+    metrics_with_field.view_through_conversions_from_location_asset_order = Some(19.5);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -429,7 +429,7 @@ fn test_metrics_view_through_conversions_from_location_asset_order() {
 fn test_metrics_view_through_conversions_from_location_asset_other_engagement() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.view_through_conversions_from_location_asset_other_engagement = 4.2;
+    metrics_with_field.view_through_conversions_from_location_asset_other_engagement = Some(4.2);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -445,7 +445,7 @@ fn test_metrics_view_through_conversions_from_location_asset_other_engagement() 
 fn test_metrics_view_through_conversions_from_location_asset_store_visits() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.view_through_conversions_from_location_asset_store_visits = 56.8;
+    metrics_with_field.view_through_conversions_from_location_asset_store_visits = Some(56.8);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -461,7 +461,7 @@ fn test_metrics_view_through_conversions_from_location_asset_store_visits() {
 fn test_metrics_view_through_conversions_from_location_asset_website() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.view_through_conversions_from_location_asset_website = 43.9;
+    metrics_with_field.view_through_conversions_from_location_asset_website = Some(43.9);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -481,7 +481,7 @@ fn test_metrics_view_through_conversions_from_location_asset_website() {
 fn test_metrics_all_new_customer_lifetime_value() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.all_new_customer_lifetime_value = 15678.90;
+    metrics_with_field.all_new_customer_lifetime_value = Some(15678.90);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -497,7 +497,7 @@ fn test_metrics_all_new_customer_lifetime_value() {
 fn test_metrics_new_customer_lifetime_value() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.new_customer_lifetime_value = 12345.67;
+    metrics_with_field.new_customer_lifetime_value = Some(12345.67);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -510,7 +510,7 @@ fn test_metrics_new_customer_lifetime_value() {
 fn test_metrics_average_impression_frequency_per_user() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.average_impression_frequency_per_user = 3.7;
+    metrics_with_field.average_impression_frequency_per_user = Some(3.7);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -526,7 +526,7 @@ fn test_metrics_average_impression_frequency_per_user() {
 fn test_metrics_unique_users() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.unique_users = 125643;
+    metrics_with_field.unique_users = Some(125643);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -543,9 +543,9 @@ fn test_metrics_unique_users() {
 fn test_phase2_zero_values() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.orders = 0.0;
-    metrics_with_field.revenue_micros = 0;
-    metrics_with_field.unique_users = 0;
+    metrics_with_field.orders = Some(0.0);
+    metrics_with_field.revenue_micros = Some(0);
+    metrics_with_field.unique_users = Some(0);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -560,8 +560,8 @@ fn test_phase2_zero_values() {
 fn test_phase2_large_values() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.revenue_micros = 999999999999; // $999,999.99
-    metrics_with_field.unique_users = 9999999;
+    metrics_with_field.revenue_micros = Some(999999999999); // $999,999.99
+    metrics_with_field.unique_users = Some(9999999);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -575,8 +575,8 @@ fn test_phase2_large_values() {
 fn test_phase2_decimal_precision() {
     let metrics = MetricsBuilder::new().build();
     let mut metrics_with_field = metrics;
-    metrics_with_field.gross_profit_margin = 0.123456789;
-    metrics_with_field.average_cart_size = 2.987654321;
+    metrics_with_field.gross_profit_margin = Some(0.123456789);
+    metrics_with_field.average_cart_size = Some(2.987654321);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_field)
@@ -599,10 +599,10 @@ fn test_phase2_combined_with_existing_metrics() {
         .build();
 
     let mut metrics_with_phase2 = metrics;
-    metrics_with_phase2.orders = 20.0;
-    metrics_with_phase2.revenue_micros = 5000000; // $5.00
-    metrics_with_phase2.unique_users = 1500;
-    metrics_with_phase2.all_conversions_from_location_asset_store_visits = 10.2;
+    metrics_with_phase2.orders = Some(20.0);
+    metrics_with_phase2.revenue_micros = Some(5000000); // $5.00
+    metrics_with_phase2.unique_users = Some(1500);
+    metrics_with_phase2.all_conversions_from_location_asset_store_visits = Some(10.2);
 
     let row = GoogleAdsRowBuilder::new()
         .with_metrics(metrics_with_phase2)
@@ -640,11 +640,11 @@ fn test_phase2_metrics_absent_parent() {
     // Create row without metrics
     let row = GoogleAdsRowBuilder::new().build();
 
-    // All Phase 2 metric fields should panic (as they use attr_str! which calls unwrap())
-    // This is expected behavior for non-optional resources
-    let result = std::panic::catch_unwind(|| row.get("metrics.orders"));
-    assert!(
-        result.is_err(),
-        "Expected panic when metrics parent is absent"
+    // Prost-reflect implementation returns empty string for missing resources
+    // This is a more lenient behavior than the previous panic-based approach
+    let result = row.get("metrics.orders");
+    assert_eq!(
+        result, "",
+        "Expected empty string when metrics parent is absent"
     );
 }

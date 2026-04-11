@@ -49,31 +49,31 @@ message PaymentsAccount {
   ];
 
   // Output only. A 16 digit ID used to identify a payments account.
- string payments_account_id = 8
+  optional string payments_account_id = 8
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The name of the payments account.
- string name = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string name = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The currency code of the payments account.
   // A subset of the currency codes derived from the ISO 4217 standard is
   // supported.
- string currency_code = 10
+  optional string currency_code = 10
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. A 12 digit ID used to identify the payments profile associated
   // with the payments account.
- string payments_profile_id = 11
+  optional string payments_profile_id = 11
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. A secondary payments profile ID present in uncommon
   // situations, for example, when a sequential liability agreement has been
   // arranged.
- string secondary_payments_profile_id = 12
+  optional string secondary_payments_profile_id = 12
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Paying manager of this payment account.
- string paying_manager_customer = 13 [
+  optional string paying_manager_customer = 13 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Customer"

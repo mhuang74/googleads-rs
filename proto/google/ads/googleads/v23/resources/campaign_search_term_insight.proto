@@ -53,12 +53,12 @@ message CampaignSearchTermInsight {
 
   // Output only. The label for the search category. An empty string denotes the
   // catch-all category for search terms that didn't fit into another category.
- string category_label = 2
+  optional string category_label = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The ID of the insight.
- int64 id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The ID of the campaign.
- int64 campaign_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 campaign_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

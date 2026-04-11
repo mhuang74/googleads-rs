@@ -49,17 +49,17 @@ message CurrencyConstant {
   ];
 
   // Output only. ISO 4217 three-letter currency code, for example, "USD"
- string code = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string code = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Full English name of the currency.
- string name = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string name = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Standard symbol for describing this currency, for example, '$'
   // for US Dollars.
- string symbol = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string symbol = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The billable unit for this currency. Billed amounts should be
   // multiples of this value.
- int64 billable_unit_micros = 9
+  optional int64 billable_unit_micros = 9
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }

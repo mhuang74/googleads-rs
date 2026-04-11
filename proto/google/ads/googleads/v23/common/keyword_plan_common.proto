@@ -41,7 +41,7 @@ option ruby_package = "Google::Ads::GoogleAds::V23::Common";
 message KeywordPlanHistoricalMetrics {
   // Approximate number of monthly searches on this query, averaged
   // for the past 12 months.
- int64 avg_monthly_searches = 7;
+  optional int64 avg_monthly_searches = 7;
 
   // Approximate number of searches on this query for the past twelve months.
   repeated MonthlySearchVolume monthly_search_volumes = 6;
@@ -55,16 +55,16 @@ message KeywordPlanHistoricalMetrics {
   // The level of competition from 0-100 is determined by the number of ad slots
   // filled divided by the total number of ad slots available. If not enough
   // data is available, null is returned.
- int64 competition_index = 8;
+  optional int64 competition_index = 8;
 
   // Top of page bid low range (20th percentile) in micros for the keyword.
- int64 low_top_of_page_bid_micros = 9;
+  optional int64 low_top_of_page_bid_micros = 9;
 
   // Top of page bid high range (80th percentile) in micros for the keyword.
- int64 high_top_of_page_bid_micros = 10;
+  optional int64 high_top_of_page_bid_micros = 10;
 
   // Average Cost Per Click in micros for the keyword.
- int64 average_cpc_micros = 11;
+  optional int64 average_cpc_micros = 11;
 }
 
 // Historical metrics options.
@@ -74,7 +74,7 @@ message HistoricalMetricsOptions {
   // Search metrics are available for the past 4 years. If the search volume is
   // not available for the entire year_month_range provided, the subset of the
   // year month range for which search volume is available are returned.
- YearMonthRange year_month_range = 1;
+  optional YearMonthRange year_month_range = 1;
 
   // Indicates whether to include average cost per click value.
   // Average CPC is provided only for legacy support.
@@ -84,7 +84,7 @@ message HistoricalMetricsOptions {
 // Monthly search volume.
 message MonthlySearchVolume {
   // The year of the search volume (for example, 2020).
- int64 year = 4;
+  optional int64 year = 4;
 
   // The month of the search volume.
   google.ads.googleads.v23.enums.MonthOfYearEnum.MonthOfYear month = 2;
@@ -92,7 +92,7 @@ message MonthlySearchVolume {
   // Approximate number of searches for the month.
   // A null value indicates the search volume is unavailable for
   // that month.
- int64 monthly_searches = 5;
+  optional int64 monthly_searches = 5;
 }
 
 // The aggregate metrics specification of the request.
@@ -119,7 +119,7 @@ message KeywordPlanDeviceSearches {
   google.ads.googleads.v23.enums.DeviceEnum.Device device = 1;
 
   // The total searches for the device.
- int64 search_count = 2;
+  optional int64 search_count = 2;
 }
 
 // The annotations for the keyword plan keywords.

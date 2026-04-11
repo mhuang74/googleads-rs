@@ -32,11 +32,11 @@ message CustomerLifecycleOptimizationValueSettings {
   // Value of the lifecycle goal. For example, for retention goals, value is the
   // incremental conversion value for lapsed customers who are not of high
   // value.
- double additional_value = 1;
+  optional double additional_value = 1;
 
   // High lifetime value of the lifecycle goal. For example, for customer
   // acquisition goals, high lifetime value is the incremental conversion value
   // for lapsed customers who are of high value. High lifetime value should be
   // greater than value, if set.
- double additional_high_lifetime_value = 2;
+  optional double additional_high_lifetime_value = 2;
 }

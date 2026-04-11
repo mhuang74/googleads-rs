@@ -49,7 +49,7 @@ message CustomerClientLink {
   ];
 
   // Immutable. The client customer linked to this customer.
- string client_customer = 7 [
+  optional string client_customer = 7 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Customer"
@@ -57,7 +57,7 @@ message CustomerClientLink {
   ];
 
   // Output only. This is uniquely identifies a customer client link. Read only.
- int64 manager_link_id = 8
+  optional int64 manager_link_id = 8
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // This is the status of the link between client and manager.
@@ -67,5 +67,5 @@ message CustomerClientLink {
   // The visibility of the link. Users can choose whether or not to see hidden
   // links in the Google Ads UI.
   // Default value is false
- bool hidden = 9;
+  optional bool hidden = 9;
 }

@@ -77,23 +77,23 @@ message CpcBidSimulationPoint {
   int64 required_budget_amount_micros = 17;
 
   // Projected number of biddable conversions.
- double biddable_conversions = 9;
+  optional double biddable_conversions = 9;
 
   // Projected total value of biddable conversions.
- double biddable_conversions_value = 10;
+  optional double biddable_conversions_value = 10;
 
   // Projected number of clicks.
- int64 clicks = 11;
+  optional int64 clicks = 11;
 
   // Projected cost in micros.
- int64 cost_micros = 12;
+  optional int64 cost_micros = 12;
 
   // Projected number of impressions.
- int64 impressions = 13;
+  optional int64 impressions = 13;
 
   // Projected number of top slot impressions.
   // Only search advertising channel type supports this field.
- int64 top_slot_impressions = 14;
+  optional int64 top_slot_impressions = 14;
 
   // When SimulationModificationMethod = UNIFORM or DEFAULT,
   // cpc_bid_micros is set.
@@ -113,16 +113,16 @@ message CpcBidSimulationPoint {
 // Projected metrics for a specific CPV bid amount.
 message CpvBidSimulationPoint {
   // The simulated CPV bid upon which projected metrics are based.
- int64 cpv_bid_micros = 5;
+  optional int64 cpv_bid_micros = 5;
 
   // Projected cost in micros.
- int64 cost_micros = 6;
+  optional int64 cost_micros = 6;
 
   // Projected number of impressions.
- int64 impressions = 7;
+  optional int64 impressions = 7;
 
   // Projected number of views.
- int64 views = 8;
+  optional int64 views = 8;
 }
 
 // Projected metrics for a specific target CPA amount.
@@ -132,10 +132,10 @@ message TargetCpaSimulationPoint {
   int64 required_budget_amount_micros = 19;
 
   // Projected number of biddable conversions.
- double biddable_conversions = 9;
+  optional double biddable_conversions = 9;
 
   // Projected total value of biddable conversions.
- double biddable_conversions_value = 10;
+  optional double biddable_conversions_value = 10;
 
   // Projected number of app installs.
   double app_installs = 15;
@@ -144,21 +144,21 @@ message TargetCpaSimulationPoint {
   double in_app_actions = 16;
 
   // Projected number of clicks.
- int64 clicks = 11;
+  optional int64 clicks = 11;
 
   // Projected cost in micros.
- int64 cost_micros = 12;
+  optional int64 cost_micros = 12;
 
   // Projected number of impressions.
- int64 impressions = 13;
+  optional int64 impressions = 13;
 
   // Projected number of top slot impressions.
   // Only search advertising channel type supports this field.
- int64 top_slot_impressions = 14;
+  optional int64 top_slot_impressions = 14;
 
   // Projected number of interactions.
   // Only discovery advertising channel type supports this field.
- int64 interactions = 20;
+  optional int64 interactions = 20;
 
   // When SimulationModificationMethod = UNIFORM or DEFAULT,
   // target_cpa_micros is set.
@@ -178,30 +178,30 @@ message TargetCpaSimulationPoint {
 // Projected metrics for a specific target ROAS amount.
 message TargetRoasSimulationPoint {
   // The simulated target ROAS upon which projected metrics are based.
- double target_roas = 8;
+  optional double target_roas = 8;
 
   // Projected required daily budget that the advertiser must set in order to
   // receive the estimated traffic, in micros of advertiser currency.
   int64 required_budget_amount_micros = 15;
 
   // Projected number of biddable conversions.
- double biddable_conversions = 9;
+  optional double biddable_conversions = 9;
 
   // Projected total value of biddable conversions.
- double biddable_conversions_value = 10;
+  optional double biddable_conversions_value = 10;
 
   // Projected number of clicks.
- int64 clicks = 11;
+  optional int64 clicks = 11;
 
   // Projected cost in micros.
- int64 cost_micros = 12;
+  optional int64 cost_micros = 12;
 
   // Projected number of impressions.
- int64 impressions = 13;
+  optional int64 impressions = 13;
 
   // Projected number of top slot impressions.
   // Only Search advertising channel type supports this field.
- int64 top_slot_impressions = 14;
+  optional int64 top_slot_impressions = 14;
 }
 
 // Projected metrics for a specific percent CPC amount. Only Hotel advertising
@@ -210,25 +210,25 @@ message PercentCpcBidSimulationPoint {
   // The simulated percent CPC upon which projected metrics are based. Percent
   // CPC expressed as fraction of the advertised price for some good or service.
   // The value stored here is 1,000,000 * [fraction].
- int64 percent_cpc_bid_micros = 1;
+  optional int64 percent_cpc_bid_micros = 1;
 
   // Projected number of biddable conversions.
- double biddable_conversions = 2;
+  optional double biddable_conversions = 2;
 
   // Projected total value of biddable conversions in local currency.
- double biddable_conversions_value = 3;
+  optional double biddable_conversions_value = 3;
 
   // Projected number of clicks.
- int64 clicks = 4;
+  optional int64 clicks = 4;
 
   // Projected cost in micros.
- int64 cost_micros = 5;
+  optional int64 cost_micros = 5;
 
   // Projected number of impressions.
- int64 impressions = 6;
+  optional int64 impressions = 6;
 
   // Projected number of top slot impressions.
- int64 top_slot_impressions = 7;
+  optional int64 top_slot_impressions = 7;
 }
 
 // Projected metrics for a specific budget amount.

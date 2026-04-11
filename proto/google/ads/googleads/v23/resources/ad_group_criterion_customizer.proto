@@ -51,7 +51,7 @@ message AdGroupCriterionCustomizer {
 
   // Immutable. The ad group criterion to which the customizer attribute is
   // linked. It must be a keyword criterion.
- string ad_group_criterion = 2 [
+  optional string ad_group_criterion = 2 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AdGroupCriterion"

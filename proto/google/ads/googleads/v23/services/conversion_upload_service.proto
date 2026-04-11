@@ -111,7 +111,7 @@ message UploadClickConversionsRequest {
   // generate a job ID in the range [2^31, (2^63)-1]. The API will return the
   // value for this request in the `job_id` field of the
   // `UploadClickConversionsResponse`.
- int32 job_id = 6 [(google.api.field_behavior) = OPTIONAL];
+  optional int32 job_id = 6 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response message for
@@ -178,7 +178,7 @@ message UploadCallConversionsResponse {
 // A click conversion.
 message ClickConversion {
   // The Google click ID (gclid) associated with this conversion.
- string gclid = 9;
+  optional string gclid = 9;
 
   // The URL parameter for clicks associated with app conversions.
   string gbraid = 18;
@@ -190,23 +190,23 @@ message ClickConversion {
   // Note: Although this resource name consists of a customer id and a
   // conversion action id, validation will ignore the customer id and use the
   // conversion action id as the sole identifier of the conversion action.
- string conversion_action = 10;
+  optional string conversion_action = 10;
 
   // The date time at which the conversion occurred. Must be after
   // the click time. The timezone must be specified. The format is
   // "yyyy-mm-dd hh:mm:ss+|-hh:mm", for example, "2019-01-01 12:32:45-08:00".
- string conversion_date_time = 11;
+  optional string conversion_date_time = 11;
 
   // The value of the conversion for the advertiser.
- double conversion_value = 12;
+  optional double conversion_value = 12;
 
   // Currency associated with the conversion value. This is the ISO 4217
   // 3-character currency code. For example: USD, EUR.
- string currency_code = 13;
+  optional string currency_code = 13;
 
   // The order ID associated with the conversion. An order id can only be used
   // for one conversion per conversion action.
- string order_id = 14;
+  optional string order_id = 14;
 
   // Additional data about externally attributed conversions. This field
   // is required for conversions with an externally attributed conversion
@@ -248,7 +248,7 @@ message ClickConversion {
   // https://support.google.com/google-ads/answer/2998031 page for more details.
   // This field is only available to allowlisted users. To include this field in
   // conversion imports, upgrade to the Data Manager API.
- string user_ip_address = 27
+  optional string user_ip_address = 27
       [(google.api.field_info).format = IPV4_OR_IPV6];
 
   // The session attributes for the event.
@@ -272,30 +272,30 @@ message ClickConversion {
 message CallConversion {
   // The caller id from which this call was placed. Caller id is expected to be
   // in E.164 format with preceding '+' sign, for example, "+16502531234".
- string caller_id = 7;
+  optional string caller_id = 7;
 
   // The date time at which the call occurred. The timezone must be specified.
   // The format is "yyyy-mm-dd hh:mm:ss+|-hh:mm",
   // for example, "2019-01-01 12:32:45-08:00".
- string call_start_date_time = 8;
+  optional string call_start_date_time = 8;
 
   // Resource name of the conversion action associated with this conversion.
   // Note: Although this resource name consists of a customer id and a
   // conversion action id, validation will ignore the customer id and use the
   // conversion action id as the sole identifier of the conversion action.
- string conversion_action = 9;
+  optional string conversion_action = 9;
 
   // The date time at which the conversion occurred. Must be after the call
   // time. The timezone must be specified. The format is
   // "yyyy-mm-dd hh:mm:ss+|-hh:mm", for example, "2019-01-01 12:32:45-08:00".
- string conversion_date_time = 10;
+  optional string conversion_date_time = 10;
 
   // The value of the conversion for the advertiser.
- double conversion_value = 11;
+  optional double conversion_value = 11;
 
   // Currency associated with the conversion value. This is the ISO 4217
   // 3-character currency code. For example: USD, EUR.
- string currency_code = 12;
+  optional string currency_code = 12;
 
   // The custom variables associated with this conversion.
   repeated CustomVariable custom_variables = 13;
@@ -308,16 +308,16 @@ message CallConversion {
 message ExternalAttributionData {
   // Represents the fraction of the conversion that is attributed to the
   // Google Ads click.
- double external_attribution_credit = 3;
+  optional double external_attribution_credit = 3;
 
   // Specifies the attribution model name.
- string external_attribution_model = 4;
+  optional string external_attribution_model = 4;
 }
 
 // Identifying information for a successfully processed ClickConversion.
 message ClickConversionResult {
   // The Google Click ID (gclid) associated with this conversion.
- string gclid = 4;
+  optional string gclid = 4;
 
   // The URL parameter for clicks associated with app conversions.
   string gbraid = 8;
@@ -326,11 +326,11 @@ message ClickConversionResult {
   string wbraid = 9;
 
   // Resource name of the conversion action associated with this conversion.
- string conversion_action = 5;
+  optional string conversion_action = 5;
 
   // The date time at which the conversion occurred. The format is
   // "yyyy-mm-dd hh:mm:ss+|-hh:mm", for example, "2019-01-01 12:32:45-08:00".
- string conversion_date_time = 6;
+  optional string conversion_date_time = 6;
 
   // The user identifiers associated with this conversion. Only hashed_email and
   // hashed_phone_number are supported for conversion uploads. The maximum
@@ -342,18 +342,18 @@ message ClickConversionResult {
 message CallConversionResult {
   // The caller id from which this call was placed. Caller id is expected to be
   // in E.164 format with preceding '+' sign.
- string caller_id = 5;
+  optional string caller_id = 5;
 
   // The date time at which the call occurred. The format is
   // "yyyy-mm-dd hh:mm:ss+|-hh:mm", for example, "2019-01-01 12:32:45-08:00".
- string call_start_date_time = 6;
+  optional string call_start_date_time = 6;
 
   // Resource name of the conversion action associated with this conversion.
- string conversion_action = 7;
+  optional string conversion_action = 7;
 
   // The date time at which the conversion occurred. The format is
   // "yyyy-mm-dd hh:mm:ss+|-hh:mm", for example, "2019-01-01 12:32:45-08:00".
- string conversion_date_time = 8;
+  optional string conversion_date_time = 8;
 }
 
 // A custom variable.

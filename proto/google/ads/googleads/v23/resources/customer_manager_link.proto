@@ -49,7 +49,7 @@ message CustomerManagerLink {
   ];
 
   // Output only. The manager customer linked to the customer.
- string manager_customer = 6 [
+  optional string manager_customer = 6 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Customer"
@@ -57,7 +57,7 @@ message CustomerManagerLink {
   ];
 
   // Output only. ID of the customer-manager link. This field is read only.
- int64 manager_link_id = 7
+  optional int64 manager_link_id = 7
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Status of the link between the customer and the manager.

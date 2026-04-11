@@ -61,11 +61,11 @@ message AccountBudgetProposal {
   ];
 
   // Output only. The ID of the proposal.
- int64 id = 25 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 25 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. The resource name of the billing setup associated with this
   // proposal.
- string billing_setup = 26 [
+  optional string billing_setup = 26 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/BillingSetup"
@@ -74,7 +74,7 @@ message AccountBudgetProposal {
 
   // Immutable. The resource name of the account-level budget associated with
   // this proposal.
- string account_budget = 27 [
+  optional string account_budget = 27 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/AccountBudget"
@@ -94,28 +94,28 @@ message AccountBudgetProposal {
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. The name to assign to the account-level budget.
- string proposed_name = 28 [(google.api.field_behavior) = IMMUTABLE];
+  optional string proposed_name = 28 [(google.api.field_behavior) = IMMUTABLE];
 
   // Output only. The approved start date time in yyyy-mm-dd hh:mm:ss format.
- string approved_start_date_time = 30
+  optional string approved_start_date_time = 30
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. A purchase order number is a value that enables the user to help
   // them reference this budget in their monthly invoices.
- string proposed_purchase_order_number = 35
+  optional string proposed_purchase_order_number = 35
       [(google.api.field_behavior) = IMMUTABLE];
 
   // Immutable. Notes associated with this budget.
- string proposed_notes = 36 [(google.api.field_behavior) = IMMUTABLE];
+  optional string proposed_notes = 36 [(google.api.field_behavior) = IMMUTABLE];
 
   // Output only. The date time when this account-level budget proposal was
   // created, which is not the same as its approval date time, if applicable.
- string creation_date_time = 37
+  optional string creation_date_time = 37
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The date time when this account-level budget was approved, if
   // applicable.
- string approval_date_time = 38
+  optional string approval_date_time = 38
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The proposed start date time of the account-level budget, which cannot be

@@ -51,7 +51,7 @@ message MediaFile {
   ];
 
   // Output only. The ID of the media file.
- int64 id = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. Type of the media file.
   google.ads.googleads.v23.enums.MediaTypeEnum.MediaType type = 5
@@ -63,14 +63,14 @@ message MediaFile {
 
   // Immutable. The URL of where the original media file was downloaded from (or
   // a file name). Only used for media of type AUDIO and IMAGE.
- string source_url = 13 [(google.api.field_behavior) = IMMUTABLE];
+  optional string source_url = 13 [(google.api.field_behavior) = IMMUTABLE];
 
   // Immutable. The name of the media file. The name can be used by clients to
   // help identify previously uploaded media.
- string name = 14 [(google.api.field_behavior) = IMMUTABLE];
+  optional string name = 14 [(google.api.field_behavior) = IMMUTABLE];
 
   // Output only. The size of the media file in bytes.
- int64 file_size = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 file_size = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The specific type of the media file.
   oneof mediatype {
@@ -92,54 +92,54 @@ message MediaFile {
 // Encapsulates an Image.
 message MediaImage {
   // Immutable. Raw image data.
- bytes data = 4 [(google.api.field_behavior) = IMMUTABLE];
+  optional bytes data = 4 [(google.api.field_behavior) = IMMUTABLE];
 
   // Output only. The url to the full size version of the image.
- string full_size_image_url = 2
+  optional string full_size_image_url = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The url to the preview size version of the image.
- string preview_size_image_url = 3
+  optional string preview_size_image_url = 3
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // Represents a ZIP archive media the content of which contains HTML5 assets.
 message MediaBundle {
   // Immutable. Raw zipped data.
- bytes data = 3 [(google.api.field_behavior) = IMMUTABLE];
+  optional bytes data = 3 [(google.api.field_behavior) = IMMUTABLE];
 
   // Output only. The url to access the uploaded zipped data.
   // For example, https://tpc.googlesyndication.com/simgad/123
   // This field is read-only.
- string url = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string url = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // Encapsulates an Audio.
 message MediaAudio {
   // Output only. The duration of the Audio in milliseconds.
- int64 ad_duration_millis = 2
+  optional int64 ad_duration_millis = 2
       [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
 // Encapsulates a Video.
 message MediaVideo {
   // Output only. The duration of the Video in milliseconds.
- int64 ad_duration_millis = 5
+  optional int64 ad_duration_millis = 5
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Immutable. The YouTube video ID (as seen in YouTube URLs). Adding prefix
   // "https://www.youtube.com/watch?v=" to this ID will get the YouTube
   // streaming URL for this video.
- string youtube_video_id = 6
+  optional string youtube_video_id = 6
       [(google.api.field_behavior) = IMMUTABLE];
 
   // Output only. The Advertising Digital Identification code for this video, as
   // defined by the American Association of Advertising Agencies, used mainly
   // for television commercials.
- string advertising_id_code = 7
+  optional string advertising_id_code = 7
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The Industry Standard Commercial Identifier code for this
   // video, used mainly for television commercials.
- string isci_code = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string isci_code = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

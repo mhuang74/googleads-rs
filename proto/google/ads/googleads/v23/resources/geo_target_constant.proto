@@ -50,17 +50,17 @@ message GeoTargetConstant {
   ];
 
   // Output only. The ID of the geo target constant.
- int64 id = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Geo target constant English name.
- string name = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string name = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The ISO-3166-1 alpha-2 country code that is associated with
   // the target.
- string country_code = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string country_code = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Geo target constant target type.
- string target_type = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional string target_type = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. Geo target constant status.
   google.ads.googleads.v23.enums.GeoTargetConstantStatusEnum
@@ -69,14 +69,14 @@ message GeoTargetConstant {
 
   // Output only. The fully qualified English name, consisting of the target's
   // name and that of its parent and country.
- string canonical_name = 14
+  optional string canonical_name = 14
       [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The resource name of the parent geo target constant.
   // Geo target constant resource names have the form:
   //
   // `geoTargetConstants/{parent_geo_target_constant_id}`
- string parent_geo_target = 9 [
+  optional string parent_geo_target = 9 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/GeoTargetConstant"

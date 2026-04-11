@@ -139,7 +139,7 @@ message ApplyRecommendationOperation {
   message CampaignBudgetParameters {
     // New budget amount to set for target budget resource. This is a required
     // field.
- int64 new_budget_amount_micros = 2;
+    optional int64 new_budget_amount_micros = 2;
   }
 
   // Parameters to use when applying a forecasting set target roas
@@ -148,10 +148,10 @@ message ApplyRecommendationOperation {
     // New target ROAS (revenue per unit of spend) to set for a campaign
     // resource.
     // The value is between 0.01 and 1000.0, inclusive.
- double target_roas = 1;
+    optional double target_roas = 1;
 
     // New campaign budget amount to set for a campaign resource.
- int64 campaign_budget_amount_micros = 2;
+    optional int64 campaign_budget_amount_micros = 2;
   }
 
   // Parameters to use when applying a text ad recommendation.
@@ -164,7 +164,7 @@ message ApplyRecommendationOperation {
   // Parameters to use when applying keyword recommendation.
   message KeywordParameters {
     // The ad group resource to add keyword to. This is a required field.
- string ad_group = 4;
+    optional string ad_group = 4;
 
     // The match type of the keyword. This is a required field.
     google.ads.googleads.v23.enums.KeywordMatchTypeEnum.KeywordMatchType
@@ -172,17 +172,17 @@ message ApplyRecommendationOperation {
 
     // Optional, CPC bid to set for the keyword. If not set, keyword will use
     // bid based on bidding strategy used by target ad group.
- int64 cpc_bid_micros = 5;
+    optional int64 cpc_bid_micros = 5;
   }
 
   // Parameters to use when applying Target CPA recommendation.
   message TargetCpaOptInParameters {
     // Average CPA to use for Target CPA bidding strategy. This is a required
     // field.
- int64 target_cpa_micros = 3;
+    optional int64 target_cpa_micros = 3;
 
     // Optional, budget amount to set for the campaign.
- int64 new_campaign_budget_amount_micros = 4;
+    optional int64 new_campaign_budget_amount_micros = 4;
   }
 
   // Parameters to use when applying a Target ROAS opt-in recommendation.
@@ -190,10 +190,10 @@ message ApplyRecommendationOperation {
     // Average ROAS (revenue per unit of spend) to use for Target ROAS bidding
     // strategy. The value is between 0.01 and 1000.0, inclusive. This is a
     // required field, unless new_campaign_budget_amount_micros is set.
- double target_roas = 1;
+    optional double target_roas = 1;
 
     // Optional, budget amount to set for the campaign.
- int64 new_campaign_budget_amount_micros = 2;
+    optional int64 new_campaign_budget_amount_micros = 2;
   }
 
   // Parameters to use when applying callout extension recommendation.
@@ -286,7 +286,7 @@ message ApplyRecommendationOperation {
   message MoveUnusedBudgetParameters {
     // Budget amount to move from excess budget to constrained budget. This is
     // a required field.
- int64 budget_micros_to_move = 2;
+    optional int64 budget_micros_to_move = 2;
   }
 
   // Parameters to use when applying a responsive search ad asset
@@ -322,16 +322,16 @@ message ApplyRecommendationOperation {
   // Parameters to use when applying a use broad match keyword recommendation.
   message UseBroadMatchKeywordParameters {
     // New budget amount to set for target budget resource.
- int64 new_budget_amount_micros = 1;
+    optional int64 new_budget_amount_micros = 1;
   }
 
   // Parameters to use when applying a set target CPA recommendation.
   message ForecastingSetTargetCpaParameters {
     // Average CPA to use for Target CPA bidding strategy.
- int64 target_cpa_micros = 1;
+    optional int64 target_cpa_micros = 1;
 
     // New campaign budget amount to set for a campaign resource.
- int64 campaign_budget_amount_micros = 2;
+    optional int64 campaign_budget_amount_micros = 2;
   }
 
   // Parameters to use when applying a lead form asset recommendation.
@@ -344,7 +344,7 @@ message ApplyRecommendationOperation {
     // As a result, ads will be shown as lead form creative ads. If false,
     // the "Submit Lead Form" goal will not be set on the campaign and ads will
     // contain lead form assets.
- bool set_submit_lead_form_asset_campaign_goal = 2;
+    optional bool set_submit_lead_form_asset_campaign_goal = 2;
   }
 
   // The resource name of the recommendation to apply.
@@ -516,7 +516,7 @@ message GenerateRecommendationsRequest {
     // CAMPAIGN_BUDGET, MAXIMIZE_CLICKS_OPT_IN, MAXIMIZE_CONVERSIONS_OPT_IN,
     // MAXIMIZE_CONVERSION_VALUE_OPT_IN, SET_TARGET_CPA, SET_TARGET_ROAS,
     // TARGET_CPA_OPT_IN, TARGET_ROAS_OPT_IN
- google.ads.googleads.v23.enums.BiddingStrategyTypeEnum
+    optional google.ads.googleads.v23.enums.BiddingStrategyTypeEnum
         .BiddingStrategyType bidding_strategy_type = 1;
 
     // Optional details related to the bidding_strategy_type.
@@ -545,7 +545,7 @@ message GenerateRecommendationsRequest {
     // This field is necessary for the following recommendation_types if
     // ad_group_info is set:
     // KEYWORD
- google.ads.googleads.v23.enums.AdGroupTypeEnum.AdGroupType
+    optional google.ads.googleads.v23.enums.AdGroupTypeEnum.AdGroupType
         ad_group_type = 1 [(google.api.field_behavior) = OPTIONAL];
 
     // Optional. Current keywords.
@@ -561,7 +561,7 @@ message GenerateRecommendationsRequest {
   // A keyword seed and a specific url to generate keywords from.
   message SeedInfo {
     // A specific url to generate ideas from, for example: www.example.com/cars.
- string url_seed = 2;
+    optional string url_seed = 2;
 
     // Optional. Keywords or phrases to generate ideas from, for example: cars
     // or "car dealership near me".
@@ -574,7 +574,7 @@ message GenerateRecommendationsRequest {
     // This field is necessary for the following recommendation_types if
     // budget_info is set:
     // CAMPAIGN_BUDGET
- int64 current_budget = 1 [(google.api.field_behavior) = REQUIRED];
+    optional int64 current_budget = 1 [(google.api.field_behavior) = REQUIRED];
   }
 
   // Current AssetGroup information of the campaign.
@@ -583,7 +583,7 @@ message GenerateRecommendationsRequest {
     // This field is necessary for the following recommendation_types if
     // asset_group_info is set:
     // CAMPAIGN_BUDGET
- string final_url = 1 [(google.api.field_behavior) = REQUIRED];
+    optional string final_url = 1 [(google.api.field_behavior) = REQUIRED];
 
     // Optional. Current headlines of the asset group.
     // This field is optional for the following recommendation_types if
@@ -603,7 +603,7 @@ message GenerateRecommendationsRequest {
     // Required. The targeted location on the search results page.
     // This is required for campaigns where the AdvertisingChannelType is SEARCH
     // and the bidding strategy type is TARGET_IMPRESSION_SHARE.
- google.ads.googleads.v23.enums.TargetImpressionShareLocationEnum
+    optional google.ads.googleads.v23.enums.TargetImpressionShareLocationEnum
         .TargetImpressionShareLocation location = 1
         [(google.api.field_behavior) = REQUIRED];
 
@@ -611,13 +611,13 @@ message GenerateRecommendationsRequest {
     // example, 1% equals 10,000. It must be a value between 1 and 1,000,000.
     // This is required for campaigns with an AdvertisingChannelType of SEARCH
     // and a bidding strategy type of TARGET_IMPRESSION_SHARE.
- int64 target_impression_share_micros = 2
+    optional int64 target_impression_share_micros = 2
         [(google.api.field_behavior) = REQUIRED];
 
     // Optional. Ceiling of max CPC bids in micros set by automated bidders.
     // This is optional for campaigns with an AdvertisingChannelType of SEARCH
     // and a bidding strategy type of TARGET_IMPRESSION_SHARE.
- int64 max_cpc_bid_ceiling = 3
+    optional int64 max_cpc_bid_ceiling = 3
         [(google.api.field_behavior) = OPTIONAL];
   }
 
@@ -652,7 +652,7 @@ message GenerateRecommendationsRequest {
   // Optional. Number of sitelinks on the campaign.
   // This field is necessary for the following recommendation_types:
   // SITELINK_ASSET
- int32 campaign_sitelink_count = 4
+  optional int32 campaign_sitelink_count = 4
       [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Current conversion tracking status.
@@ -660,7 +660,7 @@ message GenerateRecommendationsRequest {
   // MAXIMIZE_CLICKS_OPT_IN, MAXIMIZE_CONVERSIONS_OPT_IN,
   // MAXIMIZE_CONVERSION_VALUE_OPT_IN, SET_TARGET_CPA, SET_TARGET_ROAS,
   // TARGET_CPA_OPT_IN, TARGET_ROAS_OPT_IN
- google.ads.googleads.v23.enums.ConversionTrackingStatusEnum
+  optional google.ads.googleads.v23.enums.ConversionTrackingStatusEnum
       .ConversionTrackingStatus conversion_tracking_status = 5
       [(google.api.field_behavior) = OPTIONAL];
 
@@ -669,7 +669,7 @@ message GenerateRecommendationsRequest {
   // CAMPAIGN_BUDGET, MAXIMIZE_CLICKS_OPT_IN, MAXIMIZE_CONVERSIONS_OPT_IN,
   // MAXIMIZE_CONVERSION_VALUE_OPT_IN, SET_TARGET_CPA, SET_TARGET_ROAS,
   // TARGET_CPA_OPT_IN, TARGET_ROAS_OPT_IN
- BiddingInfo bidding_info = 6
+  optional BiddingInfo bidding_info = 6
       [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Current AdGroup Information.
@@ -684,23 +684,23 @@ message GenerateRecommendationsRequest {
   // Optional. Seed information for Keywords.
   // This field is necessary for the following recommendation_types:
   // KEYWORD
- SeedInfo seed_info = 8 [(google.api.field_behavior) = OPTIONAL];
+  optional SeedInfo seed_info = 8 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Current budget information.
   // This field is optional for the following recommendation_types:
   // CAMPAIGN_BUDGET
- BudgetInfo budget_info = 9 [(google.api.field_behavior) = OPTIONAL];
+  optional BudgetInfo budget_info = 9 [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Current campaign image asset count.
   // This field is optional for the following recommendation_types:
   // CAMPAIGN_BUDGET
- int32 campaign_image_asset_count = 10
+  optional int32 campaign_image_asset_count = 10
       [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Current campaign call asset count.
   // This field is optional for the following recommendation_types:
   // CAMPAIGN_BUDGET
- int32 campaign_call_asset_count = 11
+  optional int32 campaign_call_asset_count = 11
       [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Current campaign country codes.
@@ -734,13 +734,13 @@ message GenerateRecommendationsRequest {
   // Optional. If true, the campaign is opted into serving ads on the Google
   // Partner Network. This field is optional for the following
   // recommendation_types: CAMPAIGN_BUDGET
- bool target_partner_search_network = 18
+  optional bool target_partner_search_network = 18
       [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. If true, the campaign is opted into serving ads on specified
   // placements in the Google Display Network. This field is optional for the
   // following recommendation_types: CAMPAIGN_BUDGET
- bool target_content_network = 19
+  optional bool target_content_network = 19
       [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Merchant Center account ID.
@@ -750,7 +750,7 @@ message GenerateRecommendationsRequest {
   // instead of standard Performance Max.
   // This field is optional for the following recommendation_types:
   // CAMPAIGN_BUDGET
- int64 merchant_center_account_id = 20
+  optional int64 merchant_center_account_id = 20
       [(google.api.field_behavior) = OPTIONAL];
 
   // Optional. Whether or not this customer should be treated as a "new"
@@ -763,7 +763,7 @@ message GenerateRecommendationsRequest {
   //
   // This field is optional for the following recommendation_types:
   // CAMPAIGN_BUDGET
- bool is_new_customer = 21 [(google.api.field_behavior) = OPTIONAL];
+  optional bool is_new_customer = 21 [(google.api.field_behavior) = OPTIONAL];
 }
 
 // Response message for

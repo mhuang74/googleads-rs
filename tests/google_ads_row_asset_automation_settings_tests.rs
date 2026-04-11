@@ -24,8 +24,8 @@ fn create_asset_automation_setting(
     automation_status: i32,
 ) -> AssetAutomationSetting {
     AssetAutomationSetting {
-        asset_automation_type: automation_type,
-        asset_automation_status: automation_status,
+        asset_automation_type: Some(automation_type),
+        asset_automation_status: Some(automation_status),
     }
 }
 
@@ -58,7 +58,7 @@ fn test_campaign_asset_automation_settings_single_opted_in() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.asset_automation_settings");
 
-    assert_eq!(result, "TextAssetAutomation:OptedIn");
+    assert_eq!(result, "TEXT_ASSET_AUTOMATION:OPTED_IN");
 }
 
 #[test]
@@ -73,7 +73,7 @@ fn test_campaign_asset_automation_settings_single_opted_out() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.asset_automation_settings");
 
-    assert_eq!(result, "GenerateVerticalYoutubeVideos:OptedOut");
+    assert_eq!(result, "GENERATE_VERTICAL_YOUTUBE_VIDEOS:OPTED_OUT");
 }
 
 // ============================================================================
@@ -119,8 +119,8 @@ fn test_campaign_asset_automation_settings_multiple() {
 fn test_campaign_asset_automation_settings_realistic_pmax_campaign() {
     // Realistic Performance Max campaign with multiple automation settings
     let campaign = Campaign {
-        id: 123456,
-        name: "Performance Max Campaign".to_string(),
+        id: Some(123456),
+        name: Some("Performance Max Campaign".to_string()),
         asset_automation_settings: vec![
             create_asset_automation_setting(2, 2), // TEXT_ASSET_AUTOMATION:OPTED_IN
             create_asset_automation_setting(6, 2), // GENERATE_ENHANCED_YOUTUBE_VIDEOS:OPTED_IN
@@ -144,8 +144,8 @@ fn test_campaign_asset_automation_settings_realistic_pmax_campaign() {
     // Verify all are opted in
     for part in &parts {
         assert!(
-            part.ends_with(":OptedIn"),
-            "Part '{}' should end with :OptedIn",
+            part.ends_with(":OPTED_IN"),
+            "Part '{}' should end with :OPTED_IN",
             part
         );
     }
@@ -155,8 +155,8 @@ fn test_campaign_asset_automation_settings_realistic_pmax_campaign() {
 fn test_campaign_asset_automation_settings_realistic_search_campaign() {
     // Realistic Search campaign with selective automation (some opted out)
     let campaign = Campaign {
-        id: 789012,
-        name: "Search Campaign".to_string(),
+        id: Some(789012),
+        name: Some("Search Campaign".to_string()),
         asset_automation_settings: vec![
             create_asset_automation_setting(2, 3), // TEXT_ASSET_AUTOMATION:OPTED_OUT
             create_asset_automation_setting(11, 3), // FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION:OPTED_OUT
@@ -177,8 +177,8 @@ fn test_campaign_asset_automation_settings_realistic_search_campaign() {
     // Verify all are opted out
     for part in &parts {
         assert!(
-            part.ends_with(":OptedOut"),
-            "Part '{}' should end with :OptedOut",
+            part.ends_with(":OPTED_OUT"),
+            "Part '{}' should end with :OPTED_OUT",
             part
         );
     }
@@ -216,7 +216,7 @@ fn test_campaign_asset_automation_settings_all_automation_types() {
 
     // All should be opted in
     for part in &parts {
-        assert!(part.ends_with(":OptedIn"));
+        assert!(part.ends_with(":OPTED_IN"));
     }
 }
 
@@ -236,7 +236,7 @@ fn test_campaign_asset_automation_settings_unspecified_type() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.asset_automation_settings");
 
-    assert_eq!(result, "Unspecified:OptedIn");
+    assert_eq!(result, "UNSPECIFIED:OPTED_IN");
 }
 
 #[test]
@@ -251,7 +251,7 @@ fn test_campaign_asset_automation_settings_unknown_type() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.asset_automation_settings");
 
-    assert_eq!(result, "Unknown:OptedIn");
+    assert_eq!(result, "UNKNOWN:OPTED_IN");
 }
 
 #[test]
@@ -266,7 +266,7 @@ fn test_campaign_asset_automation_settings_unspecified_status() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.asset_automation_settings");
 
-    assert_eq!(result, "TextAssetAutomation:Unspecified");
+    assert_eq!(result, "TEXT_ASSET_AUTOMATION:UNSPECIFIED");
 }
 
 #[test]
@@ -281,7 +281,7 @@ fn test_campaign_asset_automation_settings_unknown_status() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.asset_automation_settings");
 
-    assert_eq!(result, "TextAssetAutomation:Unknown");
+    assert_eq!(result, "TEXT_ASSET_AUTOMATION:UNKNOWN");
 }
 
 #[test]
@@ -295,7 +295,7 @@ fn test_campaign_asset_automation_settings_both_unspecified() {
     let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
     let result = row.get("campaign.asset_automation_settings");
 
-    assert_eq!(result, "Unspecified:Unspecified");
+    assert_eq!(result, "UNSPECIFIED:UNSPECIFIED");
 }
 
 // ============================================================================
@@ -323,8 +323,8 @@ fn test_campaign_asset_automation_settings_mixed_statuses() {
     assert_eq!(parts.len(), 5);
 
     // Count opted in vs opted out
-    let opted_in_count = parts.iter().filter(|p| p.ends_with(":OptedIn")).count();
-    let opted_out_count = parts.iter().filter(|p| p.ends_with(":OptedOut")).count();
+    let opted_in_count = parts.iter().filter(|p| p.ends_with(":OPTED_IN")).count();
+    let opted_out_count = parts.iter().filter(|p| p.ends_with(":OPTED_OUT")).count();
 
     assert_eq!(opted_in_count, 3);
     assert_eq!(opted_out_count, 2);
@@ -373,8 +373,8 @@ fn test_campaign_asset_automation_settings_many_settings() {
 #[test]
 fn test_campaign_asset_automation_settings_with_other_fields() {
     let campaign = Campaign {
-        id: 999888,
-        name: "Multi-field Test Campaign".to_string(),
+        id: Some(999888),
+        name: Some("Multi-field Test Campaign".to_string()),
         status: 2, // ENABLED
         asset_automation_settings: vec![
             create_asset_automation_setting(2, 2),
@@ -388,7 +388,7 @@ fn test_campaign_asset_automation_settings_with_other_fields() {
     // Test multiple fields
     assert_eq!(row.get("campaign.id"), "999888");
     assert_eq!(row.get("campaign.name"), "Multi-field Test Campaign");
-    assert_eq!(row.get("campaign.status"), "Enabled");
+    assert_eq!(row.get("campaign.status"), "ENABLED");
 
     let settings_result = row.get("campaign.asset_automation_settings");
     assert!(settings_result.contains(", "));
@@ -460,9 +460,12 @@ fn test_campaign_asset_automation_settings_campaign_absent() {
     // Create a row without a campaign resource
     let row = GoogleAdsRowBuilder::new().build();
 
-    // Should panic because campaign is required (not optional)
-    // This is expected behavior based on the non-optional macro pattern
-    let result = std::panic::catch_unwind(|| row.get("campaign.asset_automation_settings"));
+    // Prost-reflect implementation returns empty string for missing resources
+    // This is a more lenient behavior than the previous panic-based approach
+    let result = row.get("campaign.asset_automation_settings");
 
-    assert!(result.is_err(), "Should panic when campaign is absent");
+    assert_eq!(
+        result, "",
+        "Should return empty string when campaign is absent"
+    );
 }

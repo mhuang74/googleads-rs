@@ -1,0 +1,8 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 8c7df043cfcf70907a33ad8fd1aa6edde3c89577c12a53326c34529d44de0e69 # shrinks to status = Unspecified
+cc a2909847ce913ed55fd2e1d0e292516f25b6be2b4d298e1c272ca5965e0abb9e # shrinks to field_path = "metrics.average_cpc", impressions = 0, clicks = 0

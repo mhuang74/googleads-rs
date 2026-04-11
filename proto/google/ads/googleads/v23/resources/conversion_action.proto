@@ -65,23 +65,23 @@ message ConversionAction {
     // The value to use when conversion events for this conversion action are
     // sent with an invalid, disallowed or missing value, or when
     // this conversion action is configured to always use the default value.
- double default_value = 4;
+    optional double default_value = 4;
 
     // The currency code to use when conversion events for this conversion
     // action are sent with an invalid or missing currency code, or when this
     // conversion action is configured to always use the default value.
- string default_currency_code = 5;
+    optional string default_currency_code = 5;
 
     // Controls whether the default value and default currency code are used in
     // place of the value and currency code specified in conversion events for
     // this conversion action.
- bool always_use_default_value = 6;
+    optional bool always_use_default_value = 6;
   }
 
   // Settings related to a third party app analytics conversion action.
   message ThirdPartyAppAnalyticsSettings {
     // Output only. The event name of a third-party app analytics conversion.
- string event_name = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+    optional string event_name = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. Name of the third-party app analytics provider.
     string provider_name = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
@@ -90,10 +90,10 @@ message ConversionAction {
   // Settings related to a Firebase conversion action.
   message FirebaseSettings {
     // Output only. The event name of a Firebase conversion.
- string event_name = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+    optional string event_name = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. The Firebase project ID of the conversion.
- string project_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+    optional string project_id = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
 
     // Output only. The GA property ID of the conversion.
     int64 property_id = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
@@ -126,13 +126,13 @@ message ConversionAction {
   ];
 
   // Output only. The ID of the conversion action.
- int64 id = 21 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 id = 21 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The name of the conversion action.
   //
   // This field is required and should not be empty when creating new
   // conversion actions.
- string name = 22;
+  optional string name = 22;
 
   // The status of this conversion action for conversion event accrual.
   google.ads.googleads.v23.enums.ConversionActionStatusEnum
@@ -156,7 +156,7 @@ message ConversionAction {
   // By default, primary_for_goal will be true if not set. In V9,
   // primary_for_goal can only be set to false after creation through an
   // 'update' operation because it's not declared as optional.
- bool primary_for_goal = 31;
+  optional bool primary_for_goal = 31;
 
   // The category of conversions reported for this conversion action.
   google.ads.googleads.v23.enums.ConversionActionCategoryEnum
@@ -164,7 +164,7 @@ message ConversionAction {
 
   // Output only. The resource name of the conversion action owner customer, or
   // null if this is a system-defined conversion action.
- string owner_customer = 23 [
+  optional string owner_customer = 23 [
     (google.api.field_behavior) = OUTPUT_ONLY,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Customer"
@@ -173,15 +173,15 @@ message ConversionAction {
 
   // Whether this conversion action should be included in the "conversions"
   // metric.
- bool include_in_conversions_metric = 24;
+  optional bool include_in_conversions_metric = 24;
 
   // The maximum number of days that may elapse between an interaction
   // (for example, a click) and a conversion event.
- int64 click_through_lookback_window_days = 25;
+  optional int64 click_through_lookback_window_days = 25;
 
   // The maximum number of days which may elapse between an impression and a
   // conversion without an interaction.
- int64 view_through_lookback_window_days = 26;
+  optional int64 view_through_lookback_window_days = 26;
 
   // Settings related to the value for conversion events associated with this
   // conversion action.
@@ -202,10 +202,10 @@ message ConversionAction {
   // reported for this conversion action.
   //
   // The value must be between 0 and 10000, inclusive.
- int64 phone_call_duration_seconds = 27;
+  optional int64 phone_call_duration_seconds = 27;
 
   // App ID for an app conversion action.
- string app_id = 28;
+  optional string app_id = 28;
 
   // Output only. Mobile app vendor for an app conversion action.
   google.ads.googleads.v23.enums.MobileAppVendorEnum.MobileAppVendor

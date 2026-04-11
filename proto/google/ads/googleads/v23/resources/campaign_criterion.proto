@@ -52,7 +52,7 @@ message CampaignCriterion {
   ];
 
   // Immutable. The campaign to which the criterion belongs.
- string campaign = 37 [
+  optional string campaign = 37 [
     (google.api.field_behavior) = IMMUTABLE,
     (google.api.resource_reference) = {
       type: "googleads.googleapis.com/Campaign"
@@ -62,7 +62,7 @@ message CampaignCriterion {
   // Output only. The ID of the criterion.
   //
   // This field is ignored during mutate.
- int64 criterion_id = 38 [(google.api.field_behavior) = OUTPUT_ONLY];
+  optional int64 criterion_id = 38 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Output only. The display name of the criterion.
   //
@@ -72,10 +72,10 @@ message CampaignCriterion {
   // The modifier for the bids when the criterion matches. The modifier must be
   // in the range: 0.1 - 10.0. Most targetable criteria types support modifiers.
   // Use 0 to opt out of a Device type.
- float bid_modifier = 39;
+  optional float bid_modifier = 39;
 
   // Immutable. Whether to target (`false`) or exclude (`true`) the criterion.
- bool negative = 40 [(google.api.field_behavior) = IMMUTABLE];
+  optional bool negative = 40 [(google.api.field_behavior) = IMMUTABLE];
 
   // Output only. The type of the criterion.
   google.ads.googleads.v23.enums.CriterionTypeEnum.CriterionType type = 6
