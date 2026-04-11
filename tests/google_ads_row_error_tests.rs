@@ -412,3 +412,204 @@ fn test_many_different_unimplemented_paths() {
         assert_eq!(row.get(&path), "not implemented by googleads-rs");
     }
 }
+
+// ============================================================================
+// Empty Segment Handling Tests
+// ============================================================================
+
+#[test]
+fn test_empty_segment_trailing_dot() {
+    let campaign = CampaignBuilder::new().id(123).build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
+
+    // Trailing dot creates an empty segment
+    assert_eq!(
+        row.get("campaign.id."),
+        "not implemented by googleads-rs"
+    );
+}
+
+#[test]
+fn test_empty_segment_double_dot() {
+    let campaign = CampaignBuilder::new().id(123).build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
+
+    // Double dot creates an empty segment in the middle
+    assert_eq!(
+        row.get("campaign..id"),
+        "not implemented by googleads-rs"
+    );
+}
+
+#[test]
+fn test_empty_segment_leading_dot() {
+    let campaign = CampaignBuilder::new().id(123).build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
+
+    // Leading dot creates an empty first segment
+    assert_eq!(
+        row.get(".campaign.id"),
+        "not implemented by googleads-rs"
+    );
+}
+
+#[test]
+fn test_empty_segment_multiple_dots() {
+    let campaign = CampaignBuilder::new().id(123).build();
+    let row = GoogleAdsRowBuilder::new().with_campaign(campaign).build();
+
+    // Multiple consecutive dots create multiple empty segments
+    assert_eq!(
+        row.get("campaign...id"),
+        "not implemented by googleads-rs"
+    );
+}
+
+#[test]
+fn test_empty_segment_only_dot() {
+    let row = GoogleAdsRowBuilder::new().build();
+
+    // Just a single dot
+    assert_eq!(
+        row.get("."),
+        "not implemented by googleads-rs"
+    );
+}
+
+#[test]
+fn test_empty_segment_only_dots() {
+    let row = GoogleAdsRowBuilder::new().build();
+
+    // Multiple dots only
+    assert_eq!(
+        row.get("..."),
+        "not implemented by googleads-rs"
+    );
+}
+
+// ============================================================================
+// Responsive Search Ad Special Case Tests
+// ============================================================================
+
+#[test]
+fn test_responsive_search_ad_headlines_special_case() {
+    // This tests the special case in get_field_from_dynamic() for headlines
+    use test_helpers::{AdBuilder, AdGroupAdBuilder};
+
+    let ad = AdBuilder::new()
+        .with_responsive_search_ad(
+            vec!["Headline 1", "Headline 2"],
+            vec!["Description"],
+            None,
+            None,
+        )
+        .build();
+
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
+    let row = GoogleAdsRowBuilder::new()
+        .with_ad_group_ad(ad_group_ad)
+        .build();
+
+    // The special case should extract .text from each headline
+    let result = row.get("ad_group_ad.ad.responsive_search_ad.headlines");
+    assert_eq!(result, "Headline 1, Headline 2");
+}
+
+#[test]
+fn test_responsive_search_ad_descriptions_special_case() {
+    // This tests the special case in get_field_from_dynamic() for descriptions
+    use test_helpers::{AdBuilder, AdGroupAdBuilder};
+
+    let ad = AdBuilder::new()
+        .with_responsive_search_ad(
+            vec!["Headline"],
+            vec!["Description 1", "Description 2", "Description 3"],
+            None,
+            None,
+        )
+        .build();
+
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
+    let row = GoogleAdsRowBuilder::new()
+        .with_ad_group_ad(ad_group_ad)
+        .build();
+
+    // The special case should extract .text from each description
+    let result = row.get("ad_group_ad.ad.responsive_search_ad.descriptions");
+    assert_eq!(result, "Description 1, Description 2, Description 3");
+}
+
+#[test]
+fn test_responsive_search_ad_empty_headlines() {
+    use test_helpers::{AdBuilder, AdGroupAdBuilder};
+
+    let ad = AdBuilder::new()
+        .with_responsive_search_ad(vec![], vec!["Description"], None, None)
+        .build();
+
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
+    let row = GoogleAdsRowBuilder::new()
+        .with_ad_group_ad(ad_group_ad)
+        .build();
+
+    let result = row.get("ad_group_ad.ad.responsive_search_ad.headlines");
+    assert_eq!(result, "");
+}
+
+#[test]
+fn test_responsive_search_ad_empty_descriptions() {
+    use test_helpers::{AdBuilder, AdGroupAdBuilder};
+
+    let ad = AdBuilder::new()
+        .with_responsive_search_ad(vec!["Headline"], vec![], None, None)
+        .build();
+
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
+    let row = GoogleAdsRowBuilder::new()
+        .with_ad_group_ad(ad_group_ad)
+        .build();
+
+    let result = row.get("ad_group_ad.ad.responsive_search_ad.descriptions");
+    assert_eq!(result, "");
+}
+
+#[test]
+fn test_responsive_search_ad_single_headline() {
+    use test_helpers::{AdBuilder, AdGroupAdBuilder};
+
+    let ad = AdBuilder::new()
+        .with_responsive_search_ad(vec!["Only Headline"], vec!["Description"], None, None)
+        .build();
+
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
+    let row = GoogleAdsRowBuilder::new()
+        .with_ad_group_ad(ad_group_ad)
+        .build();
+
+    let result = row.get("ad_group_ad.ad.responsive_search_ad.headlines");
+    assert_eq!(result, "Only Headline");
+}
+
+#[test]
+fn test_responsive_search_ad_headlines_with_special_chars() {
+    use test_helpers::{AdBuilder, AdGroupAdBuilder};
+
+    let ad = AdBuilder::new()
+        .with_responsive_search_ad(
+            vec!["50% Off Sale!", "Buy Now & Save", "Limited \"Time\" Offer"],
+            vec!["Description"],
+            None,
+            None,
+        )
+        .build();
+
+    let ad_group_ad = AdGroupAdBuilder::new().with_ad(ad).build();
+    let row = GoogleAdsRowBuilder::new()
+        .with_ad_group_ad(ad_group_ad)
+        .build();
+
+    let result = row.get("ad_group_ad.ad.responsive_search_ad.headlines");
+    assert!(result.contains("50% Off Sale!"));
+    assert!(result.contains("Buy Now & Save"));
+    assert!(result.contains("Limited \"Time\" Offer"));
+}
