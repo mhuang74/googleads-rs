@@ -75,7 +75,12 @@ fn main() -> Res {
         fs::write(&response_file, &response_content)?;
 
         // Find protoc executable (respects PROTOC env var)
-        let protoc = prost_build::protoc_from_env();
+        let protoc = env::var_os("PROTOC")
+            .map(std::path::PathBuf::from)
+            .or_else(|| which::which("protoc").ok())
+            .unwrap_or_else(|| std::path::PathBuf::from("protoc"));
+
+        info!("Using protoc: {:?}", protoc);
 
         // Build protoc command with response file (@file syntax)
         let status = std::process::Command::new(&protoc)
@@ -84,7 +89,8 @@ fn main() -> Res {
             .arg(format!("--descriptor_set_out={}", descriptor_path.display()))
             .arg("--include_imports")
             .arg(format!("@{}", response_file.display()))
-            .status()?;
+            .status()
+            .map_err(|e| format!("Failed to execute protoc at {:?}: {}", protoc, e))?;
 
         if !status.success() {
             return Err(format!("protoc failed with status: {}", status).into());
