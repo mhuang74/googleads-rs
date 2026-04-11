@@ -86,7 +86,10 @@ fn main() -> Res {
         let status = std::process::Command::new(&protoc)
             .arg("--experimental_allow_proto3_optional")
             .arg(format!("--proto_path={}", proto_path.display()))
-            .arg(format!("--descriptor_set_out={}", descriptor_path.display()))
+            .arg(format!(
+                "--descriptor_set_out={}",
+                descriptor_path.display()
+            ))
             .arg("--include_imports")
             .arg(format!("@{}", response_file.display()))
             .status()
