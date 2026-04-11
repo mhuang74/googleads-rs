@@ -39,18 +39,35 @@ static DESCRIPTOR_POOL: Lazy<DescriptorPool> = Lazy::new(|| {
 const GOOGLE_ADS_ROW_FQN: &str = "google.ads.googleads.v23.services.GoogleAdsRow";
 
 impl google::ads::googleads::v23::services::GoogleAdsRow {
-    /// Returns GoogleAdsRow field value by field name
+    /// Returns a field value from the GoogleAdsRow by its GAQL field path.
+    ///
+    /// This method uses `prost-reflect` to dynamically access any field in the row
+    /// using the same dot-separated paths used in GAQL queries (e.g., `"campaign.id"`,
+    /// `"ad_group.name"`). This eliminates the need to hardcode field accessors for
+    /// each field in the API.
     ///
     /// # Arguments
-    /// * `field_name` - A string slice that holds name of a field in GoogleAdsRow struct
+    /// * `field_name` - A dot-separated field path (e.g., `"campaign.id"`, `"segments.device"`)
+    ///
+    /// # Returns
+    /// The field value formatted as a string. Returns an empty string if the field
+    /// is not set or doesn't exist in the response.
+    ///
+    /// # Performance
+    /// This method encodes the row to protobuf bytes and decodes it as a `DynamicMessage`
+    /// on each call. For retrieving multiple fields from the same row, prefer [`Self::get_many`].
     ///
     /// # Example
     ///
     /// ```ignore
+    /// // After executing a GAQL query like:
+    /// // SELECT campaign.id, campaign.name, campaign.status FROM campaign
+    ///
     /// let field_mask = response.field_mask.unwrap();
     /// for row in response.results {
     ///     for path in &field_mask.paths {
-    ///         print!("{}: {}\t", path, row.get(&path));
+    ///         // path might be "campaign.id", "campaign.name", etc.
+    ///         print!("{}: {}\t", path, row.get(path));
     ///     }
     ///     print!("\n");
     /// }
@@ -69,19 +86,35 @@ impl google::ads::googleads::v23::services::GoogleAdsRow {
         self.get_field_from_dynamic(&dynamic_msg, field_name)
     }
 
-    /// Returns multiple field values efficiently
+    /// Returns multiple field values from the GoogleAdsRow efficiently.
+    ///
+    /// Like [`Self::get`], this uses `prost-reflect` for dynamic field access, but encodes
+    /// the row only once and retrieves all requested fields. This is significantly more
+    /// efficient than calling `get()` multiple times when you need several fields.
     ///
     /// # Arguments
-    /// * `field_names` - A slice of field names to retrieve
+    /// * `field_names` - A slice of dot-separated field paths (e.g., `["campaign.id", "campaign.name"]`)
     ///
-    /// This encodes the GoogleAdsRow once and then walks multiple paths,
-    /// which is more efficient than calling `get()` multiple times.
+    /// # Returns
+    /// A `Vec<String>` containing the field values in the same order as `field_names`.
+    /// Returns empty strings for fields that are not set or don't exist in the response.
+    ///
+    /// # Performance
+    /// Encodes the row to protobuf bytes once and walks all paths in a single pass.
+    /// Preferred over multiple `get()` calls when retrieving 2+ fields.
     ///
     /// # Example
     ///
     /// ```ignore
-    /// let fields = vec!["campaign.id", "campaign.name", "campaign.status"];
-    /// let values = row.get_many(&fields);
+    /// // After executing a GAQL query with multiple selected fields
+    /// let fields = vec!["campaign.id", "campaign.name", "campaign.status", "segments.device"];
+    ///
+    /// for row in response.results {
+    ///     let values = row.get_many(&fields);
+    ///     // values[0] = campaign.id, values[1] = campaign.name, etc.
+    ///     println!("Campaign {} (ID: {}) is {:?} on {:?}",
+    ///         &values[1], &values[0], &values[2], &values[3]);
+    /// }
     /// ```
     pub fn get_many(&self, field_names: &[&str]) -> Vec<String> {
         // Encode the GoogleAdsRow to bytes, then decode as DynamicMessage

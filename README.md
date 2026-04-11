@@ -13,7 +13,7 @@ A gRPC client library for Google Ads API, generated automatically from the API d
 
 I use it for my [mcc-gaql](https://github.com/mhuang74/mcc-gaql-rs) command line tool to run Google Ads Query Language queries across large number of MCC-linked accounts.
 
-There may be more elegant ways to pull query results from GoogleAdsRow in a reflection-like manner. I couldn't figure it out. So I hand-crafted a `GoogleAdsRow.get(path: &str)` accessor method for fields which I need. 
+The `GoogleAdsRow.get(path: &str)` accessor method uses `prost-reflect` for dynamic field access, allowing you to retrieve any field from the protobuf message by its GAQL path without hardcoding match arms for each field. 
 
 ## Example
 
@@ -89,18 +89,38 @@ Run `update.sh` to update the library for a new Google Ads API version:
 ## Build process
 
 * build.rs dynamically scans for available proto files, filters them, and feeds them to tonic to generate `protos.rs` (following strategy by [aquarhead](https://blog.aqd.is/2021/07/rust-protobuf))
+* build.rs also generates a file descriptor set using `prost-reflect`'s `compile_fds()` for runtime reflection
 * lib.rs includes `protos.rs`
-* lib.rs also includes hand-crafted `get()` function
+* lib.rs implements `get()` and `get_many()` using `prost-reflect` for dynamic field access:
 
+```rust
+pub fn get(&self, field_name: &str) -> String {
+    // Encode the GoogleAdsRow to bytes, then decode as DynamicMessage
+    let encoded = self.encode_to_vec();
+
+    let descriptor = DESCRIPTOR_POOL
+        .get_message_by_name(GOOGLE_ADS_ROW_FQN)
+        .expect("GoogleAdsRow descriptor not found");
+
+    let dynamic_msg = DynamicMessage::decode(descriptor, Cursor::new(&encoded))
+        .expect("Failed to decode GoogleAdsRow as DynamicMessage");
+
+    self.get_field_from_dynamic(&dynamic_msg, field_name)
+}
 ```
-    pub fn get(&self, field_name: &str) -> String {
-        match field_name {
-            "ad_group_criterion.criterion_id" => format!("{}", self.ad_group_criterion.as_ref().unwrap().criterion_id),
-            "ad_group_criterion.status" => format!("{}", self.ad_group_criterion.as_ref().unwrap().status()),
-            <snip>
-        }
-    }
-```
+
+The `get()` method uses `prost-reflect` to:
+1. Encode the `GoogleAdsRow` to protobuf bytes
+2. Decode it as a `DynamicMessage` using the descriptor pool loaded at startup
+3. Walk the dotted field path (e.g., `"campaign.id"`) recursively through the message structure
+4. Format the value appropriately (scalars, enums, nested messages, repeated fields)
+
+This approach supports **any field** in the Google Ads API without manual match arms, including:
+- Scalar fields (strings, numbers, booleans)
+- Enum fields (resolved to their name)
+- Nested messages (automatically traversed)
+- Repeated fields (formatted as comma-separated lists)
+- Special cases like `campaign.asset_automation_settings` and `responsive_search_ad` headlines/descriptions
 
 * cargo test may fail due to compilation errors with example code in comment blocks of proto files. enclose them in ignore blocks.
 
