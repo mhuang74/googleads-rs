@@ -28,7 +28,7 @@ tonic-prost-build = "0.14"
 prost-build = "0.14"
 walkdir = "2"
 build-print = "1.0"
-which = "6"
+which = "8"
 
 [dev-dependencies]
 version-sync = "0.9"
