@@ -1,6 +1,6 @@
 [package]
 name = "googleads-rs"
-version = "23.2.0"
+version = "23.3.0"
 authors = ["Michael S. Huang <mhuang74@gmail.com>"]
 edition = "2021"
 license = "Apache-2.0"
