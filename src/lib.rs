@@ -3,8 +3,9 @@
 //! A gRPC client library for Google Ads API, generated automatically from the API definition files.
 //!
 //! Provides `GoogleAdsRow.get(path: &str)` accessor method to easily retrieve fields selected in GAQL.
+//! Also provides `DynamicMutationBuilder` for constructing mutation requests dynamically via reflection.
 //!
-//! # Example
+//! # Example — Reading
 //!
 //! ```ignore
 //! let field_mask = response.field_mask.unwrap();
@@ -15,8 +16,17 @@
 //!     print!("\n");
 //! }
 //! ```
+//!
+//! # Example — Mutating
+//!
+//! ```ignore
+//! let mut builder = DynamicMutationBuilder::new("Campaign", "1234567890");
+//! builder.set_field("target_roas.target_roas", "3.5");
+//! let request = builder.build()?;
+//! client.mutate(request).await?;
+//! ```
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/23.2.0")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/23.2.1")]
 
 #[allow(clippy::all)]
 #[allow(clippy::doc_lazy_continuation)]
@@ -28,13 +38,309 @@ pub use protos::*;
 
 use once_cell::sync::Lazy;
 use prost::Message;
-use prost_reflect::{DescriptorPool, DynamicMessage, ReflectMessage, Value};
+use prost_reflect::{DescriptorPool, DynamicMessage, FieldDescriptor, Kind, ReflectMessage, Value};
 use std::io::Cursor;
 
 static DESCRIPTOR_POOL: Lazy<DescriptorPool> = Lazy::new(|| {
     let bytes = include_bytes!(concat!(env!("OUT_DIR"), "/file_descriptor_set.bin"));
     DescriptorPool::decode(bytes.as_ref()).expect("Failed to decode file descriptor set")
 });
+
+pub fn descriptor_pool() -> &'static DescriptorPool {
+    &DESCRIPTOR_POOL
+}
+
+// ---------------------------------------------------------------------------
+// Mutation types
+// ---------------------------------------------------------------------------
+
+const RESOURCES_FQN_PREFIX: &str = "google.ads.googleads.v23.resources";
+const SERVICES_FQN_PREFIX: &str = "google.ads.googleads.v23.services";
+const MUTATE_OP_FQN: &str = "google.ads.googleads.v23.services.MutateOperation";
+const MUTATE_REQUEST_FQN: &str = "google.ads.googleads.v23.services.MutateGoogleAdsRequest";
+const FIELD_MASK_FQN: &str = "google.protobuf.FieldMask";
+
+#[derive(Debug, Clone)]
+pub struct FieldUpdate {
+    pub field_path: String,
+    pub value: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum MutationOp {
+    Update,
+    Create,
+    Remove,
+}
+
+#[derive(Debug, Clone)]
+pub struct DynamicMutationBuilder {
+    resource_type: String,
+    customer_id: String,
+    operation_type: MutationOp,
+    field_updates: Vec<FieldUpdate>,
+    validate_only: bool,
+    partial_failure: bool,
+}
+
+impl DynamicMutationBuilder {
+    pub fn new(resource_type: &str, customer_id: &str) -> Self {
+        Self {
+            resource_type: resource_type.to_string(),
+            customer_id: customer_id.to_string(),
+            operation_type: MutationOp::Update,
+            field_updates: Vec::new(),
+            validate_only: false,
+            partial_failure: true,
+        }
+    }
+
+    pub fn set_field(&mut self, path: &str, value: &str) -> &mut Self {
+        self.field_updates.push(FieldUpdate {
+            field_path: path.to_string(),
+            value: value.to_string(),
+        });
+        self
+    }
+
+    pub fn operation_type(&mut self, op: MutationOp) -> &mut Self {
+        self.operation_type = op;
+        self
+    }
+
+    pub fn validate_only(&mut self, v: bool) -> &mut Self {
+        self.validate_only = v;
+        self
+    }
+
+    pub fn partial_failure(&mut self, v: bool) -> &mut Self {
+        self.partial_failure = v;
+        self
+    }
+
+    pub fn resource_type(&self) -> &str {
+        &self.resource_type
+    }
+
+    pub fn field_updates(&self) -> &[FieldUpdate] {
+        &self.field_updates
+    }
+
+    pub fn build_operation(&self, resource_name: &str) -> anyhow::Result<DynamicMessage> {
+        let resource_fqn = format!("{}.{}", RESOURCES_FQN_PREFIX, self.resource_type);
+        let resource_desc = DESCRIPTOR_POOL
+            .get_message_by_name(&resource_fqn)
+            .ok_or_else(|| {
+                anyhow::anyhow!("Resource {} not found in descriptor pool", resource_fqn)
+            })?;
+
+        let mut resource = DynamicMessage::new(resource_desc);
+        set_field_path_value(&mut resource, "resource_name", resource_name)?;
+
+        for update in &self.field_updates {
+            set_field_path_value(&mut resource, &update.field_path, &update.value)?;
+        }
+
+        let op_fqn = format!("{}.{}Operation", SERVICES_FQN_PREFIX, self.resource_type);
+        let op_desc = DESCRIPTOR_POOL
+            .get_message_by_name(&op_fqn)
+            .ok_or_else(|| anyhow::anyhow!("Operation {} not found in descriptor pool", op_fqn))?;
+
+        let mut operation = DynamicMessage::new(op_desc);
+
+        match self.operation_type {
+            MutationOp::Update => {
+                operation.set_field_by_name("update", Value::Message(resource));
+                let mask = self.build_field_mask_message()?;
+                operation.set_field_by_name("update_mask", Value::Message(mask));
+            }
+            MutationOp::Create => {
+                operation.set_field_by_name("create", Value::Message(resource));
+            }
+            MutationOp::Remove => {
+                operation.set_field_by_name("remove", Value::String(resource_name.to_string()));
+            }
+        }
+
+        let op_field_name = to_snake_case(&self.resource_type) + "_operation";
+
+        let mutate_op_desc = DESCRIPTOR_POOL
+            .get_message_by_name(MUTATE_OP_FQN)
+            .ok_or_else(|| anyhow::anyhow!("MutateOperation not found in descriptor pool"))?;
+
+        let mut mutate_op = DynamicMessage::new(mutate_op_desc);
+        mutate_op.set_field_by_name(&op_field_name, Value::Message(operation));
+
+        Ok(mutate_op)
+    }
+
+    pub fn build(
+        &self,
+        resource_name: &str,
+    ) -> anyhow::Result<google::ads::googleads::v23::services::MutateGoogleAdsRequest> {
+        let mutate_op = self.build_operation(resource_name)?;
+
+        let request_desc = DESCRIPTOR_POOL
+            .get_message_by_name(MUTATE_REQUEST_FQN)
+            .ok_or_else(|| {
+                anyhow::anyhow!("MutateGoogleAdsRequest not found in descriptor pool")
+            })?;
+
+        let mut request = DynamicMessage::new(request_desc);
+        request.set_field_by_name("customer_id", Value::String(self.customer_id.clone()));
+        request.set_field_by_name(
+            "mutate_operations",
+            Value::List(vec![Value::Message(mutate_op)]),
+        );
+        request.set_field_by_name("partial_failure", Value::Bool(self.partial_failure));
+        request.set_field_by_name("validate_only", Value::Bool(self.validate_only));
+
+        let static_request = request
+            .transcode_to::<google::ads::googleads::v23::services::MutateGoogleAdsRequest>()
+            .map_err(|e| anyhow::anyhow!("Failed to transcode MutateGoogleAdsRequest: {}", e))?;
+
+        Ok(static_request)
+    }
+
+    fn build_field_mask_message(&self) -> anyhow::Result<DynamicMessage> {
+        let desc = DESCRIPTOR_POOL
+            .get_message_by_name(FIELD_MASK_FQN)
+            .ok_or_else(|| anyhow::anyhow!("FieldMask not found in descriptor pool"))?;
+
+        let paths = generate_field_mask(&self.field_updates);
+        let mut mask = DynamicMessage::new(desc);
+        mask.set_field_by_name(
+            "paths",
+            Value::List(paths.into_iter().map(Value::String).collect()),
+        );
+        Ok(mask)
+    }
+}
+
+fn to_snake_case(s: &str) -> String {
+    let mut result = String::with_capacity(s.len() + 4);
+    for (i, c) in s.chars().enumerate() {
+        if c.is_uppercase() && i > 0 {
+            result.push('_');
+        }
+        result.push(c.to_ascii_lowercase());
+    }
+    result
+}
+
+pub fn coerce_value(value_str: &str, field_desc: &FieldDescriptor) -> anyhow::Result<Value> {
+    match field_desc.kind() {
+        Kind::Double => value_str
+            .parse::<f64>()
+            .map(Value::F64)
+            .map_err(|e| anyhow::anyhow!("Failed to parse '{}' as double: {}", value_str, e)),
+        Kind::Float => value_str
+            .parse::<f32>()
+            .map(Value::F32)
+            .map_err(|e| anyhow::anyhow!("Failed to parse '{}' as float: {}", value_str, e)),
+        Kind::Int32 | Kind::Sint32 | Kind::Sfixed32 => value_str
+            .parse::<i32>()
+            .map(Value::I32)
+            .map_err(|e| anyhow::anyhow!("Failed to parse '{}' as int32: {}", value_str, e)),
+        Kind::Int64 | Kind::Sint64 | Kind::Sfixed64 => value_str
+            .parse::<i64>()
+            .map(Value::I64)
+            .map_err(|e| anyhow::anyhow!("Failed to parse '{}' as int64: {}", value_str, e)),
+        Kind::Uint32 | Kind::Fixed32 => value_str
+            .parse::<u32>()
+            .map(Value::U32)
+            .map_err(|e| anyhow::anyhow!("Failed to parse '{}' as uint32: {}", value_str, e)),
+        Kind::Uint64 | Kind::Fixed64 => value_str
+            .parse::<u64>()
+            .map(Value::U64)
+            .map_err(|e| anyhow::anyhow!("Failed to parse '{}' as uint64: {}", value_str, e)),
+        Kind::Bool => value_str
+            .parse::<bool>()
+            .map(Value::Bool)
+            .map_err(|e| anyhow::anyhow!("Failed to parse '{}' as bool: {}", value_str, e)),
+        Kind::String => Ok(Value::String(value_str.to_string())),
+        Kind::Enum(enum_desc) => {
+            if let Some(ev) = enum_desc.get_value_by_name(value_str) {
+                Ok(Value::EnumNumber(ev.number()))
+            } else {
+                value_str
+                    .parse::<i32>()
+                    .map(Value::EnumNumber)
+                    .map_err(|e| {
+                        anyhow::anyhow!(
+                            "Failed to parse '{}' as enum name or number: {}",
+                            value_str,
+                            e
+                        )
+                    })
+            }
+        }
+        _ => Err(anyhow::anyhow!(
+            "Cannot coerce value to type {:?}",
+            field_desc.kind()
+        )),
+    }
+}
+
+pub fn set_field_path_value(
+    msg: &mut DynamicMessage,
+    field_path: &str,
+    value_str: &str,
+) -> anyhow::Result<()> {
+    let segments: Vec<&str> = field_path.split('.').collect();
+    if segments.is_empty() {
+        return Err(anyhow::anyhow!("Empty field path"));
+    }
+    set_field_path_recursive(msg, &segments, value_str)
+}
+
+fn set_field_path_recursive(
+    msg: &mut DynamicMessage,
+    segments: &[&str],
+    value_str: &str,
+) -> anyhow::Result<()> {
+    let segment = segments[0];
+    let remaining = &segments[1..];
+
+    let field_desc = msg.descriptor().get_field_by_name(segment).ok_or_else(|| {
+        anyhow::anyhow!(
+            "Field '{}' not found on {}",
+            segment,
+            msg.descriptor().full_name()
+        )
+    })?;
+
+    if remaining.is_empty() {
+        let value = coerce_value(value_str, &field_desc)?;
+        msg.set_field(&field_desc, value);
+        Ok(())
+    } else {
+        match field_desc.kind() {
+            Kind::Message(nested_desc) => {
+                let mut nested = if msg.has_field(&field_desc) {
+                    match &*msg.get_field(&field_desc) {
+                        Value::Message(existing) => existing.clone(),
+                        _ => DynamicMessage::new(nested_desc.clone()),
+                    }
+                } else {
+                    DynamicMessage::new(nested_desc.clone())
+                };
+                set_field_path_recursive(&mut nested, remaining, value_str)?;
+                msg.set_field(&field_desc, Value::Message(nested));
+                Ok(())
+            }
+            _ => Err(anyhow::anyhow!(
+                "Cannot traverse into non-message field '{}' of type {:?}",
+                segment,
+                field_desc.kind()
+            )),
+        }
+    }
+}
+
+pub fn generate_field_mask(field_updates: &[FieldUpdate]) -> Vec<String> {
+    field_updates.iter().map(|u| u.field_path.clone()).collect()
+}
 
 const GOOGLE_ADS_ROW_FQN: &str = "google.ads.googleads.v23.services.GoogleAdsRow";
 

@@ -170,11 +170,8 @@ proptest! {
                 result.parse::<i64>().expect("Should be valid i64");
             },
             // Optional fields that aren't set return empty string
-            "metrics.average_cpc" | "metrics.average_cpm" | "metrics.conversions" | "metrics.conversions_value" => {
-                // Empty string for unset optional fields, or parseable f64 if set
-                if !result.is_empty() {
-                    result.parse::<f64>().expect("Should be valid f64 if set");
-                }
+            "metrics.average_cpc" | "metrics.average_cpm" | "metrics.conversions" | "metrics.conversions_value" if !result.is_empty() => {
+                result.parse::<f64>().expect("Should be valid f64 if set");
             },
             _ => {},
         }

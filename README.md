@@ -7,14 +7,14 @@
 [![api-docs](https://docs.rs/googleads-rs/badge.svg)](https://docs.rs/googleads-rs)
 
 
-Current Version 23.2.0 uses [Google Ads API v23.2](https://developers.google.com/google-ads/api/docs/release-notes)
+Current Version 23.2.1 uses [Google Ads API v23.2](https://developers.google.com/google-ads/api/docs/release-notes)
 
 ---
 
 > **Versioning Convention**
 >
 > The crate version directly corresponds to the Google Ads API version it supports.
-> - **major.minor** = Google Ads API version (e.g., `23.2.0` → API v23.2)
+> - **major.minor** = Google Ads API version (e.g., `23.2.1` → API v23.2)
 > - **patch** = bug fixes and library updates
 >
 > This eliminates the mental friction of mapping between the `googleads-rs` version and the Google Ads API version.
