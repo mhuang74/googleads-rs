@@ -1,0 +1,12 @@
+name: Install pinned protoc
+description: Install protoc 25.3 from GitHub releases (single source of truth for the pinned version).
+
+runs:
+  using: composite
+  steps:
+    - name: Install pinned protoc (25.3)
+      shell: bash
+      run: |
+        curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
+        sudo unzip -q /tmp/protoc.zip -d /usr/local
+        protoc --version

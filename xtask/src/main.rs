@@ -3,8 +3,8 @@
 //! Zero external dependencies; shells out to cargo via `std::process::Command`.
 //! Run as `cargo xtask <subcommand>` (see `.cargo/config.toml` alias).
 //!
-//! Subcommands: `fmt`, `check`, `test`, `clippy`, and the aggregate `validate`
-//! that runs all four, fail-fast.
+//! Subcommands: `fmt`, `check`, `test`, `clippy`, `check-workflows`, and the
+//! aggregate `validate` that runs all five, fail-fast.
 
 use std::env;
 use std::process::{Command, ExitCode};
@@ -14,7 +14,7 @@ fn repo_root() -> &'static str {
     env!("CARGO_MANIFEST_DIR").trim_end_matches("/xtask")
 }
 
-const USAGE: &str = "usage: cargo xtask <fmt|check|test|clippy|validate>";
+const USAGE: &str = "usage: cargo xtask <fmt|check|test|clippy|check-workflows|validate>";
 
 fn main() -> ExitCode {
     let subcommand = match env::args().nth(1) {
@@ -23,14 +23,14 @@ fn main() -> ExitCode {
     };
 
     let subcommand: &str = &subcommand;
-    let checks: &[&str] = match subcommand {
-        "fmt" | "check" | "test" | "clippy" => std::slice::from_ref(&subcommand),
-        "validate" => &["fmt", "check", "test", "clippy"],
+    let checks: Vec<&str> = match subcommand {
+        "fmt" | "check" | "test" | "clippy" => vec![subcommand],
+        "check-workflows" => vec!["check-workflows"],
+        "validate" => vec!["fmt", "check", "test", "clippy", "check-workflows"],
         _ => return usage_failure(),
     };
-
-    // Fail-fast: the first failing check stops with cargo's own exit code.
-    for check in checks {
+    // Fail-fast: the first failing check stops with its own exit code.
+    for check in &checks {
         let code = run_check(check);
         if code != 0 {
             return ExitCode::from(u8::try_from(code).unwrap_or(1));
@@ -64,6 +64,17 @@ fn run_check(check: &str) -> i32 {
         "clippy" => {
             println!("Running: clippy");
             command.args(["clippy", "--all-targets", "--all-features", "--", "-D", "warnings"]);
+        }
+        "check-workflows" => {
+            println!("Running: check-workflows");
+            let script = format!("{}/xtask/scripts/check-workflows.py", repo_root());
+            match Command::new("python3").arg(script).current_dir(repo_root()).status() {
+                Ok(status) => return status.code().unwrap_or(1),
+                Err(error) => {
+                    eprintln!("error: failed to spawn python3: {error}");
+                    return 1;
+                }
+            }
         }
         other => {
             eprintln!("{USAGE}");

@@ -14,12 +14,6 @@ best_effort() {
   "$@" || echo "Warning: best_effort step failed (continuing): $*" >&2
 }
 
-# In-place sed (GNU sed; Linux-only script)
-# Usage: sed_inplace 'pattern' file [file2 ...]
-sed_inplace() {
-  sed -i "$@"
-}
-
 if [ -z "${1:-}" ]; then
   echo "Error: must supply Google Ads API version, e.g., 'v17'"
   exit 1
@@ -164,8 +158,8 @@ mv "$STAGE_DIR" proto
 find proto -type f -not -name '*.proto' -delete
 
 # Remove comments from 2 proto files to avoid doc test errors
-best_effort sed_inplace -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
-best_effort sed_inplace -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
+best_effort sed -i -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
+best_effort sed -i -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
 
 # Remove extra proto-e files
 best_effort find proto -type f -name '*.proto-e' -delete
@@ -179,19 +173,19 @@ best_effort rm -rf googleapis-master master.zip
 # line in src/lib.rs; no other library or test source carries a version
 # literal. build.rs derives everything from Cargo.toml.
 # The single hand-edit anchor: repoint the alias at the new generated module.
-sed_inplace "s/googleads::$CURRENT_API_VERSION/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
+sed -i "s/googleads::$CURRENT_API_VERSION/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
 
 # Crate version bump (patch resets on major/minor change by construction above).
-sed_inplace "s/^version = \"${CARGO_VERSION}\"/version = \"${NEW_CARGO_VERSION}\"/" Cargo.toml
+sed -i "s/^version = \"${CARGO_VERSION}\"/version = \"${NEW_CARGO_VERSION}\"/" Cargo.toml
 
 # Doc-root URL carries the full crate version.
-sed_inplace "s|googleads-rs/${CARGO_VERSION}|googleads-rs/${NEW_CARGO_VERSION}|g" src/lib.rs
+sed -i "s|googleads-rs/${CARGO_VERSION}|googleads-rs/${NEW_CARGO_VERSION}|g" src/lib.rs
 
 # README: full crate version, and API major.minor mentions (crate major.minor
 # mirrors the API major.minor, so the new API mention is M.MIN from the new
 # crate version).
-sed_inplace "s/${CARGO_VERSION}/${NEW_CARGO_VERSION}/g" README.md
+sed -i "s/${CARGO_VERSION}/${NEW_CARGO_VERSION}/g" README.md
 NEW_API_MINOR=$(awk -F. '{print $1"."$2}' <<<"$NEW_CARGO_VERSION")
-sed_inplace "s/API v${CARGO_MAJOR}\.${CURR_MINOR}/API v${NEW_API_MINOR}/g" README.md
+sed -i "s/API v${CARGO_MAJOR}\.${CURR_MINOR}/API v${NEW_API_MINOR}/g" README.md
 
 echo "Migration complete: crate ${CARGO_VERSION} -> ${NEW_CARGO_VERSION}, API $GOOGLEADS_API_VERSION"
