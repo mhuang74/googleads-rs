@@ -1,0 +1,98 @@
+name: google-ads-issue-worker
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # every 15 minutes
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find ready-for-agent upgrade issues
+        id: find
+        run: |
+          # Search for open issues labeled ready-for-agent + api upgrade bot
+          ISSUES=$(gh issue list \
+            --label "ready-for-agent" \
+            --label "api upgrade bot" \
+            --state open \
+            --json number,title,body \
+            --jq '.[]')
+
+          if [ -z "${ISSUES}" ]; then
+            echo "No ready-for-agent upgrade issues found"
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Global serialization: check if any upgrade branch OR PR exists
+          EXISTING_BRANCHES=$(gh api repos/{owner}/{repo}/branches --paginate --jq '.[].name' 2>/dev/null | grep '^bot/google-ads-v' || true)
+          EXISTING_PRS=$(gh pr list --search "head:bot/google-ads-v" --state open --json number --jq 'length' 2>/dev/null || echo "0")
+          if [ -n "${EXISTING_BRANCHES}" ] || [ "${EXISTING_PRS}" -gt 0 ]; then
+            echo "Upgrade branch/PR already exists; skipping (global serialization)"
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Take the oldest issue (gh issue list defaults newest-first; sort ascending)
+          ISSUE_NUMBER=$(echo "${ISSUES}" | jq -r '.number' | sort -n | head -1)
+          ISSUE_BODY=$(echo "${ISSUES}" | jq -r "select(.number == ${ISSUE_NUMBER}) | .body")
+
+          # Extract target version from body marker
+          TARGET_VERSION=$(echo "${ISSUE_BODY}" | grep -oE 'google-ads-api-upgrade: v[0-9]+' | grep -oE 'v[0-9]+')
+          if [ -z "${TARGET_VERSION}" ]; then
+            echo "Could not extract target version from issue #${ISSUE_NUMBER} body"
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "issue_number=${ISSUE_NUMBER}" >> $GITHUB_OUTPUT
+          echo "target_version=${TARGET_VERSION}" >> $GITHUB_OUTPUT
+          echo "found=true" >> $GITHUB_OUTPUT
+
+      - name: Claim issue (label swap + branch check)
+        if: steps.find.outputs.found == 'true'
+        run: |
+          ISSUE_NUMBER=${{ steps.find.outputs.issue_number }}
+          TARGET_VERSION=${{ steps.find.outputs.target_version }}
+          BRANCH_NAME="bot/google-ads-${TARGET_VERSION}-issue-${ISSUE_NUMBER}"
+
+          # Retry-via-relabel contract (plan-3 §5.3):
+          # On failure, the human deletes the failed branch/PR, removes 'api-upgrade-failed',
+          # re-adds 'ready-for-agent'. This worker re-claims on the next */15 poll.
+          # The branch check below ensures we never create a duplicate branch — if the
+          # old branch wasn't GC'd, we skip. The upgrade job always starts fresh from main.
+          #
+          # Belt-and-suspenders: check branch doesn't exist before claiming. Combined with
+          # the global serialization check in "Find ready-for-agent upgrade issues", this
+          # serializes concurrent manual dispatches: even if two dispatches race past the
+          # label swap, only one can win the branch check — the loser exits without
+          # dispatching a duplicate upgrade.
+          if gh api repos/{owner}/{repo}/branches/${BRANCH_NAME} --silent 2>/dev/null; then
+            echo "Branch ${BRANCH_NAME} already exists; skipping claim"
+            exit 0
+          fi
+
+          # Label swap: ready-for-agent -> in-progress
+          gh issue edit ${ISSUE_NUMBER} --remove-label ready-for-agent
+          gh issue edit ${ISSUE_NUMBER} --add-label in-progress
+
+          # Post claim comment (plan-3 §4.3: timestamp, target version, dispatched run link)
+          gh issue comment ${ISSUE_NUMBER} \
+            -b "🙋 Issue claimed by worker at $(date -u +%Y-%m-%dT%H:%M:%SZ). Target: ${TARGET_VERSION}. Dispatching upgrade job: ${{ github.server_url }}/${{ github.repository }}/actions/workflows/google-ads-upgrade.yml"
+
+          # Dispatch upgrade job
+          gh workflow run google-ads-upgrade.yml \
+            -f issue=${ISSUE_NUMBER} \
+            -f target_version=${TARGET_VERSION}
+
+          echo "Dispatched upgrade job for issue #${ISSUE_NUMBER}, target ${TARGET_VERSION}"

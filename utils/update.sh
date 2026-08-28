@@ -72,20 +72,26 @@ fi
 
 # ---------------------------------------------------------------------------
 # New crate version (ruled arithmetic):
-#   new major            -> M.0.0
-#   parsed minor > curr  -> M.MIN.0
-#   same major+minor     -> patch + 1   (--force re-run)
-#   unparsable notes     -> keep current minor, warn
+#   new major + parsed minor -> M.MIN.0   (release-notes inference)
+#   new major + unparsable  -> M.0.0
+#   same major, minor > curr -> M.MIN.0
+#   same major+minor       -> patch + 1   (--force re-run)
+#   unparsable notes       -> keep current minor, warn
 # ---------------------------------------------------------------------------
 CURR_MINOR=$(awk -F. '{print $2}' <<<"$CARGO_VERSION")
 CURR_PATCH=$(awk -F. '{print $3}' <<<"$CARGO_VERSION")
 
 if [ -z "$TARGET_MINOR" ]; then
-  NEW_CARGO_VERSION="${TARGET_MAJOR}.${CURR_MINOR}.0"
+  if [ "$TARGET_MAJOR" -gt "$CARGO_MAJOR" ]; then
+    # New major, unparsable notes: start at .0.0
+    NEW_CARGO_VERSION="${TARGET_MAJOR}.0.0"
+  else
+    NEW_CARGO_VERSION="${TARGET_MAJOR}.${CURR_MINOR}.0"
+  fi
 elif [ "$TARGET_MAJOR" -gt "$CARGO_MAJOR" ]; then
-  # Ruled: new major -> M.0.0. The minor inferred from release notes is for a
-  # future release not yet shipped when the major opens; start at .0.
-  NEW_CARGO_VERSION="${TARGET_MAJOR}.0.0"
+  # New major: use the release-notes-inferred minor (issue #64 acceptance:
+  # 23.2.1 -> v24 must produce 24.2.0, not 24.0.0).
+  NEW_CARGO_VERSION="${TARGET_MAJOR}.${TARGET_MINOR}.0"
 elif [ "$TARGET_MINOR" -gt "$CURR_MINOR" ]; then
   NEW_CARGO_VERSION="${TARGET_MAJOR}.${TARGET_MINOR}.0"
 elif [ "$TARGET_MINOR" -eq "$CURR_MINOR" ]; then

@@ -99,6 +99,20 @@ Run `update.sh` to update the library for a new Google Ads API version:
 ```
 
 
+## Protoc
+
+This project pins **protoc 25.3** for reproducible generated code across laptop, CI, and Actions upgrade runs.
+
+Install for laptop parity:
+```
+curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
+sudo unzip -q /tmp/protoc.zip -d /usr/local
+protoc --version  # should print 'libprotoc 25.3'
+```
+
+CI installs the same version; the upgrade job installs it before running `update.sh`.
+
+
 ## Build process
 
 * build.rs dynamically scans for available proto files, filters them, and feeds them to tonic to generate `protos.rs` (following strategy by [aquarhead](https://blog.aqd.is/2021/07/rust-protobuf))

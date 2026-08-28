@@ -13,20 +13,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Install deps
-      run: sudo apt-get -y install protobuf-compiler
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+    - uses: actions/checkout@v4
+    - name: Install pinned protoc (25.3)
+      run: |
+        curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
+        sudo unzip -q /tmp/protoc.zip -d /usr/local
+        protoc --version
+    - name: Install Rust (stable)
+      uses: dtolnay/rust-toolchain@stable
+    - name: Check (xtask)
+      run: cargo xtask check
 
   test-with-coverage:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Install deps
-      run: sudo apt-get -y install protobuf-compiler
+    - name: Install pinned protoc (25.3)
+      run: |
+        curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
+        sudo unzip -q /tmp/protoc.zip -d /usr/local
+        protoc --version
     - name: Install Rust (stable)
       uses: dtolnay/rust-toolchain@stable
     - name: Install cargo-tarpaulin
@@ -50,27 +56,27 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Install deps
-      run: sudo apt-get -y install protobuf-compiler
+    - uses: actions/checkout@v4
+    - name: Install pinned protoc (25.3)
+      run: |
+        curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
+        sudo unzip -q /tmp/protoc.zip -d /usr/local
+        protoc --version
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
       with:
         components: clippy, rustfmt
-    - name: Run clippy
-      run: cargo clippy --all-targets --all-features -- -D warnings
-    - name: Check formatting
-      run: cargo fmt -- --check
+    - name: Format check (xtask)
+      run: cargo xtask fmt
+    - name: Clippy (xtask)
+      run: cargo xtask clippy
 
-  # build-windows:
-  #   runs-on: windows-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Enable long paths
-  #     run: git config --system core.longpaths true
-  #   - name: Install deps
-  #     run: choco install protoc
-  #   - name: Build
-  #     run: cargo build --verbose
-  #   - name: Run tests
-  #     run: cargo test --verbose
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run shellcheck on utils/*.sh
+      uses: ludeeus/action-shellcheck@2.0.0
+      with:
+        severity: warning
+        paths: "utils/*.sh"
