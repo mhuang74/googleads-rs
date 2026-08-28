@@ -36,6 +36,11 @@ mod protos {
 }
 pub use protos::*;
 
+/// Canonical alias for the generated module of the currently supported Google Ads API
+/// major version. The single hand-edit anchor when upgrading: repoint this alias and
+/// migrate call sites, rather than editing versioned paths everywhere.
+pub use google::ads::googleads::v23 as current_gads_version;
+
 use once_cell::sync::Lazy;
 use prost::Message;
 use prost_reflect::{DescriptorPool, DynamicMessage, FieldDescriptor, Kind, ReflectMessage, Value};
