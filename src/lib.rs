@@ -59,29 +59,30 @@ pub fn descriptor_pool() -> &'static DescriptorPool {
 // Mutation types
 // ---------------------------------------------------------------------------
 
-/// Major version of the Google Ads API this crate supports, taken from the
-/// crate's own package version (crate major mirrors API major).
-static GADS_API_MAJOR: Lazy<u32> = Lazy::new(|| env!("CARGO_PKG_VERSION_MAJOR").parse().unwrap());
-
-/// Fully-qualified-name values for the Google Ads API descriptors, derived from
-/// the crate's major version (which mirrors the API major version). No version
-/// literals in library source besides the alias re-export above.
-static RESOURCES_FQN_PREFIX: Lazy<String> =
-    Lazy::new(|| format!("google.ads.googleads.v{}.resources", *GADS_API_MAJOR));
-static SERVICES_FQN_PREFIX: Lazy<String> =
-    Lazy::new(|| format!("google.ads.googleads.v{}.services", *GADS_API_MAJOR));
-static MUTATE_OP_FQN: Lazy<String> = Lazy::new(|| {
-    format!(
-        "google.ads.googleads.v{}.services.MutateOperation",
-        *GADS_API_MAJOR
-    )
-});
-static MUTATE_REQUEST_FQN: Lazy<String> = Lazy::new(|| {
-    format!(
-        "google.ads.googleads.v{}.services.MutateGoogleAdsRequest",
-        *GADS_API_MAJOR
-    )
-});
+/// Fully-qualified-name values for the Google Ads API descriptors, derived at
+/// compile time from the crate's major version (which mirrors the API major
+/// version) via `concat!` + `env!`. No version literals in library source
+/// besides the alias re-export above, and no runtime allocation.
+const RESOURCES_FQN_PREFIX: &str = concat!(
+    "google.ads.googleads.v",
+    env!("CARGO_PKG_VERSION_MAJOR"),
+    ".resources"
+);
+const SERVICES_FQN_PREFIX: &str = concat!(
+    "google.ads.googleads.v",
+    env!("CARGO_PKG_VERSION_MAJOR"),
+    ".services"
+);
+const MUTATE_OP_FQN: &str = concat!(
+    "google.ads.googleads.v",
+    env!("CARGO_PKG_VERSION_MAJOR"),
+    ".services.MutateOperation"
+);
+const MUTATE_REQUEST_FQN: &str = concat!(
+    "google.ads.googleads.v",
+    env!("CARGO_PKG_VERSION_MAJOR"),
+    ".services.MutateGoogleAdsRequest"
+);
 const FIELD_MASK_FQN: &str = "google.protobuf.FieldMask";
 
 #[derive(Debug, Clone)]
@@ -151,7 +152,7 @@ impl DynamicMutationBuilder {
     }
 
     pub fn build_operation(&self, resource_name: &str) -> anyhow::Result<DynamicMessage> {
-        let resource_fqn = format!("{}.{}", *RESOURCES_FQN_PREFIX, self.resource_type);
+        let resource_fqn = format!("{}.{}", RESOURCES_FQN_PREFIX, self.resource_type);
         let resource_desc = DESCRIPTOR_POOL
             .get_message_by_name(&resource_fqn)
             .ok_or_else(|| {
@@ -165,7 +166,7 @@ impl DynamicMutationBuilder {
             set_field_path_value(&mut resource, &update.field_path, &update.value)?;
         }
 
-        let op_fqn = format!("{}.{}Operation", *SERVICES_FQN_PREFIX, self.resource_type);
+        let op_fqn = format!("{}.{}Operation", SERVICES_FQN_PREFIX, self.resource_type);
         let op_desc = DESCRIPTOR_POOL
             .get_message_by_name(&op_fqn)
             .ok_or_else(|| anyhow::anyhow!("Operation {} not found in descriptor pool", op_fqn))?;
@@ -189,7 +190,7 @@ impl DynamicMutationBuilder {
         let op_field_name = to_snake_case(&self.resource_type) + "_operation";
 
         let mutate_op_desc = DESCRIPTOR_POOL
-            .get_message_by_name(&MUTATE_OP_FQN)
+            .get_message_by_name(MUTATE_OP_FQN)
             .ok_or_else(|| anyhow::anyhow!("MutateOperation not found in descriptor pool"))?;
 
         let mut mutate_op = DynamicMessage::new(mutate_op_desc);
@@ -205,7 +206,7 @@ impl DynamicMutationBuilder {
         let mutate_op = self.build_operation(resource_name)?;
 
         let request_desc = DESCRIPTOR_POOL
-            .get_message_by_name(&MUTATE_REQUEST_FQN)
+            .get_message_by_name(MUTATE_REQUEST_FQN)
             .ok_or_else(|| {
                 anyhow::anyhow!("MutateGoogleAdsRequest not found in descriptor pool")
             })?;
@@ -366,12 +367,11 @@ pub fn generate_field_mask(field_updates: &[FieldUpdate]) -> Vec<String> {
     field_updates.iter().map(|u| u.field_path.clone()).collect()
 }
 
-static GOOGLE_ADS_ROW_FQN: Lazy<String> = Lazy::new(|| {
-    format!(
-        "google.ads.googleads.v{}.services.GoogleAdsRow",
-        *GADS_API_MAJOR
-    )
-});
+const GOOGLE_ADS_ROW_FQN: &str = concat!(
+    "google.ads.googleads.v",
+    env!("CARGO_PKG_VERSION_MAJOR"),
+    ".services.GoogleAdsRow"
+);
 
 impl current_gads_version::services::GoogleAdsRow {
     /// Returns a field value from the GoogleAdsRow by its GAQL field path.
@@ -412,7 +412,7 @@ impl current_gads_version::services::GoogleAdsRow {
         let encoded = self.encode_to_vec();
 
         let descriptor = DESCRIPTOR_POOL
-            .get_message_by_name(&GOOGLE_ADS_ROW_FQN)
+            .get_message_by_name(GOOGLE_ADS_ROW_FQN)
             .expect("GoogleAdsRow descriptor not found");
 
         let dynamic_msg = DynamicMessage::decode(descriptor, Cursor::new(&encoded))
@@ -456,7 +456,7 @@ impl current_gads_version::services::GoogleAdsRow {
         let encoded = self.encode_to_vec();
 
         let descriptor = DESCRIPTOR_POOL
-            .get_message_by_name(&GOOGLE_ADS_ROW_FQN)
+            .get_message_by_name(GOOGLE_ADS_ROW_FQN)
             .expect("GoogleAdsRow descriptor not found");
 
         let dynamic_msg = DynamicMessage::decode(descriptor, Cursor::new(&encoded))

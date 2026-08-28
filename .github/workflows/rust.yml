@@ -14,11 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Install pinned protoc (25.3)
-      run: |
-        curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
-        sudo unzip -q /tmp/protoc.zip -d /usr/local
-        protoc --version
+    - uses: ./.github/actions/install-protoc
     - name: Install Rust (stable)
       uses: dtolnay/rust-toolchain@stable
     - name: Check (xtask)
@@ -28,11 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Install pinned protoc (25.3)
-      run: |
-        curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
-        sudo unzip -q /tmp/protoc.zip -d /usr/local
-        protoc --version
+    - uses: ./.github/actions/install-protoc
     - name: Install Rust (stable)
       uses: dtolnay/rust-toolchain@stable
     - name: Install cargo-tarpaulin
@@ -57,11 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Install pinned protoc (25.3)
-      run: |
-        curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
-        sudo unzip -q /tmp/protoc.zip -d /usr/local
-        protoc --version
+    - uses: ./.github/actions/install-protoc
     - name: Install Rust
       uses: dtolnay/rust-toolchain@stable
       with:
