@@ -37,6 +37,23 @@ jobs:
           ISSUE_NUMBER=${{ inputs.issue }}
           TARGET_VERSION=${{ inputs.target_version }}
 
+          # Flip issue labels with bounded retry (3 attempts, 5s backoff).
+          # Exits non-zero if all attempts fail — the Actions run fails visibly
+          # rather than silently leaving the issue wedged at in-progress.
+          flip_to_failed() {
+            local issue=$1 msg=$2
+            for attempt in 1 2 3; do
+              if gh issue edit "${issue}" --remove-label in-progress --add-label api-upgrade-failed \
+                 && gh issue comment "${issue}" -b "${msg}"; then
+                return 0
+              fi
+              echo "flip_to_failed attempt ${attempt}/3 failed; retrying in 5s" >&2
+              sleep 5
+            done
+            echo "❌ Could not flip issue #${issue} to api-upgrade-failed after 3 attempts" >&2
+            return 1
+          }
+
           # Verify issue exists and is labeled in-progress.
           # A transient GitHub API failure here must NOT masquerade as
           # "not in-progress" (it caused run 33216363929 to abort a valid
@@ -57,28 +74,23 @@ jobs:
           if ! echo "${ISSUE_LABELS}" | grep -q 'in-progress'; then
             echo "Issue #${ISSUE_NUMBER} is not in-progress; aborting"
             # Flip to failed so the issue is not stuck (plan-3 §5.3)
-            gh issue edit ${ISSUE_NUMBER} --remove-label in-progress || true
-            gh issue edit ${ISSUE_NUMBER} --add-label api-upgrade-failed || true
-            gh issue comment ${ISSUE_NUMBER} -b "❌ Re-validation failed: issue is not in-progress. Aborting." || true
+            flip_to_failed "${ISSUE_NUMBER}" \
+              "❌ Re-validation failed: issue is not in-progress. Aborting." || exit 1
             exit 1
           fi
 
           # Check no existing branch for this target version + issue
           BRANCH_NAME="bot/google-ads-${TARGET_VERSION}-issue-${ISSUE_NUMBER}"
           if gh api repos/{owner}/{repo}/branches/${BRANCH_NAME} --silent 2>/dev/null; then
-            echo "Branch ${BRANCH_NAME} already exists; aborting"
-            gh issue edit ${ISSUE_NUMBER} --remove-label in-progress 2>/dev/null || true
-            gh issue edit ${ISSUE_NUMBER} --add-label api-upgrade-failed 2>/dev/null || true
-            gh issue comment ${ISSUE_NUMBER} -b "❌ Re-validation failed: branch ${BRANCH_NAME} already exists. Aborting." 2>/dev/null || true
+            flip_to_failed "${ISSUE_NUMBER}" \
+              "❌ Re-validation failed: branch ${BRANCH_NAME} already exists. Aborting." || exit 1
             exit 1
           fi
 
           # Check no existing PR for this branch
           if gh pr list --head ${BRANCH_NAME} --state open --json number --jq 'length' | grep -q '[1-9]'; then
-            echo "PR for ${BRANCH_NAME} already exists; aborting"
-            gh issue edit ${ISSUE_NUMBER} --remove-label in-progress 2>/dev/null || true
-            gh issue edit ${ISSUE_NUMBER} --add-label api-upgrade-failed 2>/dev/null || true
-            gh issue comment ${ISSUE_NUMBER} -b "❌ Re-validation failed: PR for ${BRANCH_NAME} already exists. Aborting." 2>/dev/null || true
+            flip_to_failed "${ISSUE_NUMBER}" \
+              "❌ Re-validation failed: PR for ${BRANCH_NAME} already exists. Aborting." || exit 1
             exit 1
           fi
 
