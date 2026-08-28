@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Exit immediately if a command exits with a non-zero status
-set -e
+# Strict error mode: abort on any unhandled failure, unset variable, or pipe failure.
+set -euo pipefail
 
-# Define a function to handle errors gracefully
-safe_run() {
-  "$@" || echo "Command failed: $*" >&2
+# Cosmetic cleanup step permitted to fail with a warning only.
+# Reserved for non-essential tidying; never use for migration-critical steps.
+best_effort() {
+  "$@" || echo "Warning: best_effort step failed (continuing): $*" >&2
 }
 
 # Cross-platform in-place sed
@@ -18,7 +19,7 @@ sed_inplace() {
   fi
 }
 
-if [ -z "$1" ]; then
+if [ -z "${1:-}" ]; then
   echo "Error: must supply Google Ads API version, e.g., 'v17'"
   exit 1
 fi
@@ -27,7 +28,7 @@ GOOGLEADS_API_VERSION=$1
 # Determine the current Google Ads API version from build.rs
 current_version=$(grep -oE 'googleads\{\}v[0-9]+' build.rs | grep -oE 'v[0-9]+')
 
-if [ "$current_version" == "$GOOGLEADS_API_VERSION" ] && [ "$2" != "--force" ]; then
+if [ "$current_version" == "$GOOGLEADS_API_VERSION" ] && [ "${2:-}" != "--force" ]; then
   echo "Nothing Done. Already at target version $GOOGLEADS_API_VERSION (use --force to update anyway)"
   exit 0
 fi
@@ -56,32 +57,30 @@ mv googleapis-master/google/ads/googleads/$GOOGLEADS_API_VERSION proto/google/ad
 ######################################################################################
 
 # only keep proto files
-safe_run find proto -type f -not -name '*.proto' -delete
+find proto -type f -not -name '*.proto' -delete
 
 # Remove comments from 2 proto files to avoid doc test errors
-safe_run sed_inplace -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
-safe_run sed_inplace -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
+best_effort sed_inplace -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/error_details.proto
+best_effort sed_inplace -e 's;//.*$;;' -e '/\/\*/,/\*\//d' proto/google/rpc/context/attribute_context.proto
 
 # Remove extra proto-e files
-safe_run find proto -type f -name '*.proto-e' -delete
+best_effort find proto -type f -name '*.proto-e' -delete
 
-# Remove orig googleapis files (uncomment if needed)
-safe_run rm -rf googleapis-master master.zip
+# Remove downloaded archive + extracted tree
+best_effort rm -rf googleapis-master master.zip
 
-# Update version references in Rust code
 # Update build.rs
-safe_run sed_inplace "s/googleads{}$current_version/googleads{}$GOOGLEADS_API_VERSION/g" build.rs
-
-# Update src/lib.rs
-safe_run sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
+sed_inplace "s/googleads{}$current_version/googleads{}$GOOGLEADS_API_VERSION/g" build.rs
+sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" src/lib.rs
 
 # Update tests/*.rs
-safe_run sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/*.rs
+sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/*.rs
+
 
 # Update tests/test_helpers/*.rs
-safe_run sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/test_helpers/*.rs
+sed_inplace "s/googleads::$current_version/googleads::$GOOGLEADS_API_VERSION/g" tests/test_helpers/*.rs
 
 # Update README.md
-safe_run sed_inplace "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
+sed_inplace "s/Google Ads API $current_version/Google Ads API $GOOGLEADS_API_VERSION/g" README.md
 
 
