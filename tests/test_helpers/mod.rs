@@ -7,14 +7,14 @@
 #![allow(clippy::needless_update)]
 #![allow(clippy::field_reassign_with_default)]
 
-use googleads_rs::google::ads::googleads::v23::common::{Metrics, Segments};
-use googleads_rs::google::ads::googleads::v23::enums::{
+use googleads_rs::current_gads_version::common::{Metrics, Segments};
+use googleads_rs::current_gads_version::enums::{
     ad_group_status_enum::AdGroupStatus, ad_group_type_enum::AdGroupType,
     advertising_channel_type_enum::AdvertisingChannelType,
     bidding_strategy_type_enum::BiddingStrategyType, campaign_status_enum::CampaignStatus,
     day_of_week_enum::DayOfWeek, device_enum::Device,
 };
-use googleads_rs::google::ads::googleads::v23::resources::{
+use googleads_rs::current_gads_version::resources::{
     AccountBudget, Ad, AdGroup, AdGroupAd, AdGroupAdAssetView, AdGroupAdLabel, AdGroupAsset,
     AdGroupCriterion, AdGroupLabel, Asset, AssetFieldTypeView, AssetGroup, AssetGroupAsset,
     AssetGroupSignal, Audience, BiddingStrategy, Campaign, CampaignAsset, CampaignBudget,
@@ -23,7 +23,7 @@ use googleads_rs::google::ads::googleads::v23::resources::{
     GeographicView, KeywordView, Label, LandingPageView, Recommendation, SearchTermView,
     SharedCriterion, SharedSet, SmartCampaignSearchTermView, UserList,
 };
-use googleads_rs::google::ads::googleads::v23::services::GoogleAdsRow;
+use googleads_rs::current_gads_version::services::GoogleAdsRow;
 
 /// Builder for GoogleAdsRow
 pub struct GoogleAdsRowBuilder {
@@ -746,8 +746,8 @@ impl AdGroupCriterionBuilder {
     }
 
     pub fn with_keyword(mut self, text: &str, match_type: i32) -> Self {
-        use googleads_rs::google::ads::googleads::v23::common::KeywordInfo;
-        use googleads_rs::google::ads::googleads::v23::resources::ad_group_criterion::Criterion;
+        use googleads_rs::current_gads_version::common::KeywordInfo;
+        use googleads_rs::current_gads_version::resources::ad_group_criterion::Criterion;
 
         self.criterion.criterion = Some(Criterion::Keyword(KeywordInfo {
             text: Some(text.to_string()),
@@ -800,8 +800,8 @@ impl CampaignCriterionBuilder {
     }
 
     pub fn with_keyword(mut self, text: &str) -> Self {
-        use googleads_rs::google::ads::googleads::v23::common::KeywordInfo;
-        use googleads_rs::google::ads::googleads::v23::resources::campaign_criterion::Criterion;
+        use googleads_rs::current_gads_version::common::KeywordInfo;
+        use googleads_rs::current_gads_version::resources::campaign_criterion::Criterion;
 
         self.criterion.criterion = Some(Criterion::Keyword(KeywordInfo {
             text: Some(text.to_string()),
@@ -811,8 +811,8 @@ impl CampaignCriterionBuilder {
     }
 
     pub fn with_location(mut self, geo_target_constant: &str) -> Self {
-        use googleads_rs::google::ads::googleads::v23::common::LocationInfo;
-        use googleads_rs::google::ads::googleads::v23::resources::campaign_criterion::Criterion;
+        use googleads_rs::current_gads_version::common::LocationInfo;
+        use googleads_rs::current_gads_version::resources::campaign_criterion::Criterion;
 
         self.criterion.criterion = Some(Criterion::Location(LocationInfo {
             geo_target_constant: Some(geo_target_constant.to_string()),
@@ -863,10 +863,8 @@ impl AdBuilder {
         path1: Option<&str>,
         path2: Option<&str>,
     ) -> Self {
-        use googleads_rs::google::ads::googleads::v23::common::{
-            AdTextAsset, ResponsiveSearchAdInfo,
-        };
-        use googleads_rs::google::ads::googleads::v23::resources::ad::AdData;
+        use googleads_rs::current_gads_version::common::{AdTextAsset, ResponsiveSearchAdInfo};
+        use googleads_rs::current_gads_version::resources::ad::AdData;
 
         let headline_assets: Vec<AdTextAsset> = headlines
             .iter()
@@ -952,7 +950,7 @@ impl CampaignBuilder {
         target_partner: bool,
         target_google_search: bool,
     ) -> Self {
-        use googleads_rs::google::ads::googleads::v23::resources::campaign::NetworkSettings;
+        use googleads_rs::current_gads_version::resources::campaign::NetworkSettings;
 
         self.campaign.network_settings = Some(NetworkSettings {
             target_search_network: Some(target_search),
@@ -970,7 +968,7 @@ impl CampaignBuilder {
         language_code: &str,
         use_supplied_urls_only: bool,
     ) -> Self {
-        use googleads_rs::google::ads::googleads::v23::resources::campaign::DynamicSearchAdsSetting;
+        use googleads_rs::current_gads_version::resources::campaign::DynamicSearchAdsSetting;
 
         self.campaign.dynamic_search_ads_setting = Some(DynamicSearchAdsSetting {
             domain_name: domain_name.to_string(),

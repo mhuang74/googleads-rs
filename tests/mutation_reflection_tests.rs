@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use googleads_rs::google::ads::googleads::v23::{
+use googleads_rs::current_gads_version::{
     resources::Campaign,
     services::{campaign_operation, CampaignOperation, MutateGoogleAdsRequest},
 };
@@ -18,6 +18,18 @@ static POOL: Lazy<DescriptorPool> = Lazy::new(|| {
     DescriptorPool::decode(bytes.as_ref()).expect("Failed to decode file descriptor set")
 });
 
+/// Descriptor FQN prefix for the current Google Ads API version, derived at
+/// compile time from the crate's package version (major mirrors API major).
+macro_rules! gads_fqn {
+    ($rest:expr) => {
+        concat!(
+            "google.ads.googleads.v",
+            env!("CARGO_PKG_VERSION_MAJOR"),
+            $rest
+        )
+    };
+}
+
 // ============================================================================
 // Phase 2.1: DescriptorPool Contains Mutation Types
 // ============================================================================
@@ -25,23 +37,17 @@ static POOL: Lazy<DescriptorPool> = Lazy::new(|| {
 #[test]
 fn test_pool_contains_campaign_resource() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign message not found in pool");
-    assert_eq!(
-        desc.full_name(),
-        "google.ads.googleads.v23.resources.Campaign"
-    );
+    assert_eq!(desc.full_name(), gads_fqn!(".resources.Campaign"));
 }
 
 #[test]
 fn test_pool_contains_campaign_operation() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.CampaignOperation")
+        .get_message_by_name(gads_fqn!(".services.CampaignOperation"))
         .expect("CampaignOperation not found in pool");
-    assert_eq!(
-        desc.full_name(),
-        "google.ads.googleads.v23.services.CampaignOperation"
-    );
+    assert_eq!(desc.full_name(), gads_fqn!(".services.CampaignOperation"));
 
     let update_field = desc
         .get_field_by_name("update")
@@ -53,11 +59,11 @@ fn test_pool_contains_campaign_operation() {
 #[test]
 fn test_pool_contains_mutate_campaigns_request() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.MutateCampaignsRequest")
+        .get_message_by_name(gads_fqn!(".services.MutateCampaignsRequest"))
         .expect("MutateCampaignsRequest not found in pool");
     assert_eq!(
         desc.full_name(),
-        "google.ads.googleads.v23.services.MutateCampaignsRequest"
+        gads_fqn!(".services.MutateCampaignsRequest")
     );
 
     let ops_field = desc
@@ -69,12 +75,9 @@ fn test_pool_contains_mutate_campaigns_request() {
 #[test]
 fn test_pool_contains_mutate_operation_unified() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.MutateOperation")
+        .get_message_by_name(gads_fqn!(".services.MutateOperation"))
         .expect("MutateOperation not found in pool");
-    assert_eq!(
-        desc.full_name(),
-        "google.ads.googleads.v23.services.MutateOperation"
-    );
+    assert_eq!(desc.full_name(), gads_fqn!(".services.MutateOperation"));
 
     let campaign_op_field = desc
         .get_field_by_name("campaign_operation")
@@ -85,12 +88,9 @@ fn test_pool_contains_mutate_operation_unified() {
 #[test]
 fn test_pool_contains_target_roas_message() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas message not found in pool");
-    assert_eq!(
-        desc.full_name(),
-        "google.ads.googleads.v23.common.TargetRoas"
-    );
+    assert_eq!(desc.full_name(), gads_fqn!(".common.TargetRoas"));
 
     let target_roas_field = desc
         .get_field_by_name("target_roas")
@@ -114,7 +114,7 @@ fn test_pool_contains_field_mask() {
 #[test]
 fn test_campaign_has_bidding_strategy_oneof() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let target_roas_field = campaign_desc
@@ -139,12 +139,9 @@ fn test_campaign_has_bidding_strategy_oneof() {
 #[test]
 fn test_pool_contains_service_descriptors() {
     let service = POOL
-        .get_service_by_name("google.ads.googleads.v23.services.CampaignService")
+        .get_service_by_name(gads_fqn!(".services.CampaignService"))
         .expect("CampaignService not found in pool");
-    assert_eq!(
-        service.full_name(),
-        "google.ads.googleads.v23.services.CampaignService"
-    );
+    assert_eq!(service.full_name(), gads_fqn!(".services.CampaignService"));
 
     let methods: Vec<String> = service.methods().map(|m| m.name().to_string()).collect();
     assert!(
@@ -157,7 +154,7 @@ fn test_pool_contains_service_descriptors() {
 #[test]
 fn test_pool_contains_google_ads_service() {
     let service = POOL
-        .get_service_by_name("google.ads.googleads.v23.services.GoogleAdsService")
+        .get_service_by_name(gads_fqn!(".services.GoogleAdsService"))
         .expect("GoogleAdsService not found in pool");
 
     let methods: Vec<String> = service.methods().map(|m| m.name().to_string()).collect();
@@ -175,7 +172,7 @@ fn test_pool_contains_google_ads_service() {
 #[test]
 fn test_dynamic_campaign_construction() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -197,11 +194,11 @@ fn test_dynamic_campaign_construction() {
 #[test]
 fn test_dynamic_nested_message_construction() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let target_roas_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let mut target_roas = DynamicMessage::new(target_roas_desc);
@@ -227,11 +224,11 @@ fn test_dynamic_nested_message_construction() {
 #[test]
 fn test_dynamic_oneof_setting() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let target_roas_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let mut target_roas = DynamicMessage::new(target_roas_desc);
@@ -247,7 +244,7 @@ fn test_dynamic_oneof_setting() {
     );
 
     let max_conv_val_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.MaximizeConversionValue")
+        .get_message_by_name(gads_fqn!(".common.MaximizeConversionValue"))
         .expect("MaximizeConversionValue not found");
     let max_conv_val = DynamicMessage::new(max_conv_val_desc);
 
@@ -269,15 +266,15 @@ fn test_dynamic_oneof_setting() {
 #[test]
 fn test_dynamic_campaign_operation_construction() {
     let operation_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.CampaignOperation")
+        .get_message_by_name(gads_fqn!(".services.CampaignOperation"))
         .expect("CampaignOperation not found");
 
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let target_roas_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let field_mask_desc = POOL
@@ -314,19 +311,19 @@ fn test_dynamic_campaign_operation_construction() {
 #[test]
 fn test_dynamic_mutate_campaigns_request_construction() {
     let request_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.MutateCampaignsRequest")
+        .get_message_by_name(gads_fqn!(".services.MutateCampaignsRequest"))
         .expect("MutateCampaignsRequest not found");
 
     let operation_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.CampaignOperation")
+        .get_message_by_name(gads_fqn!(".services.CampaignOperation"))
         .expect("CampaignOperation not found");
 
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let target_roas_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let field_mask_desc = POOL
@@ -370,11 +367,11 @@ fn test_dynamic_mutate_campaigns_request_construction() {
 #[test]
 fn test_dynamic_campaign_roundtrip_encode_decode() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let target_roas_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let mut target_roas = DynamicMessage::new(target_roas_desc);
@@ -397,15 +394,15 @@ fn test_dynamic_campaign_roundtrip_encode_decode() {
 #[test]
 fn test_dynamic_campaign_operation_roundtrip() {
     let operation_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.CampaignOperation")
+        .get_message_by_name(gads_fqn!(".services.CampaignOperation"))
         .expect("CampaignOperation not found");
 
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let target_roas_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let field_mask_desc = POOL
@@ -453,7 +450,7 @@ fn test_dynamic_campaign_operation_roundtrip() {
 #[test]
 fn test_dynamic_transcode_to_static() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -469,15 +466,15 @@ fn test_dynamic_transcode_to_static() {
 #[test]
 fn test_dynamic_campaign_operation_transcode_to_static() {
     let operation_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.CampaignOperation")
+        .get_message_by_name(gads_fqn!(".services.CampaignOperation"))
         .expect("CampaignOperation not found");
 
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let target_roas_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let field_mask_desc = POOL
@@ -522,7 +519,7 @@ fn test_dynamic_campaign_operation_transcode_to_static() {
 #[test]
 fn test_value_type_mismatch_rejected() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -534,7 +531,7 @@ fn test_value_type_mismatch_rejected() {
 #[test]
 fn test_enum_field_set_by_number() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let status_field = campaign_desc
@@ -554,7 +551,7 @@ fn test_enum_field_set_by_number() {
 #[test]
 fn test_field_descriptor_kind_for_target_roas() {
     let target_roas_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let target_roas_field = target_roas_desc.get_field_by_name("target_roas").unwrap();
@@ -584,7 +581,7 @@ fn test_field_descriptor_kind_for_target_roas() {
 #[test]
 fn test_field_path_traversal_scalar() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -607,7 +604,7 @@ fn test_field_path_traversal_scalar() {
 #[test]
 fn test_field_path_traversal_nested() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -626,7 +623,7 @@ fn test_field_path_traversal_nested() {
 #[test]
 fn test_field_path_traversal_oneof() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc.clone());
@@ -652,7 +649,7 @@ fn test_field_path_traversal_oneof() {
 #[test]
 fn test_value_coercion_double() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
     let field = desc.get_field_by_name("target_roas").unwrap();
 
@@ -663,7 +660,7 @@ fn test_value_coercion_double() {
 #[test]
 fn test_value_coercion_int64() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
     let field = desc.get_field_by_name("cpc_bid_ceiling_micros").unwrap();
 
@@ -674,7 +671,7 @@ fn test_value_coercion_int64() {
 #[test]
 fn test_value_coercion_enum_by_name() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
     let field = desc.get_field_by_name("status").unwrap();
 
@@ -693,7 +690,7 @@ fn test_value_coercion_enum_by_name() {
 #[test]
 fn test_value_coercion_enum_by_number() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
     let field = desc.get_field_by_name("status").unwrap();
 
@@ -707,7 +704,7 @@ fn test_value_coercion_enum_by_number() {
 #[test]
 fn test_full_mutation_pipeline_dynamic() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -720,7 +717,7 @@ fn test_full_mutation_pipeline_dynamic() {
     set_field_path_value(&mut campaign, "target_roas.target_roas", "3.5").unwrap();
 
     let operation_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.CampaignOperation")
+        .get_message_by_name(gads_fqn!(".services.CampaignOperation"))
         .expect("CampaignOperation not found");
 
     let field_mask_desc = POOL
@@ -754,7 +751,7 @@ fn test_full_mutation_pipeline_dynamic() {
 #[test]
 fn test_unified_mutate_pipeline_dynamic() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -767,7 +764,7 @@ fn test_unified_mutate_pipeline_dynamic() {
     set_field_path_value(&mut campaign, "target_roas.target_roas", "3.5").unwrap();
 
     let campaign_op_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.CampaignOperation")
+        .get_message_by_name(gads_fqn!(".services.CampaignOperation"))
         .expect("CampaignOperation not found");
 
     let field_mask_desc = POOL
@@ -785,14 +782,14 @@ fn test_unified_mutate_pipeline_dynamic() {
     campaign_op.set_field_by_name("update_mask", Value::Message(field_mask));
 
     let mutate_op_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.MutateOperation")
+        .get_message_by_name(gads_fqn!(".services.MutateOperation"))
         .expect("MutateOperation not found");
 
     let mut mutate_op = DynamicMessage::new(mutate_op_desc);
     mutate_op.set_field_by_name("campaign_operation", Value::Message(campaign_op));
 
     let request_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.services.MutateGoogleAdsRequest")
+        .get_message_by_name(gads_fqn!(".services.MutateGoogleAdsRequest"))
         .expect("MutateGoogleAdsRequest not found");
 
     let mut request = DynamicMessage::new(request_desc);
@@ -817,7 +814,7 @@ fn test_unified_mutate_pipeline_dynamic() {
 #[test]
 fn test_field_path_error_invalid_field() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -828,7 +825,7 @@ fn test_field_path_error_invalid_field() {
 #[test]
 fn test_field_path_error_traverse_scalar() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -839,7 +836,7 @@ fn test_field_path_error_traverse_scalar() {
 #[test]
 fn test_field_path_error_type_mismatch() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let field = desc.get_field_by_name("target_roas").unwrap();
@@ -979,18 +976,15 @@ fn test_builder_field_mask_generation() {
 fn test_public_descriptor_pool() {
     let pool = descriptor_pool();
     let desc = pool
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign should be accessible via public descriptor_pool()");
-    assert_eq!(
-        desc.full_name(),
-        "google.ads.googleads.v23.resources.Campaign"
-    );
+    assert_eq!(desc.full_name(), gads_fqn!(".resources.Campaign"));
 }
 
 #[test]
 fn test_public_set_field_path_value() {
     let campaign_desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.resources.Campaign")
+        .get_message_by_name(gads_fqn!(".resources.Campaign"))
         .expect("Campaign not found");
 
     let mut campaign = DynamicMessage::new(campaign_desc);
@@ -1015,7 +1009,7 @@ fn test_public_set_field_path_value() {
 #[test]
 fn test_public_coerce_value() {
     let desc = POOL
-        .get_message_by_name("google.ads.googleads.v23.common.TargetRoas")
+        .get_message_by_name(gads_fqn!(".common.TargetRoas"))
         .expect("TargetRoas not found");
 
     let field = desc.get_field_by_name("target_roas").unwrap();

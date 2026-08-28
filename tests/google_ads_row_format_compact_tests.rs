@@ -114,7 +114,7 @@ fn test_format_compact_deeply_nested_path() {
 
 #[test]
 fn test_format_compact_with_enum_fields() {
-    use googleads_rs::google::ads::googleads::v23::enums::campaign_status_enum::CampaignStatus;
+    use googleads_rs::current_gads_version::enums::campaign_status_enum::CampaignStatus;
 
     let campaign = CampaignBuilder::new()
         .id(12345)
