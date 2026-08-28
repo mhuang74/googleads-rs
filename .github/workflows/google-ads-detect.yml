@@ -1,0 +1,21 @@
+name: google-ads-detect
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'  # weekly Monday 03:00 UTC
+  workflow_dispatch:  # manual detector-only runs for testing
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install jq
+        run: sudo apt-get -y install jq
+      - name: Detect new Google Ads API version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./utils/detect-google-ads-version.sh

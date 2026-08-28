@@ -1,8 +1,12 @@
 name: google-ads-upgrade
 
+# Dispatched exclusively by google-ads-issue-worker.yml via `gh workflow run`.
+# Direct manual dispatch is not the intended path; the re-validate step flips
+# non-eligible issues to `api-upgrade-failed` and aborts.
+# (ADR 0002: input-param `if:` trigger routing retired; schedule trigger moved
+# to google-ads-detect.yml.)
+
 on:
-  schedule:
-    - cron: '0 3 * * 1'  # weekly Monday 03:00 UTC
   workflow_dispatch:
     inputs:
       issue:
@@ -18,23 +22,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  detect:
-    runs-on: ubuntu-latest
-    # Run on schedule; also on workflow_dispatch when no issue/target_version
-    # inputs are provided (manual detector-only runs for testing).
-    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.issue == 0)
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install jq
-        run: sudo apt-get -y install jq
-      - name: Detect new Google Ads API version
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./utils/detect-google-ads-version.sh
-
   upgrade:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && inputs.issue != 0
     timeout-minutes: 30
     # NOTE: GH_TOKEN (ISSUE_WORKER_PAT) is scoped per-step, NOT at job level,
     # to prevent leaking the PAT into the pi agent's environment (plan-3 §6).
