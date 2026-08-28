@@ -151,7 +151,7 @@ impl DynamicMutationBuilder {
     }
 
     pub fn build_operation(&self, resource_name: &str) -> anyhow::Result<DynamicMessage> {
-        let resource_fqn = format!("{}.{}", &*RESOURCES_FQN_PREFIX, self.resource_type);
+        let resource_fqn = format!("{}.{}", *RESOURCES_FQN_PREFIX, self.resource_type);
         let resource_desc = DESCRIPTOR_POOL
             .get_message_by_name(&resource_fqn)
             .ok_or_else(|| {
@@ -165,7 +165,7 @@ impl DynamicMutationBuilder {
             set_field_path_value(&mut resource, &update.field_path, &update.value)?;
         }
 
-        let op_fqn = format!("{}.{}Operation", &*SERVICES_FQN_PREFIX, self.resource_type);
+        let op_fqn = format!("{}.{}Operation", *SERVICES_FQN_PREFIX, self.resource_type);
         let op_desc = DESCRIPTOR_POOL
             .get_message_by_name(&op_fqn)
             .ok_or_else(|| anyhow::anyhow!("Operation {} not found in descriptor pool", op_fqn))?;
