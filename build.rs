@@ -193,7 +193,7 @@ fn write_protos_rs(pkgs: HashSet<String>) -> Res {
 
         // now push stack
         for seg in pkg.split('.').skip(pop_to).map(map_keyword) {
-            writeln!(protos_rs, "pub mod {} {{", &seg)?;
+            writeln!(protos_rs, "pub mod {} {{", seg)?;
             path_stack.push(seg);
         }
 
