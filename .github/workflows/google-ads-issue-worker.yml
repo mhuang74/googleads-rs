@@ -59,6 +59,52 @@ jobs:
           echo "target_version=${TARGET_VERSION}" >> $GITHUB_OUTPUT
           echo "found=true" >> $GITHUB_OUTPUT
 
+      - name: Reclaim stuck in-progress issues
+        run: |
+          # Safety net for wedged in-progress issues (no corresponding running
+          # upgrade job or open PR). Steps that fail mid-claim/re-validate roll
+          # their labels back themselves; this catches any wedge that slips
+          # past those paths (e.g. a dispatch that GitHub Actions silently
+          # dropped). Reclaimed issues are re-claimed on the next */15 poll.
+          STUCK_ISSUES=$(gh issue list \
+            --label "in-progress" \
+            --label "api upgrade bot" \
+            --state open \
+            --json number,body \
+            --jq '.[]')
+          if [ -z "${STUCK_ISSUES}" ]; then
+            echo "No in-progress issues to check"
+            exit 0
+          fi
+          for issue in $(echo "${STUCK_ISSUES}" | jq -r '.number'); do
+            # Active path: is there a queued or running upgrade workflow for
+            # this issue? Checked per issue so a busy pipeline (other issues'
+            # runs active) cannot mask this issue being stuck.
+            RUNNING=$(gh run list \
+              --workflow=google-ads-upgrade.yml \
+              --issue "${issue}" \
+              --status=in_progress \
+              --json conclusion \
+              --jq 'length' 2>/dev/null || echo 0)
+            QUEUED=$(gh run list \
+              --workflow=google-ads-upgrade.yml \
+              --issue "${issue}" \
+              --status=queued \
+              --json conclusion \
+              --jq 'length' 2>/dev/null || echo 0)
+            # Success path: is there an open PR that references this issue?
+            OPEN_PR=$(gh pr list --state open --search "in:body Closes #${issue}" \
+              --json number --jq 'length' 2>/dev/null || echo 0)
+            if [ "${RUNNING}" -gt 0 ] || [ "${QUEUED}" -gt 0 ] || [ "${OPEN_PR}" -gt 0 ]; then
+              echo "Issue #${issue} has an active upgrade job or open PR; not stuck"
+              continue
+            fi
+            echo "Issue #${issue} is in-progress with no running job or open PR; reclaiming"
+            gh issue comment ${issue} \
+              -b "♻️ No active upgrade job or open PR found for this in-progress issue. Reclaiming: flipping back to ready-for-agent for re-claim on next poll."
+            gh issue edit ${issue} --remove-label in-progress --add-label ready-for-agent
+          done
+
       - name: Claim issue (label swap + branch check)
         if: steps.find.outputs.found == 'true'
         run: |
@@ -82,17 +128,28 @@ jobs:
             exit 0
           fi
 
-          # Label swap: ready-for-agent -> in-progress
-          gh issue edit ${ISSUE_NUMBER} --remove-label ready-for-agent
-          gh issue edit ${ISSUE_NUMBER} --add-label in-progress
+          # Atomic label swap: ready-for-agent -> in-progress. gh issue edit
+          # applies --add-label and --remove-label in a single API request, so
+          # the issue never sits in an intermediate label state; a failure
+          # leaves ready-for-agent intact for re-claim on the next poll.
+          gh issue edit ${ISSUE_NUMBER} --remove-label ready-for-agent --add-label in-progress
 
-          # Post claim comment (plan-3 §4.3: timestamp, target version, dispatched run link)
-          gh issue comment ${ISSUE_NUMBER} \
-            -b "🙋 Issue claimed by worker at $(date -u +%Y-%m-%dT%H:%M:%SZ). Target: ${TARGET_VERSION}. Dispatching upgrade job: ${{ github.server_url }}/${{ github.repository }}/actions/workflows/google-ads-upgrade.yml"
-
-          # Dispatch upgrade job
-          gh workflow run google-ads-upgrade.yml \
-            -f issue=${ISSUE_NUMBER} \
-            -f target_version=${TARGET_VERSION}
+          # Post claim comment (plan-3 §4.3: timestamp, target version, dispatched
+          # run link) and dispatch upgrade job; on failure roll back the label so
+          # the next */15 poll re-claims instead of leaving a wedged in-progress
+          # issue with no running upgrade job.
+          if ! {
+            gh issue comment ${ISSUE_NUMBER} \
+              -b "🙋 Issue claimed by worker at $(date -u +%Y-%m-%dT%H:%M:%SZ). Target: ${TARGET_VERSION}. Dispatching upgrade job: ${{ github.server_url }}/${{ github.repository }}/actions/workflows/google-ads-upgrade.yml"
+            gh workflow run google-ads-upgrade.yml \
+              -f issue=${ISSUE_NUMBER} \
+              -f target_version=${TARGET_VERSION}
+          }; then
+            echo "❌ Failed to dispatch upgrade job for issue #${ISSUE_NUMBER}; rolling back label" >&2
+            gh issue comment ${ISSUE_NUMBER} \
+              -b "⚠️ Worker failed to dispatch upgrade job. Label rolled back to ready-for-agent for re-claim on next poll."
+            gh issue edit ${ISSUE_NUMBER} --remove-label in-progress --add-label ready-for-agent
+            exit 1
+          fi
 
           echo "Dispatched upgrade job for issue #${ISSUE_NUMBER}, target ${TARGET_VERSION}"
