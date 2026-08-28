@@ -1,0 +1,369 @@
+name: google-ads-upgrade
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'  # weekly Monday 03:00 UTC
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: 'Issue number to process'
+        required: true
+        type: number
+      target_version:
+        description: 'Target Google Ads API version (e.g. v25)'
+        required: true
+        type: string
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    # Run on schedule; also on workflow_dispatch when no issue/target_version
+    # inputs are provided (manual detector-only runs for testing).
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.issue == 0)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install jq
+        run: sudo apt-get -y install jq
+      - name: Detect new Google Ads API version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./utils/detect-google-ads-version.sh
+
+  upgrade:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    timeout-minutes: 30
+    # NOTE: GH_TOKEN (ISSUE_WORKER_PAT) is scoped per-step, NOT at job level,
+    # to prevent leaking the PAT into the pi agent's environment (plan-3 §6).
+    steps:
+      - name: Re-validate issue inputs
+        id: validate
+        env:
+          GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+        run: |
+          # Re-validate issue eligibility and re-check no existing branch/PR
+          ISSUE_NUMBER=${{ inputs.issue }}
+          TARGET_VERSION=${{ inputs.target_version }}
+
+          # Verify issue exists and is labeled in-progress
+          ISSUE_LABELS=$(gh issue view ${ISSUE_NUMBER} --json labels --jq '.labels[].name' 2>/dev/null || echo "")
+          if ! echo "${ISSUE_LABELS}" | grep -q 'in-progress'; then
+            echo "Issue #${ISSUE_NUMBER} is not in-progress; aborting"
+            # Flip to failed so the issue is not stuck (plan-3 §5.3)
+            gh issue edit ${ISSUE_NUMBER} --remove-label in-progress 2>/dev/null || true
+            gh issue edit ${ISSUE_NUMBER} --add-label api-upgrade-failed 2>/dev/null || true
+            gh issue comment ${ISSUE_NUMBER} -b "❌ Re-validation failed: issue is not in-progress. Aborting." 2>/dev/null || true
+            exit 1
+          fi
+
+          # Check no existing branch for this target version + issue
+          BRANCH_NAME="bot/google-ads-${TARGET_VERSION}-issue-${ISSUE_NUMBER}"
+          if gh api repos/{owner}/{repo}/branches/${BRANCH_NAME} --silent 2>/dev/null; then
+            echo "Branch ${BRANCH_NAME} already exists; aborting"
+            gh issue edit ${ISSUE_NUMBER} --remove-label in-progress 2>/dev/null || true
+            gh issue edit ${ISSUE_NUMBER} --add-label api-upgrade-failed 2>/dev/null || true
+            gh issue comment ${ISSUE_NUMBER} -b "❌ Re-validation failed: branch ${BRANCH_NAME} already exists. Aborting." 2>/dev/null || true
+            exit 1
+          fi
+
+          # Check no existing PR for this branch
+          if gh pr list --head ${BRANCH_NAME} --state open --json number --jq 'length' | grep -q '[1-9]'; then
+            echo "PR for ${BRANCH_NAME} already exists; aborting"
+            gh issue edit ${ISSUE_NUMBER} --remove-label in-progress 2>/dev/null || true
+            gh issue edit ${ISSUE_NUMBER} --add-label api-upgrade-failed 2>/dev/null || true
+            gh issue comment ${ISSUE_NUMBER} -b "❌ Re-validation failed: PR for ${BRANCH_NAME} already exists. Aborting." 2>/dev/null || true
+            exit 1
+          fi
+
+          echo "issue_number=${ISSUE_NUMBER}" >> $GITHUB_OUTPUT
+          echo "target_version=${TARGET_VERSION}" >> $GITHUB_OUTPUT
+          echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Update issue state
+        env:
+          GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+        run: |
+          gh issue edit ${{ steps.validate.outputs.issue_number }} \
+            --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: starting migration/')"
+          gh issue comment ${{ steps.validate.outputs.issue_number }} \
+            -b "🔄 Upgrade job started. Target: ${{ steps.validate.outputs.target_version }}, Branch: ${{ steps.validate.outputs.branch_name }}, Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pinned protoc (25.3)
+        run: |
+          curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
+          sudo unzip -q /tmp/protoc.zip -d /usr/local
+          protoc --version
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Create upgrade branch
+        run: |
+          # Always start fresh from main (plan-3 §5.3): the agent never resumes on a
+          # failed branch. The retry-via-relabel contract guarantees the old branch
+          # was deleted by the human before the issue was relabeled; the Re-validate
+          # step above aborts if any stale branch/PR still exists.
+          git checkout main
+          git pull
+          git checkout -b ${{ steps.validate.outputs.branch_name }}
+
+      - name: Run cargo fmt
+        run: cargo fmt
+
+      - name: Run deterministic migration
+        run: ./utils/update.sh ${{ steps.validate.outputs.target_version }}
+
+      - name: Commit proto definitions
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'chore: update Google Ads API proto definitions to ${{ steps.validate.outputs.target_version }}'
+          git push origin ${{ steps.validate.outputs.branch_name }}
+
+      - name: Update issue state — validating
+        env:
+          GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+        run: |
+          gh issue edit ${{ steps.validate.outputs.issue_number }} \
+            --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: validating/')"
+
+      - name: Assemble migration context
+        run: |
+          # Context pre-assembly for the AI repair agent (plan-3 §6): the agent
+          # never self-serves from the web — everything it needs is in this file.
+          cat > /tmp/google-ads-migration.md <<'EOF'
+          # Google Ads API migration context
+
+          ## Versions
+          - Target API version: ${{ steps.validate.outputs.target_version }}
+          - Issue: #${{ steps.validate.outputs.issue_number }}
+          - Branch: ${{ steps.validate.outputs.branch_name }}
+
+          ## Release notes
+          - https://developers.google.com/google-ads/api/docs/release-notes/${{ steps.validate.outputs.target_version }}
+
+          ## Known breaking changes
+          - Review the release notes above for renamed/removed fields, changed
+            enum values, and altered error semantics.
+          - Proto definitions were regenerated by utils/update.sh; migration
+            errors typically come from downstream code referencing moved items.
+
+          ## Rules (plan-2 §11 — MUST follow)
+          - Do NOT delete tests.
+          - Do NOT weaken assertions.
+          - Do NOT add #[ignore] to tests.
+          - Do NOT disable clippy lints or add allow attributes.
+          - Do NOT edit CI files (.github/, xtask/, workflows).
+          - Do NOT remove consumer test coverage.
+          - Maximum 5 repair attempts.
+
+          ## Repository structure
+          - src/lib.rs — crate root
+          - build.rs — proto build script
+          - tests/ — integration tests (incl. consumer_surface_tests.rs)
+          - proto/ — generated proto definitions (regenerated, do not hand-edit)
+          - utils/update.sh — deterministic migration script
+          - xtask/ — validation tooling (cargo xtask <fmt|check|test|clippy|validate>)
+          EOF
+
+      - name: First validation (per-check subcommands)
+        id: first_validate
+        continue-on-error: true
+        run: |
+          # Per-check subcommands give precise failure context for the repair agent;
+          # later attempts use the aggregate `cargo xtask validate`.
+          FAILED=false
+          : > /tmp/first-validation-failures.txt
+          for check in fmt check test clippy; do
+            echo "=== cargo xtask $check ===" >> /tmp/first-validation-failures.txt
+            if ! cargo xtask $check >> /tmp/first-validation-failures.txt 2>&1; then
+              echo "FAILED: cargo xtask $check" >> /tmp/first-validation-failures.txt
+              FAILED=true
+            fi
+          done
+          echo "failed=${FAILED}" >> $GITHUB_OUTPUT
+
+      - name: On first validation success — open draft PR
+        if: steps.first_validate.outputs.failed == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+        run: |
+          PR_NUM=$(gh pr create \
+            --draft \
+            --head ${{ steps.validate.outputs.branch_name }} \
+            --base main \
+            --title "Upgrade Google Ads API to ${{ steps.validate.outputs.target_version }}" \
+            --body "Closes #${{ steps.validate.outputs.issue_number }}
+
+          Automated Google Ads API upgrade to ${{ steps.validate.outputs.target_version }}.
+
+          Issue: #${{ steps.validate.outputs.issue_number }}
+
+          Validation passed (fmt, check, test, clippy)." \
+            --label "api upgrade bot" --json number -q .number)
+          # Mark PR ready for review (plan-3 §5.2: draft → ready when validated)
+          gh pr ready ${PR_NUM} || true
+          gh issue edit ${{ steps.validate.outputs.issue_number }} \
+            --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: PR ready for review/')"
+          gh issue comment ${{ steps.validate.outputs.issue_number }} \
+            -b "✅ Validation passed. PR ready for review."
+
+      - name: AI repair loop (pi)
+        id: ai_repair_loop
+        env:
+          GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+          PI_MAX_ATTEMPTS: '5'
+          # pi auth: API key from repo secret, injected ONLY into this step
+          # (issue #74). GH_TOKEN is for gh CLI calls only, never for pi.
+          PI_API_KEY: ${{ secrets.PI_API_KEY }}
+        # ── pi plumbing (finalized, issue #74) ──────────────────────────
+        # Auth: PI_API_KEY repo secret, injected only into this step.
+        # Output capture: pi stdout/stderr → ATTEMPT_LOG; git diff HEAD →
+        #   ATTEMPT_LOG (for post-hoc diff review and issue attempt log).
+        # Network: limited to crates.io index (runner firewall; the agent
+        #   must not self-serve from the web — context is in
+        #   /tmp/google-ads-migration.md).
+        # Guardrails: strict system prompt enforcing plan-2 §11 rules.
+        # ────────────────────────────────────────────────────────────────
+        run: |
+          # GH_TOKEN is available in this step for `gh` CLI calls only
+          # (issue comments, git push). The pi agent itself authenticates
+          # via PI_API_KEY; no PAT/crates.io token in its env.
+
+          # Post initial failure context to the issue
+          gh issue comment ${{ steps.validate.outputs.issue_number }} \
+            -b "🤖 Validation failed; starting AI repair loop (max ${PI_MAX_ATTEMPTS} attempts).
+
+          Initial failures:
+          \`\`\`
+          $(head -n 80 /tmp/first-validation-failures.txt)
+          \`\`\`"
+          gh issue edit ${{ steps.validate.outputs.issue_number }} \
+            --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: AI repair in progress/')"
+
+          REPAIR_SUCCEEDED=false
+          for ATTEMPT in $(seq 1 "${PI_MAX_ATTEMPTS}"); do
+            ATTEMPT_LOG=/tmp/ai-repair-attempt-${ATTEMPT}.log
+            echo "=== Repair attempt ${ATTEMPT}/${PI_MAX_ATTEMPTS} ===" | tee "${ATTEMPT_LOG}"
+
+            SYSTEM_PROMPT="You are an automated repair agent for the googleads-rs crate \
+          (Google Ads API upgrade to ${{ steps.validate.outputs.target_version }}). \
+          Read /tmp/google-ads-migration.md for context, versions, and repository structure. \
+          \
+          HARD RULES — violating any is a hard failure: \
+          1. Do NOT delete tests or test files. \
+          2. Do NOT weaken assertions (e.g. changing assert_eq to assert, removing checks). \
+          3. Do NOT add #[ignore] to tests to bypass failures. \
+          4. Do NOT disable clippy lints or add #[allow(...)] attributes. \
+          5. Do NOT edit CI files (.github/workflows/*, .github/*, xtask/*). \
+          6. Do NOT remove or reduce consumer test coverage. \
+          7. Do NOT edit files under proto/ — those are generated by utils/update.sh. \
+          8. Do NOT edit build.rs — it derives the API version from Cargo.toml. \
+          9. Do NOT edit utils/update.sh or utils/detect-google-ads-version.sh. \
+          \
+          WHAT TO DO: \
+          - Fix compile errors and test failures caused by the API version upgrade. \
+          - Make minimal, targeted edits to src/lib.rs and tests/ only. \
+          - The versioned module path is accessed via \`current_gads_version\` alias — use it. \
+          - Run \`cargo xtask validate\` to check your fixes. \
+          - You have at most ${PI_MAX_ATTEMPTS} total attempts. \
+          \
+          COMMON UPGRADE FAILURE PATTERNS: \
+          - Removed/renamed fields: update field references in tests and lib code. \
+          - Changed enum variants: update match arms. \
+          - New required fields: add defaults in test constructors. \
+          - Descriptor FQN changes: these are derived from CARGO_PKG_VERSION_MAJOR, \
+            so they should auto-update — check if the alias line needs repointing."
+
+            # Invoke pi (API key auth via PI_API_KEY; stdout/stderr captured
+            # to attempt log). Network: limited to crates.io index (runner
+            # firewall; documented constraint, issue #74).
+            PI_API_KEY=${PI_API_KEY} pi \
+              --system-prompt "${SYSTEM_PROMPT}" \
+              --context /tmp/google-ads-migration.md \
+              --failures /tmp/first-validation-failures.txt \
+              --repo "$(pwd)" \
+              --max-attempts 1 >> "${ATTEMPT_LOG}" 2>&1 || true
+
+            # Capture pi's changes as a diff for post-hoc review (issue
+            # attempt log); taken after pi runs, before the commit stages
+            # the working tree.
+            git diff HEAD >> "${ATTEMPT_LOG}" 2>&1 || true
+            if cargo xtask validate >> "${ATTEMPT_LOG}" 2>&1; then
+              echo "Repair attempt ${ATTEMPT}: validate passed" | tee -a "${ATTEMPT_LOG}"
+              gh issue comment ${{ steps.validate.outputs.issue_number }} \
+                -b "✅ AI repair succeeded on attempt ${ATTEMPT}/${PI_MAX_ATTEMPTS}."
+              git add -A
+              git commit -m "fix: repair validation failures after ${{ steps.validate.outputs.target_version }} upgrade (attempt ${ATTEMPT})"
+              git push origin ${{ steps.validate.outputs.branch_name }}
+              REPAIR_SUCCEEDED=true
+              break
+            fi
+
+            gh issue comment ${{ steps.validate.outputs.issue_number }} \
+              -b "🤖 AI repair attempt ${ATTEMPT}/${PI_MAX_ATTEMPTS} failed.
+
+          Log tail:
+          \`\`\`
+          $(tail -n 50 "${ATTEMPT_LOG}")
+          \`\`\`"
+            # Keep partial fixes on the branch for the next attempt / inspection
+            git add -A
+            git commit -m "fix: partial repair of ${{ steps.validate.outputs.target_version }} upgrade failures (attempt ${ATTEMPT}, validate still failing)" || true
+            git push origin ${{ steps.validate.outputs.branch_name }} || true
+          done
+
+          echo "repair_succeeded=${REPAIR_SUCCEEDED}" >> $GITHUB_OUTPUT
+
+      - name: On repair success — open draft PR
+        if: steps.first_validate.outputs.failed == 'true' && steps.ai_repair_loop.outputs.repair_succeeded == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+        run: |
+          PR_NUM=$(gh pr create \
+            --draft \
+            --head ${{ steps.validate.outputs.branch_name }} \
+            --base main \
+            --title "Upgrade Google Ads API to ${{ steps.validate.outputs.target_version }}" \
+            --body "Closes #${{ steps.validate.outputs.issue_number }}
+
+          Automated Google Ads API upgrade to ${{ steps.validate.outputs.target_version }}.
+
+          Issue: #${{ steps.validate.outputs.issue_number }}
+
+          Validation passed after AI repair (fmt, check, test, clippy)." \
+            --label "api upgrade bot" --json number -q .number)
+          # Mark PR ready for review (plan-3 §5.2: draft → ready when validated)
+          gh pr ready ${PR_NUM} || true
+          gh issue edit ${{ steps.validate.outputs.issue_number }} \
+            --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: PR ready for review (after AI repair)/')"
+          gh issue comment ${{ steps.validate.outputs.issue_number }} \
+            -b "✅ Validation passed after AI repair. PR ready for review."
+
+      - name: On repair failure — report and label
+        if: steps.first_validate.outputs.failed == 'true' && steps.ai_repair_loop.outputs.repair_succeeded == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+        run: |
+          gh issue edit ${{ steps.validate.outputs.issue_number }} \
+            --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: repair failed (5\/5)/')"
+          gh issue comment ${{ steps.validate.outputs.issue_number }} \
+            -b "❌ AI repair failed after 5/5 attempts. See workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Branch ${{ steps.validate.outputs.branch_name }} left in place for inspection.
+
+          To retry: delete the failed branch/PR, remove the \`api-upgrade-failed\` label, \
+          re-add \`ready-for-agent\` — the upgrade restarts fresh from main with a full 5-attempt budget."
+          gh issue edit ${{ steps.validate.outputs.issue_number }} --remove-label in-progress
+          gh issue edit ${{ steps.validate.outputs.issue_number }} --add-label api-upgrade-failed
+          exit 1

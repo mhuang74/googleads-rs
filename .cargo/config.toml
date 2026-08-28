@@ -1,0 +1,4 @@
+[alias]
+# xtask is an isolated crate (own [workspace]), so it is addressed by manifest
+# path rather than as a workspace member; root Cargo.toml stays untouched.
+xtask = "run --manifest-path xtask/Cargo.toml --"
