@@ -85,7 +85,8 @@ def evaluate_condition(condition: str, event_name: str, issue: int) -> bool:
 
     try:
         return bool(eval(expr, {"__builtins__": {}}, {}))
-    except Exception:
+    except Exception as exc:
+        print(f"Warning: could not evaluate condition: {condition!r} -> {expr!r}: {exc}", file=sys.stderr)
         return False
 
 

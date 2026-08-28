@@ -218,7 +218,7 @@ jobs:
 
 
       - name: AI repair (pi)
-        id: ai_repair_loop
+        id: ai_repair
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
           PI_MAX_ATTEMPTS: '5'
@@ -325,7 +325,7 @@ jobs:
           echo "repair_succeeded=${REPAIR_SUCCEEDED}" >> $GITHUB_OUTPUT
 
       - name: On repair success — open draft PR
-        if: steps.first_validate.outputs.failed == 'true' && steps.ai_repair_loop.outputs.repair_succeeded == 'true'
+        if: steps.first_validate.outputs.failed == 'true' && steps.ai_repair.outputs.repair_succeeded == 'true'
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
         run: |
@@ -350,7 +350,7 @@ jobs:
             -b "✅ Validation passed after AI repair. PR ready for review."
 
       - name: On repair failure — report and label
-        if: steps.first_validate.outputs.failed == 'true' && steps.ai_repair_loop.outputs.repair_succeeded == 'false'
+        if: steps.first_validate.outputs.failed == 'true' && steps.ai_repair.outputs.repair_succeeded == 'false'
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
         run: |
