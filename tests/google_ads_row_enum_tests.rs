@@ -8,7 +8,7 @@
 
 mod test_helpers;
 
-use googleads_rs::google::ads::googleads::v23::enums::{
+use googleads_rs::current_gads_version::enums::{
     ad_group_status_enum::AdGroupStatus, ad_group_type_enum::AdGroupType,
     ad_network_type_enum::AdNetworkType,
     advertising_channel_sub_type_enum::AdvertisingChannelSubType,
@@ -290,7 +290,7 @@ fn test_ad_group_type_video_true_view_in_stream() {
 
 #[test]
 fn test_customer_status_enabled() {
-    use googleads_rs::google::ads::googleads::v23::resources::Customer;
+    use googleads_rs::current_gads_version::resources::Customer;
 
     let mut customer = Customer::default();
     customer.id = Some(123);
@@ -303,7 +303,7 @@ fn test_customer_status_enabled() {
 
 #[test]
 fn test_customer_status_canceled() {
-    use googleads_rs::google::ads::googleads::v23::resources::Customer;
+    use googleads_rs::current_gads_version::resources::Customer;
 
     let mut customer = Customer::default();
     customer.id = Some(123);
@@ -316,7 +316,7 @@ fn test_customer_status_canceled() {
 
 #[test]
 fn test_customer_status_suspended() {
-    use googleads_rs::google::ads::googleads::v23::resources::Customer;
+    use googleads_rs::current_gads_version::resources::Customer;
 
     let mut customer = Customer::default();
     customer.id = Some(123);
@@ -397,8 +397,8 @@ fn test_segments_day_of_week_sunday() {
 
 #[test]
 fn test_campaign_criterion_status_present() {
-    use googleads_rs::google::ads::googleads::v23::enums::campaign_criterion_status_enum::CampaignCriterionStatus;
-    use googleads_rs::google::ads::googleads::v23::resources::CampaignCriterion;
+    use googleads_rs::current_gads_version::enums::campaign_criterion_status_enum::CampaignCriterionStatus;
+    use googleads_rs::current_gads_version::resources::CampaignCriterion;
 
     let mut criterion = CampaignCriterion::default();
     criterion.status = CampaignCriterionStatus::Enabled as i32;
@@ -420,8 +420,8 @@ fn test_campaign_criterion_status_absent() {
 
 #[test]
 fn test_campaign_criterion_type_present() {
-    use googleads_rs::google::ads::googleads::v23::enums::criterion_type_enum::CriterionType;
-    use googleads_rs::google::ads::googleads::v23::resources::CampaignCriterion;
+    use googleads_rs::current_gads_version::enums::criterion_type_enum::CriterionType;
+    use googleads_rs::current_gads_version::resources::CampaignCriterion;
 
     let mut criterion = CampaignCriterion::default();
     criterion.r#type = CriterionType::Keyword as i32;

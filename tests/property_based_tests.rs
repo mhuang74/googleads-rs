@@ -11,7 +11,7 @@ use test_helpers::{
     MetricsBuilder, SegmentsBuilder,
 };
 
-use googleads_rs::google::ads::googleads::v23::enums::{
+use googleads_rs::current_gads_version::enums::{
     ad_group_status_enum::AdGroupStatus, advertising_channel_type_enum::AdvertisingChannelType,
     campaign_status_enum::CampaignStatus,
 };

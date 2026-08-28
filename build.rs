@@ -26,8 +26,11 @@ fn main() -> Res {
             let path_str = e.path().to_str().unwrap();
             (
                 // pull in the packages we need for calling googleads api
-                path_str.contains(&format!("googleads{}v23", std::path::MAIN_SEPARATOR))
-                    || path_str.contains(&format!("google{}rpc", std::path::MAIN_SEPARATOR))
+                path_str.contains(&format!(
+                    "googleads{}v{}",
+                    std::path::MAIN_SEPARATOR,
+                    env!("CARGO_PKG_VERSION_MAJOR")
+                )) || path_str.contains(&format!("google{}rpc", std::path::MAIN_SEPARATOR))
                     || path_str.contains(&format!("google{}longrunning", std::path::MAIN_SEPARATOR))
                     || path_str.contains(&format!("google{}type", std::path::MAIN_SEPARATOR))
             ) && e.path().extension().is_some_and(|ext| ext == "proto")

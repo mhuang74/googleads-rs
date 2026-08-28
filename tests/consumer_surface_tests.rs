@@ -41,7 +41,7 @@ fn test_google_ads_service_client_construction_with_interceptor() {
 #[test]
 fn test_google_ads_field_service_client_exists() {
     // Verify GoogleAdsFieldServiceClient exists - zero coverage today in other tests
-    use googleads_rs::google::ads::googleads::v23::services::google_ads_field_service_client::GoogleAdsFieldServiceClient;
+    use googleads_rs::current_gads_version::services::google_ads_field_service_client::GoogleAdsFieldServiceClient;
 
     let _type_check: Option<GoogleAdsFieldServiceClient<tonic::transport::Channel>> = None;
 }
@@ -49,7 +49,7 @@ fn test_google_ads_field_service_client_exists() {
 #[test]
 fn test_client_method_signatures_exist() {
     // Compile-check that critical client methods exist
-    use googleads_rs::google::ads::googleads::v23::services::{
+    use googleads_rs::current_gads_version::services::{
         google_ads_field_service_client::GoogleAdsFieldServiceClient,
         google_ads_service_client::GoogleAdsServiceClient, SearchGoogleAdsFieldsRequest,
         SearchGoogleAdsStreamRequest,
@@ -77,7 +77,7 @@ fn test_client_method_signatures_exist() {
 
 #[test]
 fn test_search_google_ads_request_construction() {
-    use googleads_rs::google::ads::googleads::v23::services::SearchGoogleAdsRequest;
+    use googleads_rs::current_gads_version::services::SearchGoogleAdsRequest;
 
     // Construct request with customer_id, query, validate_only, and defaults
     let request = SearchGoogleAdsRequest {
@@ -96,7 +96,7 @@ fn test_search_google_ads_request_construction() {
 
 #[test]
 fn test_search_google_ads_fields_request_construction() {
-    use googleads_rs::google::ads::googleads::v23::services::SearchGoogleAdsFieldsRequest;
+    use googleads_rs::current_gads_version::services::SearchGoogleAdsFieldsRequest;
 
     // Construct with query, page_token, page_size
     let request = SearchGoogleAdsFieldsRequest {
@@ -115,7 +115,7 @@ fn test_search_google_ads_fields_request_construction() {
 
 #[test]
 fn test_search_google_ads_fields_response_has_results() {
-    use googleads_rs::google::ads::googleads::v23::services::SearchGoogleAdsFieldsResponse;
+    use googleads_rs::current_gads_version::services::SearchGoogleAdsFieldsResponse;
 
     // Verify .results field exists
     let response = SearchGoogleAdsFieldsResponse {
@@ -128,7 +128,7 @@ fn test_search_google_ads_fields_response_has_results() {
 
 #[test]
 fn test_search_google_ads_stream_response_fields_exist() {
-    use googleads_rs::google::ads::googleads::v23::services::{
+    use googleads_rs::current_gads_version::services::{
         GoogleAdsRow, SearchGoogleAdsStreamResponse,
     };
 
@@ -153,8 +153,8 @@ fn test_search_google_ads_stream_response_fields_exist() {
 #[test]
 fn test_customer_client_sub_accounts_query_fields() {
     // Test fields from mcc-gaql's SUB_ACCOUNTS_QUERY that consumers actually use
-    use googleads_rs::google::ads::googleads::v23::resources::CustomerClient;
-    use googleads_rs::google::ads::googleads::v23::services::GoogleAdsRow;
+    use googleads_rs::current_gads_version::resources::CustomerClient;
+    use googleads_rs::current_gads_version::services::GoogleAdsRow;
 
     // Create a CustomerClient with populated fields
     let mut customer_client = CustomerClient::default();
@@ -202,8 +202,8 @@ async fn test_mcc_gaql_streaming_flow_simulation() {
     // 3. Call row.get() for each field path
     // 4. Assert no "not implemented" values
 
-    use googleads_rs::google::ads::googleads::v23::resources::CustomerClient;
-    use googleads_rs::google::ads::googleads::v23::services::{
+    use googleads_rs::current_gads_version::resources::CustomerClient;
+    use googleads_rs::current_gads_version::services::{
         GoogleAdsRow, SearchGoogleAdsStreamResponse,
     };
     use prost_types::FieldMask;
@@ -289,10 +289,10 @@ async fn test_streaming_response_with_field_mask_integration() {
     // Test that the field_mask in SearchGoogleAdsStreamResponse correctly
     // represents what was requested, and all fields are accessible via get()
 
-    use googleads_rs::google::ads::googleads::v23::common::Metrics;
-    use googleads_rs::google::ads::googleads::v23::enums::campaign_status_enum::CampaignStatus;
-    use googleads_rs::google::ads::googleads::v23::resources::Campaign;
-    use googleads_rs::google::ads::googleads::v23::services::{
+    use googleads_rs::current_gads_version::common::Metrics;
+    use googleads_rs::current_gads_version::enums::campaign_status_enum::CampaignStatus;
+    use googleads_rs::current_gads_version::resources::Campaign;
+    use googleads_rs::current_gads_version::services::{
         GoogleAdsRow, SearchGoogleAdsStreamResponse,
     };
     use prost_types::FieldMask;

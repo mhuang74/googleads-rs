@@ -17,7 +17,7 @@
 
 mod test_helpers;
 
-use googleads_rs::google::ads::googleads::v23::resources::{
+use googleads_rs::current_gads_version::resources::{
     AdGroup, AdGroupAd, AdGroupAsset, AdGroupCriterion, AssetGroup, AssetGroupAsset, Campaign,
     CampaignAsset, CustomerAsset,
 };

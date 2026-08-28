@@ -6,10 +6,8 @@
 
 mod test_helpers;
 
-use googleads_rs::google::ads::googleads::v23::common::{
-    AssetDisapproved, AssetLinkPrimaryStatusDetails,
-};
-use googleads_rs::google::ads::googleads::v23::resources::{
+use googleads_rs::current_gads_version::common::{AssetDisapproved, AssetLinkPrimaryStatusDetails};
+use googleads_rs::current_gads_version::resources::{
     AdGroupAsset, AssetGroupAsset, CampaignAsset, CustomerAsset,
 };
 use test_helpers::GoogleAdsRowBuilder;
@@ -34,7 +32,7 @@ fn create_status_detail_with_disapproved(
     status: i32,
     error_reasons: Vec<i32>,
 ) -> AssetLinkPrimaryStatusDetails {
-    use googleads_rs::google::ads::googleads::v23::common::asset_link_primary_status_details::Details;
+    use googleads_rs::current_gads_version::common::asset_link_primary_status_details::Details;
 
     AssetLinkPrimaryStatusDetails {
         reason: Some(reason),

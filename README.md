@@ -7,14 +7,14 @@
 [![api-docs](https://docs.rs/googleads-rs/badge.svg)](https://docs.rs/googleads-rs)
 
 
-Current Version 23.2.1 uses [Google Ads API v23.2](https://developers.google.com/google-ads/api/docs/release-notes)
+Current Version 25.1.3 uses [Google Ads API v25.1](https://developers.google.com/google-ads/api/docs/release-notes)
 
 ---
 
 > **Versioning Convention**
 >
 > The crate version directly corresponds to the Google Ads API version it supports.
-> - **major.minor** = Google Ads API version (e.g., `23.2.1` → API v23.2)
+> - **major.minor** = Google Ads API version (e.g., `25.1.3` → API v25.1)
 > - **patch** = bug fixes and library updates
 >
 > This eliminates the mental friction of mapping between the `googleads-rs` version and the Google Ads API version.
@@ -90,8 +90,9 @@ The `GoogleAdsRow.get(path: &str)` accessor method uses `prost-reflect` for dyna
 ## API Upgrade
 
 Run `update.sh` to update the library for a new Google Ads API version:
-* Download latest proto files for new Google Ads API version
-* Replace references to old api version in build.rs, lib.rs, and README.md
+* Download latest proto files for new Google Ads API version (with pre/post-copy validation)
+* Repoint the `current_gads_version` alias in lib.rs and update README/Cargo.toml versions
+* Infer the minor release from Google's release notes; build.rs derives everything from Cargo.toml
 
 ```
 ./utils/update.sh v17
