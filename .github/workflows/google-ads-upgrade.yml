@@ -32,6 +32,7 @@ jobs:
         id: validate
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+          GH_REPO: ${{ github.repository }}
         run: |
           # Re-validate issue eligibility and re-check no existing branch/PR
           ISSUE_NUMBER=${{ inputs.issue }}
@@ -101,6 +102,7 @@ jobs:
       - name: Update issue state
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
+          GH_REPO: ${{ github.repository }}
         run: |
           gh issue edit ${{ steps.validate.outputs.issue_number }} \
             --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: starting migration/')"
