@@ -212,7 +212,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
         run: |
-          PR_NUM=$(gh pr create \
+          PR_URL=$(gh pr create \
             --draft \
             --head ${{ steps.validate.outputs.branch_name }} \
             --base main \
@@ -224,7 +224,16 @@ jobs:
           Issue: #${{ steps.validate.outputs.issue_number }}
 
           Validation passed (fmt, check, test, clippy)." \
-            --label "api upgrade bot" --json number -q .number)
+            --label "api upgrade bot")
+          if [ -z "${PR_URL}" ]; then
+            echo "❌ gh pr create returned empty URL; cannot proceed" >&2
+            exit 1
+          fi
+          PR_NUM=$(echo "${PR_URL}" | grep -oE 'pull/[0-9]+' | grep -oE '[0-9]+' | tail -1)
+          if [ -z "${PR_NUM}" ]; then
+            echo "❌ could not extract PR number from: ${PR_URL}" >&2
+            exit 1
+          fi
           # Mark PR ready for review (plan-3 §5.2: draft → ready when validated)
           gh pr ready ${PR_NUM} || true
           gh issue edit ${{ steps.validate.outputs.issue_number }} \
@@ -347,7 +356,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
         run: |
-          PR_NUM=$(gh pr create \
+          PR_URL=$(gh pr create \
             --draft \
             --head ${{ steps.validate.outputs.branch_name }} \
             --base main \
@@ -359,7 +368,16 @@ jobs:
           Issue: #${{ steps.validate.outputs.issue_number }}
 
           Validation passed after AI repair (fmt, check, test, clippy)." \
-            --label "api upgrade bot" --json number -q .number)
+            --label "api upgrade bot")
+          if [ -z "${PR_URL}" ]; then
+            echo "❌ gh pr create returned empty URL; cannot proceed" >&2
+            exit 1
+          fi
+          PR_NUM=$(echo "${PR_URL}" | grep -oE 'pull/[0-9]+' | grep -oE '[0-9]+' | tail -1)
+          if [ -z "${PR_NUM}" ]; then
+            echo "❌ could not extract PR number from: ${PR_URL}" >&2
+            exit 1
+          fi
           # Mark PR ready for review (plan-3 §5.2: draft → ready when validated)
           gh pr ready ${PR_NUM} || true
           gh issue edit ${{ steps.validate.outputs.issue_number }} \
