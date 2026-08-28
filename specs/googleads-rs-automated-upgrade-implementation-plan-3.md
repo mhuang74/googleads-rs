@@ -26,7 +26,7 @@ A detected release creates an upgrade issue already labeled `ready-for-agent` an
                          ▼
              ┌────────────────────────┐
              │ Release detector       │  utils/detect-google-ads-version.sh (bash+curl+jq)   [Q22]
-             │ google-ads-upgrade.yml │  weekly cron + workflow_dispatch                     [Q13]
+             │ google-ads-detect.yml  │  weekly cron + workflow_dispatch                     [Q13, Q78]
              └───────────┬────────────┘
                          │ GitHub API tree scan, major versions only                 [Q13, Q33]
                          ▼
@@ -45,7 +45,7 @@ A detected release creates an upgrade issue already labeled `ready-for-agent` an
                    │ gh workflow run (PAT — GITHUB_TOKEN recursion limit)        [Q46, Q49]
                    ▼
        ┌────────────────────────┐
-       │ Upgrade execution      │  google-ads-upgrade.yml upgrade job
+       │ Upgrade execution      │  google-ads-upgrade.yml (worker-dispatched)
        │ (stub in M2, real M3)  │                                                           [Q29]
        └───────────┬────────────┘
                    ▼
@@ -72,7 +72,8 @@ A detected release creates an upgrade issue already labeled `ready-for-agent` an
           release workflow (Milestone 5; deferred)                                   [Q34]
 ```
 
-Workflow files: exactly **two** — `google-ads-upgrade.yml` (detector job + upgrade job) and `google-ads-issue-worker.yml` [Q35].
+
+Workflow files: exactly **three** — `google-ads-detect.yml` (detector), `google-ads-upgrade.yml` (upgrade execution, dispatched by the worker), and `google-ads-issue-worker.yml` — see **Q35→Q78** and [ADR 0002](../docs/adr/0002-split-detector-into-own-workflow.md).
 
 ## 3. Phase 2 — Canonical validation (`xtask`) — next up
 
@@ -105,7 +106,7 @@ Workflow files: exactly **two** — `google-ads-upgrade.yml` (detector job + upg
 
 - **Mechanism**: GitHub git/trees API (`recursive=1`) against `googleapis/googleapis`; list `google/ads/googleads/v*` directories; highest = latest major. One request, no clone, no HTML scraping. **[Q13]**
 - **Granularity**: major versions only. Minor bumps stay `update.sh`'s release-notes-inference job at migration time. **[Q33, Q45]**
-- **Cadence**: weekly cron + `workflow_dispatch`. **[Q13]**
+- **Cadence**: weekly cron + `workflow_dispatch` on `google-ads-detect.yml`. **[Q13, Q78]**
 - **Current version source**: Cargo.toml major (same authoritative value Phase 0 established).
 - **Idempotency**: before creating, search open upgrade issues for body marker `google-ads-api-upgrade: vNN`. Manual and auto issues are interchangeable; detector skips if either exists for the same target. **[Q14, Q51]**
 - **Issue creation**: title `Upgrade Google Ads API vOLD → vNEW` **[Q43]**; body carries marker, previous/target versions, and a one-line current-state field (see §5.3); created **already labeled `ready-for-agent`** — execution starts without human intervention. **[Q14, Q51, Q69]**
@@ -192,6 +193,7 @@ Workflow files: exactly **two** — `google-ads-upgrade.yml` (detector job + upg
 | Human triage gate before execution | No gate: issues born `ready-for-agent`, worker auto-dispatches; human enters at PR approval or failure recovery | Q69, Q74 |
 | Consumer check in PR-ready criteria + M3 | Deferred with revisit trigger (mcc-gaql CI breakage on main) | Q73 |
 | Success: `ready-for-human`/`api-upgrade-ready` labels | Success keeps `in-progress`; PR `Closes #N` auto-closes issue on merge | Q71 |
+| Two workflow files (Q35) | Three workflow files: detector split into `google-ads-detect.yml`; input-param `if:` trigger routing retired; direct manual dispatch of `google-ads-upgrade.yml` not the intended path (worker is) | Q78, ADR 0002 |
 
 ## 10. Definition of done
 
