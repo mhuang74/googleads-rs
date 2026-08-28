@@ -1,6 +1,6 @@
 //! xtask: canonical validation entry points for googleads-rs.
 //!
-//! Zero external dependencies; shells out to cargo via `std::process::Command`.
+//! Zero external dependencies; shells out to cargo and python3 via `std::process::Command`.
 //! Run as `cargo xtask <subcommand>` (see `.cargo/config.toml` alias).
 //!
 //! Subcommands: `fmt`, `check`, `test`, `clippy`, `check-workflows`, and the
