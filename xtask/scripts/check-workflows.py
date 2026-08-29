@@ -1,36 +1,44 @@
 #!/usr/bin/env python3
-"""Validate google-ads-upgrade.yml job-condition branching logic.
+"""Validate the post-ADR-0002 workflow split.
 
-Verifies:
-- detect and upgrade jobs are mutually exclusive under workflow_dispatch
-  with issue=0 vs issue!=0
+Since ADR 0002 (commit 569da0f), the detector lives in its own workflow
+(`google-ads-detect.yml`), and `google-ads-upgrade.yml` is dispatched
+exclusively by the issue worker (plus manual `resume=true` re-dispatch).
+The old `inputs.issue == 0` routing logic and its `if:` guards are retired.
+
+Verifies (structural, cross-file):
+- google-ads-upgrade.yml: `upgrade` job has NO `if:` guard
+- google-ads-detect.yml: `detect` job has NO `if:` guard
+- google-ads-upgrade.yml: triggers are `workflow_dispatch` only (no schedule)
+- google-ads-detect.yml: triggers are exactly `schedule` AND `workflow_dispatch`
 - Branch-name construction follows bot/google-ads-vNN-issue-N pattern
-- No job condition allows both jobs to run simultaneously under the same dispatch
 
-Zero external dependencies: uses only stdlib (yaml parsed manually via
-simple text scanning, since PyYAML may not be installed).
+Zero external dependencies: yaml parsed manually via simple text scanning,
+since PyYAML may not be installed.
 """
 
 import re
 import sys
 from pathlib import Path
 
+UPGRADE_PATH = ".github/workflows/google-ads-upgrade.yml"
+DETECT_PATH = ".github/workflows/google-ads-detect.yml"
+
 
 def extract_job_conditions(yaml_text: str) -> dict[str, str]:
     """Extract `if:` expressions for each job in a GitHub Actions workflow.
 
     Returns a dict mapping job name -> raw if expression (or empty string
-    if the job has no if condition).
+    if the job has no if condition). Used here to assert the ABSENCE of
+    `if:` guards (retired by ADR 0002).
     """
     jobs: dict[str, str] = {}
     lines = yaml_text.splitlines()
 
-    # Find the `jobs:` section
     in_jobs = False
     current_job: str | None = None
 
     for line in lines:
-        # Detect `jobs:` top-level key
         if line.startswith("jobs:"):
             in_jobs = True
             continue
@@ -40,7 +48,7 @@ def extract_job_conditions(yaml_text: str) -> dict[str, str]:
 
         # A job definition is a non-empty key at the same indent level
         # as the first job we see, indented by 2 spaces under `jobs:`
-        # e.g. "  detect:" or "  upgrade:"
+        # e.g. "  upgrade:" or "  detect:"
         match = re.match(r"^  (\w+):\s*$", line)
         if match:
             current_job = match.group(1)
@@ -58,111 +66,135 @@ def extract_job_conditions(yaml_text: str) -> dict[str, str]:
     return jobs
 
 
-def evaluate_condition(condition: str, event_name: str, issue: int) -> bool:
-    """Evaluate a GitHub Actions `if:` expression for given inputs.
+def extract_triggers(yaml_text: str) -> set[str]:
+    """Extract trigger names from the top-level `on:` block.
 
-    Supports the subset of expressions used in this repo's workflows:
-    - github.event_name == 'value'
-    - inputs.issue == N
-    - && (logical AND)
-    - || (logical OR)
+    Handles the block form used by this repo's workflows:
+
+        on:
+          schedule:
+            - cron: ...
+          workflow_dispatch:
+            inputs: ...
+
+    as well as inline forms (`on: push`, `on: [push, workflow_dispatch]`).
+    Returns a set of trigger names. No PyYAML dependency: trigger keys are
+    matched at exactly 2-space indent inside the `on:` block, which excludes
+    nested keys like `inputs:` (4-space indent).
     """
-    if not condition:
-        # No condition means the job always runs
-        return True
+    triggers: set[str] = set()
+    lines = yaml_text.splitlines()
 
-    # Replace GitHub context references with Python-evaluable expressions
-    expr = condition
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        if re.match(r"^on:\s*$", line):
+            # Block form: scan indented keys until the next top-level key.
+            i += 1
+            while i < len(lines):
+                inner = lines[i]
+                if inner.strip() and not inner.startswith((" ", "\t")):
+                    break  # next top-level key: `on:` block ended
+                m = re.match(r"^  ([\w-]+):\s*(?:#.*)?$", inner)
+                if m:
+                    triggers.add(m.group(1))
+                i += 1
+            return triggers
+        inline = re.match(r"^on:\s*(.+)$", line)
+        if inline:
+            rest = inline.group(1).strip()
+            if rest.startswith("[") and rest.endswith("]"):
+                triggers |= {
+                    t.strip().strip("'\"") for t in rest[1:-1].split(",") if t.strip()
+                }
+            elif rest:
+                triggers.add(rest.strip("'\""))
+            return triggers
+        i += 1
 
-    # github.event_name == 'schedule' -> check against event_name
-    expr = expr.replace("github.event_name", f"'{event_name}'")
-
-    # inputs.issue == 0 -> check against issue value
-    expr = expr.replace("inputs.issue", str(issue))
-
-    # && -> and, || -> or
-    expr = expr.replace("&&", " and ").replace("||", " or ")
-
-    try:
-        return bool(eval(expr, {"__builtins__": {}}, {}))
-    except Exception as exc:
-        print(f"Warning: could not evaluate condition: {condition!r} -> {expr!r}: {exc}", file=sys.stderr)
-        return False
+    return triggers
 
 
-def validate_mutual_exclusivity(conditions: dict[str, str]) -> list[str]:
-    """Verify detect and upgrade are never both true under the same dispatch."""
+def validate_upgrade_has_no_if_guard(conditions: dict[str, str]) -> list[str]:
+    """Verify the `upgrade` job has no `if:` condition (retired by ADR 0002)."""
     errors: list[str] = []
-
-    test_cases = [
-        ("workflow_dispatch", 0),
-        ("workflow_dispatch", 76),
-        ("workflow_dispatch", 1),
-    ]
-
-    for event, issue in test_cases:
-        detect_runs = evaluate_condition(
-            conditions.get("detect", ""), event, issue
-        )
-        upgrade_runs = evaluate_condition(
-            conditions.get("upgrade", ""), event, issue
-        )
-
-        if detect_runs and upgrade_runs:
-            errors.append(
-                f"Both detect and upgrade run for event={event}, issue={issue}"
-            )
-
-    return errors
-
-
-def validate_issue_zero_guard(conditions: dict[str, str]) -> list[str]:
-    """Verify upgrade does NOT run when issue=0 (detector-only test path)."""
-    errors: list[str] = []
-
-    upgrade_runs = evaluate_condition(
-        conditions.get("upgrade", ""), "workflow_dispatch", 0
-    )
-    if upgrade_runs:
+    cond = conditions.get("upgrade")
+    if cond is None:
+        errors.append("google-ads-upgrade.yml: no `upgrade` job found")
+    elif cond:
         errors.append(
-            "upgrade job runs on workflow_dispatch with issue=0 "
-            "(should be excluded — detector-only path)"
+            "upgrade job has an `if:` guard — retired by ADR 0002 "
+            f"(routing is structural now): {cond!r}"
         )
-
     return errors
 
 
-def validate_detector_runs_on_zero(conditions: dict[str, str]) -> list[str]:
-    """Verify detect DOES run when issue=0 (detector-only test path)."""
+def validate_detect_has_no_if_guard(conditions: dict[str, str]) -> list[str]:
+    """Verify the `detect` job has no `if:` condition (retired by ADR 0002)."""
     errors: list[str] = []
-
-    detect_runs = evaluate_condition(
-        conditions.get("detect", ""), "workflow_dispatch", 0
-    )
-    if not detect_runs:
+    cond = conditions.get("detect")
+    if cond is None:
+        errors.append("google-ads-detect.yml: no `detect` job found")
+    elif cond:
         errors.append(
-            "detect job does NOT run on workflow_dispatch with issue=0 "
-            "(detector-only test path broken)"
+            "detect job has an `if:` guard — retired by ADR 0002 "
+            "(the job lives in its own schedule-triggered workflow): "
+            f"{cond!r}"
         )
-
     return errors
 
 
-def validate_upgrade_runs_on_real_issue(
-    conditions: dict[str, str]
+def validate_upgrade_triggers(triggers: set[str]) -> list[str]:
+    """Verify google-ads-upgrade.yml has `workflow_dispatch` only (no schedule).
+
+    Scheduled detection moved to google-ads-detect.yml (ADR 0002); a
+    scheduled upgrade dispatch would re-run an upgrade unattended. Any
+    other trigger (push/pull_request/…) is equally unauthorized: the
+    workflow must be dispatch-only.
+    """
+    errors: list[str] = []
+    if "schedule" in triggers:
+        errors.append(
+            "google-ads-upgrade.yml has a `schedule` trigger — the schedule "
+            "moved to google-ads-detect.yml (ADR 0002)"
+        )
+    if "workflow_dispatch" not in triggers:
+        errors.append(
+            "google-ads-upgrade.yml is missing the `workflow_dispatch` trigger "
+            "(worker dispatch + manual resume=true requires it)"
+        )
+    if triggers - {"workflow_dispatch"}:
+        errors.append(
+            "google-ads-upgrade.yml has unauthorized extra triggers "
+            f"{sorted(triggers - {'workflow_dispatch'})} — dispatch-only "
+            "per ADR 0002"
+        )
+    return errors
+
+
+def validate_detect_triggers(
+    triggers: set[str], allowed: frozenset[str] | None = None
 ) -> list[str]:
-    """Verify upgrade DOES run when issue != 0."""
+    """Verify google-ads-detect.yml triggers are `schedule` AND `workflow_dispatch`.
+
+    Anything else (e.g. push/pull_request) is unauthorized: the detector
+    runs on the weekly cadence or on a manual testing dispatch.
+    """
+    if allowed is None:
+        allowed = frozenset({"schedule", "workflow_dispatch"})
     errors: list[str] = []
-
-    upgrade_runs = evaluate_condition(
-        conditions.get("upgrade", ""), "workflow_dispatch", 76
-    )
-    if not upgrade_runs:
+    missing = allowed - triggers
+    if missing:
         errors.append(
-            "upgrade job does NOT run on workflow_dispatch with issue=76 "
-            "(real upgrade dispatch broken)"
+            f"google-ads-detect.yml is missing required triggers {sorted(missing)} "
+            "(weekly cadence + manual detector-only runs, ADR 0002)"
         )
-
+    extra = triggers - allowed
+    if extra:
+        errors.append(
+            f"google-ads-detect.yml has unauthorized extra triggers {sorted(extra)} "
+            "— schedule/workflow_dispatch only"
+        )
     return errors
 
 
@@ -170,9 +202,7 @@ def validate_branch_name_pattern() -> list[str]:
     """Verify the branch-name construction follows bot/google-ads-vNN-issue-N."""
     errors: list[str] = []
 
-    yaml_text = Path(
-        ".github/workflows/google-ads-upgrade.yml"
-    ).read_text()
+    yaml_text = Path(UPGRADE_PATH).read_text()
 
     # The branch name is constructed as bot/google-ads-${TARGET_VERSION}-issue-${ISSUE_NUMBER}
     pattern = r"bot/google-ads-\$\{.*?TARGET_VERSION.*?\}-issue-\$\{.*?ISSUE_NUMBER.*?\}"
@@ -186,23 +216,35 @@ def validate_branch_name_pattern() -> list[str]:
 
 
 def main() -> int:
-    workflow_path = Path(".github/workflows/google-ads-upgrade.yml")
-    if not workflow_path.exists():
-        print(f"Error: {workflow_path} not found", file=sys.stderr)
-        return 1
+    upgrade_path = Path(UPGRADE_PATH)
+    detect_path = Path(DETECT_PATH)
+    for path in (upgrade_path, detect_path):
+        if not path.exists():
+            print(f"Error: {path} not found", file=sys.stderr)
+            return 1
 
-    yaml_text = workflow_path.read_text()
-    conditions = extract_job_conditions(yaml_text)
+    upgrade_text = upgrade_path.read_text()
+    detect_text = detect_path.read_text()
 
     print("Job conditions:")
-    for job, cond in conditions.items():
-        print(f"  {job}: {cond}")
+    for label, text in (
+        (UPGRADE_PATH, upgrade_text),
+        (DETECT_PATH, detect_text),
+    ):
+        for job, cond in extract_job_conditions(text).items():
+            print(f"  {label}#{job}: {cond or '(none)'}")
+
+    print("\nTriggers:")
+    upgrade_triggers = extract_triggers(upgrade_text)
+    detect_triggers = extract_triggers(detect_text)
+    print(f"  {UPGRADE_PATH}: {sorted(upgrade_triggers)}")
+    print(f"  {DETECT_PATH}: {sorted(detect_triggers)}")
 
     all_errors: list[str] = []
-    all_errors.extend(validate_mutual_exclusivity(conditions))
-    all_errors.extend(validate_issue_zero_guard(conditions))
-    all_errors.extend(validate_detector_runs_on_zero(conditions))
-    all_errors.extend(validate_upgrade_runs_on_real_issue(conditions))
+    all_errors.extend(validate_upgrade_has_no_if_guard(extract_job_conditions(upgrade_text)))
+    all_errors.extend(validate_detect_has_no_if_guard(extract_job_conditions(detect_text)))
+    all_errors.extend(validate_upgrade_triggers(upgrade_triggers))
+    all_errors.extend(validate_detect_triggers(detect_triggers))
     all_errors.extend(validate_branch_name_pattern())
 
     if all_errors:
