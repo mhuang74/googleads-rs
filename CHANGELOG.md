@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [24.2.0] - 2026-08-29
+
+### Changed
+- Migration to Google Ads API v24; crate version now mirrors the API version (24.2.0 → API v24.2)
+- Descriptor FQN prefixes and build.rs outputs derive from the crate version at compile time; no version literals in library source besides the version alias
+
+### Added
+- `DynamicMutationBuilder` for constructing mutation requests dynamically via descriptor reflection (#54)
+- `current_gads_version` alias at the crate root as the single hand-edit anchor for API upgrades
+- Automated upgrade pipeline: release detection → upgrade issue → deterministic migration → validation → AI repair (max 5 attempts) → PR (#64–#74); adds resume mode, transient-failure resilience, and stuck-issue reclamation
+
+## [23.2.0] - 2026-04-11
+
+### Changed
+- Migration to Google Ads API v23.2
+- Versioning scheme switched from `0.x.y` to major.minor mirroring the Google Ads API version (0.23.2 → 23.2.0)
+- `GoogleAdsRow::get()` rewritten from hardcoded match-arm macros to prost-reflect dynamic field access (#52), supporting any field without per-field match arms
+
+### Added
+- Consumer surface validation tests
+- `customer_user_access` resource support in `get()`
+- Cross-platform `update.sh` (macOS and Linux)
+
 ## [0.13.0] - 2025-02-03
 
 ### Changed
@@ -121,6 +144,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial tagged release with Google Ads API support
 
+[24.2.0]: https://github.com/mhuang74/googleads-rs/compare/v23.2.0...v24.2.0
+[23.2.0]: https://github.com/mhuang74/googleads-rs/compare/v0.13.0...v23.2.0
 [0.13.0]: https://github.com/mhuang74/googleads-rs/compare/v0.12.1...v0.13.0
 [0.12.1]: https://github.com/mhuang74/googleads-rs/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/mhuang74/googleads-rs/compare/v0.11.2...v0.12.0
