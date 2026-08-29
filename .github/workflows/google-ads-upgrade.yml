@@ -295,10 +295,12 @@ jobs:
           gh issue comment ${{ steps.validate.outputs.issue_number }} \
             -b "✅ Validation passed. PR ready for review."
       - name: Install pi (AI repair agent)
+        if: steps.first_validate.outputs.failed == 'true'
         run: npm install -g @earendil-works/pi-coding-agent
 
 
       - name: AI repair (pi)
+        if: steps.first_validate.outputs.failed == 'true'
         id: ai_repair
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
@@ -306,20 +308,35 @@ jobs:
           # pi auth: API key from repo secret, injected ONLY into this step
           # (issue #74). GH_TOKEN is for gh CLI calls only, never for pi.
           PI_API_KEY: ${{ secrets.PI_API_KEY }}
-        # ── pi plumbing (finalized, issue #74) ──────────────────────────
-        # Auth: PI_API_KEY repo secret, injected only into this step.
+          # Model/provider: GitHub repository VARIABLES (Settings → Secrets
+          # and variables → Actions → Variables), not secrets — non-sensitive
+          # configuration. Changing the model is a settings edit, not a
+          # workflow commit. Defaults: ollama-cloud / glm-5.3-flash
+          # (1M context, 32.8K max output, thinking, images).
+          PI_MODEL: ${{ vars.PI_MODEL || 'glm-5.3-flash' }}
+          PI_PROVIDER: ${{ vars.PI_PROVIDER || 'ollama-cloud' }}
+        # ── pi plumbing (finalized, issues #74/#75) ─────────────────────
+        # Auth: --api-key flag fed from the PI_API_KEY repo secret, which
+        #   is injected ONLY into this step (GH_TOKEN is for gh CLI calls
+        #   only, never for pi).
+        # Model: PI_PROVIDER / PI_MODEL via GitHub repo variables
+        #   (defaults: ollama-cloud / glm-5.3-flash), overridable in repo
+        #   settings without a workflow commit.
+        # Context: /tmp/google-ads-migration.md and
+        #   /tmp/first-validation-failures.txt are inlined into the prompt
+        #   (pi has no --context/--failures flags).
         # Output capture: pi stdout/stderr → ATTEMPT_LOG; git diff HEAD →
         #   ATTEMPT_LOG (for post-hoc diff review and issue attempt log).
+        # Non-interactive: --print + --no-session; --approve trusts
+        #   project-local files (AGENTS.md/CLAUDE.md) without prompting.
         # Network: limited to crates.io index (runner firewall; the agent
-        #   must not self-serve from the web — context is in
-        #   /tmp/google-ads-migration.md).
+        #   must not self-serve from the web).
         # Guardrails: strict system prompt enforcing plan-2 §11 rules.
         # ────────────────────────────────────────────────────────────────
         run: |
           # GH_TOKEN is available in this step for `gh` CLI calls only
           # (issue comments, git push). The pi agent itself authenticates
-          # via PI_API_KEY; no PAT/crates.io token in its env.
-
+          # via the --api-key flag; no PAT/crates.io token in its env.
           # Post initial failure context to the issue
           gh issue comment ${{ steps.validate.outputs.issue_number }} \
             -b "🤖 Validation failed; starting AI repair (max ${PI_MAX_ATTEMPTS} attempts).
@@ -365,15 +382,31 @@ jobs:
           - Descriptor FQN changes: these are derived from CARGO_PKG_VERSION_MAJOR, \
             so they should auto-update — check if the alias line needs repointing."
 
-            # Invoke pi (API key auth via PI_API_KEY; stdout/stderr captured
-            # to attempt log). Network: limited to crates.io index (runner
-            # firewall; documented constraint, issue #74).
-            PI_API_KEY=${PI_API_KEY} pi \
+            # Invoke pi (real CLI flags, pi 0.84.x; stdout/stderr captured
+            # to attempt log). Migration context and validation failures
+            # are inlined into the prompt — pi has no --context/--failures
+            # flags; --repo/--max-attempts don't exist either (the outer
+            # for loop owns attempt count). Network: limited to crates.io
+            # index (runner firewall; documented constraint, issue #74).
+            pi \
+              --provider "${PI_PROVIDER}" \
+              --model "${PI_MODEL}" \
               --system-prompt "${SYSTEM_PROMPT}" \
-              --context /tmp/google-ads-migration.md \
-              --failures /tmp/first-validation-failures.txt \
-              --repo "$(pwd)" \
-              --max-attempts 1 >> "${ATTEMPT_LOG}" 2>&1 || true
+              --api-key "${PI_API_KEY}" \
+              --print \
+              --no-session \
+              --approve \
+              "$(cat <<PROMPT
+          $(cat /tmp/google-ads-migration.md)
+
+          ## Validation failures
+
+          $(cat /tmp/first-validation-failures.txt)
+
+          Fix all validation failures shown above. Run \`cargo xtask validate\` to
+          check. This is attempt ${ATTEMPT} of ${PI_MAX_ATTEMPTS}.
+          PROMPT
+          )" >> "${ATTEMPT_LOG}" 2>&1 || true
 
             # Capture pi's changes as a diff for post-hoc review (issue
             # attempt log); taken after pi runs, before the commit stages
