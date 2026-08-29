@@ -1,8 +1,11 @@
 name: google-ads-upgrade
 
-# Dispatched exclusively by google-ads-issue-worker.yml via `gh workflow run`.
-# Direct manual dispatch is not the intended path; the re-validate step flips
-# non-eligible issues to `api-upgrade-failed` and aborts.
+# Normally dispatched exclusively by google-ads-issue-worker.yml via
+# `gh workflow run`; direct manual dispatch is not the intended path (the
+# re-validate step flips non-eligible issues to `api-upgrade-failed` and
+# aborts). Exception: `resume=true` is dispatched manually by the human —
+# never by the worker — to re-validate an existing branch and retry
+# validation/PR creation without deleting the branch or flipping labels.
 # (ADR 0002: input-param `if:` trigger routing retired; schedule trigger moved
 # to google-ads-detect.yml.)
 
@@ -17,6 +20,11 @@ on:
         description: 'Target Google Ads API version (e.g. v25)'
         required: true
         type: string
+      resume:
+        description: 'Resume from existing branch (skip migration; re-validate + PR/repair only)'
+        required: false
+        type: boolean
+        default: false
 
 env:
   CARGO_TERM_COLOR: always
@@ -38,6 +46,7 @@ jobs:
           ISSUE_NUMBER=${{ inputs.issue }}
           TARGET_VERSION=${{ inputs.target_version }}
 
+          BRANCH_NAME="bot/google-ads-${TARGET_VERSION}-issue-${ISSUE_NUMBER}"
           # Flip issue labels with bounded retry (3 attempts, 5s backoff).
           # Exits non-zero if all attempts fail — the Actions run fails visibly
           # rather than silently leaving the issue wedged at in-progress.
@@ -72,6 +81,25 @@ jobs:
             echo "gh issue view ${ISSUE_NUMBER} keeps failing; aborting without touching labels (transient API error, not an eligibility failure)" >&2
             exit 1
           fi
+          # Resume mode: accept in-progress OR api-upgrade-failed and skip
+          # branch/PR checks — reusing an existing branch is the point.
+          if [ "${{ inputs.resume }}" == "true" ]; then
+            if ! echo "${ISSUE_LABELS}" | grep -qE 'in-progress|api-upgrade-failed'; then
+              echo "Issue #${ISSUE_NUMBER} is not in-progress or api-upgrade-failed; cannot resume"
+              flip_to_failed "${ISSUE_NUMBER}" \
+                "❌ Resume re-validation failed: issue is not in-progress or api-upgrade-failed. Aborting." || exit 1
+              exit 1
+            fi
+            # Flip api-upgrade-failed -> in-progress (resume from a failed run)
+            if echo "${ISSUE_LABELS}" | grep -q 'api-upgrade-failed'; then
+              gh issue edit "${ISSUE_NUMBER}" --remove-label api-upgrade-failed --add-label in-progress
+            fi
+            echo "issue_number=${ISSUE_NUMBER}" >> $GITHUB_OUTPUT
+            echo "target_version=${TARGET_VERSION}" >> $GITHUB_OUTPUT
+            echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           if ! echo "${ISSUE_LABELS}" | grep -q 'in-progress'; then
             echo "Issue #${ISSUE_NUMBER} is not in-progress; aborting"
             # Flip to failed so the issue is not stuck (plan-3 §5.3)
@@ -81,7 +109,6 @@ jobs:
           fi
 
           # Check no existing branch for this target version + issue
-          BRANCH_NAME="bot/google-ads-${TARGET_VERSION}-issue-${ISSUE_NUMBER}"
           if gh api repos/{owner}/{repo}/branches/${BRANCH_NAME} --silent 2>/dev/null; then
             flip_to_failed "${ISSUE_NUMBER}" \
               "❌ Re-validation failed: branch ${BRANCH_NAME} already exists. Aborting." || exit 1
@@ -104,10 +131,17 @@ jobs:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
           GH_REPO: ${{ github.repository }}
         run: |
+          if [ "${{ inputs.resume }}" == "true" ]; then
+            STATE="resuming (re-validating)"
+            PREFIX="🔄 Resuming upgrade job"
+          else
+            STATE="starting migration"
+            PREFIX="🔄 Upgrade job started"
+          fi
           gh issue edit ${{ steps.validate.outputs.issue_number }} \
-            --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: starting migration/')"
+            --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed "s/Current state: .*/Current state: ${STATE}/")"
           gh issue comment ${{ steps.validate.outputs.issue_number }} \
-            -b "🔄 Upgrade job started. Target: ${{ steps.validate.outputs.target_version }}, Branch: ${{ steps.validate.outputs.branch_name }}, Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            -b "${PREFIX}. Target: ${{ steps.validate.outputs.target_version }}, Branch: ${{ steps.validate.outputs.branch_name }}, Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
       - uses: actions/checkout@v4
         with:
@@ -122,21 +156,30 @@ jobs:
 
       - name: Create upgrade branch
         run: |
-          # Always start fresh from main (plan-3 §5.3): the agent never resumes on a
-          # failed branch. The retry-via-relabel contract guarantees the old branch
-          # was deleted by the human before the issue was relabeled; the Re-validate
-          # step above aborts if any stale branch/PR still exists.
-          git checkout main
-          git pull
-          git checkout -b ${{ steps.validate.outputs.branch_name }}
+          if [ "${{ inputs.resume }}" == "true" ]; then
+            # Resume: check out the existing (already migrated) branch.
+            git fetch origin
+            git checkout ${{ steps.validate.outputs.branch_name }}
+            git pull origin ${{ steps.validate.outputs.branch_name }} || true
+          else
+            # Fresh: always start from main (plan-3 §5.3) — never build on a
+            # failed branch; the Re-validate step aborts if any stale
+            # branch/PR still exists.
+            git checkout main
+            git pull
+            git checkout -b ${{ steps.validate.outputs.branch_name }}
+          fi
 
       - name: Run cargo fmt
+        if: inputs.resume != true
         run: cargo fmt
 
       - name: Run deterministic migration
+        if: inputs.resume != true
         run: ./utils/update.sh ${{ steps.validate.outputs.target_version }}
 
       - name: Commit proto definitions
+        if: inputs.resume != true
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
@@ -212,6 +255,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
         run: |
+          # Idempotent: skip if a PR already exists for this branch
+          EXISTING_PR=$(gh pr list --head ${{ steps.validate.outputs.branch_name }} --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+          if [ -n "${EXISTING_PR}" ]; then
+            echo "PR #${EXISTING_PR} already exists for ${{ steps.validate.outputs.branch_name }}; skipping creation"
+            gh pr ready ${EXISTING_PR} || true
+            gh issue edit ${{ steps.validate.outputs.issue_number }} \
+              --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: PR ready for review/')"
+            gh issue comment ${{ steps.validate.outputs.issue_number }} \
+              -b "✅ Validation passed. PR #${EXISTING_PR} already exists and is ready for review."
+            exit 0
+          fi
           PR_URL=$(gh pr create \
             --draft \
             --head ${{ steps.validate.outputs.branch_name }} \
@@ -356,6 +410,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
         run: |
+          # Idempotent: skip if a PR already exists for this branch
+          EXISTING_PR=$(gh pr list --head ${{ steps.validate.outputs.branch_name }} --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+          if [ -n "${EXISTING_PR}" ]; then
+            echo "PR #${EXISTING_PR} already exists for ${{ steps.validate.outputs.branch_name }}; skipping creation"
+            gh pr ready ${EXISTING_PR} || true
+            gh issue edit ${{ steps.validate.outputs.issue_number }} \
+              --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: PR ready for review/')"
+            gh issue comment ${{ steps.validate.outputs.issue_number }} \
+              -b "✅ Validation passed. PR #${EXISTING_PR} already exists and is ready for review."
+            exit 0
+          fi
           PR_URL=$(gh pr create \
             --draft \
             --head ${{ steps.validate.outputs.branch_name }} \
@@ -392,13 +457,17 @@ jobs:
         run: |
           gh issue edit ${{ steps.validate.outputs.issue_number }} \
             --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: repair failed (5\/5)/')"
+          if [ "${{ inputs.resume }}" == "true" ]; then
+            RETRY_HINT="To retry: fix the issue and re-dispatch with resume=true (no cleanup needed). Or for a fresh start: delete the branch/PR, remove \`api-upgrade-failed\`, re-add \`ready-for-agent\`."
+          else
+            RETRY_HINT="To retry: delete the failed branch/PR, remove the \`api-upgrade-failed\` label, re-add \`ready-for-agent\` — the upgrade restarts fresh from main with a full 5-attempt budget."
+          fi
           gh issue comment ${{ steps.validate.outputs.issue_number }} \
             -b "❌ AI repair failed after 5/5 attempts. See workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
           Branch ${{ steps.validate.outputs.branch_name }} left in place for inspection.
 
-          To retry: delete the failed branch/PR, remove the \`api-upgrade-failed\` label, \
-          re-add \`ready-for-agent\` — the upgrade restarts fresh from main with a full 5-attempt budget."
+          ${RETRY_HINT}"
           gh issue edit ${{ steps.validate.outputs.issue_number }} --remove-label in-progress
           gh issue edit ${{ steps.validate.outputs.issue_number }} --add-label api-upgrade-failed
           exit 1
