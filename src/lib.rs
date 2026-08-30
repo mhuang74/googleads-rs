@@ -313,9 +313,6 @@ pub fn set_field_path_value(
     value_str: &str,
 ) -> anyhow::Result<()> {
     let segments: Vec<&str> = field_path.split('.').collect();
-    if segments.is_empty() {
-        return Err(anyhow::anyhow!("Empty field path"));
-    }
     set_field_path_recursive(msg, &segments, value_str)
 }
 
@@ -343,10 +340,12 @@ fn set_field_path_recursive(
         match field_desc.kind() {
             Kind::Message(nested_desc) => {
                 let mut nested = if msg.has_field(&field_desc) {
-                    match &*msg.get_field(&field_desc) {
-                        Value::Message(existing) => existing.clone(),
-                        _ => DynamicMessage::new(nested_desc.clone()),
-                    }
+                    // A set message-kind field always decodes to Value::Message;
+                    // as_message() returns None otherwise and we start fresh.
+                    msg.get_field(&field_desc)
+                        .as_message()
+                        .cloned()
+                        .unwrap_or_else(|| DynamicMessage::new(nested_desc.clone()))
                 } else {
                     DynamicMessage::new(nested_desc.clone())
                 };
@@ -501,9 +500,8 @@ impl current_gads_version::services::GoogleAdsRow {
         }
 
         let campaign_value = dyn_msg.get_field(&campaign_field);
-        let campaign_msg = match &*campaign_value {
-            Value::Message(msg) => msg,
-            _ => return String::new(),
+        let Some(campaign_msg) = campaign_value.as_message() else {
+            return String::new();
         };
 
         // Get asset_automation_settings repeated field
@@ -516,41 +514,34 @@ impl current_gads_version::services::GoogleAdsRow {
             return String::new();
         }
 
+        // For repeated fields the decoded value is always a List.
         let settings_value = campaign_msg.get_field(&settings_field);
-        let settings_list = match &*settings_value {
-            Value::List(list) => list,
-            _ => return String::new(),
+        let Some(settings_list) = settings_value.as_list() else {
+            return String::new();
         };
 
         // Format each item as "TYPE:STATUS"
         settings_list
             .iter()
-            .filter_map(|item| match item {
-                Value::Message(setting_msg) => {
-                    let type_field = match setting_msg
-                        .descriptor()
-                        .get_field_by_name("asset_automation_type")
-                    {
-                        Some(f) => f,
-                        None => return None,
-                    };
-                    let type_value = setting_msg.get_field(&type_field);
+            .filter_map(|item| {
+                // as_message() filters non-message items; the `?` on each
+                // descriptor lookup skips items lacking either field.
+                let setting_msg = item.as_message()?;
 
-                    let status_field = match setting_msg
-                        .descriptor()
-                        .get_field_by_name("asset_automation_status")
-                    {
-                        Some(f) => f,
-                        None => return None,
-                    };
-                    let status_value = setting_msg.get_field(&status_field);
+                let type_field = setting_msg
+                    .descriptor()
+                    .get_field_by_name("asset_automation_type")?;
+                let type_value = setting_msg.get_field(&type_field);
 
-                    let type_name = self.format_scalar(&type_value, &type_field);
-                    let status_name = self.format_scalar(&status_value, &status_field);
+                let status_field = setting_msg
+                    .descriptor()
+                    .get_field_by_name("asset_automation_status")?;
+                let status_value = setting_msg.get_field(&status_field);
 
-                    Some(format!("{}:{}", type_name, status_name))
-                }
-                _ => None,
+                let type_name = self.format_scalar(&type_value, &type_field);
+                let status_name = self.format_scalar(&status_value, &status_field);
+
+                Some(format!("{}:{}", type_name, status_name))
             })
             .collect::<Vec<_>>()
             .join(", ")
@@ -558,24 +549,25 @@ impl current_gads_version::services::GoogleAdsRow {
 
     /// Format FieldMask as comma-separated list of paths
     fn format_field_mask(&self, field_mask: &DynamicMessage) -> String {
-        let paths_field = match field_mask.descriptor().get_field_by_name("paths") {
-            Some(f) => f,
-            None => return String::new(),
-        };
+        // Descriptor constant: FieldMask always defines `paths` (same
+        // invariant as the `.expect` calls in `get`/`get_many`).
+        let paths_field = field_mask
+            .descriptor()
+            .get_field_by_name("paths")
+            .expect("FieldMask descriptor always defines paths");
 
-        // Don't check has_field for repeated fields - just get the value
+        // Don't check has_field for repeated fields - just get the value.
+        // Non-List decodes to empty; non-string items are filtered out.
         let paths_value = field_mask.get_field(&paths_field);
-        match &*paths_value {
-            Value::List(list) => list
-                .iter()
-                .filter_map(|item| match item {
-                    Value::String(s) => Some(s.clone()),
-                    _ => None,
-                })
-                .collect::<Vec<_>>()
-                .join(", "),
-            _ => String::new(),
-        }
+        paths_value
+            .as_list()
+            .map(|list| {
+                list.iter()
+                    .filter_map(|item| item.as_str().map(str::to_string))
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            })
+            .unwrap_or_default()
     }
 
     /// Format value at a dotted path
@@ -613,17 +605,23 @@ impl current_gads_version::services::GoogleAdsRow {
 
         // Check if field has presence and is unset
         if desc.supports_presence() && !msg.has_field(&desc) {
-            // Before returning empty, validate that remaining path would be valid
-            // This ensures invalid paths like "campaign.invalid_field" return "not implemented"
-            // even when campaign is not set
+            // Before returning empty, validate that the remaining path would be
+            // valid. This ensures invalid paths like "campaign.invalid_field"
+            // return "not implemented" even when campaign is not set.
             if !remaining.is_empty() {
-                // Try to validate the remaining path by checking field existence
-                if let prost_reflect::Kind::Message(msg_desc) = desc.kind() {
-                    // Validate the next segment exists
-                    if msg_desc.get_field_by_name(remaining[0]).is_none() {
-                        return "not implemented by googleads-rs".to_string();
+                // Validate the next segment exists
+                let field_valid = match desc.kind() {
+                    prost_reflect::Kind::Message(msg_desc) => {
+                        msg_desc.get_field_by_name(remaining[0]).is_some()
                     }
+                    // No other kind reaches here in practice; treat as invalid.
+                    _ => false,
+                };
+                if field_valid {
+                    // Valid subfield on unset parent: report empty.
+                    return String::new();
                 }
+                return "not implemented by googleads-rs".to_string();
             }
             return String::new();
         }
