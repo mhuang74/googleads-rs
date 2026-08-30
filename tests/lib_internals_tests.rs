@@ -336,13 +336,12 @@ fn test_coerce_uint32_and_uint64_arms() {
         DescriptorProto, FieldDescriptorProto, FileDescriptorProto, FileDescriptorSet,
     };
 
-    let field = |name: &str, number: i32, ty: Type| {
-        let mut f = FieldDescriptorProto::default();
-        f.name = Some(name.to_string());
-        f.number = Some(number);
-        f.label = Some(Label::Optional as i32);
-        f.r#type = Some(ty as i32);
-        f
+    let field = |name: &str, number: i32, ty: Type| FieldDescriptorProto {
+        name: Some(name.to_string()),
+        number: Some(number),
+        label: Some(Label::Optional as i32),
+        r#type: Some(ty as i32),
+        ..Default::default()
     };
 
     let file = FileDescriptorProto {
