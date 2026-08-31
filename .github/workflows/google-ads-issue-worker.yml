@@ -2,7 +2,7 @@ name: google-ads-issue-worker
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # every 15 minutes
+    - cron: '0 5 * * 4'  # weekly Thursday 05:00 UTC, 30 min after detect
   workflow_dispatch:
 
 env:
@@ -65,7 +65,7 @@ jobs:
           # upgrade job or open PR). Steps that fail mid-claim/re-validate roll
           # their labels back themselves; this catches any wedge that slips
           # past those paths (e.g. a dispatch that GitHub Actions silently
-          # dropped). Reclaimed issues are re-claimed on the next */15 poll.
+          # dropped). Reclaimed issues are re-claimed on the next weekly poll.
           STUCK_ISSUES=$(gh issue list \
             --label "in-progress" \
             --label "api upgrade bot" \
@@ -114,7 +114,7 @@ jobs:
 
           # Retry-via-relabel contract (plan-3 §5.3):
           # On failure, the human deletes the failed branch/PR, removes 'api-upgrade-failed',
-          # re-adds 'ready-for-agent'. This worker re-claims on the next */15 poll.
+          # re-adds 'ready-for-agent'. This worker re-claims on the next weekly poll.
           # The branch check below ensures we never create a duplicate branch — if the
           # old branch wasn't GC'd, we skip. The upgrade job always starts fresh from main.
           #
@@ -136,7 +136,7 @@ jobs:
 
           # Post claim comment (plan-3 §4.3: timestamp, target version, dispatched
           # run link) and dispatch upgrade job; on failure roll back the label so
-          # the next */15 poll re-claims instead of leaving a wedged in-progress
+          # the next weekly poll re-claims instead of leaving a wedged in-progress
           # issue with no running upgrade job.
           if ! {
             gh issue comment ${ISSUE_NUMBER} \
