@@ -178,13 +178,13 @@ jobs:
         if: inputs.resume != true
         run: ./utils/update.sh ${{ steps.validate.outputs.target_version }}
 
-      - name: Commit proto definitions
+      - name: Commit upgraded API definitions
         if: inputs.resume != true
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add -A
-          git commit -m 'chore: update Google Ads API proto definitions to ${{ steps.validate.outputs.target_version }}'
+          git commit -m 'feat: upgrade to Google Ads API ${{ steps.validate.outputs.target_version }}'
           git push origin ${{ steps.validate.outputs.branch_name }}
 
       - name: Update issue state — validating
@@ -270,7 +270,7 @@ jobs:
             --draft \
             --head ${{ steps.validate.outputs.branch_name }} \
             --base main \
-            --title "Upgrade Google Ads API to ${{ steps.validate.outputs.target_version }}" \
+            --title "Feature: Upgrade to Google Ads API ${{ steps.validate.outputs.target_version }}" \
             --body "Closes #${{ steps.validate.outputs.issue_number }}
 
           Automated Google Ads API upgrade to ${{ steps.validate.outputs.target_version }}.
@@ -458,7 +458,7 @@ jobs:
             --draft \
             --head ${{ steps.validate.outputs.branch_name }} \
             --base main \
-            --title "Upgrade Google Ads API to ${{ steps.validate.outputs.target_version }}" \
+            --title "Feature: Upgrade to Google Ads API ${{ steps.validate.outputs.target_version }}" \
             --body "Closes #${{ steps.validate.outputs.issue_number }}
 
           Automated Google Ads API upgrade to ${{ steps.validate.outputs.target_version }}.
