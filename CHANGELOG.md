@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [25.1.0] - 2026-09-01
+
+### Changed
+- Migration to Google Ads API v25.1 (#86); proto definitions regenerated for v25 with lifecycle-goal types removed upstream and `campaign_goal_settings` expanded
+- Weekly schedule moved to off-peak US hours (#90): detect Thursday 04:30 UTC, issue-worker 05:00 UTC
+- Upgrade workflow now derives PR and commit subjects from the upgrade issue title
+- `GoogleAdsRow::get()` and descriptor handling refactored for testability; coverage of `lib.rs` raised from 85% to ~96% (#88)
+
+### Added
+- `CICD.md` documenting the automated upgrade pipeline and CI/CD design
+
 ## [24.2.0] - 2026-08-29
 
 ### Changed
@@ -144,6 +155,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial tagged release with Google Ads API support
 
+[25.1.0]: https://github.com/mhuang74/googleads-rs/compare/v24.2.0...v25.1.0
 [24.2.0]: https://github.com/mhuang74/googleads-rs/compare/v23.2.0...v24.2.0
 [23.2.0]: https://github.com/mhuang74/googleads-rs/compare/v0.13.0...v23.2.0
 [0.13.0]: https://github.com/mhuang74/googleads-rs/compare/v0.12.1...v0.13.0
