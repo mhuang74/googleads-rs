@@ -328,7 +328,23 @@ jobs:
             -b "✅ Validation passed. PR ready for review."
       - name: Install pi (AI repair agent)
         if: steps.first_validate.outputs.failed == 'true'
-        run: npm install -g @earendil-works/pi-coding-agent@0.99.2
+        # The pi CLI alone does NOT know the ollama-cloud provider — it ships
+        # as a separate extension package. Without it, pi fails with
+        # `Unknown provider "ollama-cloud"` → `--api-key requires a model...`
+        # and every repair attempt burns out in <3s (run 36839396353).
+        run: |
+          npm install -g @earendil-works/pi-coding-agent@0.99.2
+          pi install npm:pi-ollama-cloud
+          # Smoke-check: the configured provider must resolve now, not after
+          # burning 5 repair attempts on arg errors. pi exits 0 even on
+          # "Unknown provider", so grep the output.
+          SMOKE_OUT="$(pi --provider '${{ vars.PI_PROVIDER || 'ollama-cloud' }}' --model '${{ vars.PI_MODEL || 'glm-5.3-flash' }}' --api-key smoke-test-dummy --print --no-session 'ping' 2>&1 || true)"
+          if echo "${SMOKE_OUT}" | grep -q 'Unknown provider'; then
+            echo "❌ pi does not know provider '${{ vars.PI_PROVIDER || 'ollama-cloud' }}' even after installing pi-ollama-cloud. Check PI_PROVIDER repo variable." >&2
+            exit 1
+          fi
+          # Expected here: a 401/403 (bad dummy key) = provider+model resolve; auth happens via real secret in repair step.
+          echo "${SMOKE_OUT}" | head -2
 
 
       - name: AI repair (pi)
