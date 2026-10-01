@@ -176,7 +176,17 @@ jobs:
 
       - name: Run deterministic migration
         if: inputs.resume != true
-        run: ./utils/update.sh ${{ steps.validate.outputs.target_version }}
+        run: |
+          # ADR 0003: minor-carrying targets (vM.N) are passed to update.sh
+          # as major-only with --force — update.sh downloads the googleapis
+          # master tip, so the landed minor is the release-notes tip at
+          # migration time and the marker's minor is advisory. Major-only
+          # targets (vN) keep the plain invocation.
+          if [[ "${{ steps.validate.outputs.target_version }}" == *.* ]]; then
+            ./utils/update.sh "${{ steps.validate.outputs.target_version %%.* }}" --force
+          else
+            ./utils/update.sh "${{ steps.validate.outputs.target_version }}"
+          fi
 
       - name: Commit upgraded API definitions
         if: inputs.resume != true
