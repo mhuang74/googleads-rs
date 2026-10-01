@@ -26,6 +26,7 @@ fn create_asset_automation_setting(
     AssetAutomationSetting {
         asset_automation_type: Some(automation_type),
         asset_automation_status: Some(automation_status),
+        setting: None,
     }
 }
 
