@@ -182,10 +182,15 @@ jobs:
           # master tip, so the landed minor is the release-notes tip at
           # migration time and the marker's minor is advisory. Major-only
           # targets (vN) keep the plain invocation.
-          if [[ "${{ steps.validate.outputs.target_version }}" == *.* ]]; then
-            ./utils/update.sh "${{ steps.validate.outputs.target_version %%.* }}" --force
+          # NOTE: strip the minor with shell parameter expansion on a plain
+          # variable — never inside ${{ }} (GitHub parses that as an
+          # expression, where %% is invalid; it breaks the whole workflow
+          # file, see failed run 36807225996).
+          TARGET_VERSION="${{ steps.validate.outputs.target_version }}"
+          if [[ "${TARGET_VERSION}" == *.* ]]; then
+            ./utils/update.sh "${TARGET_VERSION%%.*}" --force
           else
-            ./utils/update.sh "${{ steps.validate.outputs.target_version }}"
+            ./utils/update.sh "${TARGET_VERSION}"
           fi
 
       - name: Commit upgraded API definitions
