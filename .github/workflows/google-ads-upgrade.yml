@@ -183,7 +183,7 @@ jobs:
           # migration time and the marker's minor is advisory. Major-only
           # targets (vN) keep the plain invocation.
           # NOTE: strip the minor with shell parameter expansion on a plain
-          # variable — never inside ${{ }} (GitHub parses that as an
+          # variable — never inside a dollar-brace expression (GitHub parses that as an
           # expression, where %% is invalid; it breaks the whole workflow
           # file, see failed run 36807225996).
           TARGET_VERSION="${{ steps.validate.outputs.target_version }}"
