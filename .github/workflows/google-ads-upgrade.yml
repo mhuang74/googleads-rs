@@ -173,6 +173,13 @@ jobs:
 
       - name: Create upgrade branch
         run: |
+          # Git identity for all later commits (migration commit, repair
+          # commits, partial-fix commits). Must run in BOTH modes: in resume
+          # mode "Commit upgraded API definitions" is skipped, and without
+          # identity the repair success path's `git commit` dies with
+          # "empty ident name ... not allowed" (run 36839396353).
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           if [ "${{ inputs.resume }}" == "true" ]; then
             # Resume: check out the existing (already migrated) branch.
             git fetch origin
@@ -212,9 +219,8 @@ jobs:
 
       - name: Commit upgraded API definitions
         if: inputs.resume != true
+        # Identity already configured in "Create upgrade branch" (both modes).
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add -A
           git commit -m 'feat: upgrade to Google Ads API ${{ steps.validate.outputs.target_version }}'
           git push origin ${{ steps.validate.outputs.branch_name }}
@@ -335,16 +341,25 @@ jobs:
         run: |
           npm install -g @earendil-works/pi-coding-agent@0.99.2
           pi install npm:pi-ollama-cloud
-          # Smoke-check: the configured provider must resolve now, not after
-          # burning 5 repair attempts on arg errors. pi exits 0 even on
-          # "Unknown provider", so grep the output.
+          # Smoke-check: provider must resolve AND the API endpoint must be
+          # reachable, before burning repair attempts. pi exits 0 even on
+          # "Unknown provider", so exit codes are useless — grep output.
+          # Expected with a dummy key: 401 Unauthorized (provider+model
+          # resolve, network reached the endpoint). Anything else —
+          # "Unknown provider" (pkg missing), DNS/connection errors
+          # (firewall) — fails the step here instead of 5 silent attempts.
           SMOKE_OUT="$(pi --provider '${{ vars.PI_PROVIDER || 'ollama-cloud' }}' --model '${{ vars.PI_MODEL || 'glm-5.3-flash' }}' --api-key smoke-test-dummy --print --no-session 'ping' 2>&1 || true)"
-          if echo "${SMOKE_OUT}" | grep -q 'Unknown provider'; then
+          if echo "${SMOKE_OUT}" | grep -qE '401|Unauthorized'; then
+            echo "✅ pi provider+model resolve and endpoint reachable (dummy key rejected as expected)"
+          elif echo "${SMOKE_OUT}" | grep -q 'Unknown provider'; then
             echo "❌ pi does not know provider '${{ vars.PI_PROVIDER || 'ollama-cloud' }}' even after installing pi-ollama-cloud. Check PI_PROVIDER repo variable." >&2
+            echo "${SMOKE_OUT}" >&2
+            exit 1
+          else
+            echo "❌ pi cannot reach the model endpoint (firewall? provider outage? wrong PI_MODEL/PI_PROVIDER?). Repair would burn all attempts." >&2
+            echo "${SMOKE_OUT}" >&2
             exit 1
           fi
-          # Expected here: a 401/403 (bad dummy key) = provider+model resolve; auth happens via real secret in repair step.
-          echo "${SMOKE_OUT}" | head -2
 
 
       - name: AI repair (pi)
@@ -377,8 +392,8 @@ jobs:
         #   ATTEMPT_LOG (for post-hoc diff review and issue attempt log).
         # Non-interactive: --print + --no-session; --approve trusts
         #   project-local files (AGENTS.md/CLAUDE.md) without prompting.
-        # Network: limited to crates.io index (runner firewall; the agent
-        #   must not self-serve from the web).
+        # Network: crates.io index + the model API endpoint (smoke-tested in
+        #   the install step); the agent must not self-serve from the web.
         # Guardrails: strict system prompt enforcing plan-2 §11 rules.
         # ────────────────────────────────────────────────────────────────
         run: |
