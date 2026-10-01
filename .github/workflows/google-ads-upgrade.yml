@@ -41,10 +41,27 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
           GH_REPO: ${{ github.repository }}
+          # Inputs are captured via env (injection-safe, no `run:` string
+          # interpolation) so malformed values can't word-split or execute
+          # (run 36835714366: target_version="v25. 2" killed the run at the
+          # raw interpolation with exit 127 before any validation ran).
+          RAW_ISSUE_NUMBER: ${{ inputs.issue }}
+          RAW_TARGET_VERSION: ${{ inputs.target_version }}
         run: |
           # Re-validate issue eligibility and re-check no existing branch/PR
-          ISSUE_NUMBER=${{ inputs.issue }}
-          TARGET_VERSION=${{ inputs.target_version }}
+          ISSUE_NUMBER="${RAW_ISSUE_NUMBER}"
+          TARGET_VERSION="${RAW_TARGET_VERSION}"
+
+          # Reject malformed dispatch inputs before any shell command or
+          # gh CLI call consumes them.
+          if ! [[ "${ISSUE_NUMBER}" =~ ^[0-9]+$ ]]; then
+            echo "❌ Invalid issue number: '${ISSUE_NUMBER}' (expected integer)." >&2
+            exit 1
+          fi
+          if ! [[ "${TARGET_VERSION}" =~ ^v[0-9]+(\.[0-9]+)?$ ]]; then
+            echo "❌ Invalid target_version: '${TARGET_VERSION}' (expected 'v<MAJOR>' or 'v<MAJOR>.<MINOR>', e.g. v25 or v25.2 — no spaces)." >&2
+            exit 1
+          fi
 
           BRANCH_NAME="bot/google-ads-${TARGET_VERSION}-issue-${ISSUE_NUMBER}"
           # Flip issue labels with bounded retry (3 attempts, 5s backoff).
@@ -311,7 +328,7 @@ jobs:
             -b "✅ Validation passed. PR ready for review."
       - name: Install pi (AI repair agent)
         if: steps.first_validate.outputs.failed == 'true'
-        run: npm install -g @earendil-works/pi-coding-agent
+        run: npm install -g @earendil-works/pi-coding-agent@0.99.2
 
 
       - name: AI repair (pi)
@@ -349,6 +366,39 @@ jobs:
         # Guardrails: strict system prompt enforcing plan-2 §11 rules.
         # ────────────────────────────────────────────────────────────────
         run: |
+          # Fail fast on broken pi config BEFORE burning repair attempts
+          # (run 36812494921: misconfigured PI_MODEL repo variable wasted
+          # 5 attempts on CLI arg errors that never reached the agent).
+          if [ -z "${PI_API_KEY}" ]; then
+            echo "❌ PI_API_KEY secret is empty — cannot authenticate pi repair agent." >&2
+            echo "repair_succeeded=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          if [ -z "${PI_MODEL}" ] || [ -z "${PI_PROVIDER}" ]; then
+            echo "❌ PI_MODEL/PI_PROVIDER must be non-empty (PI_MODEL='${PI_MODEL}', PI_PROVIDER='${PI_PROVIDER}')." >&2
+            echo "repair_succeeded=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          case "${PI_MODEL}" in
+            *[[:space:]]*)
+              echo "❌ PI_MODEL must not contain whitespace (got '${PI_MODEL}'). Fix the repo variable (Settings → Secrets and variables → Actions → Variables). Expected e.g. 'glm-5.3-flash' or 'provider/model' with no spaces." >&2
+              echo "repair_succeeded=false" >> $GITHUB_OUTPUT
+              exit 1
+              ;;
+          esac
+          case "${PI_PROVIDER}" in
+            *[[:space:]]*)
+              echo "❌ PI_PROVIDER must not contain whitespace (got '${PI_PROVIDER}')." >&2
+              echo "repair_succeeded=false" >> $GITHUB_OUTPUT
+              exit 1
+              ;;
+          esac
+
+          # Strip ANSI escapes + carriage returns for issue display; raw log
+          # stays untouched on disk (run 36812494921: escapes pushed the real
+          # error out of the tail or mangled it into ^[[1m noise).
+          strip_ansi() { perl -pe 's/\e\[[0-9;]*[A-Za-z]//g; s/\e\[2K//g; s/\r//g' "$1"; }
+
           # GH_TOKEN is available in this step for `gh` CLI calls only
           # (issue comments, git push). The pi agent itself authenticates
           # via the --api-key flag; no PAT/crates.io token in its env.
@@ -358,7 +408,7 @@ jobs:
 
           Initial failures:
           \`\`\`
-          $(head -n 80 /tmp/first-validation-failures.txt)
+          $(strip_ansi /tmp/first-validation-failures.txt | head -n 80)
           \`\`\`"
           gh issue edit ${{ steps.validate.outputs.issue_number }} \
             --body "$(gh issue view ${{ steps.validate.outputs.issue_number }} --json body --jq '.body' | sed 's/Current state: .*/Current state: AI repair in progress/')"
@@ -397,8 +447,8 @@ jobs:
           - Descriptor FQN changes: these are derived from CARGO_PKG_VERSION_MAJOR, \
             so they should auto-update — check if the alias line needs repointing."
 
-            # Invoke pi (real CLI flags, pi 0.84.x; stdout/stderr captured
-            # to attempt log). Migration context and validation failures
+            # Invoke pi (real CLI flags, pi 0.99.2 — pinned at install;
+            # stdout/stderr captured to attempt log). Migration context and validation failures
             # are inlined into the prompt — pi has no --context/--failures
             # flags; --repo/--max-attempts don't exist either (the outer
             # for loop owns attempt count). Network: limited to crates.io
@@ -443,7 +493,7 @@ jobs:
 
           Log tail:
           \`\`\`
-          $(tail -n 50 "${ATTEMPT_LOG}")
+          $(strip_ansi "${ATTEMPT_LOG}" | tail -n 50)
           \`\`\`"
             # Keep partial fixes on the branch for the next attempt / inspection
             git add -A
@@ -499,7 +549,7 @@ jobs:
             -b "✅ Validation passed after AI repair. PR ready for review."
 
       - name: On repair failure — report and label
-        if: steps.first_validate.outputs.failed == 'true' && steps.ai_repair.outputs.repair_succeeded == 'false'
+        if: always() && steps.first_validate.outputs.failed == 'true' && steps.ai_repair.outputs.repair_succeeded != 'true'
         env:
           GH_TOKEN: ${{ secrets.ISSUE_WORKER_PAT }}
         run: |

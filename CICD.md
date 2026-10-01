@@ -86,9 +86,9 @@ Retry contract: after a failed run the human deletes the failed branch/PR, remov
 |---|---|---|
 | `GITHUB_TOKEN` | default | detect (issue listing/creation) |
 | `ISSUE_WORKER_PAT` | secret | worker poll; upgrade label/PR/issue mutation (per-step scoped) |
-| `PI_API_KEY` | secret | pi AI repair auth (`--api-key`), upgrade step-scoped only |
+| `PI_API_KEY` | secret | pi AI repair auth (`--api-key`), upgrade step-scoped only; empty secret aborts repair step at fail-fast guard |
 | `CODECOV_TOKEN` | secret | rust.yml coverage + test-result uploads |
-| `PI_MODEL` / `PI_PROVIDER` | repo variables | pi repair model config (defaults `glm-5.3-flash` / `ollama-cloud`), changeable without workflow commits |
+| `PI_MODEL` / `PI_PROVIDER` | repo variables | pi repair model config (defaults `glm-5.3-flash` / `ollama-cloud`), changeable without workflow commits; must be non-empty, whitespace-free (fail-fast guard aborts repair step otherwise) |
 
 ### Design notes
 
