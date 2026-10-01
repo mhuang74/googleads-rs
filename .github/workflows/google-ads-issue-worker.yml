@@ -47,8 +47,10 @@ jobs:
           ISSUE_NUMBER=$(echo "${ISSUES}" | jq -r '.number' | sort -n | head -1)
           ISSUE_BODY=$(echo "${ISSUES}" | jq -r "select(.number == ${ISSUE_NUMBER}) | .body")
 
-          # Extract target version from body marker
-          TARGET_VERSION=$(echo "${ISSUE_BODY}" | grep -oE 'google-ads-api-upgrade: v[0-9]+' | grep -oE 'v[0-9]+')
+          # Extract target version from body marker. Minor-carrying markers
+          # (vM.N per ADR 0003) are kept whole; the upgrade workflow strips
+          # to major for update.sh and passes --force.
+          TARGET_VERSION=$(echo "${ISSUE_BODY}" | grep -oE 'google-ads-api-upgrade: v[0-9]+(\.[0-9]+)?' | grep -oE 'v[0-9]+(\.[0-9]+)?')
           if [ -z "${TARGET_VERSION}" ]; then
             echo "Could not extract target version from issue #${ISSUE_NUMBER} body"
             echo "found=false" >> $GITHUB_OUTPUT

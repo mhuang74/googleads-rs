@@ -28,7 +28,7 @@ A migration step permitted to fail with a warning without aborting the migration
 _Avoid_: safe_run
 
 **Upgrade**:
-The end-to-end process of moving the crate to a newer Google Ads API major version: release detection → upgrade issue → deterministic migration → validation → AI repair (if needed) → PR → merge → release → publish.
+The end-to-end process of moving the crate to a newer Google Ads API major or minor version: release detection → upgrade issue → deterministic migration → validation → AI repair (if needed) → PR → merge → release → publish. For minors, the upgrade issue's target version is advisory: the migration lands the latest minor of the target major per the release notes at migration time (ADR 0003).
 _Avoid_: migration (reserve for the deterministic scripted part), bot run
 
 **AI repair**:
