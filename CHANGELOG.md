@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.0.0] - 2026-10-16
+
+### Changed
+- Migration to Google Ads API v26 (#103); proto definitions regenerated for v26
+- README Protoc section clarified: build.rs shells out to `protoc` (via `PROTOC` or `PATH`) at build time and generates into `OUT_DIR`, so the published crate ships only `.proto` sources and any reasonably recent protoc builds/verifies locally; CI pins protoc 25.3 purely for reproducible generated code
+
 ## [25.1.0] - 2026-09-01
 
 ### Changed
@@ -155,6 +161,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial tagged release with Google Ads API support
 
+[26.0.0]: https://github.com/mhuang74/googleads-rs/compare/v25.1.0...v26.0.0
 [25.1.0]: https://github.com/mhuang74/googleads-rs/compare/v24.2.0...v25.1.0
 [24.2.0]: https://github.com/mhuang74/googleads-rs/compare/v23.2.0...v24.2.0
 [23.2.0]: https://github.com/mhuang74/googleads-rs/compare/v0.13.0...v23.2.0

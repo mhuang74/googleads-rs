@@ -101,9 +101,13 @@ Run `update.sh` to update the library for a new Google Ads API version:
 
 ## Protoc
 
-This project pins **protoc 25.3** for reproducible generated code across laptop, CI, and Actions upgrade runs.
+`build.rs` shells out to `protoc` — taken from the `PROTOC` environment variable if set, otherwise from `PATH` — at build time, generating code into `OUT_DIR`. The published crate ships only the `.proto` source files, so any reasonably recent protoc on your machine will build and verify this crate locally; the exact protoc version does not affect the published artifact.
 
-Install for laptop parity:
+CI pins **protoc 25.3** via [`.github/actions/install-protoc/action.yml`](.github/actions/install-protoc/action.yml) (used by all `rust.yml` jobs and the upgrade workflow's migration job) purely for reproducible generated code.
+
+On hosts with a distro protoc (e.g. 3.21.x), local `cargo xtask` runs work fine without installing anything.
+
+Install 25.3 for laptop parity (optional):
 ```
 curl -fsSL https://github.com/protocolbuffers/protobuf/releases/download/v25.3/protoc-25.3-linux-x86_64.zip -o /tmp/protoc.zip
 sudo unzip -q /tmp/protoc.zip -d /usr/local
