@@ -26,7 +26,7 @@
 //! client.mutate(request).await?;
 //! ```
 
-#![doc(html_root_url = "https://docs.rs/googleads-rs/26.0.0")]
+#![doc(html_root_url = "https://docs.rs/googleads-rs/26.1.0")]
 
 #[allow(clippy::all)]
 #[allow(clippy::doc_lazy_continuation)]
